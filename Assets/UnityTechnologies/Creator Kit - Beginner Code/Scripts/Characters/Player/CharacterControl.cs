@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Timers;
 using CreatorKitCode;
 using UnityEngine;
@@ -37,6 +38,7 @@ namespace CreatorKitCodeInternal
 
 		RaycastHit[] m_RaycastHitCache = new RaycastHit[16];
 
+		List<SimpleEnemyController> m_EnemyList = new List<SimpleEnemyController>();
 		int m_SpeedParamID;
 		int m_AttackParamID;
 		int m_HitParamID;
@@ -67,6 +69,7 @@ namespace CreatorKitCodeInternal
 		enum State
 		{
 			DEFAULT,
+			MOVE,
 			HIT,
 			ATTACKING
 		}
@@ -127,7 +130,7 @@ namespace CreatorKitCodeInternal
 			m_LevelLayer = 1 << LayerMask.NameToLayer("Level");
 			m_TargetLayer = 1 << LayerMask.NameToLayer("Target");
 
-			m_CurrentState = State.DEFAULT;
+			SetState(State.DEFAULT);
 
 			m_CharacterAudio = GetComponent<CharacterAudio>();
 
@@ -150,7 +153,12 @@ namespace CreatorKitCodeInternal
 				{
 					m_Agent.SetPath(m_CalculatedPath);
 					m_CalculatedPath.ClearCorners();
+					SetState(State.MOVE);
 				}
+			}
+			else if (direction.magnitude == 0 && m_CurrentState == State.MOVE)
+			{
+				SetState(State.DEFAULT);
 			}
 		}
 
@@ -212,21 +220,21 @@ namespace CreatorKitCodeInternal
 				if (view.x > 0f && view.x < 1f && view.y > 0f && view.y < 1f)
 					CameraController.Instance.Zoom(-mouseWheel * Time.deltaTime * 20.0f);
 			}
+			/*
+				if (Input.GetMouseButtonDown(0))
+				{ //if we click the mouse button, we clear any previously et targets
 
-			if (Input.GetMouseButtonDown(0))
-			{ //if we click the mouse button, we clear any previously et targets
-
-				if (m_CurrentState != State.ATTACKING)
-				{
-					m_CurrentTargetCharacterData = null;
-					m_TargetInteractable = null;
+					if (m_CurrentState != State.ATTACKING)
+					{
+						m_CurrentTargetCharacterData = null;
+						m_TargetInteractable = null;
+					}
+					else
+					{
+						m_ClearPostAttack = true;
+					}
 				}
-				else
-				{
-					m_ClearPostAttack = true;
-				}
-			}
-
+			
 
 			if (!EventSystem.current.IsPointerOverGameObject() && m_CurrentState != State.ATTACKING)
 			{
@@ -257,9 +265,8 @@ namespace CreatorKitCodeInternal
 					}
 				}
 			}
-
+			*/
 			m_Animator.SetFloat(m_SpeedParamID, m_Agent.velocity.magnitude / m_Agent.speed);
-			Debug.Log("name=" + m_SpeedParamID + "value=" + m_Agent.velocity.magnitude / m_Agent.speed);
 
 			//Keyboard shortcuts
 			if (Input.GetKeyUp(KeyCode.I))
@@ -278,7 +285,7 @@ namespace CreatorKitCodeInternal
 			m_CurrentTargetCharacterData = null;
 			m_TargetInteractable = null;
 
-			m_CurrentState = State.DEFAULT;
+			SetState(State.DEFAULT);
 
 			m_Animator.SetTrigger(m_RespawnParamID);
 
@@ -383,7 +390,7 @@ namespace CreatorKitCodeInternal
 
 		void CheckAttack()
 		{
-			if (m_CurrentState == State.ATTACKING)
+			if (m_CurrentState == State.ATTACKING || m_CurrentState == State.MOVE)
 				return;
 
 			if (m_CharacterData.CanAttackReach(m_CurrentTargetCharacterData))
@@ -391,7 +398,7 @@ namespace CreatorKitCodeInternal
 				StopAgent();
 
 				//if the mouse button isn't pressed, we do NOT attack
-				if (Input.GetMouseButton(0))
+				if (true)//Input.GetMouseButton(0))
 				{
 					Vector3 forward = (m_CurrentTargetCharacterData.transform.position - transform.position);
 					forward.y = 0;
@@ -401,7 +408,7 @@ namespace CreatorKitCodeInternal
 					transform.forward = forward;
 					if (m_CharacterData.CanAttackTarget(m_CurrentTargetCharacterData))
 					{
-						m_CurrentState = State.ATTACKING;
+						SetState(State.ATTACKING);
 
 						m_CharacterData.AttackTriggered();
 						m_Animator.SetTrigger(m_AttackParamID);
@@ -439,7 +446,7 @@ namespace CreatorKitCodeInternal
 				m_TargetInteractable = null;
 			}
 
-			m_CurrentState = State.DEFAULT;
+			SetState(State.DEFAULT);
 		}
 
 		public void SetNewRespawn(SpawnPoint point)
@@ -477,6 +484,35 @@ namespace CreatorKitCodeInternal
 			});
 
 			VFXManager.PlayVFX(VFXType.StepPuff, pos);
+		}
+
+		void SetState(State nextState)
+		{
+			if (m_CurrentState != nextState)
+			{
+				Debug.Log("curState=" + m_CurrentState + "   nextState=" + nextState);
+				m_CurrentState = nextState;
+			}
+		}
+
+		public void RefreshEnemy(SimpleEnemyController enemy)
+		{
+			if (m_EnemyList.Contains(enemy))
+			{
+				Debug.Log("exited enemy :" + enemy);
+			}
+			else
+			{
+				m_EnemyList.Add(enemy);
+				if (m_CurrentTargetCharacterData == null)
+				{
+
+					m_CurrentTargetCharacterData = enemy?.GetComponent<CharacterData>();
+					Debug.Log("set currentTarget :" + m_CurrentTargetCharacterData);
+				}
+				Debug.Log("add enemy :" + enemy);
+			}
+
 		}
 	}
 }
