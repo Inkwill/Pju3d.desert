@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6022041055068851432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02a7a4fb9113c6944afcb17a16050662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Description: 
+  HealthAmount: 10
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18,8 +32,8 @@ MonoBehaviour:
   WorldObjectPrefab: {fileID: 5898196935238221940, guid: 9be663f1d15d2a74395a9b0ff319d423,
     type: 3}
   UsageEffects:
-  - {fileID: 1107657640091256493}
---- !u!114 &1107657640091256493
+  - {fileID: 2218347905887207402}
+--- !u!114 &2218347905887207402
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -28,8 +42,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a164706e4dc5a4b44b645cb6c64d9923, type: 3}
+  m_Script: {fileID: 11500000, guid: 02a7a4fb9113c6944afcb17a16050662, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Description: Add 20% of health
-  HealthPurcentageAmount: 20
+  Description: Add 10 HP
+  HealthAmount: 10

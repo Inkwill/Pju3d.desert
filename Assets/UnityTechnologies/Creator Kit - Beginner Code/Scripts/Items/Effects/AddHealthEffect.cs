@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
 
-public class ItemEffect : MonoBehaviour
+public class AddHealthEffect : UsableItem.UsageEffect
 {
-	// Start is called before the first frame update
-	void Start()
-	{
-
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-
-	}
+	public int HealthAmount = 10;
+	public override bool Use(CharacterData user)
+    {
+        user.Stats.ChangeHealth(HealthAmount);
+		return false;
+    }
 }
