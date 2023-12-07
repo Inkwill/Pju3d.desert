@@ -104,8 +104,8 @@ public sealed class TerrainTool : MonoBehaviour
 		{
 			LocalNavMeshBuilder builder = GetComponent<LocalNavMeshBuilder>();
 
-			//GameObject obj = Instantiate(Resources.Load("Cube", typeof(GameObject)), builder.GetNavMeshRandomPos(gameObject), Quaternion.identity) as GameObject;
-			GameObject obj = Instantiate(prefab, builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
+			GameObject obj = Instantiate(Resources.Load("building_hotel"), builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
+			//GameObject obj = Instantiate(prefab, builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
 			Debug.Log("build at :" + obj.transform.position);
 		}
 	}
