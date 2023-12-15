@@ -25,18 +25,18 @@ public class InteractOnTrigger : MonoBehaviour
 	{
 		if (0 != (layers.value & 1 << other.gameObject.layer))
 		{
-			lastInteracter = other.gameObject;
-			if (!interObjects.Contains(lastInteracter))
-			{
-				interObjects.Add(lastInteracter);
-				lastInteracter.GetComponent<EventSender>()?.m_event.AddListener(OnInterEvent);
-			}
-			ExecuteOnEnter(lastInteracter);
+			ExecuteOnEnter(other.gameObject);
 		}
 	}
 
-	protected virtual void ExecuteOnEnter(GameObject other)
+	protected virtual void ExecuteOnEnter(GameObject enter)
 	{
+		lastInteracter = enter;
+		if (!interObjects.Contains(lastInteracter))
+		{
+			interObjects.Add(lastInteracter);
+			lastInteracter.GetComponent<EventSender>()?.m_event.AddListener(OnInterEvent);
+		}
 		OnEnter.Invoke("enter");
 	}
 
@@ -46,7 +46,7 @@ public class InteractOnTrigger : MonoBehaviour
 		//{
 		if (interObjects.Contains(other.gameObject))
 		{
-			ExecuteOnExit(lastInteracter);
+			ExecuteOnExit(other.gameObject);
 		}
 		//}
 	}
@@ -81,8 +81,7 @@ public class InteractOnTrigger : MonoBehaviour
 		if (eventMessage == "Dead" && interObjects.Contains(sender))
 		{
 			ExecuteOnExit(sender);
-			interObjects.Remove(sender);
-			if (lastInteracter == sender) lastInteracter = GetIntruder();
+			if (lastInteracter == sender) lastInteracter = null;
 			Debug.Log("sender is Dead :" + sender);
 		}
 	}

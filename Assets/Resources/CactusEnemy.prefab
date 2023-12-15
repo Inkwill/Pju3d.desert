@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6d32986edb697438a2746b08746dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 6
+  Speed: 5
   detectionRadius: 0
   pathRoot: {fileID: 0}
   SpottedAudioClip:

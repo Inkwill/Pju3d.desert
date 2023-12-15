@@ -14,20 +14,24 @@ namespace CreatorKitCodeInternal
 
 		public float spawnCd = 5;
 
+		public int spawnTimes = 1;
+
 		float colldown = 0;
 
 		void Update()
 		{
+			if (spawnTimes <= 0) return;
+
 			if (colldown < spawnCd)
 			{
 				colldown += Time.deltaTime;
 				return;
 			}
-
 			for (int i = 0; i < spawnNum; i++)
 			{
 				SpawnPotion(angleStep * (i + 1), radius);
 			}
+			spawnTimes--;
 			colldown = 0;
 			/*
 			Vector3 spawnPosition = transform.position;

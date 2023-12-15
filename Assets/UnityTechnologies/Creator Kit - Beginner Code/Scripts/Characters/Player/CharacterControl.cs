@@ -147,6 +147,8 @@ namespace CreatorKitCodeInternal
 
 		public void FixedUpdate()
 		{
+			if (m_CurrentState == State.Dead) return;
+
 			Vector3 direction = Vector3.forward * variableJoystick.Vertical + Vector3.right * variableJoystick.Horizontal;
 			if (direction.magnitude > 0)
 			{
@@ -171,10 +173,16 @@ namespace CreatorKitCodeInternal
 		{
 			Vector3 pos = transform.position;
 
-			if (m_IsKO)
+			if (m_CurrentState == State.Dead)
 			{
 				m_KOTimer += Time.deltaTime;
-				if (m_KOTimer > 3.0f)
+				m_Agent.enabled = false;
+				if (gameObject.layer != LayerMask.NameToLayer("PlayerCorpse"))
+				{
+					Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("PlayerCorpse"));
+					//Destroy(GetComponent<Rigidbody>());
+				}
+				if (m_KOTimer > 3.0f && m_CurrentSpawn)
 				{
 					GoToRespawn();
 				}
@@ -192,7 +200,6 @@ namespace CreatorKitCodeInternal
 
 				m_Agent.isStopped = true;
 				m_Agent.ResetPath();
-				m_IsKO = true;
 				m_KOTimer = 0.0f;
 
 				Data.Death();
@@ -284,7 +291,6 @@ namespace CreatorKitCodeInternal
 			m_Agent.Warp(m_CurrentSpawn.transform.position);
 			m_Agent.isStopped = true;
 			m_Agent.ResetPath();
-			m_IsKO = false;
 
 			m_CurrentTargetCharacterData = null;
 			m_TargetInteractable = null;
@@ -504,10 +510,10 @@ namespace CreatorKitCodeInternal
 
 		public void OnDetected(string type)
 		{
-			Debug.Log("OnDetected, obj = " + gameObject + " type= " + type + " target= " + m_Detector.lastInteracter);
+			//Debug.Log("OnDetected, obj = " + gameObject + " type= " + type + " target= " + m_Detector.lastInteracter);
 			var enemy = m_Detector.GetIntruder();
 			m_CurrentTargetCharacterData = enemy?.GetComponent<CharacterData>();
-			Debug.Log("CurrentTarget = " + m_CurrentTargetCharacterData);
+			//Debug.Log("CurrentTarget = " + m_CurrentTargetCharacterData);
 		}
 	}
 }

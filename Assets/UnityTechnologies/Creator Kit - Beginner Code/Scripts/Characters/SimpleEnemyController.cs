@@ -105,7 +105,6 @@ namespace CreatorKitCodeInternal
 				//Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("EnemyCorpse"));
 				//Destroy(GetComponent<Collider>());
 				//Destroy(this);
-				m_Agent.enabled = false;
 				SetState(State.Dead);
 				return;
 			}
@@ -126,20 +125,17 @@ namespace CreatorKitCodeInternal
 								});
 							}
 
-							m_StartingAnchor = transform.position;
 							SetState(State.PURSUING);
-							m_Agent.isStopped = false;
 						}
 						else if (m_idleDuring > 3)
 						{
 							SetState(State.MOVE);
-							m_Agent.SetDestination(m_pathList[m_curPathIndex].position);
 						}
 					}
 					break;
 				case State.MOVE:
 					{
-						if (Vector3.SqrMagnitude(m_pathList[m_curPathIndex].position - transform.position) < 1)
+						if (Vector3.SqrMagnitude(m_pathList[m_curPathIndex].position - transform.position) <= 1)
 						{
 							if (m_curPathIndex + 1 < m_pathList.Count)
 							{
@@ -147,7 +143,6 @@ namespace CreatorKitCodeInternal
 							}
 
 							SetState(State.IDLE);
-							m_idleDuring = 0;
 						}
 					}
 					break;
@@ -155,8 +150,8 @@ namespace CreatorKitCodeInternal
 					{
 						if (!m_Enemy)
 						{
-							m_Agent.SetDestination(m_StartingAnchor);
-							SetState(State.IDLE);
+							//m_Agent.SetDestination(m_StartingAnchor);
+							SetState(State.MOVE);
 						}
 						else
 						{
@@ -167,10 +162,9 @@ namespace CreatorKitCodeInternal
 							{
 								m_CharacterData.AttackTriggered();
 								m_Animator.SetTrigger(m_AttackAnimHash);
-								SetState(State.ATTACKING);
 								m_Agent.ResetPath();
 								m_Agent.velocity = Vector3.zero;
-								m_Agent.isStopped = true;
+								SetState(State.ATTACKING);
 							}
 						}
 					}
@@ -179,8 +173,8 @@ namespace CreatorKitCodeInternal
 					{
 						if (!m_Enemy)
 						{
-							m_Agent.SetDestination(m_StartingAnchor);
-							SetState(State.IDLE);
+							//m_Agent.SetDestination(m_StartingAnchor);
+							SetState(State.MOVE);
 						}
 						else
 						{
@@ -188,7 +182,6 @@ namespace CreatorKitCodeInternal
 							if (!m_CharacterData.CanAttackReach(enemyData))
 							{
 								SetState(State.PURSUING);
-								m_Agent.isStopped = false;
 							}
 							else
 							{
@@ -239,9 +232,9 @@ namespace CreatorKitCodeInternal
 
 		public void OnDetected(string type)
 		{
-			Debug.Log("OnDetected, obj = " + gameObject + " type= " + type + " target= " + m_Detector.lastInteracter);
+			//Debug.Log("OnDetected, obj = " + gameObject + " type= " + type + " target= " + m_Detector.lastInteracter);
 			m_Enemy = m_Detector.GetIntruder();
-			Debug.Log("m_Enemy = " + m_Enemy);
+			//Debug.Log("m_Enemy = " + m_Enemy);
 		}
 
 		void SetState(State nextState)
@@ -250,6 +243,26 @@ namespace CreatorKitCodeInternal
 			{
 				m_State = nextState;
 				GetComponent<EventSender>()?.Send(gameObject, System.Enum.GetName(typeof(State), m_State));
+				switch (m_State)
+				{
+					case State.IDLE:
+						m_idleDuring = 0;
+						break;
+					case State.MOVE:
+						m_Agent.SetDestination(m_pathList[m_curPathIndex].position);
+						m_Agent.isStopped = false;
+						break;
+					case State.PURSUING:
+						m_Agent.isStopped = false;
+						break;
+					case State.ATTACKING:
+						m_Agent.isStopped = true;
+						break;
+					case State.Dead:
+						m_Agent.isStopped = true;
+						m_Agent.enabled = false;
+						break;
+				}
 			}
 		}
 	}
