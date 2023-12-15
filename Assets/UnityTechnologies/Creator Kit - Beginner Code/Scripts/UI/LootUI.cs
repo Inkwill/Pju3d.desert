@@ -4,138 +4,138 @@ using CreatorKitCode;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CreatorKitCodeInternal 
+namespace CreatorKitCodeInternal
 {
-    /// <summary>
-    /// Handle display the names of every loot on screen (which are button for easy pickup)
-    /// </summary>
-    public class LootUI : MonoBehaviour
-    {
-        public static LootUI Instance { get; protected set; }
+	/// <summary>
+	/// Handle display the names of every loot on screen (which are button for easy pickup)
+	/// </summary>
+	public class LootUI : MonoBehaviour
+	{
+		public static LootUI Instance { get; protected set; }
 
-        const int BUTTON_OFFSET = 32;
-    
-        struct ButtonText
-        {
-            public Button LootButton;
-            public Text LootName;
-        }
-    
-        struct DisplayedLoot
-        {
-            public Loot TargetLoot;
-            public ButtonText TargetButton;
-        }
+		const int BUTTON_OFFSET = 32;
 
-        public Button ButtonPrefab;
-    
-        Queue<ButtonText> m_ButtonPool = new Queue<ButtonText>();
-        List<Loot> m_OffScreenLoot = new List<Loot>();
-        List<DisplayedLoot> m_OnScreenLoot = new List<DisplayedLoot>();
+		struct ButtonText
+		{
+			public Button LootButton;
+			public Text LootName;
+		}
 
-        void OnEnable()
-        {
-            Instance = this;
-        }
+		struct DisplayedLoot
+		{
+			public Loot TargetLoot;
+			public ButtonText TargetButton;
+		}
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            const int poolSize = 16;
-            for (int i = 0; i < poolSize; ++i)
-            {
-                //probably more efficient to use a custom 
-                Button b = Instantiate(ButtonPrefab, transform);
-                b.gameObject.SetActive(false);
-                Text t = b.GetComponentInChildren<Text>();
-            
-                m_ButtonPool.Enqueue(new ButtonText(){ LootButton = b, LootName = t});
-            }
-        }
+		public Button ButtonPrefab;
 
-        public void NewLoot(Loot loot)
-        {
-            Vector3 screenPos;
-            if (OnScreen(loot.transform.position, out screenPos))
-            {
-                AddButton(loot, screenPos);
-            }
-            else
-            {
-                m_OffScreenLoot.Add(loot);
-            }
-        }
+		Queue<ButtonText> m_ButtonPool = new Queue<ButtonText>();
+		List<Loot> m_OffScreenLoot = new List<Loot>();
+		List<DisplayedLoot> m_OnScreenLoot = new List<DisplayedLoot>();
 
-        void AddButton(Loot l, Vector3 screenPosition)
-        {
-            DisplayedLoot dl;
+		void OnEnable()
+		{
+			Instance = this;
+		}
 
-            dl.TargetLoot = l;
-            dl.TargetButton = m_ButtonPool.Dequeue();
-            dl.TargetButton.LootButton.gameObject.SetActive(true);
-            dl.TargetButton.LootButton.transform.position = screenPosition + Vector3.up * BUTTON_OFFSET;
+		// Start is called before the first frame update
+		void Start()
+		{
+			const int poolSize = 16;
+			for (int i = 0; i < poolSize; ++i)
+			{
+				//probably more efficient to use a custom 
+				Button b = Instantiate(ButtonPrefab, transform);
+				b.gameObject.SetActive(false);
+				Text t = b.GetComponentInChildren<Text>();
 
-            dl.TargetButton.LootButton.onClick.RemoveAllListeners(); 
-            dl.TargetButton.LootButton.onClick.AddListener(() => { CharacterControl.Instance.InteractWith(l); } );
-        
-            dl.TargetButton.LootName.text = l.Item.ItemName;
-        
-            m_OnScreenLoot.Add(dl);
-        }
+				m_ButtonPool.Enqueue(new ButtonText() { LootButton = b, LootName = t });
+			}
+		}
 
-        bool OnScreen(Vector3 position, out Vector3 screenPosition)
-        {
-            screenPosition = Camera.main.WorldToScreenPoint(position);
-            return (screenPosition.x >= 0 && screenPosition.y >= 0 && screenPosition.x <= Screen.width && screenPosition.y <= Screen.height);
-        }
+		public void NewLoot(Loot loot)
+		{
+			Vector3 screenPos;
+			if (OnScreen(loot.transform.position, out screenPos))
+			{
+				AddButton(loot, screenPos);
+			}
+			else
+			{
+				m_OffScreenLoot.Add(loot);
+			}
+		}
 
-        // Update is called once per frame
-        void Update()
-        {
-            List<Loot> newOffscreen = new List<Loot>();
-        
-            for (int i = 0; i < m_OnScreenLoot.Count; ++i)
-            {
-                Vector3 sp;
-                var entry = m_OnScreenLoot[i];
+		void AddButton(Loot l, Vector3 screenPosition)
+		{
+			DisplayedLoot dl;
 
-                if (entry.TargetLoot != null && OnScreen(entry.TargetLoot.transform.position, out sp))
-                {
-                    entry.TargetButton.LootButton.transform.position = sp + Vector3.up * BUTTON_OFFSET;
-                }
-                else
-                {
-                    m_OnScreenLoot.RemoveAt(i);
-                    entry.TargetButton.LootButton.gameObject.SetActive(false);
-                    m_ButtonPool.Enqueue(entry.TargetButton);
-                    newOffscreen.Add(entry.TargetLoot);
-                    i--;
-                }
-            }
+			dl.TargetLoot = l;
+			dl.TargetButton = m_ButtonPool.Dequeue();
+			dl.TargetButton.LootButton.gameObject.SetActive(true);
+			dl.TargetButton.LootButton.transform.position = screenPosition + Vector3.up * BUTTON_OFFSET;
 
-            for (int i = 0; i < m_OffScreenLoot.Count; ++i)
-            {
-                Vector3 sp;
-                var loot = m_OffScreenLoot[i];
+			dl.TargetButton.LootButton.onClick.RemoveAllListeners();
+			//dl.TargetButton.LootButton.onClick.AddListener(() => { CharacterControl.Instance.InteractWith(l); } );
 
-                if (loot != null)
-                {
-                    if (OnScreen(loot.transform.position, out sp))
-                    {
-                        AddButton(loot, sp);
-                        m_OffScreenLoot.RemoveAt(i);
-                        i--;
-                    }
-                }
-                else
-                {
-                    m_OffScreenLoot.RemoveAt(i);
-                    i--;
-                }
-            }
-        
-            //do that at the end so we don't recompute their position in the second loop
-            m_OffScreenLoot.AddRange(newOffscreen);
-        }
-    }
+			dl.TargetButton.LootName.text = l.Item.ItemName;
+
+			m_OnScreenLoot.Add(dl);
+		}
+
+		bool OnScreen(Vector3 position, out Vector3 screenPosition)
+		{
+			screenPosition = Camera.main.WorldToScreenPoint(position);
+			return (screenPosition.x >= 0 && screenPosition.y >= 0 && screenPosition.x <= Screen.width && screenPosition.y <= Screen.height);
+		}
+
+		// Update is called once per frame
+		void Update()
+		{
+			List<Loot> newOffscreen = new List<Loot>();
+
+			for (int i = 0; i < m_OnScreenLoot.Count; ++i)
+			{
+				Vector3 sp;
+				var entry = m_OnScreenLoot[i];
+
+				if (entry.TargetLoot != null && OnScreen(entry.TargetLoot.transform.position, out sp))
+				{
+					entry.TargetButton.LootButton.transform.position = sp + Vector3.up * BUTTON_OFFSET;
+				}
+				else
+				{
+					m_OnScreenLoot.RemoveAt(i);
+					entry.TargetButton.LootButton.gameObject.SetActive(false);
+					m_ButtonPool.Enqueue(entry.TargetButton);
+					newOffscreen.Add(entry.TargetLoot);
+					i--;
+				}
+			}
+
+			for (int i = 0; i < m_OffScreenLoot.Count; ++i)
+			{
+				Vector3 sp;
+				var loot = m_OffScreenLoot[i];
+
+				if (loot != null)
+				{
+					if (OnScreen(loot.transform.position, out sp))
+					{
+						AddButton(loot, sp);
+						m_OffScreenLoot.RemoveAt(i);
+						i--;
+					}
+				}
+				else
+				{
+					m_OffScreenLoot.RemoveAt(i);
+					i--;
+				}
+			}
+
+			//do that at the end so we don't recompute their position in the second loop
+			m_OffScreenLoot.AddRange(newOffscreen);
+		}
+	}
 }

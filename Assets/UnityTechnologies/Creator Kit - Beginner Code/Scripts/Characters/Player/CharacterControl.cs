@@ -39,7 +39,7 @@ namespace CreatorKitCodeInternal
 
 		RaycastHit[] m_RaycastHitCache = new RaycastHit[16];
 
-		List<SimpleEnemyController> m_EnemyList = new List<SimpleEnemyController>();
+		InteractOnTrigger m_Detector;
 		int m_SpeedParamID;
 		int m_AttackParamID;
 		int m_HitParamID;
@@ -50,8 +50,8 @@ namespace CreatorKitCodeInternal
 		float m_KOTimer = 0.0f;
 
 		int m_InteractableLayer;
-		int m_LevelLayer;
-		Collider m_TargetCollider;
+		//int m_LevelLayer;
+		//Collider m_TargetCollider;
 		InteractableObject m_TargetInteractable = null;
 		Camera m_MainCamera;
 
@@ -71,8 +71,10 @@ namespace CreatorKitCodeInternal
 		{
 			DEFAULT,
 			MOVE,
+			PURSUING,
 			HIT,
-			ATTACKING
+			ATTACKING,
+			Dead
 		}
 
 		State m_CurrentState;
@@ -93,6 +95,7 @@ namespace CreatorKitCodeInternal
 
 			m_Agent = GetComponent<NavMeshAgent>();
 			m_Animator = GetComponentInChildren<Animator>();
+			m_Detector = GetComponentInChildren<InteractOnTrigger>();
 
 			m_Agent.speed = Speed;
 			m_Agent.angularSpeed = 360.0f;
@@ -127,9 +130,9 @@ namespace CreatorKitCodeInternal
 
 			m_CharacterData.Init();
 
-			m_InteractableLayer = 1 << LayerMask.NameToLayer("Interactable");
-			m_LevelLayer = 1 << LayerMask.NameToLayer("Level");
-			m_TargetLayer = 1 << LayerMask.NameToLayer("Target");
+			//m_InteractableLayer = 1 << LayerMask.NameToLayer("Interactable");
+			//m_LevelLayer = 1 << LayerMask.NameToLayer("Level");
+			//m_TargetLayer = 1 << LayerMask.NameToLayer("Target");
 
 			SetState(State.DEFAULT);
 
@@ -183,7 +186,7 @@ namespace CreatorKitCodeInternal
 			//Another method would be to add a callback in the CharacterData that get called
 			//when health reach 0, and this class register to the callback in Start
 			//(see CharacterData.OnDamage for an example)
-			if (m_CharacterData.Stats.CurrentHealth == 0)
+			if (m_CurrentState != State.Dead && m_CharacterData.Stats.CurrentHealth == 0)
 			{
 				m_Animator.SetTrigger(m_FaintParamID);
 
@@ -195,16 +198,16 @@ namespace CreatorKitCodeInternal
 				Data.Death();
 
 				m_CharacterAudio.Death(pos);
-
+				SetState(State.Dead);
 				return;
 			}
 
 			Ray screenRay = CameraController.Instance.GameplayCamera.ScreenPointToRay(Input.mousePosition);
 
-			if (m_TargetInteractable != null)
-			{
-				CheckInteractableRange();
-			}
+			// if (m_TargetInteractable != null)
+			// {
+			// 	CheckInteractableRange();
+			// }
 
 			if (m_CurrentTargetCharacterData != null)
 			{
@@ -293,45 +296,45 @@ namespace CreatorKitCodeInternal
 			m_CharacterData.Stats.ChangeHealth(m_CharacterData.Stats.stats.health);
 		}
 
-		void ObjectsRaycasts(Ray screenRay)
-		{
-			bool somethingFound = false;
+		// void ObjectsRaycasts(Ray screenRay)
+		// {
+		// 	bool somethingFound = false;
 
-			//first check for interactable Object
-			int count = Physics.SphereCastNonAlloc(screenRay, 1.0f, m_RaycastHitCache, 1000.0f, m_InteractableLayer);
-			if (count > 0)
-			{
-				for (int i = 0; i < count; ++i)
-				{
-					InteractableObject obj = m_RaycastHitCache[0].collider.GetComponentInParent<InteractableObject>();
-					if (obj != null && obj.IsInteractable)
-					{
-						SwitchHighlightedObject(obj);
-						somethingFound = true;
-						break;
-					}
-				}
-			}
-			else
-			{
-				count = Physics.SphereCastNonAlloc(screenRay, 1.0f, m_RaycastHitCache, 1000.0f, m_TargetLayer);
+		// 	//first check for interactable Object
+		// 	int count = Physics.SphereCastNonAlloc(screenRay, 1.0f, m_RaycastHitCache, 1000.0f, m_InteractableLayer);
+		// 	if (count > 0)
+		// 	{
+		// 		for (int i = 0; i < count; ++i)
+		// 		{
+		// 			InteractableObject obj = m_RaycastHitCache[0].collider.GetComponentInParent<InteractableObject>();
+		// 			if (obj != null && obj.IsInteractable)
+		// 			{
+		// 				SwitchHighlightedObject(obj);
+		// 				somethingFound = true;
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		// 	else
+		// 	{
+		// 		count = Physics.SphereCastNonAlloc(screenRay, 1.0f, m_RaycastHitCache, 1000.0f, m_TargetLayer);
 
-				if (count > 0)
-				{
-					CharacterData data = m_RaycastHitCache[0].collider.GetComponentInParent<CharacterData>();
-					if (data != null)
-					{
-						SwitchHighlightedObject(data);
-						somethingFound = true;
-					}
-				}
-			}
+		// 		if (count > 0)
+		// 		{
+		// 			CharacterData data = m_RaycastHitCache[0].collider.GetComponentInParent<CharacterData>();
+		// 			if (data != null)
+		// 			{
+		// 				SwitchHighlightedObject(data);
+		// 				somethingFound = true;
+		// 			}
+		// 		}
+		// 	}
 
-			if (!somethingFound && m_Highlighted != null)
-			{
-				SwitchHighlightedObject(null);
-			}
-		}
+		// 	if (!somethingFound && m_Highlighted != null)
+		// 	{
+		// 		SwitchHighlightedObject(null);
+		// 	}
+		// }
 
 		void SwitchHighlightedObject(HighlightableObject obj)
 		{
@@ -341,47 +344,47 @@ namespace CreatorKitCodeInternal
 			if (m_Highlighted != null) m_Highlighted.Highlight();
 		}
 
-		void MoveCheck(Ray screenRay)
-		{
-			if (m_CalculatedPath.status == NavMeshPathStatus.PathComplete)
-			{
-				m_Agent.SetPath(m_CalculatedPath);
-				m_CalculatedPath.ClearCorners();
-			}
+		// void MoveCheck(Ray screenRay)
+		// {
+		// 	if (m_CalculatedPath.status == NavMeshPathStatus.PathComplete)
+		// 	{
+		// 		m_Agent.SetPath(m_CalculatedPath);
+		// 		m_CalculatedPath.ClearCorners();
+		// 	}
 
-			if (Physics.RaycastNonAlloc(screenRay, m_RaycastHitCache, 1000.0f, m_LevelLayer) > 0)
-			{
-				Vector3 point = m_RaycastHitCache[0].point;
-				//avoid recomputing path for close enough click
-				if (Vector3.SqrMagnitude(point - m_LastRaycastResult) > 1.0f)
-				{
-					NavMeshHit hit;
-					if (NavMesh.SamplePosition(point, out hit, 0.5f, NavMesh.AllAreas))
-					{//sample just around where we hit, avoid setting destination outside of navmesh (ie. on building)
-						m_LastRaycastResult = point;
-						//m_Agent.SetDestination(hit.position);
+		// 	if (Physics.RaycastNonAlloc(screenRay, m_RaycastHitCache, 1000.0f, m_LevelLayer) > 0)
+		// 	{
+		// 		Vector3 point = m_RaycastHitCache[0].point;
+		// 		//avoid recomputing path for close enough click
+		// 		if (Vector3.SqrMagnitude(point - m_LastRaycastResult) > 1.0f)
+		// 		{
+		// 			NavMeshHit hit;
+		// 			if (NavMesh.SamplePosition(point, out hit, 0.5f, NavMesh.AllAreas))
+		// 			{//sample just around where we hit, avoid setting destination outside of navmesh (ie. on building)
+		// 				m_LastRaycastResult = point;
+		// 				//m_Agent.SetDestination(hit.position);
 
-						m_Agent.CalculatePath(hit.position, m_CalculatedPath);
-					}
-				}
-			}
-		}
+		// 				m_Agent.CalculatePath(hit.position, m_CalculatedPath);
+		// 			}
+		// 		}
+		// 	}
+		// }
 
-		void CheckInteractableRange()
-		{
-			if (m_CurrentState == State.ATTACKING)
-				return;
+		// void CheckInteractableRange()
+		// {
+		// 	if (m_CurrentState == State.ATTACKING)
+		// 		return;
 
-			Vector3 distance = m_TargetCollider.ClosestPointOnBounds(transform.position) - transform.position;
+		// 	Vector3 distance = m_TargetCollider.ClosestPointOnBounds(transform.position) - transform.position;
 
 
-			if (distance.sqrMagnitude < 1.5f * 1.5f)
-			{
-				StopAgent();
-				m_TargetInteractable.InteractWith(m_CharacterData);
-				m_TargetInteractable = null;
-			}
-		}
+		// 	if (distance.sqrMagnitude < 1.5f * 1.5f)
+		// 	{
+		// 		StopAgent();
+		// 		m_TargetInteractable.InteractWith(m_CharacterData);
+		// 		m_TargetInteractable = null;
+		// 	}
+		// }
 
 		void StopAgent()
 		{
@@ -391,7 +394,7 @@ namespace CreatorKitCodeInternal
 
 		void CheckAttack()
 		{
-			if (m_CurrentState == State.ATTACKING || m_CurrentState == State.MOVE)
+			if (m_CurrentState == State.ATTACKING || m_CurrentState == State.MOVE || m_CurrentState == State.Dead)
 				return;
 
 			if (m_CharacterData.CanAttackReach(m_CurrentTargetCharacterData))
@@ -419,6 +422,7 @@ namespace CreatorKitCodeInternal
 			else
 			{
 				m_Agent.SetDestination(m_CurrentTargetCharacterData.transform.position);
+				SetState(State.PURSUING);
 			}
 		}
 
@@ -459,15 +463,15 @@ namespace CreatorKitCodeInternal
 			m_CurrentSpawn.Activated();
 		}
 
-		public void InteractWith(InteractableObject obj)
-		{
-			if (obj.IsInteractable)
-			{
-				m_TargetCollider = obj.GetComponentInChildren<Collider>();
-				m_TargetInteractable = obj;
-				m_Agent.SetDestination(obj.transform.position);
-			}
-		}
+		// public void InteractWith(InteractableObject obj)
+		// {
+		// 	if (obj.IsInteractable)
+		// 	{
+		// 		m_TargetCollider = obj.GetComponentInChildren<Collider>();
+		// 		m_TargetInteractable = obj;
+		// 		m_Agent.SetDestination(obj.transform.position);
+		// 	}
+		// }
 
 		public void FootstepFrame()
 		{
@@ -491,29 +495,19 @@ namespace CreatorKitCodeInternal
 		{
 			if (m_CurrentState != nextState)
 			{
-				Debug.Log("curState=" + m_CurrentState + "   nextState=" + nextState);
+				//Debug.Log("curState=" + m_CurrentState + "   nextState=" + nextState);
 				m_CurrentState = nextState;
+				GetComponent<EventSender>()?.Send(gameObject, System.Enum.GetName(typeof(State), m_CurrentState));
 			}
 		}
 
-		public void RefreshEnemy(SimpleEnemyController enemy)
+
+		public void OnDetected(string type)
 		{
-			if (m_EnemyList.Contains(enemy))
-			{
-				Debug.Log("exited enemy :" + enemy);
-			}
-			else
-			{
-				m_EnemyList.Add(enemy);
-				if (m_CurrentTargetCharacterData == null)
-				{
-
-					m_CurrentTargetCharacterData = enemy?.GetComponent<CharacterData>();
-					Debug.Log("set currentTarget :" + m_CurrentTargetCharacterData);
-				}
-				Debug.Log("add enemy :" + enemy);
-			}
-
+			Debug.Log("OnDetected, obj = " + gameObject + " type= " + type + " target= " + m_Detector.lastInteracter);
+			var enemy = m_Detector.GetIntruder();
+			m_CurrentTargetCharacterData = enemy?.GetComponent<CharacterData>();
+			Debug.Log("CurrentTarget = " + m_CurrentTargetCharacterData);
 		}
 	}
 }

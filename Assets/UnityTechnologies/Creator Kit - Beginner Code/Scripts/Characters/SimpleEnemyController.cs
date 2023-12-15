@@ -1,6 +1,8 @@
 ﻿using CreatorKitCode;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace CreatorKitCodeInternal
 {
@@ -11,20 +13,24 @@ namespace CreatorKitCodeInternal
 		public enum State
 		{
 			IDLE,
+			MOVE,
 			PURSUING,
-			ATTACKING
+			ATTACKING,
+			Dead
 		}
 
 		public float Speed = 6.0f;
 		public float detectionRadius = 10.0f;
-
+		public Transform pathRoot;
 		public AudioClip[] SpottedAudioClip;
+		public List<Transform> m_pathList;
+
+		public State m_State;
 
 		Vector3 m_StartingAnchor;
 		Animator m_Animator;
 		NavMeshAgent m_Agent;
 		CharacterData m_CharacterData;
-
 		CharacterAudio m_CharacterAudio;
 
 		int m_SpeedAnimHash;
@@ -34,15 +40,22 @@ namespace CreatorKitCodeInternal
 		bool m_Pursuing;
 		float m_PursuitTimer = 0.0f;
 
-		State m_State;
+		//LootSpawner m_LootSpawner;
 
-		LootSpawner m_LootSpawner;
+		int m_curPathIndex;
+
+		float m_idleDuring;
+
+		InteractOnTrigger m_Detector;
+
+		GameObject m_Enemy;
 
 		// Start is called before the first frame update
 		void Start()
 		{
 			m_Animator = GetComponentInChildren<Animator>();
 			m_Agent = GetComponent<NavMeshAgent>();
+			m_Detector = GetComponentInChildren<InteractOnTrigger>();
 
 			m_SpeedAnimHash = Animator.StringToHash("Speed");
 			m_AttackAnimHash = Animator.StringToHash("Attack");
@@ -62,9 +75,15 @@ namespace CreatorKitCodeInternal
 
 			m_Agent.speed = Speed;
 
-			m_LootSpawner = GetComponent<LootSpawner>();
+			//m_LootSpawner = GetComponent<LootSpawner>();
 
 			m_StartingAnchor = transform.position;
+
+			foreach (Transform child in pathRoot)
+			{
+				m_pathList.Add(child);
+			}
+			m_curPathIndex = 0;
 		}
 
 		// Update is called once per frame
@@ -72,33 +91,31 @@ namespace CreatorKitCodeInternal
 		{
 			//See the Update function of CharacterControl.cs for a comment on how we could replace
 			//this (polling health) to a callback method.
-			if (m_CharacterData.Stats.CurrentHealth == 0)
+			if (m_State != State.Dead && m_CharacterData.Stats.CurrentHealth == 0)
 			{
 				m_Animator.SetTrigger(m_DeathAnimHash);
 
 				m_CharacterAudio.Death(transform.position);
 				m_CharacterData.Death();
 
-				if (m_LootSpawner != null)
-					m_LootSpawner.SpawnLoot();
+				// if (m_LootSpawner != null)
+				// 	m_LootSpawner.SpawnLoot();
 
-				Destroy(m_Agent);
-				Destroy(GetComponent<Collider>());
-				Destroy(this);
+				//Destroy(m_Agent);
+				//Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("EnemyCorpse"));
+				//Destroy(GetComponent<Collider>());
+				//Destroy(this);
+				m_Agent.enabled = false;
+				SetState(State.Dead);
 				return;
 			}
-
-			//NOTE : in a full game, this would use a targetting system that would give the closest target
-			//of the opposing team (e.g. multiplayer or player owned pets). Here for simplicity we just reference
-			//directly the player.
-			Vector3 playerPosition = CharacterControl.Instance.transform.position;
-			CharacterData playerData = CharacterControl.Instance.Data;
 
 			switch (m_State)
 			{
 				case State.IDLE:
 					{
-						if (Vector3.SqrMagnitude(playerPosition - transform.position) < detectionRadius * detectionRadius)
+						m_idleDuring += Time.deltaTime;
+						if (m_Enemy)
 						{
 							if (SpottedAudioClip.Length != 0)
 							{
@@ -109,65 +126,86 @@ namespace CreatorKitCodeInternal
 								});
 							}
 
-							m_PursuitTimer = 4.0f;
-							m_State = State.PURSUING;
+							m_StartingAnchor = transform.position;
+							SetState(State.PURSUING);
 							m_Agent.isStopped = false;
-							CharacterControl.Instance.RefreshEnemy(this);
+						}
+						else if (m_idleDuring > 3)
+						{
+							SetState(State.MOVE);
+							m_Agent.SetDestination(m_pathList[m_curPathIndex].position);
+						}
+					}
+					break;
+				case State.MOVE:
+					{
+						if (Vector3.SqrMagnitude(m_pathList[m_curPathIndex].position - transform.position) < 1)
+						{
+							if (m_curPathIndex + 1 < m_pathList.Count)
+							{
+								m_curPathIndex++;
+							}
+
+							SetState(State.IDLE);
+							m_idleDuring = 0;
 						}
 					}
 					break;
 				case State.PURSUING:
 					{
-						float distToPlayer = Vector3.SqrMagnitude(playerPosition - transform.position);
-						if (distToPlayer < detectionRadius * detectionRadius)
+						if (!m_Enemy)
 						{
-							m_PursuitTimer = 4.0f;
-
-							if (m_CharacterData.CanAttackTarget(playerData))
+							m_Agent.SetDestination(m_StartingAnchor);
+							SetState(State.IDLE);
+						}
+						else
+						{
+							m_Agent.SetDestination(m_Enemy.transform.position);
+							float distToEnemy = Vector3.SqrMagnitude(m_Enemy.transform.position - transform.position);
+							CharacterData enemyData = m_Enemy.GetComponent<CharacterData>();
+							if (m_CharacterData.CanAttackTarget(enemyData))
 							{
 								m_CharacterData.AttackTriggered();
 								m_Animator.SetTrigger(m_AttackAnimHash);
-								m_State = State.ATTACKING;
+								SetState(State.ATTACKING);
 								m_Agent.ResetPath();
 								m_Agent.velocity = Vector3.zero;
 								m_Agent.isStopped = true;
 							}
 						}
-						else
-						{
-							if (m_PursuitTimer > 0.0f)
-							{
-								m_PursuitTimer -= Time.deltaTime;
-
-								if (m_PursuitTimer <= 0.0f)
-								{
-									m_Agent.SetDestination(m_StartingAnchor);
-									m_State = State.IDLE;
-								}
-							}
-						}
-
-						if (m_PursuitTimer > 0)
-						{
-							m_Agent.SetDestination(playerPosition);
-						}
 					}
 					break;
 				case State.ATTACKING:
 					{
-						if (!m_CharacterData.CanAttackReach(playerData))
+						if (!m_Enemy)
 						{
-							m_State = State.PURSUING;
-							m_Agent.isStopped = false;
+							m_Agent.SetDestination(m_StartingAnchor);
+							SetState(State.IDLE);
 						}
 						else
 						{
-							if (m_CharacterData.CanAttackTarget(playerData))
+							CharacterData enemyData = m_Enemy.GetComponent<CharacterData>();
+							if (!m_CharacterData.CanAttackReach(enemyData))
 							{
-								m_CharacterData.AttackTriggered();
-								m_Animator.SetTrigger(m_AttackAnimHash);
+								SetState(State.PURSUING);
+								m_Agent.isStopped = false;
+							}
+							else
+							{
+								if (m_CharacterData.CanAttackTarget(enemyData))
+								{
+									m_CharacterData.AttackTriggered();
+									m_Animator.SetTrigger(m_AttackAnimHash);
+								}
 							}
 						}
+					}
+					break;
+				case State.Dead:
+					if (gameObject.layer != LayerMask.NameToLayer("EnemyCorpse"))
+					{
+						Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("EnemyCorpse"));
+						//Destroy(GetComponent<Rigidbody>());
 					}
 					break;
 			}
@@ -197,6 +235,22 @@ namespace CreatorKitCodeInternal
 
 			m_CharacterAudio.Step(pos);
 			VFXManager.PlayVFX(VFXType.StepPuff, pos);
+		}
+
+		public void OnDetected(string type)
+		{
+			Debug.Log("OnDetected, obj = " + gameObject + " type= " + type + " target= " + m_Detector.lastInteracter);
+			m_Enemy = m_Detector.GetIntruder();
+			Debug.Log("m_Enemy = " + m_Enemy);
+		}
+
+		void SetState(State nextState)
+		{
+			if (m_State != nextState)
+			{
+				m_State = nextState;
+				GetComponent<EventSender>()?.Send(gameObject, System.Enum.GetName(typeof(State), m_State));
+			}
 		}
 	}
 }

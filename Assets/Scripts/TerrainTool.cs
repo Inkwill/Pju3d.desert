@@ -23,7 +23,6 @@ public sealed class TerrainTool : MonoBehaviour
 	public Camera camera_;
 	[Range(0.001f, 0.1f)]
 	public float strength;
-	public GameObject prefab;
 
 	public TerrainModificationAction modificationAction = TerrainModificationAction.PaintTexture;
 
@@ -107,6 +106,10 @@ public sealed class TerrainTool : MonoBehaviour
 			GameObject obj = Instantiate(Resources.Load("building_hotel"), builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
 			//GameObject obj = Instantiate(prefab, builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
 			Debug.Log("build at :" + obj.transform.position);
+		}
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Undo();
 		}
 	}
 

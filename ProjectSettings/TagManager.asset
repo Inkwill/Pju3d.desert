@@ -11,16 +11,13 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - Level
-  - Props
-  - Interactable
-  - Target
-  - PlayerCollisionOnly
   - Player
+  - Enemy
+  - Interactable
+  - PlayerDetector
+  - EnemyDetector
   - PlayerEquipment
-  - SelfIgnore
+  - EnemyCorpse
   - 
   - 
   - 
@@ -36,7 +33,10 @@ TagManager:
   - 
   - 
   - 
-  - PostProcessing
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0
