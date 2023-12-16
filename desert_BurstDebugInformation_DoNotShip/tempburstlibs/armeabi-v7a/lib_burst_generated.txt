@@ -17,6 +17,7 @@ Library: D:\Pju3d.desert\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_ge
 --assembly-defines=System.Core;
 --assembly-defines=System;
 --assembly-defines=System.Xml;
+--assembly-defines=Unity.AI.Navigation;
 --assembly-defines=Unity.Burst;
 --assembly-defines=Unity.Burst.Unsafe;
 --assembly-defines=Unity.Mathematics;
@@ -52,6 +53,7 @@ Library: D:\Pju3d.desert\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_ge
 --assembly-defines=System.Core;
 --assembly-defines=System;
 --assembly-defines=System.Xml;
+--assembly-defines=Unity.AI.Navigation;
 --assembly-defines=Unity.Burst;
 --assembly-defines=Unity.Burst.Unsafe;
 --assembly-defines=Unity.Mathematics;
