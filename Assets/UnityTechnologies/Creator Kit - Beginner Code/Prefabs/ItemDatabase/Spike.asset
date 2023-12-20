@@ -17,13 +17,9 @@ MonoBehaviour:
   Description: 
   WorldObjectPrefab: {fileID: 0}
   Slot: 666
-  MinimumStats:
-    health: 0
-    strength: 0
-    defense: 0
-    agility: 0
-    elementalProtection: 00000000000000000000000000000000
-    elementalBoosts: 00000000000000000000000000000000
+  MinimumStrength: 0
+  MinimumAgility: 0
+  MinimumDefense: 0
   EquippedEffects: []
   HitSounds: []
   SwingSounds:
@@ -32,5 +28,5 @@ MonoBehaviour:
     Speed: 3
     MinimumDamage: 2
     MaximumDamage: 3
-    MaxRange: 2
+    MaxRange: 3
   AttackEffects: []
