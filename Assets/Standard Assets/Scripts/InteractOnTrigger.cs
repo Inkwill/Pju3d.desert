@@ -87,5 +87,21 @@ public class InteractOnTrigger : MonoBehaviour
 			Debug.Log("sender is Dead :" + sender);
 		}
 	}
+
+	public GameObject GetSceneBox()
+	{
+		foreach (GameObject sceneBox in interObjects)
+		{
+			if (sceneBox)
+			{
+				return sceneBox;
+			}
+			else
+			{
+				interObjects.Remove(sceneBox);
+			}
+		}
+		return null;
+	}
 }
 

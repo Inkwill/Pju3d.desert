@@ -3,12 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - FxTemporaire
+  - road
+  - building
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Scene
   - Water
   - UI
   - Player
@@ -19,7 +22,7 @@ TagManager:
   - PlayerEquipment
   - EnemyCorpse
   - PlayerCorpse
-  - 
+  - SceneDetector
   - 
   - 
   - 

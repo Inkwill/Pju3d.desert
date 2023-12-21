@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/UnityTechnologies/Creator Kit - Beginner Code/Scenes/ExampleScene.unity
+    path: Assets/PlusPackages/UnityTechnologies/Creator Kit - Beginner Code/Scenes/ExampleScene.unity
     guid: ff09c31ad1e1ae44c8a2939b67d1180f
   - enabled: 1
     path: Assets/Scenes/OceDemo.unity

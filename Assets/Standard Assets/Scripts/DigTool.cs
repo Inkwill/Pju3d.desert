@@ -10,14 +10,24 @@ public class DigTool : MonoBehaviour
 
 	public CharacterControl m_character;
 
+	InteractOnTrigger m_Detector;
+
 	// Update is called once per frame
-	void Update()
+	private void Start()
+	{
+		m_Detector = GetComponent<InteractOnTrigger>();
+	}
+	void FixedUpdate()
 	{
 		if (Input.GetKeyDown(KeyCode.Return))
 		{
 			Pit pit = Instantiate(pitObj, transform.position, Quaternion.Euler(0, 180, 0)) as Pit;
 			pit.GetComponent<EventSender>()?.m_event.AddListener(OnPitCompleted);
 			m_character.PlayWork(true);
+		}
+		if (Input.GetKeyDown("space"))
+		{
+			Debug.Log("SceneDetector : " + m_Detector.GetSceneBox());
 		}
 	}
 
@@ -27,5 +37,24 @@ public class DigTool : MonoBehaviour
 		{
 			m_character.PlayWork(false);
 		}
+	}
+
+	public string SceneBoxInfo()
+	{
+		GameObject sceneBox = m_Detector.GetSceneBox();
+		if (!sceneBox) return "空地";
+		string sceneTag = sceneBox.tag;
+		switch (sceneTag)
+		{
+			case "road":
+				return "道路";
+				break;
+			case "building":
+				return "建筑:" + sceneBox;
+				break;
+			default:
+				break;
+		}
+		return "空地";
 	}
 }

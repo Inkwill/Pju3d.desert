@@ -96,7 +96,7 @@ public sealed class TerrainTool : MonoBehaviour
 		// }
 		// if (Input.GetKeyDown("space"))
 		// {
-		// 	ChangeTerrain(TerrainModificationAction.Lower, transform.position);
+		// 	GetTerrainTextureInfo(gameObject.transform.position, 10);
 
 		// }
 
@@ -379,5 +379,37 @@ public sealed class TerrainTool : MonoBehaviour
 		}
 		// Set the alpha map at the specified position to the updated texture alphas
 		terrainData.SetAlphamaps(brushPosition.x, brushPosition.y, textureAlphas);
+	}
+
+	public void GetTerrainTextureInfo(Vector3 worldPosition, int regionSize)
+	{
+		TerrainData terrainData = GetTerrainData();
+
+		// 计算起始坐标
+		int startX = (int)(worldPosition.x - regionSize / 2);
+		int startZ = (int)(worldPosition.z - regionSize / 2);
+
+		// 获取地形纹理混合信息
+		float[,,] splatmaps = terrainData.GetAlphamaps(startX, startZ, regionSize, regionSize);
+
+		// 获取纹理的数量
+		int numTextures = terrainData.terrainLayers.Length;
+
+		// 遍历每个像素的纹理混合信息
+		for (int y = 0; y < regionSize; y++)
+		{
+			for (int x = 0; x < regionSize; x++)
+			{
+				// 获取当前像素的纹理混合信息
+				float[] splatValues = new float[numTextures];
+				for (int i = 0; i < numTextures; i++)
+				{
+					splatValues[i] = splatmaps[x, y, i];
+				}
+
+				// 在这里你可以根据需要处理纹理混合信息
+				Debug.Log("Texture blend at (" + (startX + x) + ", " + (startZ + y) + "): " + string.Join(", ", splatValues));
+			}
+		}
 	}
 }
