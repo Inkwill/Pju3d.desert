@@ -33,7 +33,7 @@ public class Shooter : Creater
 	{
 		if (type == "exit" && m_CurrentTarget)
 		{
-			if (m_CurrentTarget.gameObject == m_Detector.lastInteracter)
+			if (m_CurrentTarget.gameObject == m_Detector.lastExiter)
 			{
 				m_CurrentTarget = null;
 			}

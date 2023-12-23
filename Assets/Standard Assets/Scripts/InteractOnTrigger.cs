@@ -10,7 +10,8 @@ public class InteractOnTrigger : MonoBehaviour
 	public bool once;
 	public UnityEvent<string> OnEnter, OnExit;
 
-	public GameObject lastInteracter;
+	public GameObject lastInner;
+	public GameObject lastExiter;
 
 	List<GameObject> interObjects;
 	new Collider collider;
@@ -32,11 +33,11 @@ public class InteractOnTrigger : MonoBehaviour
 
 	protected virtual void ExecuteOnEnter(GameObject enter)
 	{
-		lastInteracter = enter;
-		if (!interObjects.Contains(lastInteracter))
+		lastInner = enter;
+		if (!interObjects.Contains(lastInner))
 		{
-			interObjects.Add(lastInteracter);
-			lastInteracter.GetComponent<EventSender>()?.m_event.AddListener(OnInterEvent);
+			interObjects.Add(lastInner);
+			lastInner.GetComponent<EventSender>()?.m_event.AddListener(OnInterEvent);
 		}
 		OnEnter.Invoke("enter");
 		if (once) collider.enabled = false;
@@ -48,16 +49,17 @@ public class InteractOnTrigger : MonoBehaviour
 		//{
 		if (interObjects.Contains(other.gameObject))
 		{
-			ExecuteOnExit(other.gameObject);
+			lastExiter = other.gameObject;
+			ExecuteOnExit(lastExiter);
 		}
 		//}
 	}
 
 	protected virtual void ExecuteOnExit(GameObject exiter)
 	{
-		lastInteracter = exiter;
-		interObjects.Remove(lastInteracter);
-		lastInteracter.GetComponent<EventSender>()?.m_event.RemoveListener(OnInterEvent);
+		if (exiter == lastInner) lastInner = null;
+		interObjects.Remove(exiter);
+		exiter.GetComponent<EventSender>()?.m_event.RemoveListener(OnInterEvent);
 		OnExit.Invoke("exit");
 	}
 
@@ -83,25 +85,9 @@ public class InteractOnTrigger : MonoBehaviour
 		if (eventMessage == "Dead" && interObjects.Contains(sender))
 		{
 			ExecuteOnExit(sender);
-			if (lastInteracter == sender) lastInteracter = null;
-			Debug.Log("sender is Dead :" + sender);
+			if (lastInner == sender) lastInner = null;
+			Debug.Log("interObj is Dead :" + sender);
 		}
-	}
-
-	public GameObject GetSceneBox()
-	{
-		foreach (GameObject sceneBox in interObjects)
-		{
-			if (sceneBox)
-			{
-				return sceneBox;
-			}
-			else
-			{
-				interObjects.Remove(sceneBox);
-			}
-		}
-		return null;
 	}
 }
 

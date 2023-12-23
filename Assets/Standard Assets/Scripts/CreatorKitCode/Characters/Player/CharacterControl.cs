@@ -32,6 +32,8 @@ namespace CreatorKitCodeInternal
 		[Header("Audio")]
 		public AudioClip[] SpurSoundClips;
 
+		public bool canWork { get { return (m_CurrentState == State.DEFAULT || m_CurrentState == State.MOVE) && !m_CurrentTargetCharacterData; } protected set { } }
+
 		Vector3 m_LastRaycastResult;
 		Animator m_Animator;
 		NavMeshAgent m_Agent;

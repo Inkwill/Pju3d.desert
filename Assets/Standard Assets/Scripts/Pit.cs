@@ -9,7 +9,10 @@ public class Pit : MonoBehaviour
 {
 	public float digDeep = 0.1f;
 	public float digTime = 10.0f;
-	public TMP_Text text;
+
+	public Text text_Title;
+	public Text text_Info;
+	public Text text_help;
 	public Slider progressSlider;
 
 	public GameObject fxProgress;
@@ -20,6 +23,8 @@ public class Pit : MonoBehaviour
 	float m_timer;
 	float m_step;
 	float m_back_step;
+
+	float m_back_stepTime = 1.0f;
 	TerrainTool terrainTool;
 
 	public bool isDigging
@@ -31,17 +36,25 @@ public class Pit : MonoBehaviour
 			m_rebacking = !value;
 			if (progressSlider) progressSlider.gameObject.SetActive(value);
 			if (fxProgress) fxProgress.SetActive(value);
+			if (value) text_Title.text = "挖个坑...";
+			else text_Title.text = "坑会消失...";
 		}
 	}
 	private void Start()
 	{
 		terrainTool = GetComponent<TerrainTool>();
 		m_initialDeep = Terrain.activeTerrain.SampleHeight(transform.position);
-		if (text) text.text = m_initialDeep.ToString();
+		text_Info.text = m_initialDeep.ToString();
 		isDigging = true;
 	}
 
-	void Update()
+	public void Fill(float speed)
+	{
+		Collider box = GetComponent<Collider>();
+		if (box) box.enabled = false;
+		m_back_stepTime = m_back_stepTime / speed;
+	}
+	void FixedUpdate()
 	{
 		if (m_digging)
 		{
@@ -60,7 +73,8 @@ public class Pit : MonoBehaviour
 				m_step = 0f;
 			}
 			if (progressSlider) progressSlider.value = m_timer / digTime;
-			if (text) text.text = Terrain.activeTerrain.SampleHeight(transform.position).ToString();
+			text_help.text = "";
+			text_Info.text = "deep:" + (10 - Terrain.activeTerrain.SampleHeight(transform.position)).ToString("f2");
 		}
 		else if (m_rebacking)
 		{
@@ -68,7 +82,7 @@ public class Pit : MonoBehaviour
 			float cur_deep = Terrain.activeTerrain.SampleHeight(transform.position);
 			if (cur_deep < m_initialDeep)
 			{
-				if (m_back_step >= 1.0f)
+				if (m_back_step >= m_back_stepTime)
 				{
 					OnRebacking();
 					m_back_step = 0;
@@ -77,7 +91,10 @@ public class Pit : MonoBehaviour
 			else
 			{
 				m_rebacking = false;
+				Destroy(gameObject, 1.0f);
 			}
+			text_help.text = "点击按钮建造";
+			text_Info.text = "deep:" + (10 - Terrain.activeTerrain.SampleHeight(transform.position)).ToString("f2");
 		}
 	}
 	void OnProcessing()
@@ -93,5 +110,14 @@ public class Pit : MonoBehaviour
 	void OnDisable()
 	{
 		terrainTool.SetTerrainHeight(transform.position, m_initialDeep * 0.01f, 8, 8);
+	}
+
+	public void OnPlanted(Creater creater)
+	{
+		m_rebacking = false;
+		text_help.text = "建造中..";
+		text_Title.text = "风车塔";
+		text_Info.text = "法术攻击: 5";
+		Destroy(gameObject, creater.interval);
 	}
 }

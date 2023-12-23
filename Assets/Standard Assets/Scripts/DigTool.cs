@@ -12,6 +12,7 @@ public class DigTool : MonoBehaviour
 
 	InteractOnTrigger m_Detector;
 
+
 	// Update is called once per frame
 	private void Start()
 	{
@@ -19,16 +20,14 @@ public class DigTool : MonoBehaviour
 	}
 	void FixedUpdate()
 	{
-		if (Input.GetKeyDown(KeyCode.Return))
-		{
-			Pit pit = Instantiate(pitObj, transform.position, Quaternion.Euler(0, 180, 0)) as Pit;
-			pit.GetComponent<EventSender>()?.m_event.AddListener(OnPitCompleted);
-			m_character.PlayWork(true);
-		}
-		if (Input.GetKeyDown("space"))
-		{
-			Debug.Log("SceneDetector : " + m_Detector.GetSceneBox());
-		}
+		// if (Input.GetKeyDown(KeyCode.Return))
+		// {
+
+		// }
+		// if (Input.GetKeyDown("space"))
+		// {
+		// 	Debug.Log("SceneDetector : " + m_Detector.GetSceneBox());
+		// }
 	}
 
 	void OnPitCompleted(GameObject sender, string eventMessage)
@@ -39,22 +38,43 @@ public class DigTool : MonoBehaviour
 		}
 	}
 
-	public string SceneBoxInfo()
+	public string SceneBoxInfo(bool display)
 	{
-		GameObject sceneBox = m_Detector.GetSceneBox();
-		if (!sceneBox) return "空地";
+		GameObject sceneBox = m_Detector.lastInner;
+		if (!sceneBox) return display ? "空地" : null;
 		string sceneTag = sceneBox.tag;
 		switch (sceneTag)
 		{
 			case "road":
-				return "道路";
+				return display ? "道路" : sceneTag;
 				break;
 			case "building":
-				return "建筑:" + sceneBox;
+				return display ? "建筑:" + sceneBox : sceneTag;
+				break;
+			case "pit":
+				return display ? "坑:" + sceneBox : sceneTag;
 				break;
 			default:
 				break;
 		}
-		return "空地";
+		return display ? "空地" : null;
+	}
+
+	public Pit DigPit()
+	{
+		Pit pit = Instantiate(pitObj, transform.position, Quaternion.Euler(0, 180, 0)) as Pit;
+		pit.GetComponent<EventSender>()?.m_event.AddListener(OnPitCompleted);
+		m_character.PlayWork(true);
+		return pit;
+	}
+
+	public Creater Plant(string pbName)
+	{
+		Pit curPit = m_Detector.lastInner?.GetComponent<Pit>();
+		Creater plant = Resources.Load<Creater>(pbName);
+		plant = Instantiate(plant, curPit.gameObject.transform.position, Quaternion.Euler(0, 180, 0));
+		curPit.OnPlanted(plant);
+		return plant;
+		//plant.GetComponent<EventSender>()?.m_event.AddListener(OnCreateCompleted);
 	}
 }

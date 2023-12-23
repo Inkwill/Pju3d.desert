@@ -34,8 +34,11 @@ namespace CreatorKitCodeInternal
 
 		public CinemachineVirtualCamera Camera { get; protected set; }
 
-		protected float m_CurrentDistance = 1.0f;
+		protected float m_CurrentDistance = 0;
 		protected CinemachineFramingTransposer m_FramingTransposer;
+
+		float m_setDistance = 0;
+		bool m_setTrigger = false;
 
 		void Awake()
 		{
@@ -44,9 +47,24 @@ namespace CreatorKitCodeInternal
 			m_FramingTransposer = Camera.GetCinemachineComponent<CinemachineFramingTransposer>();
 		}
 
+		private void FixedUpdate()
+		{
+			if (Mathf.Abs(m_setDistance - m_CurrentDistance) > 0.01f && m_setTrigger)
+			{
+				// 在 10 秒内从 m_CurrentDistance 插值到 m_setDistance
+				float t = Mathf.PingPong(Time.time / 10f, 1f); // 控制插值的比例
+				float interpolatedValue = m_CurrentDistance < m_setDistance ? 0.05f : -0.05f;
+				//float interpolatedValue = m_CurrentDistance < m_setDistance ? Mathf.Lerp(m_CurrentDistance, m_setDistance, t) : (-1 * Mathf.Lerp(m_setDistance, m_CurrentDistance, t));
+				Zoom(interpolatedValue);
+			}
+			else
+			{
+				m_setTrigger = false;
+			}
+		}
 		void Start()
 		{
-			Zoom(-10);
+			Zoom(0);
 		}
 
 		/// <summary>
@@ -64,6 +82,25 @@ namespace CreatorKitCodeInternal
 			m_FramingTransposer.m_CameraDistance = Mathf.Lerp(MinDistance, MaxDistance, m_CurrentDistance);
 
 			AmbiencePlayer.UpdateVolume(m_CurrentDistance);
+		}
+
+		public void SwitchModel()
+		{
+			switch (m_setDistance)
+			{
+				case 0:
+					m_setDistance = 0.5f;
+					break;
+				case 0.5f:
+					m_setDistance = 1.0f;
+					break;
+				case 1.0f:
+					m_setDistance = 0f;
+					break;
+				default:
+					break;
+			}
+			m_setTrigger = true;
 		}
 	}
 }
