@@ -12,7 +12,7 @@ namespace CreatorKitCodeInternal
 		public int angleStep = 15;
 		public int spawnNum = 5;
 
-		public override void OnTimer()
+		protected override void OnTimer()
 		{
 			for (int i = 0; i < spawnNum; i++)
 			{

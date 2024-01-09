@@ -30,9 +30,9 @@ public class DigTool : MonoBehaviour
 		// }
 	}
 
-	void OnPitCompleted(GameObject sender, string eventMessage)
+	void OnWorkCompleted(GameObject sender, string eventMessage)
 	{
-		if (eventMessage == "event_pit_completed")
+		if (eventMessage == "event_work_completed")
 		{
 			m_character.PlayWork(false);
 		}
@@ -54,27 +54,47 @@ public class DigTool : MonoBehaviour
 			case "pit":
 				return display ? "坑:" + sceneBox : sceneTag;
 				break;
+			case "mount":
+				return display ? "山体:" : sceneTag;
+				break;
+			case "npc":
+				return display ? "npc:" + sceneBox : sceneTag;
+				break;
+			case "creater":
+				return display ? "建造中..." : sceneTag;
+				break;
 			default:
 				break;
 		}
 		return display ? "空地" : null;
 	}
 
-	public Pit DigPit()
+	public Creater DoCreate(string pbName)
 	{
-		Pit pit = Instantiate(pitObj, transform.position, Quaternion.Euler(0, 180, 0)) as Pit;
-		pit.GetComponent<EventSender>()?.m_event.AddListener(OnPitCompleted);
-		m_character.PlayWork(true);
-		return pit;
+		Creater creater = Resources.Load<Creater>("creater");
+		creater = Instantiate(creater, transform.position, Quaternion.Euler(0, 180, 0));
+		//creater.GetComponent<EventSender>()?.m_event.AddListener(OnWorkCompleted);
+		//m_character.PlayWork(true);
+		creater.DoCreate(m_character, pbName);
+		return creater;
 	}
 
-	public Creater Plant(string pbName)
+	public void DoPlant(string pbName)
 	{
-		Pit curPit = m_Detector.lastInner?.GetComponent<Pit>();
-		Creater plant = Resources.Load<Creater>(pbName);
-		plant = Instantiate(plant, curPit.gameObject.transform.position, Quaternion.Euler(0, 180, 0));
-		curPit.OnPlanted(plant);
-		return plant;
-		//plant.GetComponent<EventSender>()?.m_event.AddListener(OnCreateCompleted);
+		Pit pit = GetLastInner<Pit>();
+		if (pit) pit.DoCreate(m_character, pbName);
+		//creater = Instantiate(creater, transform.position, Quaternion.Euler(0, 180, 0));
+		//creater.GetComponent<EventSender>()?.m_event.AddListener(OnWorkCompleted);
+		//m_character.PlayWork(true);
+		//creater.DoCreate(m_character, pbName);
+	}
+
+	public T GetLastInner<T>()
+	{
+		if (m_Detector.lastInner)
+		{
+			return m_Detector.lastInner.GetComponent<T>();
+		}
+		else { return default(T); }
 	}
 }

@@ -8,6 +8,9 @@ TagManager:
   - road
   - building
   - pit
+  - mount
+  - npc
+  - creater
   layers:
   - Default
   - TransparentFX

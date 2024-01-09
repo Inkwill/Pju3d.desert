@@ -18,8 +18,9 @@ public class Shooter : Creater
 	{
 		if (m_CurrentTarget)
 		{
-			GameObject obj = Instantiate(createrObj, trans.position, Quaternion.Euler(0, 180, 0)) as GameObject;
-			Bullet bullet = createrObj.GetComponent<Bullet>();
+			GameObject createObj = Resources.Load(m_targetName) as GameObject;
+			createObj = Instantiate(createObj, trans.position, Quaternion.Euler(0, 180, 0)) as GameObject;
+			Bullet bullet = createObj.GetComponent<Bullet>();
 			if (bullet)
 			{
 				bullet.target = m_CurrentTarget;
