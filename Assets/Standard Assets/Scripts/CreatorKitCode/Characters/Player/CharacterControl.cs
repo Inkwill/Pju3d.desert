@@ -72,7 +72,9 @@ namespace CreatorKitCodeInternal
 
 		SpawnPoint m_CurrentSpawn = null;
 
-		enum State
+		DigTool m_digTool;
+
+		public enum State
 		{
 			DEFAULT,
 			MOVE,
@@ -104,6 +106,7 @@ namespace CreatorKitCodeInternal
 			m_Detector = GetComponentInChildren<InteractOnTrigger>();
 			m_Detector.OnEnter.AddListener(OnEnter);
 			m_Detector.OnExit.AddListener(OnExit);
+			m_digTool = GetComponentInChildren<DigTool>();
 
 			m_Agent.speed = Speed;
 			m_Agent.angularSpeed = 360.0f;
@@ -154,7 +157,7 @@ namespace CreatorKitCodeInternal
 			};
 		}
 
-		public void FixedUpdate()
+		void FixedUpdate()
 		{
 			if (m_CurrentState == State.Dead || m_CurrentState == State.WORKING) return;
 
@@ -541,16 +544,24 @@ namespace CreatorKitCodeInternal
 			}
 		}
 
-		public void PlayWork(bool play)
+		public void ChangeState(State state, bool active)
 		{
-			if (m_CurrentState == State.DEFAULT && play)
+			switch (state)
 			{
-				SetState(State.WORKING);
-				m_Animator.SetTrigger(m_WokingID);
-			}
-			else if (!play)
-			{
-				SetState(State.DEFAULT);
+				case State.WORKING:
+					if (m_CurrentState == State.DEFAULT && active)
+					{
+						SetState(state);
+						m_Animator.SetTrigger(m_WokingID);
+					}
+					else if (!active)
+					{
+						SetState(State.DEFAULT);
+					}
+					break;
+				default:
+					Debug.LogError("Cant manual change character state to :" + state);
+					break;
 			}
 		}
 	}

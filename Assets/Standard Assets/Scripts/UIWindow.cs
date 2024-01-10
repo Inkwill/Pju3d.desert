@@ -10,8 +10,8 @@ public class UIWindow : MonoBehaviour
 
 	protected CharacterControl m_player;
 	protected DigTool m_digtool;
-
 	protected UIManager m_uiRoot;
+	protected List<Button> switch_buttons;
 
 	void Awake()
 	{
@@ -32,12 +32,38 @@ public class UIWindow : MonoBehaviour
 		else OnClosed();
 	}
 
-	public virtual void OnOpen() { }
-	public virtual void OnClose() { }
-	public virtual void OnClosed() { gameObject.SetActive(false); }
+	protected virtual void OnOpen() { }
+	protected virtual void OnClose() { }
+	protected virtual void OnClosed() { gameObject.SetActive(false); }
 
 	public void Back()
 	{
 		m_uiRoot.BackWindow(this);
 	}
+
+	protected void SetButton(Button bt, bool active)
+	{
+		if (bt.interactable == active) return;
+
+		bt.interactable = active;
+		string anim = active ? "move_up" : "move_down";
+		Animator animator = bt.GetComponent<Animator>();
+		if (animator) animator.Play(anim);
+
+		// Image[] imgs = bt.gameObject.GetComponentsInChildren<Image>();
+		// foreach (Image img in imgs)
+		// {
+		// 	img.color = active ? Color.red : Color.gray;
+		// }
+	}
+
+	protected void SwitchButton(Button bt)
+	{
+		foreach (Button button in switch_buttons)
+		{
+			SetButton(button, bt == button);
+		}
+	}
+
+	public virtual void OnButtonClick(string eventName) { }
 }

@@ -6,38 +6,30 @@ using UnityEngine.UI;
 
 public class UIMainWindow : UIWindow
 {
-	public Text infoPos;
-	public Text infoTerrian;
-
-	public Button btDig;
+	public Button btBuild;
 
 	public Button btPlant;
 
 	public Button btTalk;
 
-	List<Button> switch_buttons;
 
-
-	public override void OnOpen()
+	protected override void OnOpen()
 	{
 		switch_buttons = new List<Button>();
-		switch_buttons.Add(btDig);
 		switch_buttons.Add(btPlant);
 		switch_buttons.Add(btTalk);
 
-		SetButton(btDig, false);
+		SetButton(btBuild, true);
 		SetButton(btPlant, false);
 		SetButton(btTalk, false);
 	}
 	void FixedUpdate()
 	{
-		infoPos.text = m_player.gameObject.transform.position.ToString();
-		infoTerrian.text = m_digtool?.SceneBoxInfo(true);
 		switch (m_digtool?.SceneBoxInfo(false))
 		{
-			case null:
-				if (m_player.canWork && !btDig.interactable) SwitchButton(btDig);
-				break;
+			// case null:
+			// 	if (m_player.canWork && !btBuild.interactable) SwitchButton(btBuild);
+			// 	break;
 			case "pit":
 				if (m_player.canWork && !btPlant.interactable) SwitchButton(btPlant);
 				break;
@@ -50,12 +42,12 @@ public class UIMainWindow : UIWindow
 		}
 	}
 
-	public void OnButtonClick(string eventName)
+	public override void OnButtonClick(string eventName)
 	{
 		switch (eventName)
 		{
-			case "dig":
-				m_digtool.DoCreate("pit");
+			case "build":
+				m_uiRoot.SwitchWindow("winBuild");
 				break;
 			case "plant":
 				m_uiRoot.SwitchWindow("winPlant");
@@ -68,30 +60,6 @@ public class UIMainWindow : UIWindow
 				break;
 			default:
 				break;
-		}
-	}
-
-	void SetButton(Button bt, bool active)
-	{
-		if (bt.interactable == active) return;
-
-		bt.interactable = active;
-		string anim = active ? "move_up" : "move_down";
-		Animator animator = bt.GetComponent<Animator>();
-		if (animator) animator.Play(anim);
-
-		// Image[] imgs = bt.gameObject.GetComponentsInChildren<Image>();
-		// foreach (Image img in imgs)
-		// {
-		// 	img.color = active ? Color.red : Color.gray;
-		// }
-	}
-
-	void SwitchButton(Button bt)
-	{
-		foreach (Button button in switch_buttons)
-		{
-			SetButton(button, bt == button);
 		}
 	}
 }

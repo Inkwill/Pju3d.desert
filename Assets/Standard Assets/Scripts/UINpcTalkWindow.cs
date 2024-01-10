@@ -5,7 +5,7 @@ using UnityEngine;
 public class UINpcTalkWindow : UIWindow
 {
 	Npc m_npc;
-	public override void OnOpen()
+	protected override void OnOpen()
 	{
 		m_npc = m_digtool.GetLastInner<Npc>();
 		if (m_npc)
@@ -15,7 +15,7 @@ public class UINpcTalkWindow : UIWindow
 		}
 	}
 
-	public override void OnClose()
+	protected override void OnClose()
 	{
 		m_npc?.EndTalk();
 	}

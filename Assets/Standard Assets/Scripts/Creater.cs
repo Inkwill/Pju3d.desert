@@ -45,14 +45,14 @@ public class Creater : TimerBehaviour
 	{
 		if (fxProgress) fxProgress.SetActive(true);
 		if (showObj) showObj.SetActive(true);
-		if (m_character) m_character.PlayWork(true);
+		if (m_character) m_character.ChangeState(CharacterControl.State.WORKING, true);
 	}
 
 	protected override void OnEnd()
 	{
 		if (fxProgress) fxProgress.SetActive(false);
 		if (showObj) showObj.SetActive(false);
-		if (m_character) m_character.PlayWork(false);
+		if (m_character) m_character.ChangeState(CharacterControl.State.WORKING, false);
 		Destroy(gameObject, interval);
 	}
 	protected override void OnTimer()

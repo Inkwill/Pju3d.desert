@@ -118,3 +118,5 @@ MonoBehaviour:
   cameraCtrl: {fileID: 0}
   digtool: {fileID: 0}
   m_winList: []
+  win_LastOpen: {fileID: 0}
+  win_LastClose: {fileID: 0}

@@ -513,7 +513,6 @@ MonoBehaviour:
   interval: 0.2
   during: 10
   times: -1
-  auto: 0
   progressSlider: {fileID: 6801603274825253710}
   m_CharacterData: {fileID: 5549394745342254537}
 --- !u!1 &5549394743663049038
@@ -563,7 +562,6 @@ GameObject:
   - component: {fileID: 5549394745342254542}
   - component: {fileID: 5549394745342254543}
   - component: {fileID: 1569409349163966999}
-  - component: {fileID: 2095995333904923747}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -759,18 +757,6 @@ MonoBehaviour:
   m_event:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2095995333904923747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5549394745342254548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd6b97ab3ac304747b998f1968fef231, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6456407764239576092
 GameObject:
   m_ObjectHideFlags: 0

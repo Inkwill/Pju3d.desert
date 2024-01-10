@@ -7,12 +7,20 @@ using UnityEngine.AI;
 
 public class DigTool : MonoBehaviour
 {
-	public Pit pitObj;
-
 	public CharacterControl m_character;
 
 	InteractOnTrigger m_Detector;
+	Renderer m_Renderer;
 
+	bool m_buildmodel;
+	public bool BuildModel
+	{
+		get { return m_buildmodel; }
+		set
+		{
+			m_Renderer.enabled = m_buildmodel = value;
+		}
+	}
 
 	// Update is called once per frame
 	private void Start()
@@ -20,6 +28,26 @@ public class DigTool : MonoBehaviour
 		m_Detector = GetComponent<InteractOnTrigger>();
 		m_Detector.OnEnter.AddListener(OnEnter);
 		m_Detector.OnExit.AddListener(OnExit);
+		m_Renderer = GetComponent<Renderer>();
+	}
+
+	void FixedUpdate()
+	{
+		switch (SceneBoxInfo(false))
+		{
+			case null:
+				m_Renderer.material.color = Color.green;
+				break;
+			case "pit":
+				m_Renderer.material.color = Color.red;
+				break;
+			case "npc":
+				m_Renderer.material.color = Color.red;
+				break;
+			default:
+				m_Renderer.material.color = Color.red;
+				break;
+		}
 	}
 	void OnEnter(GameObject enter)
 	{
@@ -45,7 +73,7 @@ public class DigTool : MonoBehaviour
 	{
 		if (eventMessage == "event_work_completed")
 		{
-			m_character.PlayWork(false);
+			m_character.ChangeState(CharacterControl.State.WORKING, false);
 		}
 	}
 
