@@ -102,6 +102,8 @@ namespace CreatorKitCodeInternal
 			m_Agent = GetComponent<NavMeshAgent>();
 			m_Animator = GetComponentInChildren<Animator>();
 			m_Detector = GetComponentInChildren<InteractOnTrigger>();
+			m_Detector.OnEnter.AddListener(OnEnter);
+			m_Detector.OnExit.AddListener(OnExit);
 
 			m_Agent.speed = Speed;
 			m_Agent.angularSpeed = 360.0f;
@@ -155,6 +157,12 @@ namespace CreatorKitCodeInternal
 		public void FixedUpdate()
 		{
 			if (m_CurrentState == State.Dead || m_CurrentState == State.WORKING) return;
+
+			if (m_CurrentTargetCharacterData == null && m_CurrentState == State.DEFAULT)
+			{
+				GameObject enemy = m_Detector.GetNearest();
+				if (enemy) m_CurrentTargetCharacterData = enemy.GetComponent<CharacterData>();
+			}
 
 			Vector3 direction = Vector3.forward * variableJoystick.Vertical + Vector3.right * variableJoystick.Horizontal;
 			if (direction.magnitude > 0)
@@ -216,12 +224,7 @@ namespace CreatorKitCodeInternal
 				return;
 			}
 
-			Ray screenRay = CameraController.Instance.GameplayCamera.ScreenPointToRay(Input.mousePosition);
-
-			// if (m_TargetInteractable != null)
-			// {
-			// 	CheckInteractableRange();
-			// }
+			//Ray screenRay = CameraController.Instance.GameplayCamera.ScreenPointToRay(Input.mousePosition);
 
 			if (m_CurrentTargetCharacterData != null)
 			{
@@ -521,13 +524,21 @@ namespace CreatorKitCodeInternal
 			}
 		}
 
-
-		public void OnDetected(string type)
+		void OnEnter(GameObject enter)
 		{
-			//Debug.Log("OnDetected, obj = " + gameObject + " type= " + type + " target= " + m_Detector.lastInteracter);
-			var enemy = m_Detector.GetIntruder();
-			m_CurrentTargetCharacterData = enemy?.GetComponent<CharacterData>();
-			//Debug.Log("CurrentTarget = " + m_CurrentTargetCharacterData);
+			//m_CurrentTargetCharacterData = enter.GetComponent<CharacterData>();
+		}
+
+		void OnExit(GameObject exiter)
+		{
+			if (m_CurrentTargetCharacterData && m_CurrentTargetCharacterData.gameObject == exiter)
+			{
+				m_CurrentTargetCharacterData = m_Detector.GetNearest()?.GetComponent<CharacterData>();
+			}
+			else
+			{
+				Debug.Log("kill enemy : " + exiter);
+			}
 		}
 
 		public void PlayWork(bool play)

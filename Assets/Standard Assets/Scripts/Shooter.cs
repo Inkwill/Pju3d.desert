@@ -3,51 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
 
-public class Shooter : Creater
+public class Shooter : TimerBehaviour
 {
-	Transform m_CurrentTarget;
+	GameObject m_CurrentTarget;
 	InteractOnTrigger m_Detector;
 	public CharacterData m_CharacterData;
-	private void Start()
+	void Start()
 	{
 		m_Detector = GetComponentInChildren<InteractOnTrigger>();
+		m_Detector.OnEnter.AddListener(OnEnter);
+		m_Detector.OnExit.AddListener(OnExit);
 		m_CharacterData.Init();
 	}
 
-	public override void CreateObj(Transform trans)
+	protected override void OnTimer()
 	{
 		if (m_CurrentTarget)
 		{
-			GameObject createObj = Resources.Load(m_targetName) as GameObject;
-			createObj = Instantiate(createObj, trans.position, Quaternion.Euler(0, 180, 0)) as GameObject;
+			GameObject createObj = Resources.Load("bullet") as GameObject;
+			createObj = Instantiate(createObj, transform.position, Quaternion.Euler(0, 180, 0)) as GameObject;
 			Bullet bullet = createObj.GetComponent<Bullet>();
 			if (bullet)
 			{
-				bullet.target = m_CurrentTarget;
+				bullet.target = m_CurrentTarget.transform;
 				bullet.shooter = m_CharacterData;
 				bullet.active = true;
 			}
 		}
 	}
 
-	public void OnDetected(string type)
+	protected override void OnInterval()
 	{
-		if (type == "exit" && m_CurrentTarget)
+		if (!m_CurrentTarget)
 		{
-			if (m_CurrentTarget.gameObject == m_Detector.lastExiter)
-			{
-				m_CurrentTarget = null;
-			}
+			m_CurrentTarget = m_Detector.GetNearest();
+			if (m_CurrentTarget) isStarted = true;
 		}
+	}
 
-		var enemy = m_Detector.GetIntruder();
-		if (enemy)
+	void OnEnter(GameObject enter)
+	{
+		if (!m_CurrentTarget)
 		{
-			m_CurrentTarget = enemy?.transform;
+			m_CurrentTarget = enter;
 			isStarted = true;
 		}
+	}
 
-		if (!enemy && !m_CurrentTarget) isStarted = false;
-		//Debug.Log("CurrentTarget = " + m_CurrentTargetCharacterData);
+	void OnExit(GameObject exiter)
+	{
+		if (m_CurrentTarget.gameObject == exiter)
+		{
+			m_CurrentTarget = null;
+			isStarted = false;
+		}
 	}
 }

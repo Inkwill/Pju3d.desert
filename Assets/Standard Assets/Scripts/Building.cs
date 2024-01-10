@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
 
-public class Building : MonoBehaviour
+public class Building : TimerBehaviour
 {
 	CharacterData m_CharacterData;
 	void Start()

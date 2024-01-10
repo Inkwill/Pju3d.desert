@@ -101,7 +101,7 @@ Transform:
   m_GameObject: {fileID: 2361409564726942478}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.107, y: 4.394, z: 0.69}
+  m_LocalPosition: {x: 0.107, y: 3.356, z: 0.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -215,7 +215,6 @@ GameObject:
   - component: {fileID: 20382521450558625}
   - component: {fileID: 8620759668883383812}
   - component: {fileID: 4470911453094232027}
-  - component: {fileID: 4043609040992462654}
   - component: {fileID: 5976539223668299168}
   m_Layer: 0
   m_Name: nav
@@ -289,27 +288,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4043609040992462654
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4038370790702397638}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5976539223668299168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,6 +613,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1665068905567385778}
   - component: {fileID: 8808625526842954357}
+  - component: {fileID: 4909541052228188201}
   m_Layer: 0
   m_Name: tower_windmill
   m_TagString: Untagged
@@ -683,6 +662,23 @@ MonoBehaviour:
       elementalBoosts: 00000000000000000000000000000000
   StartingWeapon: {fileID: 11400000, guid: 1bc88fa9b7f7fc7459fd151c254349d0, type: 2}
   HitClip: []
+--- !u!114 &4909541052228188201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7891067466924855349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03aa0f4915897fd45af92c979df190ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interval: 1
+  during: 10
+  times: -1
+  auto: 1
+  progressSlider: {fileID: 0}
 --- !u!1 &9107655136896120317
 GameObject:
   m_ObjectHideFlags: 0

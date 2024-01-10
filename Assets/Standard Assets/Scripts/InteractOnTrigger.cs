@@ -8,7 +8,7 @@ public class InteractOnTrigger : MonoBehaviour
 {
 	public LayerMask layers;
 	public bool once;
-	public UnityEvent<string> OnEnter, OnExit;
+	public UnityEvent<GameObject> OnEnter, OnExit;
 
 	public GameObject lastInner;
 	public GameObject lastExiter;
@@ -39,7 +39,7 @@ public class InteractOnTrigger : MonoBehaviour
 			interObjects.Add(lastInner);
 			lastInner.GetComponent<EventSender>()?.m_event.AddListener(OnInterEvent);
 		}
-		OnEnter.Invoke("enter");
+		OnEnter.Invoke(enter);
 		if (once) collider.enabled = false;
 	}
 
@@ -57,26 +57,33 @@ public class InteractOnTrigger : MonoBehaviour
 
 	protected virtual void ExecuteOnExit(GameObject exiter)
 	{
-		if (exiter == lastInner) lastInner = null;
 		interObjects.Remove(exiter);
+		if (exiter == lastInner)
+		{
+			lastInner = interObjects.Count > 0 ? interObjects[interObjects.Count - 1] : null;
+		}
 		exiter.GetComponent<EventSender>()?.m_event.RemoveListener(OnInterEvent);
-		OnExit.Invoke("exit");
+		OnExit.Invoke(exiter);
 	}
 
-	public GameObject GetIntruder()
+	public GameObject GetNearest()
 	{
-		foreach (GameObject intruder in interObjects)
+		if (interObjects.Count == 0) return null;
+
+		GameObject nearest = interObjects[0];
+		float nearestDistance = Vector3.Distance(transform.position, nearest.transform.position);
+
+		for (int i = 1; i < interObjects.Count; i++)
 		{
-			if (intruder)
+			float distance = Vector3.Distance(transform.position, interObjects[i].transform.position);
+
+			if (distance < nearestDistance)
 			{
-				return intruder;
-			}
-			else
-			{
-				interObjects.Remove(intruder);
+				nearest = interObjects[i];
+				nearestDistance = distance;
 			}
 		}
-		return null;
+		return nearest;
 	}
 
 	void OnInterEvent(GameObject sender, string eventMessage)
@@ -85,8 +92,6 @@ public class InteractOnTrigger : MonoBehaviour
 		if (eventMessage == "Dead" && interObjects.Contains(sender))
 		{
 			ExecuteOnExit(sender);
-			if (lastInner == sender) lastInner = null;
-			Debug.Log("interObj is Dead :" + sender);
 		}
 	}
 }

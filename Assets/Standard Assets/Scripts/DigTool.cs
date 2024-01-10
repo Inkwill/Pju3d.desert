@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CreatorKitCode;
 using CreatorKitCodeInternal;
 using UnityEngine.AI;
 
@@ -17,17 +18,27 @@ public class DigTool : MonoBehaviour
 	private void Start()
 	{
 		m_Detector = GetComponent<InteractOnTrigger>();
+		m_Detector.OnEnter.AddListener(OnEnter);
+		m_Detector.OnExit.AddListener(OnExit);
 	}
-	void FixedUpdate()
+	void OnEnter(GameObject enter)
 	{
-		// if (Input.GetKeyDown(KeyCode.Return))
-		// {
+		//Debug.Log("DigTool OnEnter: " + enter);
+	}
 
-		// }
-		// if (Input.GetKeyDown("space"))
-		// {
-		// 	Debug.Log("SceneDetector : " + m_Detector.GetSceneBox());
-		// }
+	void OnExit(GameObject exiter)
+	{
+		//Debug.Log("DigTool OnExit:" + exiter);
+	}
+
+	void HighlightTarget(GameObject obj, bool active)
+	{
+		HighlightableObject target = obj.GetComponent<HighlightableObject>();
+		if (target)
+		{
+			if (active) target.Highlight();
+			else target.Dehighlight();
+		}
 	}
 
 	void OnWorkCompleted(GameObject sender, string eventMessage)

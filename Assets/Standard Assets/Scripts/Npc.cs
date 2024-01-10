@@ -7,6 +7,7 @@ public class Npc : MonoBehaviour
 	public string name;
 	public GameObject talkCam;
 
+
 	void Start()
 	{
 		if (talkCam) talkCam.SetActive(false);

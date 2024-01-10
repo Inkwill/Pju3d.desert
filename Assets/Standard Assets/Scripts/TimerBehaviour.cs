@@ -9,7 +9,6 @@ public class TimerBehaviour : MonoBehaviour
 	public float interval = 1.0f;
 	public float during = 10.0f;
 	public int times = -1;  //times <= 0  means loop
-	public bool auto = true;
 	public Slider progressSlider;
 	float m_curTimer = 0f;
 	float m_step = 0f;
@@ -31,10 +30,6 @@ public class TimerBehaviour : MonoBehaviour
 			}
 		}
 	}
-	// private void Start()
-	// {
-	// 	isStarted = auto;
-	// }
 
 	void Update()
 	{

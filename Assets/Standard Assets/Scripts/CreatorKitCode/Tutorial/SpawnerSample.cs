@@ -11,7 +11,13 @@ namespace CreatorKitCodeInternal
 		public int radius = 5;
 		public int angleStep = 15;
 		public int spawnNum = 5;
+		public bool auto = true;
 
+
+		private void Start()
+		{
+			isStarted = auto;
+		}
 		protected override void OnTimer()
 		{
 			for (int i = 0; i < spawnNum; i++)

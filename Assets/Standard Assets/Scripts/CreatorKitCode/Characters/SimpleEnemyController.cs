@@ -56,6 +56,8 @@ namespace CreatorKitCodeInternal
 			m_Animator = GetComponentInChildren<Animator>();
 			m_Agent = GetComponent<NavMeshAgent>();
 			m_Detector = GetComponentInChildren<InteractOnTrigger>();
+			m_Detector.OnEnter.AddListener(OnEnter);
+			m_Detector.OnExit.AddListener(OnExit);
 
 			m_SpeedAnimHash = Animator.StringToHash("Speed");
 			m_AttackAnimHash = Animator.StringToHash("Attack");
@@ -209,7 +211,7 @@ namespace CreatorKitCodeInternal
 			//CharacterData playerData = CharacterControl.Instance.Data;
 
 			//if we can't reach the player anymore when it's time to damage, then that attack miss.
-			if (!m_CharacterData.CanAttackReach(m_Enemy))
+			if (m_Enemy && !m_CharacterData.CanAttackReach(m_Enemy))
 				return;
 
 			if (m_Enemy) m_CharacterData.Attack(m_Enemy);
@@ -228,11 +230,15 @@ namespace CreatorKitCodeInternal
 			VFXManager.PlayVFX(VFXType.StepPuff, pos);
 		}
 
-		public void OnDetected(string type)
+		void OnEnter(GameObject enter)
 		{
-			//Debug.Log("OnDetected, obj = " + gameObject + " type= " + type + " target= " + m_Detector.lastInteracter);
-			m_Enemy = m_Detector.GetIntruder()?.GetComponent<CharacterData>();
-			//Debug.Log("m_Enemy = " + m_Enemy);
+			if (!m_Enemy) m_Enemy = enter.GetComponent<CharacterData>();
+		}
+
+		void OnExit(GameObject exiter)
+		{
+			if (m_Enemy && m_Enemy.gameObject == exiter) m_Enemy = m_Detector.GetNearest()?.GetComponent<CharacterData>();
+			else Debug.Log("kill player : " + exiter);
 		}
 
 		void SetState(State nextState)

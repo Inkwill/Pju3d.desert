@@ -61,7 +61,7 @@ public class Creater : TimerBehaviour
 		//GetComponent<EventSender>()?.Send(gameObject, "event_work_completed");
 	}
 
-	public virtual void CreateObj(Transform trans)
+	void CreateObj(Transform trans)
 	{
 		GameObject createObj = Resources.Load(m_targetName) as GameObject;
 		if (createObj)

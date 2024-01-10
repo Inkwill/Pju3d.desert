@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 5998521005373102623}
   - component: {fileID: 7715494362089377660}
   - component: {fileID: 5525849775138159083}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: DigTool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,9 +134,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -176,7 +176,8 @@ MonoBehaviour:
   OnExit:
     m_PersistentCalls:
       m_Calls: []
-  lastInteracter: {fileID: 0}
+  lastInner: {fileID: 0}
+  lastExiter: {fileID: 0}
 --- !u!1 &2156679889147519523
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +365,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3313820623904243860}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9e94f464eab9d541a8dfa3e09f3f3bd, type: 3}
   m_Name: 
@@ -387,7 +388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Tracked: {fileID: 5549394745342254539}
-  m_Size: {x: 150, y: 20, z: 150}
+  m_Size: {x: 200, y: 20, z: 200}
 --- !u!1 &3802477455295917400
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,13 +511,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interval: 0.2
+  during: 10
   times: -1
   auto: 0
   progressSlider: {fileID: 6801603274825253710}
-  createrObj: {fileID: 9219826987724211706, guid: b3e41fda3f5b45f43b6a45f83e143a9d,
-    type: 3}
-  fxProgress: {fileID: 0}
-  hideObj: {fileID: 0}
   m_CharacterData: {fileID: 5549394745342254537}
 --- !u!1 &5549394743663049038
 GameObject:
@@ -565,6 +563,7 @@ GameObject:
   - component: {fileID: 5549394745342254542}
   - component: {fileID: 5549394745342254543}
   - component: {fileID: 1569409349163966999}
+  - component: {fileID: 2095995333904923747}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -760,6 +759,18 @@ MonoBehaviour:
   m_event:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2095995333904923747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5549394745342254548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd6b97ab3ac304747b998f1968fef231, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6456407764239576092
 GameObject:
   m_ObjectHideFlags: 0
@@ -1036,6 +1047,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138228250969492708, guid: a217a5233176f174a87aaa2c25a0f890,
+        type: 3}
+      propertyPath: OnExit.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138228250969492708, guid: a217a5233176f174a87aaa2c25a0f890,
+        type: 3}
+      propertyPath: OnEnter.m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5138228250969492708, guid: a217a5233176f174a87aaa2c25a0f890,
         type: 3}
@@ -3930,6 +3951,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400018, guid: a40b64bf23366dc42a892af2c6ff6140, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400018, guid: a40b64bf23366dc42a892af2c6ff6140, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: a40b64bf23366dc42a892af2c6ff6140, type: 3}
