@@ -22,6 +22,12 @@ public class DigTool : MonoBehaviour
 		}
 	}
 
+	public bool CanDig
+	{
+		get { return SceneBoxInfo(false) == "blank"; }
+		set { }
+	}
+
 	// Update is called once per frame
 	private void Start()
 	{
@@ -35,7 +41,7 @@ public class DigTool : MonoBehaviour
 	{
 		switch (SceneBoxInfo(false))
 		{
-			case null:
+			case "blank":
 				m_Renderer.material.color = Color.green;
 				break;
 			case "pit":
@@ -80,7 +86,7 @@ public class DigTool : MonoBehaviour
 	public string SceneBoxInfo(bool display)
 	{
 		GameObject sceneBox = m_Detector.lastInner;
-		if (!sceneBox) return display ? "空地" : null;
+		if (!sceneBox) return display ? "空地" : "blank";
 		string sceneTag = sceneBox.tag;
 		switch (sceneTag)
 		{
@@ -105,7 +111,7 @@ public class DigTool : MonoBehaviour
 			default:
 				break;
 		}
-		return display ? "空地" : null;
+		return display ? "空地" : "blank";
 	}
 
 	public Creater DoCreate(string pbName)

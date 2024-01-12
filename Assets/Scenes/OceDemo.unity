@@ -76005,6 +76005,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2118148525921817181, guid: b74b36718b2fa8946a307381a120a835,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2390878720286101461, guid: b74b36718b2fa8946a307381a120a835,
         type: 3}
       propertyPath: m_LocalScale.y

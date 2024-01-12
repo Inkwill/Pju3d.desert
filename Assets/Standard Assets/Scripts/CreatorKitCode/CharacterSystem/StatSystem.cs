@@ -342,7 +342,7 @@ namespace CreatorKitCode
 			int totalDamage = attackData.GetFullDamage();
 
 			ChangeHealth(-totalDamage);
-			//DamageUI.Instance.NewDamage(totalDamage, m_Owner.transform.position);
+			DamageUI.Instance.NewDamage(totalDamage, m_Owner.transform.position);
 		}
 	}
 }

@@ -13,6 +13,8 @@ public class UIWindow : MonoBehaviour
 	protected UIManager m_uiRoot;
 	protected List<Button> switch_buttons;
 
+	bool m_isOpened;
+
 	void Awake()
 	{
 		m_uiRoot = UIManager.root;
@@ -24,6 +26,11 @@ public class UIWindow : MonoBehaviour
 	{
 		OnOpen();
 	}
+
+	void OnDisable()
+	{
+		OnClose();
+	}
 	public virtual void Close()
 	{
 		OnClose();
@@ -33,7 +40,8 @@ public class UIWindow : MonoBehaviour
 	}
 
 	protected virtual void OnOpen() { }
-	protected virtual void OnClose() { }
+	protected virtual void OnOpened() { m_isOpened = true; }
+	protected virtual void OnClose() { m_isOpened = false; }
 	protected virtual void OnClosed() { gameObject.SetActive(false); }
 
 	public void Back()
@@ -41,14 +49,15 @@ public class UIWindow : MonoBehaviour
 		m_uiRoot.BackWindow(this);
 	}
 
-	protected void SetButton(Button bt, bool active)
+	public static void SetButton(Button bt, bool active)
 	{
 		if (bt.interactable == active) return;
+		if (!bt.gameObject.active) bt.gameObject.SetActive(true);
 
 		bt.interactable = active;
-		string anim = active ? "move_up" : "move_down";
+		//string state = active ? "show" : "hide";
 		Animator animator = bt.GetComponent<Animator>();
-		if (animator) animator.Play(anim);
+		if (animator) animator.SetBool("show", active);//animator.Play(anim);
 
 		// Image[] imgs = bt.gameObject.GetComponentsInChildren<Image>();
 		// foreach (Image img in imgs)
