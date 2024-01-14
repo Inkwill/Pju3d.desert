@@ -5,16 +5,19 @@ using UnityEngine.UI;
 
 public class UIBuildWindow : UIWindow
 {
-	public Text infoPos;
-	public Text infoTerrian;
-	public Button btPit;
 
+	public Button btConfirm;
+
+	protected override void OnOpen()
+	{
+		SetButton(btConfirm, false);
+
+	}
 	protected override void OnOpened()
 	{
 		m_digtool.BuildModel = true;
 		// objList.SetActive(true);
 		// btConfirm.interactable = false;
-		SetButton(btPit, true);
 		base.OnOpened();
 	}
 
@@ -31,24 +34,22 @@ public class UIBuildWindow : UIWindow
 
 	void FixedUpdate()
 	{
-		infoPos.text = m_player.gameObject.transform.position.ToString();
-		infoTerrian.text = m_digtool.SceneBoxInfo(true);
-		// switch (m_digtool.SceneBoxInfo(false))
-		// {
-		// 	case null:
-		// 		if (m_player.canWork && !btConfirm.interactable) SetButton(btConfirm, true);
-		// 		break;
-		// 	default:
-		// 		SetButton(btConfirm, false);
-		// 		break;
-		// }
+		switch (m_digtool.SceneBoxInfo(false))
+		{
+			case "blank":
+				if (m_player.canWork && !btConfirm.interactable) SetButton(btConfirm, true);
+				break;
+			default:
+				SetButton(btConfirm, false);
+				break;
+		}
 	}
 
 	public override void OnButtonClick(string eventName)
 	{
 		switch (eventName)
 		{
-			case "pit":
+			case "confirm":
 				if (m_digtool.CanDig) m_digtool.DoCreate("pit");
 				break;
 			case "place":

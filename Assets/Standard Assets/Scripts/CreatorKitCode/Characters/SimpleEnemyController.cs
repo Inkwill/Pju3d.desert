@@ -38,7 +38,7 @@ namespace CreatorKitCodeInternal
 		int m_DeathAnimHash;
 		int m_HitAnimHash;
 		bool m_Pursuing;
-		float m_PursuitTimer = 0.0f;
+		//float m_PursuitTimer = 0.0f;
 
 		//LootSpawner m_LootSpawner;
 

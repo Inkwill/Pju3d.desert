@@ -52,7 +52,7 @@ public class UIWindow : MonoBehaviour
 	public static void SetButton(Button bt, bool active)
 	{
 		if (bt.interactable == active) return;
-		if (!bt.gameObject.active) bt.gameObject.SetActive(true);
+		if (!bt.gameObject.activeSelf) bt.gameObject.SetActive(true);
 
 		bt.interactable = active;
 		//string state = active ? "show" : "hide";

@@ -18,7 +18,8 @@ public class DigTool : MonoBehaviour
 		get { return m_buildmodel; }
 		set
 		{
-			m_Renderer.enabled = m_buildmodel = value;
+			m_buildmodel = value;
+			if (m_Renderer) m_Renderer.enabled = m_buildmodel;
 		}
 	}
 
@@ -92,22 +93,16 @@ public class DigTool : MonoBehaviour
 		{
 			case "road":
 				return display ? "道路" : sceneTag;
-				break;
 			case "building":
 				return display ? "建筑:" + sceneBox : sceneTag;
-				break;
 			case "pit":
 				return display ? "坑:" + sceneBox : sceneTag;
-				break;
 			case "mount":
 				return display ? "山体:" : sceneTag;
-				break;
 			case "npc":
 				return display ? "npc:" + sceneBox : sceneTag;
-				break;
 			case "creater":
 				return display ? "建造中..." : sceneTag;
-				break;
 			default:
 				break;
 		}

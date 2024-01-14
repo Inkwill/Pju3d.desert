@@ -6,11 +6,15 @@ using UnityEngine.UI;
 
 public class UIMainWindow : UIWindow
 {
-	public Button btBuild;
+	public Button btDig;
+	public Toggle tgDigTool;
 
 	public Button btPlant;
 
 	public Button btTalk;
+
+	public Text infoPos;
+	public Text infoTerrian;
 
 
 	protected override void OnOpen()
@@ -19,16 +23,20 @@ public class UIMainWindow : UIWindow
 		switch_buttons.Add(btPlant);
 		switch_buttons.Add(btTalk);
 
-		SetButton(btBuild, true);
 		SetButton(btPlant, false);
 		SetButton(btTalk, false);
+
+		tgDigTool.onValueChanged.AddListener(SetDigTool);
 	}
 	void FixedUpdate()
 	{
+		infoPos.text = m_player.gameObject.transform.position.ToString();
+		infoTerrian.text = m_digtool.SceneBoxInfo(true);
+		SetButton(btDig, m_digtool.CanDig);
 		switch (m_digtool?.SceneBoxInfo(false))
 		{
-			// case null:
-			// 	if (m_player.canWork && !btBuild.interactable) SwitchButton(btBuild);
+			// case "blank":
+			// 	if (m_player.canWork && !btDig.interactable) SwitchButton(btDig);
 			// 	break;
 			case "pit":
 				if (m_player.canWork && !btPlant.interactable) SwitchButton(btPlant);
@@ -46,8 +54,8 @@ public class UIMainWindow : UIWindow
 	{
 		switch (eventName)
 		{
-			case "build":
-				m_uiRoot.SwitchWindow("winBuild");
+			case "dig":
+				if (m_digtool.CanDig) m_digtool.DoCreate("pit");
 				break;
 			case "plant":
 				m_uiRoot.SwitchWindow("winPlant");
@@ -61,5 +69,10 @@ public class UIMainWindow : UIWindow
 			default:
 				break;
 		}
+	}
+
+	public void SetDigTool(bool toggle)
+	{
+		m_digtool.BuildModel = toggle;
 	}
 }

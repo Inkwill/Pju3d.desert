@@ -51,7 +51,7 @@ namespace CreatorKitCodeInternal
 		int m_RespawnParamID;
 		int m_WokingID;
 
-		bool m_IsKO = false;
+		//bool m_IsKO = false;
 		float m_KOTimer = 0.0f;
 
 		int m_InteractableLayer;

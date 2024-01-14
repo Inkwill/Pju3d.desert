@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
 		during_check += Time.deltaTime;
 		if (during_check >= 2.0f)
 		{
-			if (!win_LastOpen.gameObject.active)
+			if (!win_LastOpen.gameObject.activeSelf)
 				win_LastOpen.gameObject.SetActive(true);
 			during_check = 0;
 		}
