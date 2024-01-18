@@ -74,6 +74,8 @@ namespace CreatorKitCodeInternal
 
 		DigTool m_digTool;
 
+		public UICharacterHud hud;
+
 		public enum State
 		{
 			DEFAULT,
@@ -107,6 +109,7 @@ namespace CreatorKitCodeInternal
 			m_Detector.OnEnter.AddListener(OnEnter);
 			m_Detector.OnExit.AddListener(OnExit);
 			m_digTool = GetComponentInChildren<DigTool>();
+			hud = GetComponentInChildren<UICharacterHud>();
 
 			m_Agent.speed = Speed;
 			m_Agent.angularSpeed = 360.0f;

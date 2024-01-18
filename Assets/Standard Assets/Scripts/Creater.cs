@@ -25,6 +25,7 @@ public class Creater : TimerBehaviour
 		{
 			case "pit":
 				digDeep = 0.1f;
+				if (m_character) progressSlider = m_character.hud.sliderPg;
 				break;
 			default:
 				break;
@@ -73,6 +74,6 @@ public class Creater : TimerBehaviour
 
 	protected override void OnProcessing(float completed)
 	{
-		if (digDeep > 0) terrainTool.LowerTerrain(transform.position, digDeep * 0.01f, 8, 8);
+		if (digDeep > 0) terrainTool.LowerTerrain(transform.position, digDeep * 0.01f, 5, 5);
 	}
 }

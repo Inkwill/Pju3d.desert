@@ -19,7 +19,12 @@ public class TimerBehaviour : MonoBehaviour
 		set
 		{
 			m_started = value;
-			if (progressSlider) progressSlider.gameObject.SetActive(value);
+			if (progressSlider)
+			{
+				progressSlider.gameObject.SetActive(value);
+				progressSlider.maxValue = during;
+				progressSlider.value = m_curTimer;
+			}
 			if (m_started)
 			{
 				OnStart();
@@ -50,7 +55,7 @@ public class TimerBehaviour : MonoBehaviour
 				OnProcessing(m_curTimer / during);
 				m_step = 0f;
 			}
-			if (progressSlider) progressSlider.value = m_curTimer / during;
+			if (progressSlider) progressSlider.value = m_curTimer;
 		}
 		else if (m_step >= interval)
 		{

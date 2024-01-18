@@ -12,7 +12,7 @@ public class DigTool : MonoBehaviour
 	InteractOnTrigger m_Detector;
 	Renderer m_Renderer;
 
-	bool m_buildmodel;
+	bool m_buildmodel = true;
 	public bool BuildModel
 	{
 		get { return m_buildmodel; }

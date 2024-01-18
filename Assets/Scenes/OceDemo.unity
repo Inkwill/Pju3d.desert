@@ -76000,6 +76000,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1737896439910172446, guid: b74b36718b2fa8946a307381a120a835,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1876964062391230609, guid: b74b36718b2fa8946a307381a120a835,
         type: 3}
       propertyPath: m_IsActive
@@ -76008,18 +76013,34 @@ PrefabInstance:
     - target: {fileID: 2118148525921817181, guid: b74b36718b2fa8946a307381a120a835,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2390878720286101461, guid: b74b36718b2fa8946a307381a120a835,
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4096633950372475039, guid: b74b36718b2fa8946a307381a120a835,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4188359303036728622, guid: b74b36718b2fa8946a307381a120a835,
         type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5549394745342254537, guid: b74b36718b2fa8946a307381a120a835,
+        type: 3}
+      propertyPath: CharacterName
+      value: Jack
+      objectReference: {fileID: 0}
+    - target: {fileID: 5549394745342254537, guid: b74b36718b2fa8946a307381a120a835,
+        type: 3}
+      propertyPath: StartingWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 44e5dc8ef2e5fc44aa99db53e2c5a1be,
+        type: 2}
     - target: {fileID: 5549394745342254539, guid: b74b36718b2fa8946a307381a120a835,
         type: 3}
       propertyPath: m_LocalPosition.x

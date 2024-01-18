@@ -12,6 +12,8 @@ public class Pit : Creater
 	public Text text_Info;
 	public Text text_help;
 
+	const int m_pitSize = 5;
+
 
 
 	public float curDeep
@@ -19,7 +21,7 @@ public class Pit : Creater
 		get { return 10 - Terrain.activeTerrain.SampleHeight(transform.position); }
 		set
 		{
-			terrainTool.SetTerrainHeight(transform.position, (10 - value) * 0.01f, 8, 8);
+			terrainTool.SetTerrainHeight(transform.position, (10 - value) * 0.01f, m_pitSize, m_pitSize);
 		}
 	}
 	protected override void OnProcessing(float completed)
