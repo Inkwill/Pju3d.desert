@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,12 @@ using UnityEngine.Events;
 
 public class EventSender : MonoBehaviour
 {
-	public UnityEvent<GameObject, string> m_event;
+	public UnityEvent<GameObject, string> events;
+	public Action<GameObject, string> actions;
 
 	public void Send(GameObject sender, string eventMessage)
 	{
-		m_event.Invoke(sender, eventMessage);
+		events?.Invoke(sender, eventMessage);
+		actions?.Invoke(sender, eventMessage);
 	}
 }

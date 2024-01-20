@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using CreatorKitCode;
 using CreatorKitCodeInternal;
 
 public class UIWindow : MonoBehaviour
 {
 	public Text winTitle;
-
+	public AudioClip OpenClip;
+	public AudioClip CloseClip;
 	protected CharacterControl m_player;
 	protected DigTool m_digtool;
 	protected UIManager m_uiRoot;
 	protected List<Button> switch_buttons;
+
+	protected Canvas m_DragCanvas;
 
 	bool m_isOpened;
 
@@ -20,11 +24,14 @@ public class UIWindow : MonoBehaviour
 		m_uiRoot = UIManager.root;
 		m_player = m_uiRoot.player;
 		m_digtool = m_uiRoot.digtool;
+		m_DragCanvas = m_uiRoot.DragCanvas;
+		Init();
 	}
 
 	void OnEnable()
 	{
 		OnOpen();
+		if (OpenClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = OpenClip });
 	}
 
 	void OnDisable()
@@ -37,8 +44,10 @@ public class UIWindow : MonoBehaviour
 		Animator anim = GetComponent<Animator>();
 		if (anim) anim.Play("close");
 		else OnClosed();
+		if (CloseClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = CloseClip });
 	}
 
+	protected virtual void Init() { }
 	protected virtual void OnOpen() { }
 	protected virtual void OnOpened() { m_isOpened = true; }
 	protected virtual void OnClose() { m_isOpened = false; }

@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
 	public CameraController cameraCtrl;
 
 	public DigTool digtool;
+	public Canvas DragCanvas;
 
 	public List<UIWindow> m_winList;
 

@@ -37,7 +37,7 @@ public class InteractOnTrigger : MonoBehaviour
 		if (!interObjects.Contains(lastInner))
 		{
 			interObjects.Add(lastInner);
-			lastInner.GetComponent<EventSender>()?.m_event.AddListener(OnInterEvent);
+			lastInner.GetComponent<EventSender>()?.events.AddListener(OnInterEvent);
 		}
 		OnEnter.Invoke(enter);
 		if (once) collider.enabled = false;
@@ -62,7 +62,7 @@ public class InteractOnTrigger : MonoBehaviour
 		{
 			lastInner = interObjects.Count > 0 ? interObjects[interObjects.Count - 1] : null;
 		}
-		exiter.GetComponent<EventSender>()?.m_event.RemoveListener(OnInterEvent);
+		exiter.GetComponent<EventSender>()?.events.RemoveListener(OnInterEvent);
 		OnExit.Invoke(exiter);
 	}
 

@@ -6,7 +6,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: winBase
+  m_Name: winMain
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:
@@ -197,7 +197,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 64675d8943615c145ba665a43ec5d03b, type: 2}
+  m_Motion: {fileID: 7400000, guid: 5e6235a71e893bc4b87aecc49139dc20, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -224,7 +224,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 02c18ce8362e50e4e90ce4615e6a5f06, type: 2}
+  m_Motion: {fileID: 7400000, guid: cde4bac9a1aa43f4a971a69a11aa0a66, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

@@ -44,6 +44,7 @@ namespace CreatorKitCode
 			public int defense;
 			public int agility;
 
+
 			//use an array indexed by the DamageType enum for easy extensibility
 			public int[] elementalProtection = new int[Enum.GetValues(typeof(DamageType)).Length];
 			public int[] elementalBoosts = new int[Enum.GetValues(typeof(DamageType)).Length];

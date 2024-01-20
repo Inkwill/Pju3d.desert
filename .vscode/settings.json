@@ -56,6 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-	"dotnet.defaultSolution": "desert.sln",
-	"git.ignoreLimitWarning": true
+    "dotnet.defaultSolution": "Pju3d.desert.sln",
+    "git.ignoreLimitWarning": true
 }

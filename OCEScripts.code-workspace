@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "Assets/Standard Assets/Scripts"
+		},
+		{
+			"path": "Assets/Standard Assets/Plugins/CircularScrollingList"
 		}
 	]
 }

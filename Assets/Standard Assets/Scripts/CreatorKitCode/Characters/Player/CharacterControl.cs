@@ -23,7 +23,16 @@ namespace CreatorKitCodeInternal
 		public float Speed = 10.0f;
 
 		public CharacterData Data => m_CharacterData;
-		public CharacterData CurrentTarget => m_CurrentTargetCharacterData;
+		public CharacterData CurrentTarget
+		{
+			get { return m_CurrentTargetCharacterData; }
+			set
+			{
+				m_CurrentTargetCharacterData = value;
+				GameObject target = value ? m_CurrentTargetCharacterData.gameObject : null;
+				m_eventSender.Send(target, "onTarget");
+			}
+		}
 
 		public Transform WeaponLocator;
 
@@ -73,6 +82,7 @@ namespace CreatorKitCodeInternal
 		SpawnPoint m_CurrentSpawn = null;
 
 		DigTool m_digTool;
+		EventSender m_eventSender;
 
 		public UICharacterHud hud;
 
@@ -110,6 +120,7 @@ namespace CreatorKitCodeInternal
 			m_Detector.OnExit.AddListener(OnExit);
 			m_digTool = GetComponentInChildren<DigTool>();
 			hud = GetComponentInChildren<UICharacterHud>();
+			m_eventSender = GetComponent<EventSender>();
 
 			m_Agent.speed = Speed;
 			m_Agent.angularSpeed = 360.0f;
@@ -167,7 +178,7 @@ namespace CreatorKitCodeInternal
 			if (m_CurrentTargetCharacterData == null && m_CurrentState == State.DEFAULT)
 			{
 				GameObject enemy = m_Detector.GetNearest();
-				if (enemy) m_CurrentTargetCharacterData = enemy.GetComponent<CharacterData>();
+				if (enemy) CurrentTarget = enemy.GetComponent<CharacterData>();
 			}
 
 			Vector3 direction = Vector3.forward * variableJoystick.Vertical + Vector3.right * variableJoystick.Horizontal;
@@ -235,7 +246,7 @@ namespace CreatorKitCodeInternal
 			if (m_CurrentTargetCharacterData != null)
 			{
 				if (m_CurrentTargetCharacterData.Stats.CurrentHealth == 0)
-					m_CurrentTargetCharacterData = null;
+					CurrentTarget = null;
 				else
 					CheckAttack();
 			}
@@ -261,7 +272,7 @@ namespace CreatorKitCodeInternal
 						m_ClearPostAttack = true;
 					}
 				}
-			
+
 
 			if (!EventSystem.current.IsPointerOverGameObject() && m_CurrentState != State.ATTACKING)
 			{
@@ -308,7 +319,7 @@ namespace CreatorKitCodeInternal
 			m_Agent.isStopped = true;
 			m_Agent.ResetPath();
 
-			m_CurrentTargetCharacterData = null;
+			CurrentTarget = null;
 			m_TargetInteractable = null;
 
 			SetState(State.DEFAULT);
@@ -476,7 +487,7 @@ namespace CreatorKitCodeInternal
 			if (m_ClearPostAttack)
 			{
 				m_ClearPostAttack = false;
-				m_CurrentTargetCharacterData = null;
+				CurrentTarget = null;
 				m_TargetInteractable = null;
 			}
 
@@ -532,19 +543,20 @@ namespace CreatorKitCodeInternal
 
 		void OnEnter(GameObject enter)
 		{
-			//m_CurrentTargetCharacterData = enter.GetComponent<CharacterData>();
+			GetComponent<EventSender>()?.Send(enter, "enemy_enter");
 		}
 
 		void OnExit(GameObject exiter)
 		{
 			if (m_CurrentTargetCharacterData && m_CurrentTargetCharacterData.gameObject == exiter)
 			{
-				m_CurrentTargetCharacterData = m_Detector.GetNearest()?.GetComponent<CharacterData>();
+				CurrentTarget = m_Detector.GetNearest()?.GetComponent<CharacterData>();
 			}
 			else
 			{
 				Debug.Log("kill enemy : " + exiter);
 			}
+			GetComponent<EventSender>()?.Send(exiter, "enemy_exiter");
 		}
 
 		public void ChangeState(State state, bool active)

@@ -15,7 +15,7 @@ MonoBehaviour:
   ItemName: EmptyHand
   ItemSprite: {fileID: 21300000, guid: 3b3f6ca0035d2b54fbb4bdbc1edc5182, type: 3}
   Description: unarmed
-  WorldObjectPrefab: {fileID: 1436811195228682453, guid: 170bb3a4df1e76f448eccfac4174adfc,
+  WorldObjectPrefab: {fileID: 1436811195228682453, guid: fbef98e409c6b444e8603e0910a798a1,
     type: 3}
   Slot: 666
   MinimumStrength: 0
@@ -29,4 +29,6 @@ MonoBehaviour:
     MinimumDamage: 0
     MaximumDamage: 0
     MaxRange: 4
+    Dig: 0
+    Cut: 0
   AttackEffects: []

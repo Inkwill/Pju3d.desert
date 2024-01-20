@@ -137,6 +137,10 @@ namespace CreatorKitCode
 			public int MinimumDamage;
 			public int MaximumDamage;
 			public float MaxRange;
+
+			public int Dig;
+
+			public int Cut;
 		}
 
 		[Header("Sounds")]
@@ -144,7 +148,7 @@ namespace CreatorKitCode
 		public AudioClip[] SwingSounds;
 
 		[Header("Stats")]
-		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1 };
+		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1, Dig = 0, Cut = 0 };
 
 		public List<WeaponAttackEffect> AttackEffects;
 

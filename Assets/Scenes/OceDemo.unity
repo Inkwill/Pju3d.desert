@@ -75868,6 +75868,11 @@ PrefabInstance:
       objectReference: {fileID: 1581823366}
     - target: {fileID: 8923592970020563021, guid: 14fb6a8134ee17941a103a80c429a6b3,
         type: 3}
+      propertyPath: DragCanvas
+      value: 
+      objectReference: {fileID: 5564097808463368702}
+    - target: {fileID: 8923592970020563021, guid: 14fb6a8134ee17941a103a80c429a6b3,
+        type: 3}
       propertyPath: cameraCtrl
       value: 
       objectReference: {fileID: 3218442}
@@ -76000,6 +76005,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 481590449962565788, guid: b74b36718b2fa8946a307381a120a835,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1737896439910172446, guid: b74b36718b2fa8946a307381a120a835,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -76030,6 +76040,21 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4489266791487088338, guid: b74b36718b2fa8946a307381a120a835,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4489266791487088338, guid: b74b36718b2fa8946a307381a120a835,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4489266791487088338, guid: b74b36718b2fa8946a307381a120a835,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5549394745342254537, guid: b74b36718b2fa8946a307381a120a835,
         type: 3}
       propertyPath: CharacterName
@@ -76039,7 +76064,7 @@ PrefabInstance:
         type: 3}
       propertyPath: StartingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 44e5dc8ef2e5fc44aa99db53e2c5a1be,
+      objectReference: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec,
         type: 2}
     - target: {fileID: 5549394745342254539, guid: b74b36718b2fa8946a307381a120a835,
         type: 3}
@@ -76349,7 +76374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!223 &5564097808463368702
 Canvas:
   m_ObjectHideFlags: 0
@@ -76364,7 +76389,7 @@ Canvas:
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
-  m_OverrideSorting: 0
+  m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
@@ -76504,8 +76529,8 @@ RectTransform:
   - {fileID: 1452381133412384396}
   - {fileID: 5564097808273907386}
   - {fileID: 5564097809701674728}
-  - {fileID: 5564097808463368697}
   - {fileID: 1336661300}
+  - {fileID: 5564097808463368697}
   m_Father: {fileID: 5564097808657904715}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

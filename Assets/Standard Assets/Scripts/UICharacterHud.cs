@@ -13,8 +13,27 @@ public class UICharacterHud : MonoBehaviour
 
 	private void Start()
 	{
-		if (data && textName) textName.text = data.name;
 		if (sliderPg) sliderPg.gameObject.SetActive(false);
+		if (data) Show(data);
+	}
+
+	public void Show(CharacterData targetData)
+	{
+		data = targetData;
+		if (data)
+		{
+			if (textName) textName.text = data.CharacterName;
+			if (sliderHp)
+			{
+				sliderHp.maxValue = (float)data.Stats.stats.health;
+				sliderHp.value = data.Stats.CurrentHealth;
+			}
+			gameObject.SetActive(true);
+		}
+		else
+		{
+			gameObject.SetActive(false);
+		}
 	}
 
 	private void Update()
@@ -22,12 +41,12 @@ public class UICharacterHud : MonoBehaviour
 		this.transform.forward = Camera.main.transform.forward;
 		if (data && sliderHp)
 		{
-			sliderHp.value = data.Stats.CurrentHealth / (float)data.Stats.stats.health;
+			sliderHp.value = data.Stats.CurrentHealth;
 		}
 	}
 
-	public void SetProgressSlider(bool active)
-	{
-		if (sliderPg) sliderPg.gameObject.SetActive(active);
-	}
+	// public void SetProgressSlider(bool active)
+	// {
+	// 	if (sliderPg) sliderPg.gameObject.SetActive(active);
+	// }
 }
