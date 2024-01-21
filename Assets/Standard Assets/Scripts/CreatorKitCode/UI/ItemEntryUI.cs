@@ -81,14 +81,14 @@ namespace CreatorKitCodeInternal
 
 		public void OnBeginDrag(PointerEventData eventData)
 		{
-			if (EquipmentItem != null)
-				return;
+			// if (EquipmentItem != null)
+			// 	return;
 
-			Owner.CurrentlyDragged = new UIInventoryWindow.DragData();
-			Owner.CurrentlyDragged.DraggedEntry = this;
-			Owner.CurrentlyDragged.OriginalParent = (RectTransform)transform.parent;
+			// Owner.CurrentlyDragged = new UIInventoryWindow.DragData();
+			// Owner.CurrentlyDragged.DraggedEntry = this;
+			// Owner.CurrentlyDragged.OriginalParent = (RectTransform)transform.parent;
 
-			transform.SetParent(UIManager.root.DragCanvas.transform, true);
+			// transform.SetParent(UIManager.root.DragCanvas.transform, true);
 		}
 
 		public void OnDrag(PointerEventData eventData)
