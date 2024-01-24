@@ -26,6 +26,7 @@ public class UIWindow : MonoBehaviour
 		m_digtool = m_uiRoot.digtool;
 		m_DragCanvas = m_uiRoot.DragCanvas;
 		Init();
+		Debug.Log("WindowInit Compeleted: " + this);
 	}
 
 	void OnEnable()

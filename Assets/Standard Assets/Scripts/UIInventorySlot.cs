@@ -6,46 +6,69 @@ using CreatorKitCode;
 
 public class UIInventorySlot : MonoBehaviour
 {
-    public int InventoryID { get; set; } = -1;
+	public int InventoryID { get; set; } = -1;
 
-    [SerializeField]
-    Image iconItem;
-    [SerializeField]
-    Sprite defaultSprite;
-    public Text ItemCount;
-    Item m_item;
-    CharacterData m_CharacterData;
+	[SerializeField]
+	Image iconItem;
+	[SerializeField]
+	Sprite defaultSprite;
+	[SerializeField]
+	AudioClip SlectedClip;
+	public Text ItemCount;
+	public bool equipment;
 
-    public Item item
-    {
-        get { return m_item; }
-        set
-        {
-            m_item = value;
-            iconItem.sprite = m_item ? m_item.ItemSprite : defaultSprite;
-        }
-    }
+	public Toggle tog;
+	Item m_item;
+	CharacterData m_CharacterData;
 
-    public void UpdateEntry(CharacterData data)
-    {
-        m_CharacterData = data;
-        var entry = m_CharacterData.Inventory.Entries[InventoryID];
+	UIInventoryWindow winInventory;
 
-        //gameObject.SetActive(isEnabled);
-        item = entry?.Item;
+	public Item item
+	{
+		get { return m_item; }
+		set
+		{
+			m_item = value;
+			iconItem.sprite = m_item ? m_item.ItemSprite : defaultSprite;
+		}
+	}
 
-        if (item && ItemCount)
-        {
-            //iconItem.sprite = entry.Item.ItemSprite;
+	void Start()
+	{
+		tog = GetComponent<Toggle>();
+		tog.onValueChanged.AddListener(OnToggled);
+		winInventory = tog.group.GetComponent<UIInventoryWindow>();
+	}
+	public void UpdateEntry(CharacterData data)
+	{
+		m_CharacterData = data;
+		var entry = m_CharacterData.Inventory.Entries[InventoryID];
 
-            if (entry?.Count > 1)
-            {
-                ItemCount.text = entry.Count.ToString();
-            }
-            else
-            {
-                ItemCount.text = "";
-            }
-        }
-    }
+		//gameObject.SetActive(isEnabled);
+		item = entry?.Item;
+
+		if (item && entry?.Count > 1)
+		{
+			//iconItem.sprite = entry.Item.ItemSprite;
+
+			if (ItemCount) ItemCount.text = entry.Count.ToString();
+		}
+		else
+		{
+			if (ItemCount) ItemCount.text = "";
+		}
+	}
+
+
+	public void OnToggled(bool selected)
+	{
+		if (SlectedClip && selected) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SlectedClip });
+		winInventory.OnSlotSelected(this, selected);
+	}
+
+	void OnDisable()
+	{
+		Toggle tog = GetComponent<Toggle>();
+		if (tog && tog.isOn) tog.isOn = false;
+	}
 }

@@ -8,49 +8,51 @@ using AirFishLab.ScrollingList;
 
 public class UIMainWindow : UIWindow
 {
-	public Toggle tgDig;
 	public Toggle tgDigTool;
-	public Toggle tgWater;
-	public Toggle tgCut;
-	public Toggle tgAttack;
-
-	public Button btDig;
-
+	public Button btWeapon;
+	public Button btSwitchWeapon;
+	public Image iconWeapon;
 	public Text infoPos;
 	public Text infoTerrian;
+	public Text infoTime;
+	public UITargetInfo targetUI;
 
 	[SerializeField]
-	private CircularScrollingList m_weaponlist;
-	public UICharacterHud monsterHud;
+	AudioClip SwitchWeaponClip;
 
-	protected override void OnOpen()
+
+	protected override void Init()
 	{
 		switch_buttons = new List<Button>();
-		m_player.GetComponent<EventSender>()?.events.AddListener(OnPlayerEvent);
-		SetButton(btDig, false);
-		monsterHud.Show(null);
-
-		tgDig.onValueChanged.AddListener(SetDig);
+		targetUI.Init(m_player);
 		tgDigTool.onValueChanged.AddListener(SetDigTool);
-		tgWater.onValueChanged.AddListener(SetWater);
-		tgCut.onValueChanged.AddListener(SetCut);
-		tgAttack.onValueChanged.AddListener(SetAttack);
+	}
+	protected override void OnOpen()
+	{
+		//SetButton(btDig, false);
+		UpdateWeapon(m_player.Data.Equipment);
+		//if (m_player.Data.Equipment.Weapon == null) m_player.Data.Equipment.EquipWeapon();
+		//SetDig(m_player.Data.Equipment.Weapon.Stats.Dig > 0);
 		//tgDigTool.onValueChanged += value => { m_digtool.BuildModel = value; };
 	}
 
-	void OnPlayerEvent(GameObject obj, string eventName)
+	void UpdateWeapon(EquipmentSystem equipment)
 	{
-		if (eventName == "onTarget")
-		{
-			monsterHud.Show(m_player.CurrentTarget);
-		}
+		btWeapon.gameObject.SetActive(equipment.Weapon || equipment.ViceWeapon);
+		btSwitchWeapon.gameObject.SetActive(equipment.ViceWeapon != null);
+		iconWeapon.enabled = (equipment.Weapon != null);
+		if (equipment.Weapon) iconWeapon.sprite = equipment.Weapon.ItemSprite;
+		tgDigTool.gameObject.SetActive(equipment.Weapon && equipment.Weapon.Stats.Dig > 0);
+		m_digtool.BuildModel = tgDigTool.gameObject.activeSelf && tgDigTool.isOn;
 	}
 	void FixedUpdate()
 	{
 		infoPos.text = m_player.gameObject.transform.position.ToString();
 		infoTerrian.text = m_digtool.SceneBoxInfo(true);
-		if (tgDig.isOn) SetButton(btDig, m_player.canWork && m_digtool.CanDig);
-		else if (btDig.interactable) SetButton(btDig, false);
+		infoTime.text = m_uiRoot.dayNight.TimeInfo;
+		btWeapon.interactable = btSwitchWeapon.interactable = m_player.canWork;
+		//if (tgDig.isOn) SetButton(btDig, m_player.canWork && m_digtool.CanDig);
+		//else if (btDig.interactable) SetButton(btDig, false);
 
 
 		// switch (m_digtool?.SceneBoxInfo(false))
@@ -77,11 +79,13 @@ public class UIMainWindow : UIWindow
 	{
 		switch (eventName)
 		{
-			case "dig":
-				if (m_player.canWork && m_digtool.CanDig) m_digtool.DoCreate("pit");
+			case "UseWeapon":
+				if (m_player.canWork && m_digtool.CanDig && m_digtool.BuildModel) m_digtool.DoCreate("pit");
 				break;
-			case "switch":
-				//if (scroll) scroll.normalizedPosition = scroll.normalizedPosition.x < 0.1 ? new Vector2(1, 0) : new Vector2(0, 0);
+			case "SwitchWeapon":
+				m_player.Data.Equipment.SwitchWeapon();
+				UpdateWeapon(m_player.Data.Equipment);
+				if (SwitchWeaponClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SwitchWeaponClip });
 				break;
 			case "camCtrl":
 				m_uiRoot.cameraCtrl.SwitchModel();
@@ -94,36 +98,36 @@ public class UIMainWindow : UIWindow
 		}
 	}
 
-	public void SetDig(bool toggle)
-	{
-		tgDigTool.gameObject.SetActive(toggle);
-		m_digtool.BuildModel = tgDigTool.isOn && toggle;
-		// string wpName = toggle ? "wp_rake" : "wp_unarmed";
-		// EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
-		// m_player.Data.Equipment.Equip(wp);
-	}
+	// public void SetDig(bool toggle)
+	// {
+	// 	tgDigTool.gameObject.SetActive(toggle);
+	// 	m_digtool.BuildModel = tgDigTool.isOn && toggle;
+	// 	// string wpName = toggle ? "wp_rake" : "wp_unarmed";
+	// 	// EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
+	// 	// m_player.Data.Equipment.Equip(wp);
+	// }
 	public void SetDigTool(bool toggle)
 	{
 		m_digtool.BuildModel = toggle;
 	}
-	public void SetWater(bool toggle)
-	{
-		string wpName = toggle ? "wp_water" : "wp_unarmed";
-		EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
-		m_player.Data.Equipment.Equip(wp);
-	}
-	public void SetCut(bool toggle)
-	{
-		string wpName = toggle ? "wp_axe" : "wp_unarmed";
-		EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
-		m_player.Data.Equipment.Equip(wp);
-	}
-	public void SetAttack(bool toggle)
-	{
-		string wpName = toggle ? "wp_weapon1" : "wp_unarmed";
-		EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
-		m_player.Data.Equipment.Equip(wp);
-	}
+	// public void SetWater(bool toggle)
+	// {
+	// 	string wpName = toggle ? "wp_water" : "wp_unarmed";
+	// 	EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
+	// 	m_player.Data.Equipment.Equip(wp);
+	// }
+	// public void SetCut(bool toggle)
+	// {
+	// 	string wpName = toggle ? "wp_axe" : "wp_unarmed";
+	// 	EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
+	// 	m_player.Data.Equipment.Equip(wp);
+	// }
+	// public void SetAttack(bool toggle)
+	// {
+	// 	string wpName = toggle ? "wp_weapon1" : "wp_unarmed";
+	// 	EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
+	// 	m_player.Data.Equipment.Equip(wp);
+	// }
 
 	// public void DisplayFocusingContent()
 	// {
@@ -134,37 +138,44 @@ public class UIMainWindow : UIWindow
 	// 		$"Focusing content: {centeredContent}");
 	// }
 
-	public void OnBoxSelected(ListBox listBox)
-	{
-		var content = m_weaponlist.ListBank.GetListContent(listBox.ContentID);
-		Weapon wp = content as Weapon;
-		if (wp.Stats.Dig > 0 && m_player.canWork && m_digtool.CanDig) m_digtool.DoCreate("pit");
-		// Debug.Log($"Selected content ID: {listBox.ContentID}, Content: {content}");
+	// public void OnBoxSelected(ListBox listBox)
+	// {
+	// 	var content = m_weaponlist.GetListContent(listBox.ContentID);
+	// 	Weapon wp = content as Weapon;
+	// 	if (wp.Stats.Dig > 0 && m_player.canWork && m_digtool.CanDig) m_digtool.DoCreate("pit");
+	// 	// Debug.Log($"Selected content ID: {listBox.ContentID}, Content: {content}");
 
-	}
+	// }
 
-	public void OnFocusingBoxChanged(ListBox prevFocusingBox, ListBox curFocusingBox)
-	{
-		// Debug.Log(
-		// 	"(Auto updated)\nFocusing content: "
-		// 	+ $"{curFocusingBox}");
-		UIItemListBox box = (UIItemListBox)curFocusingBox;
-		Weapon wp = box?.item as Weapon;
-		if (wp == null)
-		{
-			wp = Resources.Load<Weapon>("wp_unarmed");
-		}
-		else if (wp.WorldObjectPrefab == null)
-		{
-			wp.WorldObjectPrefab = Resources.Load("Unarmed") as GameObject;
+	// public void OnFocusingBoxChanged(ListBox prevFocusingBox, ListBox curFocusingBox)
+	// {
+	// 	// Debug.Log(
+	// 	// 	"(Auto updated)\nFocusing content: "
+	// 	// 	+ $"{curFocusingBox}");
 
-		}
-		m_player.Data.Equipment.Equip(wp);
-		SetDig(wp.Stats.Dig > 0);
-	}
+	// 	UIItemListBox box = (UIItemListBox)curFocusingBox;
+	// 	Weapon wp = box?.item as Weapon;
+	// 	if (wp && wp != m_player.Data.Equipment.Weapon)
+	// 	{
+	// 		m_player.Data.Equipment.SwitchWeapon(wp);
+	// 	}
+	// 	if (wp) SetDig(wp.Stats.Dig > 0);
 
-	public void OnMovementEnd()
-	{
-		//Debug.Log("Movement Ends");
-	}
+	// 	// if (wp == null)
+	// 	// {
+	// 	// 	wp = Resources.Load<Weapon>("wp_unarmed");
+	// 	// }
+	// 	// else if (wp.WorldObjectPrefab == null)
+	// 	// {
+	// 	// 	wp.WorldObjectPrefab = Resources.Load("Unarmed") as GameObject;
+
+	// 	// }
+	// 	// m_player.Data.Equipment.EquipWeapon(wp);
+
+	// }
+
+	// public void OnMovementEnd()
+	// {
+	// 	//Debug.Log("Movement Ends");
+	// }
 }

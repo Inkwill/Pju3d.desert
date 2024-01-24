@@ -10,11 +10,11 @@ public class ItemListBank : BaseListBank
 	[SerializeField]
 	private List<Item> _contents = new List<Item>();
 
-	public void Init(List<Item> items)
+	public void Init(CharacterData data)
 	{
-		// for (var i = 0; i < _numOfContents; ++i)
-		// 	_contents.Add(i + 1);
-		_contents = items;
+		_contents.Clear();
+		if (data.Equipment.Weapon) _contents.Add(data.Equipment.Weapon);
+		if (data.Equipment.ViceWeapon) _contents.Add(data.Equipment.ViceWeapon);
 	}
 
 	public override IListContent GetListContent(int index)
@@ -26,5 +26,6 @@ public class ItemListBank : BaseListBank
 	{
 		return _contents.Count;
 	}
+
 }
 

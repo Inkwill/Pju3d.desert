@@ -12,7 +12,7 @@ namespace CreatorKitCode
 	public class EquipmentSystem
 	{
 		public Weapon Weapon { get; private set; }
-
+		public Weapon ViceWeapon { get; private set; }
 		public Action<EquipmentItem> OnEquiped { get; set; }
 		public Action<EquipmentItem> OnUnequip { get; set; }
 
@@ -23,7 +23,6 @@ namespace CreatorKitCode
 		EquipmentItem m_LegsSlot;
 		EquipmentItem m_FeetSlot;
 		EquipmentItem m_AccessorySlot;
-
 		Weapon m_DefaultWeapon;
 
 		public void Init(CharacterData owner)
@@ -62,8 +61,7 @@ namespace CreatorKitCode
 		/// <param name="item">Which item to equip</param>
 		public void Equip(EquipmentItem item)
 		{
-			Unequip(item.Slot, true);
-
+			Unequip(item.Slot);
 			OnEquiped?.Invoke(item);
 
 			switch (item.Slot)
@@ -100,14 +98,89 @@ namespace CreatorKitCode
 					break;
 				//special value for weapon
 				case (EquipmentItem.EquipmentSlot)666:
-					Weapon = item as Weapon;
-					Weapon.EquippedBy(m_Owner);
+					Debug.LogError("is weapon, shoud use EquipWeapon()!" + item.ToString());
 					break;
 				default:
 					break;
 			}
 		}
 
+		public void EquipWeapon(Weapon wp)
+		{
+			if ((m_DefaultWeapon != null && Weapon == m_DefaultWeapon) || (Weapon != null && ViceWeapon != null)) UnWeapon(Weapon);
+
+			if (Weapon == null)
+			{
+				Weapon = wp;
+				Weapon.EquippedBy(m_Owner);
+				OnEquiped?.Invoke(wp);
+			}
+			else
+			{
+				ViceWeapon = wp;
+				//m_Owner.Inventory.AddItem(ViceWeapon);
+			}
+		}
+		public void EquipWeapon()
+		{
+			if (ViceWeapon != null) SwitchWeapon();
+			else EquipWeapon(m_DefaultWeapon);
+		}
+
+		public void SwitchWeapon()
+		{
+			if (ViceWeapon == null) { Debug.LogError("Switch Weapon is null!"); return; }
+			Weapon wp = Weapon;
+			Weapon = ViceWeapon;
+			if (wp) { wp.UnequippedBy(m_Owner); OnUnequip?.Invoke(wp); }
+			ViceWeapon = wp;
+			Weapon.EquippedBy(m_Owner);
+			OnEquiped?.Invoke(Weapon);
+		}
+
+		public void UnWeapon(Weapon wp)
+		{
+			if (Weapon == wp) Weapon = null;
+			else if (ViceWeapon == wp) ViceWeapon = null;
+			wp.UnequippedBy(m_Owner);
+			OnUnequip?.Invoke(wp);
+			if (wp != m_DefaultWeapon) m_Owner.Inventory.AddItem(wp);
+			// if (wp == Weapon)
+			// {
+			// 	Weapon.UnequippedBy(m_Owner);
+			// 	OnUnequip?.Invoke(Weapon);
+			// 	m_Owner.Inventory.AddItem(Weapon);
+			// 	Weapon = m_DefaultWeapon;
+			// 	Weapon.EquippedBy(m_Owner);
+			// 	OnEquiped?.Invoke(Weapon);
+			// }
+			// else if (wp == ViceWeapon)
+			// {
+			// 	ViceWeapon = null;
+			// 	m_Owner.Inventory.AddItem(wp);
+			// }
+			// else
+			// {
+			// 	Debug.LogError("Try to UnWeapon a unEquip weapon!" + wp);
+
+			// }
+			// if (Weapon != null &&
+			// 				(Weapon != m_DefaultWeapon || isReplacement)) // the only way to unequip the default weapon is through replacing it
+			// {
+			// 	Weapon.UnequippedBy(m_Owner);
+
+			// 	//the default weapon does not go back to the inventory
+			// 	if (Weapon != m_DefaultWeapon)
+			// 		m_Owner.Inventory.AddItem(Weapon);
+
+			// 	OnUnequip?.Invoke(Weapon);
+			// 	Weapon = null;
+
+			// 	//reequip the default weapon if this is not an unequip to equip a new one
+			// 	if (!isReplacement)
+			// 		Equip(m_DefaultWeapon);
+			// }
+		}
 		/// <summary>
 		/// Unequip the item in the given slot. isReplacement is used to tell the system if this unequip was called
 		/// because we equipped something new in that slot or just unequip to empty slot. This is for the weapon : the
@@ -115,7 +188,7 @@ namespace CreatorKitCode
 		/// </summary>
 		/// <param name="slot"></param>
 		/// <param name="isReplacement"></param>
-		public void Unequip(EquipmentItem.EquipmentSlot slot, bool isReplacement = false)
+		public void Unequip(EquipmentItem.EquipmentSlot slot)
 		{
 			switch (slot)
 			{
@@ -165,22 +238,7 @@ namespace CreatorKitCode
 					}
 					break;
 				case (EquipmentItem.EquipmentSlot)666:
-					if (Weapon != null &&
-						(Weapon != m_DefaultWeapon || isReplacement)) // the only way to unequip the default weapon is through replacing it
-					{
-						Weapon.UnequippedBy(m_Owner);
-
-						//the default weapon does not go back to the inventory
-						if (Weapon != m_DefaultWeapon)
-							m_Owner.Inventory.AddItem(Weapon);
-
-						OnUnequip?.Invoke(Weapon);
-						Weapon = null;
-
-						//reequip the default weapon if this is not an unequip to equip a new one
-						if (!isReplacement)
-							Equip(m_DefaultWeapon);
-					}
+					Debug.LogError("is weapon, shoud use UnWeapon()!" + slot.ToString());
 					break;
 				default:
 					break;

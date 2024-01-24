@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
 
 	public CameraController cameraCtrl;
 
+	public LightManager dayNight;
+
 	public DigTool digtool;
 	public Canvas DragCanvas;
 
@@ -40,6 +42,7 @@ public class UIManager : MonoBehaviour
 	}
 	public UIWindow OpenWindow(string winName)
 	{
+		Debug.Log("OpenWindow: " + winName);
 		foreach (UIWindow win in m_winList)
 		{
 			if (win.gameObject.name == winName)

@@ -16,6 +16,7 @@ public class UIInventoryWindow : UIWindow
 	public RectTransform ItemSlots;
 
 	public Item testItem;
+	public Item testItem1;
 
 	public ItemEntryUI ItemEntryPrefab;
 	public ItemTooltip Tooltip;
@@ -24,18 +25,19 @@ public class UIInventoryWindow : UIWindow
 	public UIInventorySlot TorsoSlot;
 	public UIInventorySlot LegsSlot;
 	public UIInventorySlot FeetSlot;
+	public UIInventorySlot WeaponSlot_1;
+	public UIInventorySlot WeaponSlot_2;
 
 	public DragData CurrentlyDragged { get; set; }
 	public CanvasScaler DragCanvasScaler { get; private set; }
 
 	public CharacterData Character
 	{
-		get { return m_Data; }
+		get { return m_player.Data; }
 	}
 
 	UIInventorySlot[] m_ItemEntries;
-	UIInventorySlot m_HoveredItem;
-	CharacterData m_Data;
+	UIInventorySlot m_SelectedSlot;
 
 	protected override void Init()
 	{
@@ -54,24 +56,23 @@ public class UIInventoryWindow : UIWindow
 			m_ItemEntries[i].InventoryID = i;
 		}
 
-		//EquipementUI.Init(this);
+		if (testItem) m_player.Data.Inventory.AddItem(testItem);
+		if (testItem1) m_player.Data.Inventory.AddItem(testItem1);
 	}
 
 	protected override void OnOpen()
 	{
-		m_HoveredItem = null;
+		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
-		Load(m_player.Data);
+		Load();
 	}
-
-	public void Load(CharacterData data)
+	public void Load()
 	{
-		m_Data = data;
-		UpdateEquipment(m_Data.Equipment, m_Data.Stats);
-		if (testItem) m_Data.Inventory.AddItem(testItem);
+		UpdateEquipment(m_player.Data.Equipment, m_player.Data.Stats);
+		UpdateWeapon(m_player.Data.Equipment);
 		for (int i = 0; i < m_ItemEntries.Length; ++i)
 		{
-			m_ItemEntries[i].UpdateEntry(data);
+			m_ItemEntries[i].UpdateEntry(m_player.Data);
 		}
 	}
 
@@ -91,25 +92,52 @@ public class UIInventoryWindow : UIWindow
 		// Load(m_Data);
 	}
 
-	public void ObjectHoveredEnter(ItemEntryUI hovered)
+	public void OnSlotSelected(UIInventorySlot slot, bool selected)
 	{
-		// m_HoveredItem = hovered;
-
-		// Tooltip.gameObject.SetActive(true);
-
+		m_SelectedSlot = selected ? slot : null;
+		Tooltip.SetItem(m_SelectedSlot);
 		// Item itemUsed = m_HoveredItem.InventoryID != -1 ? m_Data.Inventory.Entries[m_HoveredItem.InventoryID].Item : m_HoveredItem.EquipmentItem;
+	}
 
-		// Tooltip.Name.text = itemUsed.ItemName;
-		// Tooltip.DescriptionText.text = itemUsed.GetDescription();
+	public void OnClickItemEvent(string eventName)
+	{
+		EquipmentItem equip = m_SelectedSlot.item as EquipmentItem;
+		Weapon wp = equip as Weapon;
+		switch (eventName)
+		{
+			case "Equip":
+				if (equip)
+				{
+					if (wp) m_player.Data.Equipment.EquipWeapon(wp);
+					else m_player.Data.Equipment.Equip(equip);
+					m_player.Data.Inventory.RemoveItem(m_SelectedSlot.InventoryID);
+					m_SelectedSlot.tog.isOn = false;
+					Load();
+				}
+				break;
+			case "UnEquip":
+				if (equip)
+				{
+					if (wp) m_player.Data.Equipment.UnWeapon(wp);
+					else m_player.Data.Equipment.Unequip(equip.Slot);
+					//m_player.Data.Inventory.AddItem(m_SelectedSlot.item);
+					m_SelectedSlot.tog.isOn = false;
+					Load();
+				}
+				break;
+			default:
+				break;
+		}
+
 	}
 
 	public void ObjectHoverExited(ItemEntryUI exited)
 	{
-		if (m_HoveredItem == exited)
-		{
-			m_HoveredItem = null;
-			Tooltip.gameObject.SetActive(false);
-		}
+		// if (m_HoveredItem == exited)
+		// {
+		// 	m_HoveredItem = null;
+		// 	Tooltip.gameObject.SetActive(false);
+		// }
 	}
 
 	public void HandledDroppedEntry(Vector3 position)
@@ -139,6 +167,12 @@ public class UIInventoryWindow : UIWindow
 		TorsoSlot.item = equipment.GetItem(EquipmentItem.EquipmentSlot.Torso);
 		LegsSlot.item = equipment.GetItem(EquipmentItem.EquipmentSlot.Legs);
 		FeetSlot.item = equipment.GetItem(EquipmentItem.EquipmentSlot.Feet);
+	}
+
+	public void UpdateWeapon(EquipmentSystem equipment)
+	{
+		WeaponSlot_1.item = equipment.Weapon;
+		WeaponSlot_2.item = equipment.ViceWeapon;
 	}
 }
 

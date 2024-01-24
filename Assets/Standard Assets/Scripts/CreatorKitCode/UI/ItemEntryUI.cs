@@ -38,7 +38,7 @@ namespace CreatorKitCodeInternal
 
 		public void OnPointerEnter(PointerEventData eventData)
 		{
-			Owner.ObjectHoveredEnter(this);
+			//Owner.ObjectHoveredEnter(this);
 		}
 
 		public void OnPointerExit(PointerEventData eventData)

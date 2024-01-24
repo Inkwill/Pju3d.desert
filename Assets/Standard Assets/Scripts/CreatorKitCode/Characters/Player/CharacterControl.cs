@@ -103,6 +103,7 @@ namespace CreatorKitCodeInternal
 		{
 			Instance = this;
 			m_MainCamera = Camera.main;
+			m_CharacterData = GetComponent<CharacterData>();
 		}
 
 		// Start is called before the first frame update
@@ -134,7 +135,7 @@ namespace CreatorKitCodeInternal
 			m_RespawnParamID = Animator.StringToHash("Respawn");
 			m_WokingID = Animator.StringToHash("Attack");
 
-			m_CharacterData = GetComponent<CharacterData>();
+
 
 			m_CharacterData.Equipment.OnEquiped += item =>
 			{

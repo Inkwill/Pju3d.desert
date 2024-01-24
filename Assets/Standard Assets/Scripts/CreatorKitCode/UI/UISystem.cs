@@ -135,7 +135,7 @@ namespace CreatorKitCodeInternal
 			{
 				((Image)OpenInventoryButton.targetGraphic).sprite = m_OpenInventorySprite;
 				InventoryWindow.gameObject.SetActive(true);
-				InventoryWindow.Load(PlayerCharacter.Data);
+				InventoryWindow.Load();
 				SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = OpenInventoryClip });
 			}
 		}

@@ -61,6 +61,18 @@ namespace CreatorKitCode
 			}
 		}
 
+		public void RemoveItem(int InventoryID)
+		{
+			for (int i = 0; i < 32; ++i)
+			{
+				if (i == InventoryID)
+				{
+					Entries[i] = null;
+					break;
+				}
+			}
+		}
+
 		/// <summary>
 		/// This will *try* to use the item. If the item return true when used, this will decrement the stack count and
 		/// if the stack count reach 0 this will free the slot. If it return false, it will just ignore that call.
