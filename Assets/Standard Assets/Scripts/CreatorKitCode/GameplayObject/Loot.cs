@@ -29,17 +29,11 @@ namespace CreatorKitCode
 		float m_AnimationTimer = 0.0f;
 
 
-		void Awake()
+		void Start()
 		{
-			m_OriginalPosition = transform.position;
+			m_OriginalPosition = transform.position + new Vector3(0, 0.5f, 0);
 			m_TargetPoint = transform.position;
 			m_AnimationTimer = AnimationTime - 0.1f;
-		}
-
-		protected override void Start()
-		{
-			base.Start();
-
 			CreateWorldRepresentation();
 		}
 
@@ -56,10 +50,10 @@ namespace CreatorKitCode
 
 				transform.position = currentPos;
 
-				if (m_AnimationTimer >= AnimationTime)
-				{
-					LootUI.Instance.NewLoot(this);
-				}
+				// if (m_AnimationTimer >= AnimationTime)
+				// {
+				// 	LootUI.Instance.NewLoot(this);
+				// }
 			}
 
 			Debug.DrawLine(m_TargetPoint, m_TargetPoint + Vector3.up, Color.magenta);
@@ -68,9 +62,7 @@ namespace CreatorKitCode
 		public override void InteractWith(CharacterData target)
 		{
 			target.Inventory.AddItem(Item);
-			SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SFXManager.PickupSound });
-
-			UISystem.Instance.InventoryWindow.Load();
+			SFXManager.PlayClip("picked");
 			Destroy(gameObject);
 		}
 
@@ -98,7 +90,7 @@ namespace CreatorKitCode
 		{
 			for (int i = 0; i < 30; i++)
 			{
-				Vector3 randomPoint = center + Random.insideUnitSphere * range;
+				Vector3 randomPoint = center + UnityEngine.Random.insideUnitSphere * range;
 				NavMeshHit hit;
 				if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
 				{
@@ -140,6 +132,8 @@ namespace CreatorKitCode
 				var bc = billboard.AddComponent<BoxCollider>();
 				bc.size = new Vector3(0.5f, 0.5f, 0.5f) * (1.0f / scale);
 			}
+			if (Item.SpawnClip) SFXManager.PlayClip(Item.SpawnClip);
+			else SFXManager.PlayClip("spawn");
 		}
 	}
 }

@@ -10,53 +10,33 @@ public class UIWindow : MonoBehaviour
 	public Text winTitle;
 	public AudioClip OpenClip;
 	public AudioClip CloseClip;
-	protected CharacterControl m_player;
-	protected DigTool m_digtool;
-	protected UIManager m_uiRoot;
 	protected List<Button> switch_buttons;
-
-	protected Canvas m_DragCanvas;
-
-	bool m_isOpened;
-
-	void Awake()
-	{
-		m_uiRoot = UIManager.root;
-		m_player = m_uiRoot.player;
-		m_digtool = m_uiRoot.digtool;
-		m_DragCanvas = m_uiRoot.DragCanvas;
-		Init();
-		Debug.Log("WindowInit Compeleted: " + this);
-	}
 
 	void OnEnable()
 	{
-		OnOpen();
 		if (OpenClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = OpenClip });
+		OnOpen();
 	}
 
 	void OnDisable()
 	{
+		if (CloseClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = CloseClip });
 		OnClose();
 	}
-	public virtual void Close()
+	public void Close()
 	{
-		OnClose();
 		Animator anim = GetComponent<Animator>();
 		if (anim) anim.Play("close");
 		else OnClosed();
-		if (CloseClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = CloseClip });
 	}
-
-	protected virtual void Init() { }
 	protected virtual void OnOpen() { }
-	protected virtual void OnOpened() { m_isOpened = true; }
-	protected virtual void OnClose() { m_isOpened = false; }
-	protected virtual void OnClosed() { gameObject.SetActive(false); }
+	protected virtual void OnOpened() { }
+	protected virtual void OnClose() { }
+	void OnClosed() { gameObject.SetActive(false); }
 
 	public void Back()
 	{
-		m_uiRoot.BackWindow(this);
+		GameManager.GameUI.BackWindow(this);
 	}
 
 	public static void SetButton(Button bt, bool active)

@@ -72,9 +72,9 @@ namespace CreatorKitCodeInternal
 			MaxHealth.text = PlayerCharacter.Data.Stats.stats.health.ToString();
 			CurrentHealth.text = PlayerCharacter.Data.Stats.CurrentHealth.ToString();
 
-			if (PlayerCharacter.CurrentTarget != null)
+			if (PlayerCharacter.CurrentEnemy != null)
 			{
-				UpdateEnemyUI(PlayerCharacter.CurrentTarget);
+				UpdateEnemyUI(PlayerCharacter.CurrentEnemy);
 			}
 			else
 			{

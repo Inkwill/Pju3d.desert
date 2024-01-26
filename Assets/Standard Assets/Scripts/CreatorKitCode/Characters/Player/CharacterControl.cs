@@ -16,32 +16,31 @@ namespace CreatorKitCodeInternal
 		AnimationControllerDispatcher.IAttackFrameReceiver,
 		AnimationControllerDispatcher.IFootstepFrameReceiver
 	{
-		public static CharacterControl Instance { get; protected set; }
-
-		public VariableJoystick variableJoystick;
-
+		//public static CharacterControl Instance { get; protected set; }
+		public EventSender eventSender { get { return m_eventSender; } }
 		public float Speed = 10.0f;
-
 		public CharacterData Data => m_CharacterData;
-		public CharacterData CurrentTarget
+		public CharacterData CurrentEnemy
 		{
-			get { return m_CurrentTargetCharacterData; }
+			get { return m_CurrentEnemyCharacterData; }
 			set
 			{
-				m_CurrentTargetCharacterData = value;
-				GameObject target = value ? m_CurrentTargetCharacterData.gameObject : null;
-				m_eventSender.Send(target, "onTarget");
+				m_CurrentEnemyCharacterData = value;
+				GameObject target = value ? m_CurrentEnemyCharacterData.gameObject : null;
+				m_eventSender.Send(target, "playerEvent_OnSetCurrentEnemy");
 			}
 		}
 
 		public Transform WeaponLocator;
-
 		public ParticleSystem fx_Working;
 
 		[Header("Audio")]
 		public AudioClip[] SpurSoundClips;
-
-		public bool canWork { get { return (m_CurrentState == State.DEFAULT) && !m_CurrentTargetCharacterData; } protected set { } }
+		[Header("Detector")]
+		[SerializeField]
+		InteractOnTrigger Detector_enemy;
+		public InteractOnTrigger Detector_item;
+		public bool canWork { get { return (m_CurrentState == State.DEFAULT) && !m_CurrentEnemyCharacterData; } protected set { } }
 
 		Vector3 m_LastRaycastResult;
 		Animator m_Animator;
@@ -51,8 +50,6 @@ namespace CreatorKitCodeInternal
 		HighlightableObject m_Highlighted;
 
 		RaycastHit[] m_RaycastHitCache = new RaycastHit[16];
-
-		InteractOnTrigger m_Detector;
 		int m_SpeedParamID;
 		int m_AttackParamID;
 		int m_HitParamID;
@@ -67,21 +64,19 @@ namespace CreatorKitCodeInternal
 		//int m_LevelLayer;
 		//Collider m_TargetCollider;
 		InteractableObject m_TargetInteractable = null;
-		Camera m_MainCamera;
 
 		NavMeshPath m_CalculatedPath;
 
 		CharacterAudio m_CharacterAudio;
-
 		int m_TargetLayer;
-		CharacterData m_CurrentTargetCharacterData = null;
+		CharacterData m_CurrentEnemyCharacterData = null;
 		//this is a flag that tell the controller it need to clear the target once the attack finished.
 		//usefull for when clicking elwswhere mid attack animation, allow to finish the attack and then exit.
 		bool m_ClearPostAttack = false;
 
 		SpawnPoint m_CurrentSpawn = null;
 
-		DigTool m_digTool;
+		public DigTool DigTool;
 		EventSender m_eventSender;
 
 		public UICharacterHud hud;
@@ -101,9 +96,10 @@ namespace CreatorKitCodeInternal
 
 		void Awake()
 		{
-			Instance = this;
-			m_MainCamera = Camera.main;
 			m_CharacterData = GetComponent<CharacterData>();
+			m_eventSender = GetComponent<EventSender>();
+			m_Agent = GetComponent<NavMeshAgent>();
+			m_Animator = GetComponentInChildren<Animator>();
 		}
 
 		// Start is called before the first frame update
@@ -113,15 +109,6 @@ namespace CreatorKitCodeInternal
 			Application.targetFrameRate = 60;
 
 			m_CalculatedPath = new NavMeshPath();
-
-			m_Agent = GetComponent<NavMeshAgent>();
-			m_Animator = GetComponentInChildren<Animator>();
-			m_Detector = GetComponentInChildren<InteractOnTrigger>();
-			m_Detector.OnEnter.AddListener(OnEnter);
-			m_Detector.OnExit.AddListener(OnExit);
-			m_digTool = GetComponentInChildren<DigTool>();
-			hud = GetComponentInChildren<UICharacterHud>();
-			m_eventSender = GetComponent<EventSender>();
 
 			m_Agent.speed = Speed;
 			m_Agent.angularSpeed = 360.0f;
@@ -135,7 +122,8 @@ namespace CreatorKitCodeInternal
 			m_RespawnParamID = Animator.StringToHash("Respawn");
 			m_WokingID = Animator.StringToHash("Attack");
 
-
+			Detector_enemy.OnEnter.AddListener(OnEnemyEnter);
+			Detector_enemy.OnExit.AddListener(OnEnemyExit);
 
 			m_CharacterData.Equipment.OnEquiped += item =>
 			{
@@ -144,6 +132,7 @@ namespace CreatorKitCodeInternal
 					var obj = Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
 					Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
 				}
+				m_eventSender.Send(gameObject, "playerEvent_OnEquiped");
 			};
 
 			m_CharacterData.Equipment.OnUnequip += item =>
@@ -153,6 +142,7 @@ namespace CreatorKitCodeInternal
 					foreach (Transform t in WeaponLocator)
 						Destroy(t.gameObject);
 				}
+				m_eventSender.Send(gameObject, "playerEvent_OnUnequip");
 			};
 
 			m_CharacterData.Init();
@@ -161,6 +151,7 @@ namespace CreatorKitCodeInternal
 			//m_LevelLayer = 1 << LayerMask.NameToLayer("Level");
 			//m_TargetLayer = 1 << LayerMask.NameToLayer("Target");
 
+			m_eventSender.Send(gameObject, "playerEvent_OnInit");
 			SetState(State.DEFAULT);
 
 			m_CharacterAudio = GetComponent<CharacterAudio>();
@@ -169,6 +160,7 @@ namespace CreatorKitCodeInternal
 			{
 				m_Animator.SetTrigger(m_HitParamID);
 				m_CharacterAudio.Hit(transform.position);
+				m_eventSender.Send(gameObject, "playerEvent_OnDamaged");
 			};
 		}
 
@@ -176,13 +168,13 @@ namespace CreatorKitCodeInternal
 		{
 			if (m_CurrentState == State.Dead || m_CurrentState == State.WORKING) return;
 
-			if (m_CurrentTargetCharacterData == null && m_CurrentState == State.DEFAULT)
+			if (CurrentEnemy == null && m_CurrentState == State.DEFAULT)
 			{
-				GameObject enemy = m_Detector.GetNearest();
-				if (enemy) CurrentTarget = enemy.GetComponent<CharacterData>();
+				GameObject enemy = Detector_enemy.GetNearest();
+				if (enemy) CurrentEnemy = enemy.GetComponent<CharacterData>();
 			}
 
-			Vector3 direction = Vector3.forward * variableJoystick.Vertical + Vector3.right * variableJoystick.Horizontal;
+			Vector3 direction = Vector3.forward * GameManager.GameUI.JoyStick.Vertical + Vector3.right * GameManager.GameUI.JoyStick.Horizontal;
 			if (direction.magnitude > 0)
 			{
 				//Debug.Log(direction);
@@ -244,10 +236,10 @@ namespace CreatorKitCodeInternal
 
 			//Ray screenRay = CameraController.Instance.GameplayCamera.ScreenPointToRay(Input.mousePosition);
 
-			if (m_CurrentTargetCharacterData != null)
+			if (m_CurrentEnemyCharacterData != null)
 			{
-				if (m_CurrentTargetCharacterData.Stats.CurrentHealth == 0)
-					CurrentTarget = null;
+				if (m_CurrentEnemyCharacterData.Stats.CurrentHealth == 0)
+					CurrentEnemy = null;
 				else
 					CheckAttack();
 			}
@@ -255,7 +247,7 @@ namespace CreatorKitCodeInternal
 			float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
 			if (!Mathf.Approximately(mouseWheel, 0.0f))
 			{
-				Vector3 view = m_MainCamera.ScreenToViewportPoint(Input.mousePosition);
+				Vector3 view = Camera.main.ScreenToViewportPoint(Input.mousePosition);
 				if (view.x > 0f && view.x < 1f && view.y > 0f && view.y < 1f)
 					CameraController.Instance.Zoom(-mouseWheel * Time.deltaTime * 20.0f);
 			}
@@ -265,7 +257,7 @@ namespace CreatorKitCodeInternal
 
 					if (m_CurrentState != State.ATTACKING)
 					{
-						m_CurrentTargetCharacterData = null;
+						m_CurrentEnemyCharacterData = null;
 						m_TargetInteractable = null;
 					}
 					else
@@ -282,7 +274,7 @@ namespace CreatorKitCodeInternal
 
 				if (Input.GetMouseButton(0))
 				{
-					if (m_TargetInteractable == null && m_CurrentTargetCharacterData == null)
+					if (m_TargetInteractable == null && m_CurrentEnemyCharacterData == null)
 					{
 						InteractableObject obj = m_Highlighted as InteractableObject;
 						if (obj)
@@ -294,7 +286,7 @@ namespace CreatorKitCodeInternal
 							CharacterData data = m_Highlighted as CharacterData;
 							if (data != null)
 							{
-								m_CurrentTargetCharacterData = data;
+								m_CurrentEnemyCharacterData = data;
 							}
 							else
 							{
@@ -320,7 +312,7 @@ namespace CreatorKitCodeInternal
 			m_Agent.isStopped = true;
 			m_Agent.ResetPath();
 
-			CurrentTarget = null;
+			CurrentEnemy = null;
 			m_TargetInteractable = null;
 
 			SetState(State.DEFAULT);
@@ -431,20 +423,20 @@ namespace CreatorKitCodeInternal
 			if (m_CurrentState == State.ATTACKING || m_CurrentState == State.MOVE || m_CurrentState == State.Dead || m_CurrentState == State.WORKING)
 				return;
 
-			if (m_CharacterData.CanAttackReach(m_CurrentTargetCharacterData))
+			if (m_CharacterData.CanAttackReach(m_CurrentEnemyCharacterData))
 			{
 				StopAgent();
 
 				//if the mouse button isn't pressed, we do NOT attack
 				if (true)//Input.GetMouseButton(0))
 				{
-					Vector3 forward = (m_CurrentTargetCharacterData.transform.position - transform.position);
+					Vector3 forward = (m_CurrentEnemyCharacterData.transform.position - transform.position);
 					forward.y = 0;
 					forward.Normalize();
 
 
 					transform.forward = forward;
-					if (m_CharacterData.CanAttackTarget(m_CurrentTargetCharacterData))
+					if (m_CharacterData.CanAttackTarget(m_CurrentEnemyCharacterData))
 					{
 						SetState(State.ATTACKING);
 
@@ -455,7 +447,7 @@ namespace CreatorKitCodeInternal
 			}
 			else
 			{
-				m_Agent.SetDestination(m_CurrentTargetCharacterData.transform.position);
+				m_Agent.SetDestination(m_CurrentEnemyCharacterData.transform.position);
 				SetState(State.PURSUING);
 			}
 		}
@@ -469,18 +461,18 @@ namespace CreatorKitCodeInternal
 				return;
 			}
 
-			if (m_CurrentTargetCharacterData == null)
+			if (m_CurrentEnemyCharacterData == null)
 			{
 				m_ClearPostAttack = false;
 				return;
 			}
 
 			//if we can't reach the target anymore when it's time to damage, then that attack miss.
-			if (m_CharacterData.CanAttackReach(m_CurrentTargetCharacterData))
+			if (m_CharacterData.CanAttackReach(m_CurrentEnemyCharacterData))
 			{
-				m_CharacterData.Attack(m_CurrentTargetCharacterData);
+				m_CharacterData.Attack(m_CurrentEnemyCharacterData);
 
-				var attackPos = m_CurrentTargetCharacterData.transform.position + transform.up * 0.5f;
+				var attackPos = m_CurrentEnemyCharacterData.transform.position + transform.up * 0.5f;
 				VFXManager.PlayVFX(VFXType.Hit, attackPos);
 				SFXManager.PlaySound(m_CharacterAudio.UseType, new SFXManager.PlayData() { Clip = m_CharacterData.Equipment.Weapon.GetHitSound(), PitchMin = 0.8f, PitchMax = 1.2f, Position = attackPos });
 			}
@@ -488,7 +480,7 @@ namespace CreatorKitCodeInternal
 			if (m_ClearPostAttack)
 			{
 				m_ClearPostAttack = false;
-				CurrentTarget = null;
+				CurrentEnemy = null;
 				m_TargetInteractable = null;
 			}
 
@@ -538,26 +530,27 @@ namespace CreatorKitCodeInternal
 			{
 				//Debug.Log("curState=" + m_CurrentState + "   nextState=" + nextState);
 				m_CurrentState = nextState;
-				GetComponent<EventSender>()?.Send(gameObject, System.Enum.GetName(typeof(State), m_CurrentState));
+				m_eventSender.Send(gameObject, "playerEvent_OnState_" + System.Enum.GetName(typeof(State), m_CurrentState));
 			}
 		}
 
-		void OnEnter(GameObject enter)
+		void OnEnemyEnter(GameObject enter)
 		{
-			GetComponent<EventSender>()?.Send(enter, "enemy_enter");
+			m_eventSender.Send(enter, "playerEvent_OnEnemyEnter");
 		}
 
-		void OnExit(GameObject exiter)
+		void OnEnemyExit(GameObject exiter)
 		{
-			if (m_CurrentTargetCharacterData && m_CurrentTargetCharacterData.gameObject == exiter)
+			m_eventSender.Send(exiter, "playerEvent_OnEnemyExit");
+			if (m_CurrentEnemyCharacterData && m_CurrentEnemyCharacterData.gameObject == exiter)
 			{
-				CurrentTarget = m_Detector.GetNearest()?.GetComponent<CharacterData>();
+				CurrentEnemy = Detector_enemy.GetNearest()?.GetComponent<CharacterData>();
+				m_eventSender.Send(exiter, "playerEvent_OnTargetEnemyExit");
 			}
 			else
 			{
-				Debug.Log("kill enemy : " + exiter);
+				m_eventSender.Send(exiter, "playerEvent_OnTargetEnemyDead");
 			}
-			GetComponent<EventSender>()?.Send(exiter, "enemy_exiter");
 		}
 
 		public void ChangeState(State state, bool active)

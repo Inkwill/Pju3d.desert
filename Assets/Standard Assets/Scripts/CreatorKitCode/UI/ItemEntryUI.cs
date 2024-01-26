@@ -26,8 +26,8 @@ namespace CreatorKitCodeInternal
 			{
 				if (InventoryEntry != -1)
 				{
-					if (Owner.Character.Inventory.Entries[InventoryEntry] != null)
-						Owner.ObjectDoubleClicked(Owner.Character.Inventory.Entries[InventoryEntry]);
+					if (GameManager.Player.Data.Inventory.Entries[InventoryEntry] != null)
+						Owner.ObjectDoubleClicked(GameManager.Player.Data.Inventory.Entries[InventoryEntry]);
 				}
 				else
 				{
@@ -48,7 +48,7 @@ namespace CreatorKitCodeInternal
 
 		public void UpdateEntry()
 		{
-			var entry = Owner.Character.Inventory.Entries[InventoryEntry];
+			var entry = GameManager.Player.Data.Inventory.Entries[InventoryEntry];
 			bool isEnabled = entry != null;
 
 			gameObject.SetActive(isEnabled);

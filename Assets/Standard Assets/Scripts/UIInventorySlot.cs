@@ -12,8 +12,6 @@ public class UIInventorySlot : MonoBehaviour
 	Image iconItem;
 	[SerializeField]
 	Sprite defaultSprite;
-	[SerializeField]
-	AudioClip SlectedClip;
 	public Text ItemCount;
 	public bool equipment;
 
@@ -62,7 +60,8 @@ public class UIInventorySlot : MonoBehaviour
 
 	public void OnToggled(bool selected)
 	{
-		if (SlectedClip && selected) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SlectedClip });
+		if (selected) SFXManager.PlayClip("selected");//SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SFXManager.PickupSound });
+		else SFXManager.PlayClip("cancle");
 		winInventory.OnSlotSelected(this, selected);
 	}
 

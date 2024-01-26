@@ -15,7 +15,7 @@ public class UIBuildWindow : UIWindow
 	}
 	protected override void OnOpened()
 	{
-		m_digtool.BuildModel = true;
+		GameManager.Player.DigTool.BuildModel = true;
 		// objList.SetActive(true);
 		// btConfirm.interactable = false;
 		base.OnOpened();
@@ -23,21 +23,15 @@ public class UIBuildWindow : UIWindow
 
 	protected override void OnClose()
 	{
-		m_digtool.BuildModel = false;
-	}
-	protected override void OnClosed()
-	{
-		m_digtool.BuildModel = false;
-		//SetButton(btConfirm, false);
-		base.OnClosed();
+		GameManager.Player.DigTool.BuildModel = false;
 	}
 
 	void FixedUpdate()
 	{
-		switch (m_digtool.SceneBoxInfo(false))
+		switch (GameManager.Player.DigTool.SceneBoxInfo(false))
 		{
 			case "blank":
-				if (m_player.canWork && !btConfirm.interactable) SetButton(btConfirm, true);
+				if (GameManager.Player.canWork && !btConfirm.interactable) SetButton(btConfirm, true);
 				break;
 			default:
 				SetButton(btConfirm, false);
@@ -50,7 +44,7 @@ public class UIBuildWindow : UIWindow
 		switch (eventName)
 		{
 			case "confirm":
-				if (m_digtool.CanDig) m_digtool.DoCreate("pit");
+				if (GameManager.Player.DigTool.CanDig) GameManager.Player.DigTool.DoCreate("pit");
 				break;
 			case "place":
 				break;

@@ -7,15 +7,13 @@ public class Creater : TimerBehaviour
 {
 	public GameObject fxProgress;
 
-	public GameObject showObj;
-
-
 	protected float digDeep;
-	protected TerrainTool terrainTool;
 	protected float m_initialDeep;
+	[SerializeField]
 	protected string m_targetName;
-
 	protected CharacterControl m_character;
+
+	public bool Auto = false;
 
 	public void DoCreate(CharacterControl character, string pbName)
 	{
@@ -31,28 +29,24 @@ public class Creater : TimerBehaviour
 				break;
 		}
 		isStarted = true;
-
 	}
 
-	void Awake()
+	void Start()
 	{
 		if (fxProgress) fxProgress.SetActive(false);
-		if (showObj) showObj.SetActive(false);
-		terrainTool = GetComponent<TerrainTool>();
 		m_initialDeep = Terrain.activeTerrain.SampleHeight(transform.position);
+		isStarted = Auto;
 
 	}
 	protected override void OnStart()
 	{
 		if (fxProgress) fxProgress.SetActive(true);
-		if (showObj) showObj.SetActive(true);
 		if (m_character) m_character.ChangeState(CharacterControl.State.WORKING, true);
 	}
 
 	protected override void OnEnd()
 	{
 		if (fxProgress) fxProgress.SetActive(false);
-		if (showObj) showObj.SetActive(false);
 		if (m_character) m_character.ChangeState(CharacterControl.State.WORKING, false);
 		Destroy(gameObject, interval);
 	}
@@ -74,6 +68,6 @@ public class Creater : TimerBehaviour
 
 	protected override void OnProcessing(float completed)
 	{
-		if (digDeep > 0) terrainTool.LowerTerrain(transform.position, digDeep * 0.01f, 5, 5);
+		if (digDeep > 0) GameManager.Instance.TerrainTool.LowerTerrain(transform.position, digDeep * 0.01f, 5, 5);
 	}
 }

@@ -21,20 +21,19 @@ public class Pit : Creater
 		get { return 10 - Terrain.activeTerrain.SampleHeight(transform.position); }
 		set
 		{
-			terrainTool.SetTerrainHeight(transform.position, (10 - value) * 0.01f, m_pitSize, m_pitSize);
+			GameManager.Instance.TerrainTool.SetTerrainHeight(transform.position, (10 - value) * 0.01f, m_pitSize, m_pitSize);
 		}
 	}
 	protected override void OnProcessing(float completed)
 	{
 		curDeep -= 0.01f;
-		if (showObj) showObj.transform.Translate(new Vector3(0, 0.5f, 0));
 	}
 	protected override void OnInterval()
 	{
 		if (curDeep <= 0)
 		{
-			Destroy(gameObject, interval / 2.0f);
 			curDeep = 0;
+			Destroy(gameObject, interval / 2.0f);
 		}
 		else
 		{
@@ -97,11 +96,6 @@ public class Pit : Creater
 	// {
 	// 	terrainTool.RaiseTerrain(transform.position, 0.01f * 0.01f, 8, 8);
 	// }
-
-	void OnDisable()
-	{
-		curDeep = 0;
-	}
 
 	// public void OnPlanted(Creater creater)
 	// {

@@ -246,7 +246,7 @@ namespace CreatorKitCodeInternal
 			if (m_State != nextState)
 			{
 				m_State = nextState;
-				GetComponent<EventSender>()?.Send(gameObject, System.Enum.GetName(typeof(State), m_State));
+				GetComponent<EventSender>()?.Send(gameObject, "enemyEvent_onState_" + System.Enum.GetName(typeof(State), m_State));
 				switch (m_State)
 				{
 					case State.IDLE:

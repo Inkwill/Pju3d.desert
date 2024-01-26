@@ -7,7 +7,7 @@ public class UINpcTalkWindow : UIWindow
 	Npc m_npc;
 	protected override void OnOpen()
 	{
-		m_npc = m_digtool.GetLastInner<Npc>();
+		m_npc = GameManager.Player.DigTool.GetLastInner<Npc>();
 		if (m_npc)
 		{
 			m_npc.StartTalk();

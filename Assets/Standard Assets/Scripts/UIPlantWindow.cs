@@ -10,7 +10,7 @@ public class UIPlantWindow : UIWindow
 	string m_selectedPlant;
 	public void DoPlant()
 	{
-		m_player?.GetComponentInChildren<DigTool>().DoPlant(m_selectedPlant);
+		GameManager.Player.DigTool.DoPlant(m_selectedPlant);
 		Back();
 	}
 

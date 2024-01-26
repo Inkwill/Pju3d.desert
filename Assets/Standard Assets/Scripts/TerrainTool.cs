@@ -38,7 +38,7 @@ public sealed class TerrainTool : MonoBehaviour
 		DuplicateTerrainData(GetTerrainData(), _initTerrainData);
 	}
 
-	private void Undo()
+	public void ResetTerrainData()
 	{
 		DuplicateTerrainData(_initTerrainData, GetTerrainData());
 	}
@@ -108,10 +108,10 @@ public sealed class TerrainTool : MonoBehaviour
 		// 	//GameObject obj = Instantiate(prefab, builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
 		// 	Debug.Log("build at :" + obj.transform.position);
 		// }
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			Undo();
-		}
+		// if (Input.GetKeyDown(KeyCode.Escape))
+		// {
+		// 	ResetTerrainData();
+		// }
 	}
 
 	public void ChangeTerrain(TerrainModificationAction actionType, Vector3 worldPosition)

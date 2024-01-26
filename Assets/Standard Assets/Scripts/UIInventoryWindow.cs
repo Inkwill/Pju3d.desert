@@ -31,19 +31,14 @@ public class UIInventoryWindow : UIWindow
 	public DragData CurrentlyDragged { get; set; }
 	public CanvasScaler DragCanvasScaler { get; private set; }
 
-	public CharacterData Character
-	{
-		get { return m_player.Data; }
-	}
-
 	UIInventorySlot[] m_ItemEntries;
 	UIInventorySlot m_SelectedSlot;
 
-	protected override void Init()
+	void Awake()
 	{
 		CurrentlyDragged = null;
 
-		DragCanvasScaler = m_DragCanvas.GetComponentInParent<CanvasScaler>();
+		DragCanvasScaler = GameManager.GameUI.DragCanvas.GetComponentInParent<CanvasScaler>();
 		m_ItemEntries = ItemSlots.GetComponentsInChildren<UIInventorySlot>();
 
 		// m_ItemEntries = new UIInventorySlot[ItemSlots.Length];
@@ -56,8 +51,8 @@ public class UIInventoryWindow : UIWindow
 			m_ItemEntries[i].InventoryID = i;
 		}
 
-		if (testItem) m_player.Data.Inventory.AddItem(testItem);
-		if (testItem1) m_player.Data.Inventory.AddItem(testItem1);
+		if (testItem) GameManager.Player.Data.Inventory.AddItem(testItem);
+		if (testItem1) GameManager.Player.Data.Inventory.AddItem(testItem1);
 	}
 
 	protected override void OnOpen()
@@ -68,11 +63,11 @@ public class UIInventoryWindow : UIWindow
 	}
 	public void Load()
 	{
-		UpdateEquipment(m_player.Data.Equipment, m_player.Data.Stats);
-		UpdateWeapon(m_player.Data.Equipment);
+		UpdateEquipment(GameManager.Player.Data.Equipment, GameManager.Player.Data.Stats);
+		UpdateWeapon(GameManager.Player.Data.Equipment);
 		for (int i = 0; i < m_ItemEntries.Length; ++i)
 		{
-			m_ItemEntries[i].UpdateEntry(m_player.Data);
+			m_ItemEntries[i].UpdateEntry(GameManager.Player.Data);
 		}
 	}
 
@@ -108,19 +103,20 @@ public class UIInventoryWindow : UIWindow
 			case "Equip":
 				if (equip)
 				{
-					if (wp) m_player.Data.Equipment.EquipWeapon(wp);
-					else m_player.Data.Equipment.Equip(equip);
-					m_player.Data.Inventory.RemoveItem(m_SelectedSlot.InventoryID);
+					if (wp) GameManager.Player.Data.Equipment.EquipWeapon(wp);
+					else GameManager.Player.Data.Equipment.Equip(equip);
+					GameManager.Player.Data.Inventory.RemoveItem(m_SelectedSlot.InventoryID);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
+					SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SFXManager.ItemEquippedSound });
 				}
 				break;
 			case "UnEquip":
 				if (equip)
 				{
-					if (wp) m_player.Data.Equipment.UnWeapon(wp);
-					else m_player.Data.Equipment.Unequip(equip.Slot);
-					//m_player.Data.Inventory.AddItem(m_SelectedSlot.item);
+					if (wp) GameManager.Player.Data.Equipment.UnWeapon(wp);
+					else GameManager.Player.Data.Equipment.Unequip(equip.Slot);
+					//GameManager.Player.Data.Inventory.AddItem(m_SelectedSlot.item);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
 				}

@@ -17,23 +17,21 @@ public class UIMainWindow : UIWindow
 	public Text infoTime;
 	public UITargetInfo targetUI;
 
-	[SerializeField]
-	AudioClip SwitchWeaponClip;
-
-
-	protected override void Init()
+	void Start()
 	{
 		switch_buttons = new List<Button>();
-		targetUI.Init(m_player);
+		targetUI.Init();
 		tgDigTool.onValueChanged.AddListener(SetDigTool);
+		// GameManager.Player.Detector_item.OnEnter.AddListener(obj => { Debug.Log("OnItemEnter"); });
+		// GameManager.Player.Detector_item.OnExit.AddListener(obj => { Debug.Log("OnItemExit"); });
 	}
 	protected override void OnOpen()
 	{
 		//SetButton(btDig, false);
-		UpdateWeapon(m_player.Data.Equipment);
-		//if (m_player.Data.Equipment.Weapon == null) m_player.Data.Equipment.EquipWeapon();
-		//SetDig(m_player.Data.Equipment.Weapon.Stats.Dig > 0);
-		//tgDigTool.onValueChanged += value => { m_digtool.BuildModel = value; };
+		UpdateWeapon(GameManager.Player.Data.Equipment);
+		//if (GameManager.Player.Data.Equipment.Weapon == null) GameManager.Player.Data.Equipment.EquipWeapon();
+		//SetDig(GameManager.Player.Data.Equipment.Weapon.Stats.Dig > 0);
+		//tgDigTool.onValueChanged += value => { GameManager.Player.DigTool.BuildModel = value; };
 	}
 
 	void UpdateWeapon(EquipmentSystem equipment)
@@ -43,28 +41,28 @@ public class UIMainWindow : UIWindow
 		iconWeapon.enabled = (equipment.Weapon != null);
 		if (equipment.Weapon) iconWeapon.sprite = equipment.Weapon.ItemSprite;
 		tgDigTool.gameObject.SetActive(equipment.Weapon && equipment.Weapon.Stats.Dig > 0);
-		m_digtool.BuildModel = tgDigTool.gameObject.activeSelf && tgDigTool.isOn;
+		GameManager.Player.DigTool.BuildModel = tgDigTool.gameObject.activeSelf && tgDigTool.isOn;
 	}
 	void FixedUpdate()
 	{
-		infoPos.text = m_player.gameObject.transform.position.ToString();
-		infoTerrian.text = m_digtool.SceneBoxInfo(true);
-		infoTime.text = m_uiRoot.dayNight.TimeInfo;
-		btWeapon.interactable = btSwitchWeapon.interactable = m_player.canWork;
-		//if (tgDig.isOn) SetButton(btDig, m_player.canWork && m_digtool.CanDig);
+		infoPos.text = GameManager.Player.gameObject.transform.position.ToString();
+		infoTerrian.text = GameManager.Player.DigTool.SceneBoxInfo(true);
+		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
+		btWeapon.interactable = btSwitchWeapon.interactable = GameManager.Player.canWork;
+		//if (tgDig.isOn) SetButton(btDig, GameManager.Player.canWork && GameManager.Player.DigTool.CanDig);
 		//else if (btDig.interactable) SetButton(btDig, false);
 
 
-		// switch (m_digtool?.SceneBoxInfo(false))
+		// switch (GameManager.Player.DigTool?.SceneBoxInfo(false))
 		// {
 		// 	case "blank":
-		// 		if (m_player.canWork && tgDig.isOn) SetButton(btDig, true);
+		// 		if (GameManager.Player.canWork && tgDig.isOn) SetButton(btDig, true);
 		// 		break;
 		// case "pit":
-		// 	if (m_player.canWork && !btPlant.interactable) SwitchButton(btPlant);
+		// 	if (GameManager.Player.canWork && !btPlant.interactable) SwitchButton(btPlant);
 		// 	break;
 		// case "npc":
-		// 	if (m_player.canWork && !btTalk.interactable) SwitchButton(btTalk);
+		// 	if (GameManager.Player.canWork && !btTalk.interactable) SwitchButton(btTalk);
 		// 	break;
 		// default:
 		// 		SwitchButton(null);
@@ -80,18 +78,18 @@ public class UIMainWindow : UIWindow
 		switch (eventName)
 		{
 			case "UseWeapon":
-				if (m_player.canWork && m_digtool.CanDig && m_digtool.BuildModel) m_digtool.DoCreate("pit");
+				if (GameManager.Player.canWork && GameManager.Player.DigTool.CanDig && GameManager.Player.DigTool.BuildModel) GameManager.Player.DigTool.DoCreate("pit");
 				break;
 			case "SwitchWeapon":
-				m_player.Data.Equipment.SwitchWeapon();
-				UpdateWeapon(m_player.Data.Equipment);
-				if (SwitchWeaponClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SwitchWeaponClip });
+				GameManager.Player.Data.Equipment.SwitchWeapon();
+				UpdateWeapon(GameManager.Player.Data.Equipment);
+				SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SFXManager.ItemEquippedSound });
 				break;
 			case "camCtrl":
-				m_uiRoot.cameraCtrl.SwitchModel();
+				GameManager.Instance.CameraCtrl.SwitchModel();
 				break;
 			case "package":
-				m_uiRoot.SwitchWindow("winInventory");
+				GameManager.GameUI.SwitchWindow("winInventory");
 				break;
 			default:
 				break;
@@ -101,32 +99,32 @@ public class UIMainWindow : UIWindow
 	// public void SetDig(bool toggle)
 	// {
 	// 	tgDigTool.gameObject.SetActive(toggle);
-	// 	m_digtool.BuildModel = tgDigTool.isOn && toggle;
+	// 	GameManager.Player.DigTool.BuildModel = tgDigTool.isOn && toggle;
 	// 	// string wpName = toggle ? "wp_rake" : "wp_unarmed";
 	// 	// EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
-	// 	// m_player.Data.Equipment.Equip(wp);
+	// 	// GameManager.Player.Data.Equipment.Equip(wp);
 	// }
 	public void SetDigTool(bool toggle)
 	{
-		m_digtool.BuildModel = toggle;
+		GameManager.Player.DigTool.BuildModel = toggle;
 	}
 	// public void SetWater(bool toggle)
 	// {
 	// 	string wpName = toggle ? "wp_water" : "wp_unarmed";
 	// 	EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
-	// 	m_player.Data.Equipment.Equip(wp);
+	// 	GameManager.Player.Data.Equipment.Equip(wp);
 	// }
 	// public void SetCut(bool toggle)
 	// {
 	// 	string wpName = toggle ? "wp_axe" : "wp_unarmed";
 	// 	EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
-	// 	m_player.Data.Equipment.Equip(wp);
+	// 	GameManager.Player.Data.Equipment.Equip(wp);
 	// }
 	// public void SetAttack(bool toggle)
 	// {
 	// 	string wpName = toggle ? "wp_weapon1" : "wp_unarmed";
 	// 	EquipmentItem wp = Resources.Load<EquipmentItem>(wpName);
-	// 	m_player.Data.Equipment.Equip(wp);
+	// 	GameManager.Player.Data.Equipment.Equip(wp);
 	// }
 
 	// public void DisplayFocusingContent()
@@ -142,7 +140,7 @@ public class UIMainWindow : UIWindow
 	// {
 	// 	var content = m_weaponlist.GetListContent(listBox.ContentID);
 	// 	Weapon wp = content as Weapon;
-	// 	if (wp.Stats.Dig > 0 && m_player.canWork && m_digtool.CanDig) m_digtool.DoCreate("pit");
+	// 	if (wp.Stats.Dig > 0 && GameManager.Player.canWork && GameManager.Player.DigTool.CanDig) GameManager.Player.DigTool.DoCreate("pit");
 	// 	// Debug.Log($"Selected content ID: {listBox.ContentID}, Content: {content}");
 
 	// }
@@ -155,9 +153,9 @@ public class UIMainWindow : UIWindow
 
 	// 	UIItemListBox box = (UIItemListBox)curFocusingBox;
 	// 	Weapon wp = box?.item as Weapon;
-	// 	if (wp && wp != m_player.Data.Equipment.Weapon)
+	// 	if (wp && wp != GameManager.Player.Data.Equipment.Weapon)
 	// 	{
-	// 		m_player.Data.Equipment.SwitchWeapon(wp);
+	// 		GameManager.Player.Data.Equipment.SwitchWeapon(wp);
 	// 	}
 	// 	if (wp) SetDig(wp.Stats.Dig > 0);
 
@@ -170,7 +168,7 @@ public class UIMainWindow : UIWindow
 	// 	// 	wp.WorldObjectPrefab = Resources.Load("Unarmed") as GameObject;
 
 	// 	// }
-	// 	// m_player.Data.Equipment.EquipWeapon(wp);
+	// 	// GameManager.Player.Data.Equipment.EquipWeapon(wp);
 
 	// }
 

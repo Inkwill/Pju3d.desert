@@ -2,31 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CreatorKitCode 
+namespace CreatorKitCode
 {
-    
-    /// <summary>
-    /// Special InteractableObject that will trigger the LootSpawner on it when interacted with, and delete itself
-    /// (a container can only be looted once).
-    /// </summary>
-    [RequireComponent(typeof(LootSpawner))]
-    public class Container : InteractableObject
-    {
-        LootSpawner m_LootSpawner;
-    
-        public override bool IsInteractable => true;
 
-        protected override void Start()
-        {
-            base.Start();
+	/// <summary>
+	/// Special InteractableObject that will trigger the LootSpawner on it when interacted with, and delete itself
+	/// (a container can only be looted once).
+	/// </summary>
+	[RequireComponent(typeof(LootSpawner))]
+	public class Container : InteractableObject
+	{
+		LootSpawner m_LootSpawner;
 
-            m_LootSpawner = GetComponent<LootSpawner>();
-        }
+		public override bool IsInteractable => true;
 
-        public override void InteractWith(CharacterData target)
-        {
-            m_LootSpawner.SpawnLoot();
-            Destroy(this);
-        }
-    }
+		void Awake()
+		{
+			m_LootSpawner = GetComponent<LootSpawner>();
+		}
+
+		public override void InteractWith(CharacterData target)
+		{
+			m_LootSpawner.SpawnLoot();
+			Destroy(this);
+		}
+	}
 }

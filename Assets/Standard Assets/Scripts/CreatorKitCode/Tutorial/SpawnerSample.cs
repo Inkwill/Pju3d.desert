@@ -5,7 +5,7 @@ namespace CreatorKitCodeInternal
 {
 	public class SpawnerSample : TimerBehaviour
 	{
-		public SimpleEnemyController ObjectToSpawn;
+		public GameObject ObjectToSpawn;
 
 		public Transform pathRoot;
 		public int radius = 5;
@@ -22,7 +22,7 @@ namespace CreatorKitCodeInternal
 		{
 			for (int i = 0; i < spawnNum; i++)
 			{
-				SpawnPotion(angleStep * (i + 1), radius);
+				Spawn(angleStep * (i + 1), radius);
 			}
 		}
 		// void Update()
@@ -60,12 +60,12 @@ namespace CreatorKitCodeInternal
 		*/
 		// }
 
-		void SpawnPotion(int angle, int radius)
+		void Spawn(int angle, int radius)
 		{
 
 			Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.right;
 			Vector3 spawnPosition = transform.position + direction * radius;
-			SimpleEnemyController enemy = Instantiate(ObjectToSpawn, spawnPosition, Quaternion.identity) as SimpleEnemyController;
+			SimpleEnemyController enemy = Instantiate(ObjectToSpawn, spawnPosition, Quaternion.identity).GetComponent<SimpleEnemyController>();
 			enemy.pathRoot = pathRoot;
 		}
 	}

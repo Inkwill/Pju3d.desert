@@ -18,6 +18,7 @@ namespace CreatorKitCode
 		public Sprite ItemSprite;
 		public string Description;
 		public GameObject WorldObjectPrefab;
+		public AudioClip SpawnClip;
 
 		/// <summary>
 		/// Called by the inventory system when the object is "used" (double clicked)
@@ -45,6 +46,7 @@ public class ItemEditor
     SerializedProperty m_IconProperty;
     SerializedProperty m_DescriptionProperty;
     SerializedProperty m_WorldObjectPrefabProperty;
+	SerializedProperty m_SpawnClip;
     
     public void Init(SerializedObject target)
     {
@@ -54,6 +56,7 @@ public class ItemEditor
         m_IconProperty = m_Target.FindProperty(nameof(Item.ItemSprite));
         m_DescriptionProperty = m_Target.FindProperty(nameof(Item.Description));
         m_WorldObjectPrefabProperty = m_Target.FindProperty(nameof(Item.WorldObjectPrefab));
+		m_SpawnClip = m_Target.FindProperty(nameof(Item.SpawnClip));
     }
 
     public void GUI()
@@ -62,6 +65,7 @@ public class ItemEditor
         EditorGUILayout.PropertyField(m_NameProperty);
         EditorGUILayout.PropertyField(m_DescriptionProperty, GUILayout.MinHeight(128));
         EditorGUILayout.PropertyField(m_WorldObjectPrefabProperty);
+		EditorGUILayout.PropertyField(m_SpawnClip);
     }
 }
 #endif

@@ -6,14 +6,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-	public static UIManager root;
-	public CharacterControl player;
+	public VariableJoystick JoyStick;
 
-	public CameraController cameraCtrl;
-
-	public LightManager dayNight;
-
-	public DigTool digtool;
 	public Canvas DragCanvas;
 
 	public List<UIWindow> m_winList;
@@ -25,24 +19,25 @@ public class UIManager : MonoBehaviour
 
 	private void Start()
 	{
-		player = CharacterControl.Instance;
-		root = this;
 		OpenWindow("winMain");
 	}
 
 	void FixedUpdate()
 	{
-		during_check += Time.deltaTime;
-		if (during_check >= 2.0f)
+		if (win_LastOpen)
 		{
-			if (!win_LastOpen.gameObject.activeSelf)
-				win_LastOpen.gameObject.SetActive(true);
-			during_check = 0;
+			during_check += Time.deltaTime;
+			if (during_check >= 2.0f)
+			{
+				if (!win_LastOpen.gameObject.activeSelf)
+					win_LastOpen.gameObject.SetActive(true);
+				during_check = 0;
+			}
 		}
 	}
 	public UIWindow OpenWindow(string winName)
 	{
-		Debug.Log("OpenWindow: " + winName);
+		//Debug.Log("OpenWindow: " + winName);
 		foreach (UIWindow win in m_winList)
 		{
 			if (win.gameObject.name == winName)

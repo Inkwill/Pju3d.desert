@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6181ee0b866f43d4980896bcc1f13572, type: 3}
+  m_Name: DemoData
+  m_EditorClassIdentifier: 
+  AudioDic:
+  - Key: cancle
+    Value: {fileID: 8300000, guid: 2cfe31bd25480fa4184ff3a6f4856b0d, type: 3}
+  - Key: selected
+    Value: {fileID: 8300000, guid: 96d314255593b5c408eba1f353c20fb3, type: 3}
+  - Key: picked
+    Value: {fileID: 8300000, guid: e330f2958ccfdbc48bd702910cbbab2f, type: 3}
