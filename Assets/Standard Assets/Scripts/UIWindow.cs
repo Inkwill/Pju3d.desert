@@ -26,7 +26,7 @@ public class UIWindow : MonoBehaviour
 	public void Close()
 	{
 		Animator anim = GetComponent<Animator>();
-		if (anim) anim.Play("close");
+		if (anim) anim.SetTrigger("close");
 		else OnClosed();
 	}
 	protected virtual void OnOpen() { }

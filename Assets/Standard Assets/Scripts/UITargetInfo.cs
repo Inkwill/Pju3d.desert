@@ -29,7 +29,7 @@ public class UITargetInfo : MonoBehaviour
 		for (int i = 0; i < maxUILoot; i++)
 		{
 			uilootList[i] = Instantiate(lootElement).GetComponent<UILootElement>();
-			uilootList[i].gameObject.transform.parent = lootRoot;
+			uilootList[i].gameObject.transform.SetParent(lootRoot);
 			uilootList[i].gameObject.SetActive(false);
 		}
 	}

@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 		// });
 		SFXManager.ListenerTarget = Player.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();
-		GameUI.transform.parent = ui_trans;
+		GameUI.transform.SetParent(ui_trans);
 		VCamera.Follow = Player.gameObject.transform;
 		VCamera.LookAt = Player.gameObject.transform;
 

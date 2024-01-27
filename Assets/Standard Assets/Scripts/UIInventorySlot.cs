@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using CreatorKitCode;
 using UnityEngine;
 using UnityEngine.UI;
-using CreatorKitCode;
+using UnityEngine.EventSystems;
 
-public class UIInventorySlot : MonoBehaviour
+public class UIInventorySlot : MonoBehaviour, IPointerClickHandler
 {
 	public int InventoryID { get; set; } = -1;
 
@@ -69,5 +71,19 @@ public class UIInventorySlot : MonoBehaviour
 	{
 		Toggle tog = GetComponent<Toggle>();
 		if (tog && tog.isOn) tog.isOn = false;
+	}
+
+	public void OnPointerClick(PointerEventData eventData)
+	{
+		if (eventData.clickCount % 2 == 0)
+		{
+			if (m_item)
+			{
+				if (equipment) winInventory.OnClickItemEvent("UnEquip");
+				else if (m_item is EquipmentItem) winInventory.OnClickItemEvent("Equip");
+				else Debug.Log("OnDoubleClick item : " + item.ItemName);
+				tog.isOn = false;
+			}
+		}
 	}
 }

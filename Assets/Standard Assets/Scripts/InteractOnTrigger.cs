@@ -17,12 +17,12 @@ public class InteractOnTrigger : MonoBehaviour
 	bool once;
 
 	List<GameObject> interObjects;
-	Collider collider;
+	Collider m_collider;
 
 	void Start()
 	{
-		collider = GetComponent<Collider>();
-		collider.isTrigger = true;
+		m_collider = GetComponent<Collider>();
+		m_collider.isTrigger = true;
 		interObjects = new List<GameObject>();
 	}
 
@@ -43,7 +43,7 @@ public class InteractOnTrigger : MonoBehaviour
 			lastInner.GetComponent<EventSender>()?.events.AddListener(OnInterEvent);
 		}
 		OnEnter?.Invoke(enter);
-		if (once) collider.enabled = false;
+		if (once) GetComponent<Collider>().enabled = false;
 	}
 
 	void OnTriggerExit(Collider other)

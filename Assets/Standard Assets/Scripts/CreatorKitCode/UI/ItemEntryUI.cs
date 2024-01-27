@@ -22,18 +22,18 @@ namespace CreatorKitCodeInternal
 
 		public void OnPointerClick(PointerEventData eventData)
 		{
-			if (eventData.clickCount % 2 == 0)
-			{
-				if (InventoryEntry != -1)
-				{
-					if (GameManager.Player.Data.Inventory.Entries[InventoryEntry] != null)
-						Owner.ObjectDoubleClicked(GameManager.Player.Data.Inventory.Entries[InventoryEntry]);
-				}
-				else
-				{
-					Owner.EquipmentDoubleClicked(EquipmentItem);
-				}
-			}
+			// if (eventData.clickCount % 2 == 0)
+			// {
+			// 	if (InventoryEntry != -1)
+			// 	{
+			// 		if (GameManager.Player.Data.Inventory.Entries[InventoryEntry] != null)
+			// 			Owner.ObjectDoubleClicked(GameManager.Player.Data.Inventory.Entries[InventoryEntry]);
+			// 	}
+			// 	else
+			// 	{
+			// 		Owner.EquipmentDoubleClicked(EquipmentItem);
+			// 	}
+			// }
 		}
 
 		public void OnPointerEnter(PointerEventData eventData)

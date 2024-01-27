@@ -71,22 +71,6 @@ public class UIInventoryWindow : UIWindow
 		}
 	}
 
-	public void ObjectDoubleClicked(InventorySystem.InventoryEntry usedItem)
-	{
-		// if (m_Data.Inventory.UseItem(usedItem))
-		// 	SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = usedItem.Item is EquipmentItem ? SFXManager.ItemEquippedSound : SFXManager.ItemUsedSound });
-
-		// ObjectHoverExited(m_HoveredItem);
-		// Load(m_Data);
-	}
-
-	public void EquipmentDoubleClicked(EquipmentItem equItem)
-	{
-		// m_Data.Equipment.Unequip(equItem.Slot);
-		// ObjectHoverExited(m_HoveredItem);
-		// Load(m_Data);
-	}
-
 	public void OnSlotSelected(UIInventorySlot slot, bool selected)
 	{
 		m_SelectedSlot = selected ? slot : null;

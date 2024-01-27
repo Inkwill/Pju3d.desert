@@ -113,7 +113,7 @@ namespace CreatorKitCode
 		public static void PlaySound(Use useType, PlayData data)
 		{
 			var source = GetSource(useType);
-
+			if (!source) return;
 			source.clip = data.Clip;
 			source.gameObject.transform.position = data.Position;
 			source.pitch = Random.Range(data.PitchMin, data.PitchMax);
