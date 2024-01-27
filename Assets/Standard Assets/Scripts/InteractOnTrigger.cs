@@ -7,14 +7,17 @@ using UnityEngine.Events;
 public class InteractOnTrigger : MonoBehaviour
 {
 	public LayerMask layers;
-	public bool once;
 	public UnityEvent<GameObject> OnEnter, OnExit;
+	public UnityEvent<GameObject, string> OnEvent;
 
-	public GameObject lastInner;
-	public GameObject lastExiter;
+	public GameObject lastInner { get; private set; }
+	public GameObject lastExiter { get; private set; }
+
+	[SerializeField]
+	bool once;
 
 	List<GameObject> interObjects;
-	new Collider collider;
+	Collider collider;
 
 	void Start()
 	{
@@ -39,20 +42,18 @@ public class InteractOnTrigger : MonoBehaviour
 			interObjects.Add(lastInner);
 			lastInner.GetComponent<EventSender>()?.events.AddListener(OnInterEvent);
 		}
-		OnEnter.Invoke(enter);
+		OnEnter?.Invoke(enter);
 		if (once) collider.enabled = false;
 	}
 
 	void OnTriggerExit(Collider other)
 	{
-		//if (0 != (layers.value & 1 << other.gameObject.layer))
-		//{
+
 		if (interObjects.Contains(other.gameObject))
 		{
 			lastExiter = other.gameObject;
 			ExecuteOnExit(lastExiter);
 		}
-		//}
 	}
 
 	protected virtual void ExecuteOnExit(GameObject exiter)
@@ -63,7 +64,7 @@ public class InteractOnTrigger : MonoBehaviour
 			lastInner = interObjects.Count > 0 ? interObjects[interObjects.Count - 1] : null;
 		}
 		exiter.GetComponent<EventSender>()?.events.RemoveListener(OnInterEvent);
-		OnExit.Invoke(exiter);
+		OnExit?.Invoke(exiter);
 	}
 
 	public GameObject GetNearest()
@@ -88,11 +89,11 @@ public class InteractOnTrigger : MonoBehaviour
 
 	void OnInterEvent(GameObject sender, string eventMessage)
 	{
-		//Debug.Log("OnInterEvent sender= " + sender + "eventMessage = " + eventMessage);
-		if (eventMessage == "Dead" && interObjects.Contains(sender))
+		if (eventMessage == "roleEvent_OnState_DEAD" && interObjects.Contains(sender))
 		{
 			ExecuteOnExit(sender);
 		}
+		OnEvent?.Invoke(sender, eventMessage);
 	}
 }
 

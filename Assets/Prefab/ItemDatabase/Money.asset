@@ -17,4 +17,5 @@ MonoBehaviour:
   Description: Makes the West go round
   WorldObjectPrefab: {fileID: 5425733448891748066, guid: 78a62d5ec617d564f8925757d757eabe,
     type: 3}
+  SpawnClip: {fileID: 8300000, guid: aa9f51999376d094486f2363c9a8219d, type: 3}
   UsageEffects: []

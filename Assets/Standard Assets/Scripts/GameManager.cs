@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 	public static UIManager GameUI;
 	public static KeyValueData Data => Instance.DemoData;
 	public LightManager DayNight;
-	public CinemachineVirtualCamera Camera;
+	public CinemachineVirtualCamera VCamera;
 	public CameraController CameraCtrl;
 	public SFXManager SFXManager;
 
@@ -34,19 +34,20 @@ public class GameManager : MonoBehaviour
 	{
 		Instance = this;
 		Player = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterControl>();
-		Player.eventSender.events.AddListener((player, eventName) =>
-		{
-			if (eventName == "playerEvent_OnInit") Debug.Log("player Init Ok!");
-		});
+		// Player.eventSender.events.AddListener((player, eventName) =>
+		// {
+		// 	if (eventName == "playerEvent_OnInit") Debug.Log("player Init Ok!");
+		// });
 		SFXManager.ListenerTarget = Player.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();
 		GameUI.transform.parent = ui_trans;
-		Camera.Follow = Player.gameObject.transform;
-		Camera.LookAt = Player.gameObject.transform;
+		VCamera.Follow = Player.gameObject.transform;
+		VCamera.LookAt = Player.gameObject.transform;
 
 		// 注册应用退出事件
 		Application.quitting += OnApplicationQuit;
-
+		QualitySettings.vSyncCount = 0;
+		Application.targetFrameRate = 60;
 	}
 
 	void OnApplicationQuit()
@@ -75,10 +76,14 @@ public class GameManager : MonoBehaviour
 		{
 			Debug.Log(DemoData.AudioDic[0].Key);
 		}
-		// if (Input.GetKeyDown("space"))
-		// {
-		// 	obj.Dehighlight();
-		// }
+
+		float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
+		if (!Mathf.Approximately(mouseWheel, 0.0f))
+		{
+			Vector3 view = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+			if (view.x > 0f && view.x < 1f && view.y > 0f && view.y < 1f)
+				CameraCtrl.Zoom(-mouseWheel * Time.deltaTime * 20.0f);
+		}
 	}
 
 }

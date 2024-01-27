@@ -16,17 +16,19 @@ MonoBehaviour:
   ItemSprite: {fileID: 0}
   Description: 
   WorldObjectPrefab: {fileID: 0}
-  Slot: 666
+  SpawnClip: {fileID: 0}
+  Slot: 0
   MinimumStrength: 0
   MinimumAgility: 0
   MinimumDefense: 0
   EquippedEffects: []
   HitSounds: []
-  SwingSounds:
-  - {fileID: 8300000, guid: 6d3a84948efc13b4899a25de57f2dec9, type: 3}
+  SwingSounds: []
   Stats:
-    Speed: 4
-    MinimumDamage: 10
-    MaximumDamage: 15
-    MaxRange: 4
+    Speed: 1
+    MinimumDamage: 1
+    MaximumDamage: 1
+    MaxRange: 1
+    Dig: 0
+    Cut: 0
   AttackEffects: []

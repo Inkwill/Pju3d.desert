@@ -19,3 +19,5 @@ MonoBehaviour:
     Value: {fileID: 8300000, guid: 96d314255593b5c408eba1f353c20fb3, type: 3}
   - Key: picked
     Value: {fileID: 8300000, guid: e330f2958ccfdbc48bd702910cbbab2f, type: 3}
+  - Key: spawn
+    Value: {fileID: 8300000, guid: aa9f51999376d094486f2363c9a8219d, type: 3}

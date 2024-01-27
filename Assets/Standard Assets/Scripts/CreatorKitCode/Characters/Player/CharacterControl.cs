@@ -12,173 +12,50 @@ using UnityEngine.Serialization;
 
 namespace CreatorKitCodeInternal
 {
-	public class CharacterControl : MonoBehaviour,
+	public class CharacterControl : RoleControl,
 		AnimationControllerDispatcher.IAttackFrameReceiver,
 		AnimationControllerDispatcher.IFootstepFrameReceiver
 	{
-		//public static CharacterControl Instance { get; protected set; }
-		public EventSender eventSender { get { return m_eventSender; } }
-		public float Speed = 10.0f;
-		public CharacterData Data => m_CharacterData;
-		public CharacterData CurrentEnemy
-		{
-			get { return m_CurrentEnemyCharacterData; }
-			set
-			{
-				m_CurrentEnemyCharacterData = value;
-				GameObject target = value ? m_CurrentEnemyCharacterData.gameObject : null;
-				m_eventSender.Send(target, "playerEvent_OnSetCurrentEnemy");
-			}
-		}
 
-		public Transform WeaponLocator;
 		public ParticleSystem fx_Working;
 
-		[Header("Audio")]
-		public AudioClip[] SpurSoundClips;
-		[Header("Detector")]
-		[SerializeField]
-		InteractOnTrigger Detector_enemy;
+		public DigTool DigTool;
 		public InteractOnTrigger Detector_item;
-		public bool canWork { get { return (m_CurrentState == State.DEFAULT) && !m_CurrentEnemyCharacterData; } protected set { } }
 
-		Vector3 m_LastRaycastResult;
-		Animator m_Animator;
-		NavMeshAgent m_Agent;
-		CharacterData m_CharacterData;
 
-		HighlightableObject m_Highlighted;
+		//HighlightableObject m_Highlighted;
 
-		RaycastHit[] m_RaycastHitCache = new RaycastHit[16];
-		int m_SpeedParamID;
-		int m_AttackParamID;
-		int m_HitParamID;
-		int m_FaintParamID;
-		int m_RespawnParamID;
-		int m_WokingID;
+		//RaycastHit[] m_RaycastHitCache = new RaycastHit[16];
 
 		//bool m_IsKO = false;
-		float m_KOTimer = 0.0f;
+		//float m_KOTimer = 0.0f;
 
-		int m_InteractableLayer;
+		//int m_InteractableLayer;
 		//int m_LevelLayer;
 		//Collider m_TargetCollider;
-		InteractableObject m_TargetInteractable = null;
+		//InteractableObject m_TargetInteractable = null;
 
 		NavMeshPath m_CalculatedPath;
 
-		CharacterAudio m_CharacterAudio;
-		int m_TargetLayer;
-		CharacterData m_CurrentEnemyCharacterData = null;
 		//this is a flag that tell the controller it need to clear the target once the attack finished.
 		//usefull for when clicking elwswhere mid attack animation, allow to finish the attack and then exit.
-		bool m_ClearPostAttack = false;
+		//bool m_ClearPostAttack = false;
 
-		SpawnPoint m_CurrentSpawn = null;
+		//SpawnPoint m_CurrentSpawn = null;
 
-		public DigTool DigTool;
-		EventSender m_eventSender;
-
-		public UICharacterHud hud;
-
-		public enum State
-		{
-			DEFAULT,
-			MOVE,
-			PURSUING,
-			HIT,
-			ATTACKING,
-			WORKING,
-			Dead
-		}
-
-		State m_CurrentState;
-
-		void Awake()
-		{
-			m_CharacterData = GetComponent<CharacterData>();
-			m_eventSender = GetComponent<EventSender>();
-			m_Agent = GetComponent<NavMeshAgent>();
-			m_Animator = GetComponentInChildren<Animator>();
-		}
-
-		// Start is called before the first frame update
 		void Start()
 		{
-			QualitySettings.vSyncCount = 0;
-			Application.targetFrameRate = 60;
-
 			m_CalculatedPath = new NavMeshPath();
-
-			m_Agent.speed = Speed;
-			m_Agent.angularSpeed = 360.0f;
-
-			m_LastRaycastResult = transform.position;
-
-			m_SpeedParamID = Animator.StringToHash("Speed");
-			m_AttackParamID = Animator.StringToHash("Attack");
-			m_HitParamID = Animator.StringToHash("Hit");
-			m_FaintParamID = Animator.StringToHash("Faint");
-			m_RespawnParamID = Animator.StringToHash("Respawn");
-			m_WokingID = Animator.StringToHash("Attack");
-
-			Detector_enemy.OnEnter.AddListener(OnEnemyEnter);
-			Detector_enemy.OnExit.AddListener(OnEnemyExit);
-
-			m_CharacterData.Equipment.OnEquiped += item =>
-			{
-				if (item.Slot == (EquipmentItem.EquipmentSlot)666)
-				{
-					var obj = Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
-					Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
-				}
-				m_eventSender.Send(gameObject, "playerEvent_OnEquiped");
-			};
-
-			m_CharacterData.Equipment.OnUnequip += item =>
-			{
-				if (item.Slot == (EquipmentItem.EquipmentSlot)666)
-				{
-					foreach (Transform t in WeaponLocator)
-						Destroy(t.gameObject);
-				}
-				m_eventSender.Send(gameObject, "playerEvent_OnUnequip");
-			};
-
-			m_CharacterData.Init();
-
-			//m_InteractableLayer = 1 << LayerMask.NameToLayer("Interactable");
-			//m_LevelLayer = 1 << LayerMask.NameToLayer("Level");
-			//m_TargetLayer = 1 << LayerMask.NameToLayer("Target");
-
-			m_eventSender.Send(gameObject, "playerEvent_OnInit");
-			SetState(State.DEFAULT);
-
-			m_CharacterAudio = GetComponent<CharacterAudio>();
-
-			m_CharacterData.OnDamage += () =>
-			{
-				m_Animator.SetTrigger(m_HitParamID);
-				m_CharacterAudio.Hit(transform.position);
-				m_eventSender.Send(gameObject, "playerEvent_OnDamaged");
-			};
+			SetState(State.IDLE);
 		}
 
 		void FixedUpdate()
 		{
-			if (m_CurrentState == State.Dead || m_CurrentState == State.WORKING) return;
-
-			if (CurrentEnemy == null && m_CurrentState == State.DEFAULT)
-			{
-				GameObject enemy = Detector_enemy.GetNearest();
-				if (enemy) CurrentEnemy = enemy.GetComponent<CharacterData>();
-			}
+			if (m_State == State.DEAD || m_State == State.WORKING) return;
 
 			Vector3 direction = Vector3.forward * GameManager.GameUI.JoyStick.Vertical + Vector3.right * GameManager.GameUI.JoyStick.Horizontal;
 			if (direction.magnitude > 0)
 			{
-				//Debug.Log(direction);
-				//m_Agent.Move(direction * 0.1f);
 				m_Agent.CalculatePath(transform.position + direction, m_CalculatedPath);
 				if (m_CalculatedPath.status == NavMeshPathStatus.PathComplete)
 				{
@@ -187,140 +64,111 @@ namespace CreatorKitCodeInternal
 					SetState(State.MOVE);
 				}
 			}
-			else if (direction.magnitude == 0 && m_CurrentState == State.MOVE)
+			else if (direction.magnitude == 0 && m_State == State.MOVE)
 			{
-				SetState(State.DEFAULT);
+				SetState(State.IDLE);
 			}
 		}
 
-		// Update is called once per frame
-		void Update()
-		{
-			Vector3 pos = transform.position;
+		// public void ChangeState(State state, bool active)
+		// {
+		// 	switch (state)
+		// 	{
+		// 		case State.WORKING:
+		// 			if (m_State == State.IDLE && active)
+		// 			{
+		// 				SetState(state);
+		// 				m_Animator.SetTrigger(m_WokingID);
+		// 			}
+		// 			else if (!active)
+		// 			{
+		// 				SetState(State.IDLE);
+		// 			}
+		// 			break;
+		// 		default:
+		// 			Debug.LogError("Cant manual change character state to :" + state);
+		// 			break;
+		// 	}
+		// }
+		//void Update()
+		//{
 
-			if (m_CurrentState == State.Dead)
-			{
-				m_KOTimer += Time.deltaTime;
-				m_Agent.enabled = false;
-				if (gameObject.layer != LayerMask.NameToLayer("PlayerCorpse"))
+		//The update need to run, so we can check the health here.
+		//Another method would be to add a callback in the CharacterData that get called
+		//when health reach 0, and this class register to the callback in Start
+		//(see CharacterData.OnDamage for an example)
+
+
+		//Ray screenRay = CameraController.Instance.GameplayCamera.ScreenPointToRay(Input.mousePosition);
+
+
+
+		//m_Animator.SetFloat(m_SpeedParamID, m_Agent.velocity.magnitude / m_Agent.speed);
+		/*
+			if (Input.GetMouseButtonDown(0))
+			{ //if we click the mouse button, we clear any previously et targets
+
+				if (m_State != State.ATTACKING)
 				{
-					Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("PlayerCorpse"));
-					//Destroy(GetComponent<Rigidbody>());
+					m_Enemy = null;
+					m_TargetInteractable = null;
 				}
-				if (m_KOTimer > 3.0f && m_CurrentSpawn)
-				{
-					GoToRespawn();
-				}
-
-				return;
-			}
-
-			//The update need to run, so we can check the health here.
-			//Another method would be to add a callback in the CharacterData that get called
-			//when health reach 0, and this class register to the callback in Start
-			//(see CharacterData.OnDamage for an example)
-			if (m_CurrentState != State.Dead && m_CharacterData.Stats.CurrentHealth == 0)
-			{
-				m_Animator.SetTrigger(m_FaintParamID);
-
-				m_Agent.isStopped = true;
-				m_Agent.ResetPath();
-				m_KOTimer = 0.0f;
-
-				Data.Death();
-
-				m_CharacterAudio.Death(pos);
-				SetState(State.Dead);
-				return;
-			}
-
-			//Ray screenRay = CameraController.Instance.GameplayCamera.ScreenPointToRay(Input.mousePosition);
-
-			if (m_CurrentEnemyCharacterData != null)
-			{
-				if (m_CurrentEnemyCharacterData.Stats.CurrentHealth == 0)
-					CurrentEnemy = null;
 				else
-					CheckAttack();
+				{
+					m_ClearPostAttack = true;
+				}
 			}
 
-			float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
-			if (!Mathf.Approximately(mouseWheel, 0.0f))
+
+		if (!EventSystem.current.IsPointerOverGameObject() && m_State != State.ATTACKING)
+		{
+			//Raycast to find object currently under the mouse cursor
+			ObjectsRaycasts(screenRay);
+
+			if (Input.GetMouseButton(0))
 			{
-				Vector3 view = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-				if (view.x > 0f && view.x < 1f && view.y > 0f && view.y < 1f)
-					CameraController.Instance.Zoom(-mouseWheel * Time.deltaTime * 20.0f);
-			}
-			/*
-				if (Input.GetMouseButtonDown(0))
-				{ //if we click the mouse button, we clear any previously et targets
-
-					if (m_CurrentState != State.ATTACKING)
+				if (m_TargetInteractable == null && m_Enemy == null)
+				{
+					InteractableObject obj = m_Highlighted as InteractableObject;
+					if (obj)
 					{
-						m_CurrentEnemyCharacterData = null;
-						m_TargetInteractable = null;
+						InteractWith(obj);
 					}
 					else
 					{
-						m_ClearPostAttack = true;
-					}
-				}
-
-
-			if (!EventSystem.current.IsPointerOverGameObject() && m_CurrentState != State.ATTACKING)
-			{
-				//Raycast to find object currently under the mouse cursor
-				ObjectsRaycasts(screenRay);
-
-				if (Input.GetMouseButton(0))
-				{
-					if (m_TargetInteractable == null && m_CurrentEnemyCharacterData == null)
-					{
-						InteractableObject obj = m_Highlighted as InteractableObject;
-						if (obj)
+						CharacterData data = m_Highlighted as CharacterData;
+						if (data != null)
 						{
-							InteractWith(obj);
+							m_Enemy = data;
 						}
 						else
 						{
-							CharacterData data = m_Highlighted as CharacterData;
-							if (data != null)
-							{
-								m_CurrentEnemyCharacterData = data;
-							}
-							else
-							{
-								//MoveCheck(screenRay);
-							}
+							//MoveCheck(screenRay);
 						}
 					}
 				}
 			}
-			*/
-			m_Animator.SetFloat(m_SpeedParamID, m_Agent.velocity.magnitude / m_Agent.speed);
-
-			//Keyboard shortcuts
-			if (Input.GetKeyUp(KeyCode.I))
-				UISystem.Instance.ToggleInventory();
 		}
+		*/
+		//}
 
-		void GoToRespawn()
-		{
-			m_Animator.ResetTrigger(m_HitParamID);
+		// void GoToRespawn()
+		// {
+		// 	m_Animator.ResetTrigger(m_HitParamID);
 
-			m_Agent.Warp(m_CurrentSpawn.transform.position);
-			m_Agent.isStopped = true;
-			m_Agent.ResetPath();
+		// 	m_Agent.Warp(m_CurrentSpawn.transform.position);
+		// 	m_Agent.isStopped = true;
+		// 	m_Agent.ResetPath();
 
-			CurrentEnemy = null;
-			m_TargetInteractable = null;
+		// 	CurrentEnemy = null;
+		// 	m_TargetInteractable = null;
 
-			SetState(State.DEFAULT);
+		// 	SetState(State.IDLE);
 
-			m_Animator.SetTrigger(m_RespawnParamID);
+		// 	m_Animator.SetTrigger(m_RespawnParamID);
 
-			m_CharacterData.Stats.ChangeHealth(m_CharacterData.Stats.stats.health);
-		}
+		// 	m_CharacterData.Stats.ChangeHealth(m_CharacterData.Stats.stats.health);
+		// }
 
 		// void ObjectsRaycasts(Ray screenRay)
 		// {
@@ -362,13 +210,13 @@ namespace CreatorKitCodeInternal
 		// 	}
 		// }
 
-		void SwitchHighlightedObject(HighlightableObject obj)
-		{
-			if (m_Highlighted != null) m_Highlighted.Dehighlight();
+		// void SwitchHighlightedObject(HighlightableObject obj)
+		// {
+		// 	if (m_Highlighted != null) m_Highlighted.Dehighlight();
 
-			m_Highlighted = obj;
-			if (m_Highlighted != null) m_Highlighted.Highlight();
-		}
+		// 	m_Highlighted = obj;
+		// 	if (m_Highlighted != null) m_Highlighted.Highlight();
+		// }
 
 		// void MoveCheck(Ray screenRay)
 		// {
@@ -398,7 +246,7 @@ namespace CreatorKitCodeInternal
 
 		// void CheckInteractableRange()
 		// {
-		// 	if (m_CurrentState == State.ATTACKING)
+		// 	if (m_State == State.ATTACKING)
 		// 		return;
 
 		// 	Vector3 distance = m_TargetCollider.ClosestPointOnBounds(transform.position) - transform.position;
@@ -412,89 +260,16 @@ namespace CreatorKitCodeInternal
 		// 	}
 		// }
 
-		void StopAgent()
-		{
-			m_Agent.ResetPath();
-			m_Agent.velocity = Vector3.zero;
-		}
-
-		void CheckAttack()
-		{
-			if (m_CurrentState == State.ATTACKING || m_CurrentState == State.MOVE || m_CurrentState == State.Dead || m_CurrentState == State.WORKING)
-				return;
-
-			if (m_CharacterData.CanAttackReach(m_CurrentEnemyCharacterData))
-			{
-				StopAgent();
-
-				//if the mouse button isn't pressed, we do NOT attack
-				if (true)//Input.GetMouseButton(0))
-				{
-					Vector3 forward = (m_CurrentEnemyCharacterData.transform.position - transform.position);
-					forward.y = 0;
-					forward.Normalize();
 
 
-					transform.forward = forward;
-					if (m_CharacterData.CanAttackTarget(m_CurrentEnemyCharacterData))
-					{
-						SetState(State.ATTACKING);
+		// public void SetNewRespawn(SpawnPoint point)
+		// {
+		// 	if (m_CurrentSpawn != null)
+		// 		m_CurrentSpawn.Deactivated();
 
-						m_CharacterData.AttackTriggered();
-						m_Animator.SetTrigger(m_AttackParamID);
-					}
-				}
-			}
-			else
-			{
-				m_Agent.SetDestination(m_CurrentEnemyCharacterData.transform.position);
-				SetState(State.PURSUING);
-			}
-		}
-
-		public void AttackFrame()
-		{
-			if (m_CurrentState == State.WORKING)
-			{
-				m_Animator.SetTrigger(m_WokingID);
-				if (fx_Working) fx_Working.Play();
-				return;
-			}
-
-			if (m_CurrentEnemyCharacterData == null)
-			{
-				m_ClearPostAttack = false;
-				return;
-			}
-
-			//if we can't reach the target anymore when it's time to damage, then that attack miss.
-			if (m_CharacterData.CanAttackReach(m_CurrentEnemyCharacterData))
-			{
-				m_CharacterData.Attack(m_CurrentEnemyCharacterData);
-
-				var attackPos = m_CurrentEnemyCharacterData.transform.position + transform.up * 0.5f;
-				VFXManager.PlayVFX(VFXType.Hit, attackPos);
-				SFXManager.PlaySound(m_CharacterAudio.UseType, new SFXManager.PlayData() { Clip = m_CharacterData.Equipment.Weapon.GetHitSound(), PitchMin = 0.8f, PitchMax = 1.2f, Position = attackPos });
-			}
-
-			if (m_ClearPostAttack)
-			{
-				m_ClearPostAttack = false;
-				CurrentEnemy = null;
-				m_TargetInteractable = null;
-			}
-
-			SetState(State.DEFAULT);
-		}
-
-		public void SetNewRespawn(SpawnPoint point)
-		{
-			if (m_CurrentSpawn != null)
-				m_CurrentSpawn.Deactivated();
-
-			m_CurrentSpawn = point;
-			m_CurrentSpawn.Activated();
-		}
+		// 	m_CurrentSpawn = point;
+		// 	m_CurrentSpawn.Activated();
+		// }
 
 		// public void InteractWith(InteractableObject obj)
 		// {
@@ -505,73 +280,5 @@ namespace CreatorKitCodeInternal
 		// 		m_Agent.SetDestination(obj.transform.position);
 		// 	}
 		// }
-
-		public void FootstepFrame()
-		{
-			Vector3 pos = transform.position;
-
-			m_CharacterAudio.Step(pos);
-
-			SFXManager.PlaySound(SFXManager.Use.Player, new SFXManager.PlayData()
-			{
-				Clip = SpurSoundClips[Random.Range(0, SpurSoundClips.Length)],
-				Position = pos,
-				PitchMin = 0.8f,
-				PitchMax = 1.2f,
-				Volume = 0.3f
-			});
-
-			VFXManager.PlayVFX(VFXType.StepPuff, pos);
-		}
-
-		void SetState(State nextState)
-		{
-			if (m_CurrentState != nextState)
-			{
-				//Debug.Log("curState=" + m_CurrentState + "   nextState=" + nextState);
-				m_CurrentState = nextState;
-				m_eventSender.Send(gameObject, "playerEvent_OnState_" + System.Enum.GetName(typeof(State), m_CurrentState));
-			}
-		}
-
-		void OnEnemyEnter(GameObject enter)
-		{
-			m_eventSender.Send(enter, "playerEvent_OnEnemyEnter");
-		}
-
-		void OnEnemyExit(GameObject exiter)
-		{
-			m_eventSender.Send(exiter, "playerEvent_OnEnemyExit");
-			if (m_CurrentEnemyCharacterData && m_CurrentEnemyCharacterData.gameObject == exiter)
-			{
-				CurrentEnemy = Detector_enemy.GetNearest()?.GetComponent<CharacterData>();
-				m_eventSender.Send(exiter, "playerEvent_OnTargetEnemyExit");
-			}
-			else
-			{
-				m_eventSender.Send(exiter, "playerEvent_OnTargetEnemyDead");
-			}
-		}
-
-		public void ChangeState(State state, bool active)
-		{
-			switch (state)
-			{
-				case State.WORKING:
-					if (m_CurrentState == State.DEFAULT && active)
-					{
-						SetState(state);
-						m_Animator.SetTrigger(m_WokingID);
-					}
-					else if (!active)
-					{
-						SetState(State.DEFAULT);
-					}
-					break;
-				default:
-					Debug.LogError("Cant manual change character state to :" + state);
-					break;
-			}
-		}
 	}
 }

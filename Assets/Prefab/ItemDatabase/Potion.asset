@@ -31,6 +31,7 @@ MonoBehaviour:
   Description: 
   WorldObjectPrefab: {fileID: 5898196935238221940, guid: 9be663f1d15d2a74395a9b0ff319d423,
     type: 3}
+  SpawnClip: {fileID: 8300000, guid: dbdd0ed5d7f4cba46a6fda8f74dd5cc9, type: 3}
   UsageEffects:
   - {fileID: 2218347905887207402}
 --- !u!114 &2218347905887207402

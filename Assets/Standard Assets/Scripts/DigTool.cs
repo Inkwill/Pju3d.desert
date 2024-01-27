@@ -80,7 +80,7 @@ public class DigTool : MonoBehaviour
 	{
 		if (eventMessage == "event_work_completed")
 		{
-			m_character.ChangeState(CharacterControl.State.WORKING, false);
+			//m_character.ChangeState(CharacterControl.State.WORKING, false);
 		}
 	}
 

@@ -62,11 +62,9 @@ namespace CreatorKitCodeInternal
 
 		void Spawn(int angle, int radius)
 		{
-
 			Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.right;
 			Vector3 spawnPosition = transform.position + direction * radius;
 			SimpleEnemyController enemy = Instantiate(ObjectToSpawn, spawnPosition, Quaternion.identity).GetComponent<SimpleEnemyController>();
-			enemy.pathRoot = pathRoot;
 		}
 	}
 }

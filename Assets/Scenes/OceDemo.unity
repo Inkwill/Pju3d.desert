@@ -50396,12 +50396,13 @@ MonoBehaviour:
   during: 10
   times: 100
   progressSlider: {fileID: 375547312}
-  ObjectToSpawn: {fileID: 0}
+  ObjectToSpawn: {fileID: 95224015133262308, guid: 33e53786b21d36541ba67b52e95c304d,
+    type: 3}
   pathRoot: {fileID: 2056123598}
   radius: 3
   angleStep: 90
   spawnNum: 2
-  auto: 0
+  auto: 1
 --- !u!135 &1483239280
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -73575,7 +73576,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DayNight: {fileID: 578704702}
-  Camera: {fileID: 3218440}
+  VCamera: {fileID: 3218440}
   CameraCtrl: {fileID: 3218442}
   SFXManager: {fileID: 5564097810133815885}
   TerrainTool: {fileID: 1996416778}
