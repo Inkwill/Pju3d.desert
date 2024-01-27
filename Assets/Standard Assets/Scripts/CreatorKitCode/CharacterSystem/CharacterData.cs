@@ -18,7 +18,6 @@ namespace CreatorKitCode
 		/// <summary>
 		/// The starting weapon equipped when the Character is created. Set through the Unity Editor.
 		/// </summary>
-		public Weapon StartingWeapon;
 		public InventorySystem Inventory = new InventorySystem();
 		public EquipmentSystem Equipment = new EquipmentSystem();
 
@@ -45,12 +44,6 @@ namespace CreatorKitCode
 			Stats.Init(this);
 			Inventory.Init(this);
 			Equipment.Init(this);
-
-			if (StartingWeapon != null)
-			{
-				StartingWeapon.UsedBy(this);
-				Equipment.InitWeapon(StartingWeapon, this);
-			}
 		}
 
 		void Awake()

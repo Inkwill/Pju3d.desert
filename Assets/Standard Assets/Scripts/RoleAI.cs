@@ -6,7 +6,12 @@ using CreatorKitCodeInternal;
 
 public class RoleAI : MonoBehaviour
 {
-
+	public enum Camp
+	{
+		PLAYER,
+		ENEMY
+	}
+	public Camp camp;
 	public AudioClip[] SpottedAudioClip;
 	public InteractOnTrigger Detector;
 	RoleControl m_role;
@@ -19,6 +24,8 @@ public class RoleAI : MonoBehaviour
 		Detector.OnEnter.AddListener(OnTargetEnter);
 		Detector.OnExit.AddListener(OnTargetExit);
 		Detector.OnEvent.AddListener(OnTargetEvent);
+		Detector.layers = (camp == Camp.ENEMY) ? LayerMask.GetMask("Player") : LayerMask.GetMask("Enemy");
+		m_role.gameObject.layer = (camp == Camp.ENEMY) ? LayerMask.NameToLayer("Enemy") : LayerMask.NameToLayer("Player");
 	}
 	public void HandleState(RoleControl.State state, float during)
 	{

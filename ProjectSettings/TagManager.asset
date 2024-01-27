@@ -21,8 +21,8 @@ TagManager:
   - Player
   - Enemy
   - Interactable
-  - PlayerDetector
-  - EnemyDetector
+  - RoleDetector
+  - ItemDetector
   - PlayerEquipment
   - EnemyCorpse
   - PlayerCorpse

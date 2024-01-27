@@ -48,22 +48,22 @@ namespace CreatorKitCode
 
 		public List<EquippedEffect> EquippedEffects;
 
-		public override bool UsedBy(CharacterData user)
-		{
-			var userStat = user.Stats.stats;
+		// public override bool UsedBy(CharacterData user)
+		// {
+		// 	var userStat = user.Stats.stats;
 
-			if (userStat.agility < MinimumAgility
-				|| userStat.strength < MinimumStrength
-				|| userStat.defense < MinimumDefense)
-			{
-				return false;
-			}
+		// 	if (userStat.agility < MinimumAgility
+		// 		|| userStat.strength < MinimumStrength
+		// 		|| userStat.defense < MinimumDefense)
+		// 	{
+		// 		return false;
+		// 	}
 
-			if (Slot == (EquipmentSlot)666) user.Equipment.EquipWeapon(this as Weapon);
-			else user.Equipment.Equip(this);
+		// 	if (Slot == (EquipmentSlot)666) user.Equipment.EquipWeapon(this as Weapon);
+		// 	else user.Equipment.Equip(this);
 
-			return true;
-		}
+		// 	return true;
+		// }
 
 		public override string GetDescription()
 		{

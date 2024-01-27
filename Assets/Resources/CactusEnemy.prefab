@@ -98,8 +98,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 3
-  hud: {fileID: 0}
-  WeaponLocator: {fileID: 0}
+  DefaultWeapon: {fileID: 11400000, guid: 7f1a957562a85434e80c93859ff367a3, type: 2}
+  hud: {fileID: 7303116161709857043}
+  WeaponLocator: {fileID: 4387020051728443196}
   SpurSoundClips: []
 --- !u!114 &5082947502171920998
 MonoBehaviour:
@@ -122,7 +123,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 11400000, guid: fe2930c8cf06ca84c9350406348026e6, type: 2}
   HitClip:
   - {fileID: 8300000, guid: 52bbf808b3d93fb4f861009f0d06498b, type: 3}
   - {fileID: 8300000, guid: a2b0c466fe3cda84da5a4a1f58ae2f07, type: 3}
@@ -212,9 +212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b97291c3ecc5a742b087a681ae68440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_pathList: []
+  camp: 1
   SpottedAudioClip: []
-  pathRoot: {fileID: 0}
   Detector: {fileID: 2985886304864756767}
 --- !u!1001 &3064117141470114346
 PrefabInstance:
@@ -365,6 +364,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 3064117141470114346}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7303116161709857043 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5754491169340107577, guid: aa96cce25b973164eb6aff0eb2866553,
+    type: 3}
+  m_PrefabInstance: {fileID: 3064117141470114346}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a11e274466de044c8a8b82d78ab9c5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7935721431831357691
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -431,7 +442,7 @@ PrefabInstance:
     - target: {fileID: 1178781360537917573, guid: a217a5233176f174a87aaa2c25a0f890,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5138228250969492708, guid: a217a5233176f174a87aaa2c25a0f890,
         type: 3}
@@ -803,6 +814,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackFrameReceiver: {fileID: 8164179436178918315}
   FootstepFrameReceiver: {fileID: 8164179436178918315}
+--- !u!4 &4387020051728443196 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4900819671777818830, guid: d3aea247b6976ac4298d5d2e8c0a681b,
+    type: 3}
+  m_PrefabInstance: {fileID: 8710778585358147570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4438387825741903080 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: d3aea247b6976ac4298d5d2e8c0a681b,

@@ -21,6 +21,7 @@ namespace CreatorKitCodeInternal
 			DEAD
 		}
 		public float Speed = 6.0f;
+		public Weapon DefaultWeapon;
 		public State CurState { get { return m_State; } set { SetState(value); } }
 		public EventSender eventSender { get { return m_eventSender; } }
 		public bool canWork { get { return (m_State == State.IDLE) && !m_Enemy; } protected set { } }
@@ -57,7 +58,7 @@ namespace CreatorKitCodeInternal
 		int m_SpeedParamID;
 		int m_AttackParamID;
 		int m_HitParamID;
-		int m_FaintParamID;
+		//int m_FaintParamID;
 		int m_RespawnParamID;
 		protected int m_WokingID;
 
@@ -71,7 +72,7 @@ namespace CreatorKitCodeInternal
 			m_SpeedParamID = Animator.StringToHash("Speed");
 			m_AttackParamID = Animator.StringToHash("Attack");
 			m_HitParamID = Animator.StringToHash("Hit");
-			m_FaintParamID = Animator.StringToHash("Faint");
+			//m_FaintParamID = Animator.StringToHash("Faint");
 			m_RespawnParamID = Animator.StringToHash("Respawn");
 			m_WokingID = Animator.StringToHash("Attack");
 
@@ -84,6 +85,8 @@ namespace CreatorKitCodeInternal
 
 			m_CharacterData = GetComponent<CharacterData>();
 			m_CharacterData.Init();
+			m_CharacterData.Equipment.InitWeapon(DefaultWeapon);
+
 
 			m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
 
@@ -91,17 +94,17 @@ namespace CreatorKitCodeInternal
 			{
 				m_Animator.SetTrigger(m_HitParamID);
 				m_CharacterAudio.Hit(transform.position);
-				m_eventSender.Send(gameObject, "roleEvent_OnDamaged");
+				hud.UpdateHp();
 			};
 
 			m_CharacterData.Equipment.OnEquiped += item =>
 			{
 				if (item.Slot == (EquipmentItem.EquipmentSlot)666 && WeaponLocator)
 				{
+					if (!item.WorldObjectPrefab) return;
 					var obj = Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
 					Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
 				}
-				m_eventSender.Send(gameObject, "roleEvent_OnEquiped");
 			};
 
 			m_CharacterData.Equipment.OnUnequip += item =>
@@ -111,7 +114,6 @@ namespace CreatorKitCodeInternal
 					foreach (Transform t in WeaponLocator)
 						Destroy(t.gameObject);
 				}
-				m_eventSender.Send(gameObject, "roleEvent_OnUnequip");
 			};
 		}
 
@@ -124,50 +126,48 @@ namespace CreatorKitCodeInternal
 				return;
 			}
 
-			if (m_Enemy && m_State == State.IDLE)
+			if (m_Enemy && (m_State == State.IDLE || m_State == State.PURSUING || m_State == State.ATTACKING))
 			{
 				CheckAttack();
 				return;
 			}
-			if (m_Enemy && m_State == State.PURSUING)
-			{
-				m_Agent.SetDestination(m_Enemy.gameObject.transform.position);
-				float distToEnemy = Vector3.SqrMagnitude(m_Enemy.gameObject.transform.position - transform.position);
-				if (m_CharacterData.CanAttackTarget(m_Enemy))
-				{
-					m_CharacterData.AttackTriggered();
-					m_Animator.SetTrigger(m_AttackParamID);
-					m_Agent.ResetPath();
-					m_Agent.velocity = Vector3.zero;
-					SetState(State.ATTACKING);
-					return;
-				}
-			}
-			if (m_Enemy && m_State == State.ATTACKING)
-			{
-				if (!m_CharacterData.CanAttackReach(m_Enemy))
-				{
-					SetState(State.PURSUING);
-					return;
-				}
-				else
-				{
-					if (m_CharacterData.CanAttackTarget(m_Enemy))
-					{
-						m_CharacterData.AttackTriggered();
-						m_Animator.SetTrigger(m_AttackParamID);
-						return;
-					}
-				}
-			}
+			// if (m_Enemy && m_State == State.PURSUING)
+			// {
+			// 	m_Agent.SetDestination(m_Enemy.gameObject.transform.position);
+			// 	float distToEnemy = Vector3.SqrMagnitude(m_Enemy.gameObject.transform.position - transform.position);
+			// 	if (m_CharacterData.CanAttackTarget(m_Enemy))
+			// 	{
+			// 		m_CharacterData.AttackTriggered();
+			// 		m_Animator.SetTrigger(m_AttackParamID);
+			// 		m_Agent.ResetPath();
+			// 		m_Agent.velocity = Vector3.zero;
+			// 		SetState(State.ATTACKING);
+			// 		return;
+			// 	}
+			// }
+			// if (m_Enemy && m_State == State.ATTACKING)
+			// {
+			// 	if (!m_CharacterData.CanAttackReach(m_Enemy))
+			// 	{
+			// 		SetState(State.PURSUING);
+			// 		return;
+			// 	}
+			// 	else
+			// 	{
+			// 		if (m_CharacterData.CanAttackTarget(m_Enemy))
+			// 		{
+			// 			m_CharacterData.AttackTriggered();
+			// 			m_Animator.SetTrigger(m_AttackParamID);
+			// 			return;
+			// 		}
+			// 	}
+			// }
 			if (Vector3.SqrMagnitude(m_Destination - transform.position) <= 1 && m_State == State.MOVE)
 			{
 				SetState(State.IDLE);
 				return;
 			}
-			//if (m_State == State.MOVE || m_State == State.PURSUING)
 			m_Animator.SetFloat(m_SpeedParamID, m_Agent.velocity.magnitude / Speed);
-
 			if (m_Ai) m_Ai.HandleState(m_State, m_stateDuring);
 		}
 
@@ -216,6 +216,16 @@ namespace CreatorKitCodeInternal
 
 		void CheckAttack()
 		{
+			if (m_CharacterData.Equipment.Weapon == null)
+			{
+				if (DefaultWeapon) m_CharacterData.Equipment.EquipWeapon();
+				else
+				{
+					Debug.LogError("Miss a Weapon! role = " + gameObject);
+					return;
+				}
+			}
+
 			if (m_CharacterData.CanAttackReach(m_Enemy))
 			{
 				m_Agent.ResetPath();
@@ -234,10 +244,7 @@ namespace CreatorKitCodeInternal
 					m_Animator.SetTrigger(m_AttackParamID);
 				}
 			}
-			else
-			{
-				SetState(State.PURSUING);
-			}
+			else { m_Agent.SetDestination(m_Enemy.gameObject.transform.position); SetState(State.PURSUING); }
 		}
 		public void AttackFrame()
 		{

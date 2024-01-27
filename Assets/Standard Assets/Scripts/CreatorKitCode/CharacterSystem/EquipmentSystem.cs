@@ -30,7 +30,7 @@ namespace CreatorKitCode
 			m_Owner = owner;
 		}
 
-		public void InitWeapon(Weapon wep, CharacterData data)
+		public void InitWeapon(Weapon wep)
 		{
 			m_DefaultWeapon = wep;
 		}
@@ -124,7 +124,7 @@ namespace CreatorKitCode
 		public void EquipWeapon()
 		{
 			if (ViceWeapon != null) SwitchWeapon();
-			else EquipWeapon(m_DefaultWeapon);
+			else if (m_DefaultWeapon != null) EquipWeapon(m_DefaultWeapon);
 		}
 
 		public void SwitchWeapon()

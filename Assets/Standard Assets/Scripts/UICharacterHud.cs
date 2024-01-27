@@ -39,10 +39,15 @@ public class UICharacterHud : MonoBehaviour
 	private void Update()
 	{
 		this.transform.forward = Camera.main.transform.forward;
-		if (data && sliderHp)
-		{
-			sliderHp.value = data.Stats.CurrentHealth;
-		}
+		// if (data && sliderHp)
+		// {
+
+		// }
+	}
+
+	public void UpdateHp()
+	{
+		if (data && sliderHp) sliderHp.value = data.Stats.CurrentHealth;
 	}
 
 	// public void SetProgressSlider(bool active)

@@ -511,7 +511,6 @@ MonoBehaviour:
   layers:
     serializedVersion: 2
     m_Bits: 8
-  once: 0
   OnEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -521,9 +520,7 @@ MonoBehaviour:
   OnEvent:
     m_PersistentCalls:
       m_Calls: []
-  lastInner: {fileID: 0}
-  lastExiter: {fileID: 0}
-  interObjects: []
+  once: 0
 --- !u!1 &8112423057566066908
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,6 +604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 4
+  DefaultWeapon: {fileID: 11400000, guid: 44e5dc8ef2e5fc44aa99db53e2c5a1be, type: 2}
   hud: {fileID: 4346466451996622556}
   WeaponLocator: {fileID: 226675115136632130}
   SpurSoundClips:
@@ -638,7 +636,6 @@ MonoBehaviour:
       agility: 5
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
   HitClip:
   - {fileID: 8300000, guid: f8f4ccf89f1c24a45950bc9d619a7448, type: 3}
 --- !u!114 &8038204361242864812
@@ -765,9 +762,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b97291c3ecc5a742b087a681ae68440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_pathList: []
+  camp: 0
   SpottedAudioClip: []
-  pathRoot: {fileID: 0}
   Detector: {fileID: 2267154641734507682}
 --- !u!1 &8884047718753860576
 GameObject:
@@ -1010,7 +1006,7 @@ PrefabInstance:
     - target: {fileID: 1178781360537917573, guid: a217a5233176f174a87aaa2c25a0f890,
         type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5138228250969492708, guid: a217a5233176f174a87aaa2c25a0f890,
         type: 3}
