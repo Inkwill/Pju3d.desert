@@ -31,8 +31,8 @@ public class ResCollector : MonoBehaviour
             }
             else if (eventName == "Remove")
             {
-                Transform[] objs = root.GetComponentsInChildren<Transform>();
-                Destroy(objs[objs.Length - 1]);
+                Transform[] trans = root.GetComponentsInChildren<Transform>();
+                Destroy(trans[trans.Length - 1].gameObject);
             }
         }
         Debug.Log("OnItemEvent: item = " + itemEntry.Item + "event = " + eventName);

@@ -10,14 +10,14 @@ public class Creater : TimerBehaviour
 	protected float digDeep;
 	protected float m_initialDeep;
 	[SerializeField]
-	protected string m_targetName;
+	protected string creatPrefab;
 	protected CharacterControl m_character;
 
 	public bool Auto = false;
 
 	public void DoCreate(CharacterControl character, string pbName)
 	{
-		m_targetName = pbName;
+		creatPrefab = pbName;
 		m_character = character;
 		switch (pbName)
 		{
@@ -58,7 +58,7 @@ public class Creater : TimerBehaviour
 
 	void CreateObj(Transform trans)
 	{
-		GameObject createObj = Resources.Load(m_targetName) as GameObject;
+		GameObject createObj = Resources.Load(creatPrefab) as GameObject;
 		if (createObj)
 		{
 			GameObject obj = Instantiate(createObj, trans.position, Quaternion.Euler(0, 180, 0)) as GameObject;

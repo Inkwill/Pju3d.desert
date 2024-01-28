@@ -37045,6 +37045,16 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1845171550588815522, guid: 5f9ac09826a345c4d9aedf0fd883d86a,
+        type: 3}
+      propertyPath: creatPrefab
+      value: WoodLoot
+      objectReference: {fileID: 0}
+    - target: {fileID: 1845171550588815522, guid: 5f9ac09826a345c4d9aedf0fd883d86a,
+        type: 3}
+      propertyPath: m_targetName
+      value: WoodLoot
+      objectReference: {fileID: 0}
     - target: {fileID: 8227851896368260499, guid: 5f9ac09826a345c4d9aedf0fd883d86a,
         type: 3}
       propertyPath: m_Name

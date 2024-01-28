@@ -8,9 +8,10 @@ namespace CreatorKitCodeInternal
 	{
 		public Text Name;
 		public Text DescriptionText;
-
 		public Button btEquip;
 		public Button btUnEquip;
+		public Button btDrop;
+		public Button btUse;
 
 
 		void Start()
@@ -29,6 +30,7 @@ namespace CreatorKitCodeInternal
 				EquipmentItem equItem = slot.item as EquipmentItem;
 				btEquip.gameObject.SetActive(!slot.equipment && equItem);
 				btUnEquip.gameObject.SetActive(slot.equipment);
+				btDrop.gameObject.SetActive(!slot.equipment);
 			}
 			else
 			{

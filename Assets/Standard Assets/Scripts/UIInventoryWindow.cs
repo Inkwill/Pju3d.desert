@@ -78,7 +78,7 @@ public class UIInventoryWindow : UIWindow
 		// Item itemUsed = m_HoveredItem.InventoryID != -1 ? m_Data.Inventory.Entries[m_HoveredItem.InventoryID].Item : m_HoveredItem.EquipmentItem;
 	}
 
-	public void OnClickItemEvent(string eventName)
+	public override void OnButtonClick(string eventName)
 	{
 		EquipmentItem equip = m_SelectedSlot.item as EquipmentItem;
 		Weapon wp = equip as Weapon;
@@ -92,7 +92,7 @@ public class UIInventoryWindow : UIWindow
 					GameManager.Player.Data.Inventory.RemoveItem(m_SelectedSlot.InventoryID);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
-					SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SFXManager.ItemEquippedSound });
+					SFXManager.PlayClip("equiped");
 				}
 				break;
 			case "UnEquip":
@@ -103,6 +103,18 @@ public class UIInventoryWindow : UIWindow
 					//GameManager.Player.Data.Inventory.AddItem(m_SelectedSlot.item);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
+				}
+				break;
+			case "Drop":
+				GameObject lootObj = Resources.Load("Loot") as GameObject;
+				if (lootObj)
+				{
+					GameManager.Player.Data.Inventory.RemoveItem(m_SelectedSlot.InventoryID);
+					Loot loot = Instantiate(lootObj, GameManager.Player.transform.position, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
+					loot.Item = m_SelectedSlot.item;
+					m_SelectedSlot.tog.isOn = false;
+					Load();
+					//GameObject obj = Instantiate(prefab, builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
 				}
 				break;
 			default:

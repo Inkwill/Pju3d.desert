@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 324227691043144642}
   - component: {fileID: 8729354740472216052}
   - component: {fileID: 3033293687468328205}
-  - component: {fileID: 2335873363935358293}
+  - component: {fileID: -9160682569744089398}
   m_Layer: 0
   m_Name: Tonic_Prefab
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2335873363935358293
+--- !u!65 &-9160682569744089398
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,5 +103,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.39799994, y: 0.4416, z: 0.1688}
-  m_Center: {x: 0.0020999983, y: 0.1957, z: 0.0030999966}
+  m_Size: {x: 0.39800003, y: 0.4416001, z: 0.16880007}
+  m_Center: {x: 0.0020999988, y: 0.19570002, z: 0.003100006}

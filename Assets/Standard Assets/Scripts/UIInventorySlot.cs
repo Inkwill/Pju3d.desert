@@ -79,8 +79,8 @@ public class UIInventorySlot : MonoBehaviour, IPointerClickHandler
 		{
 			if (m_item)
 			{
-				if (equipment) winInventory.OnClickItemEvent("UnEquip");
-				else if (m_item is EquipmentItem) winInventory.OnClickItemEvent("Equip");
+				if (equipment) winInventory.OnButtonClick("UnEquip");
+				else if (m_item is EquipmentItem) winInventory.OnButtonClick("Equip");
 				else Debug.Log("OnDoubleClick item : " + item.ItemName);
 				tog.isOn = false;
 			}

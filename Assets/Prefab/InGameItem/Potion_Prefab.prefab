@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7458456880851645031}
   - component: {fileID: 1935076397621299281}
   - component: {fileID: 5325028067288954024}
-  - component: {fileID: 2520740129033902463}
+  - component: {fileID: 5304282015606575244}
   m_Layer: 8
   m_Name: Potion_Prefab
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2520740129033902463
+--- !u!65 &5304282015606575244
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

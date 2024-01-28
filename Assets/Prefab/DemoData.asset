@@ -21,3 +21,7 @@ MonoBehaviour:
     Value: {fileID: 8300000, guid: e330f2958ccfdbc48bd702910cbbab2f, type: 3}
   - Key: spawn
     Value: {fileID: 8300000, guid: aa9f51999376d094486f2363c9a8219d, type: 3}
+  - Key: equiped
+    Value: {fileID: 8300000, guid: e0554fb81bb64c942833ae78f8c873a6, type: 3}
+  - Key: useitem
+    Value: {fileID: 8300000, guid: 5f17cbf980ad98646aa52d56b67f654a, type: 3}
