@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,6 @@ public class UITargetInfo : MonoBehaviour
 	[SerializeField]
 	GameObject lootElement;
 
-	List<Loot> lootList;
 	UILootElement[] uilootList = new UILootElement[maxUILoot];
 	public void Init()
 	{
@@ -25,7 +25,6 @@ public class UITargetInfo : MonoBehaviour
 		GameManager.Player.Detector_item.OnEnter.AddListener(OnItemEnter);
 		GameManager.Player.Detector_item.OnExit.AddListener(OnItemExit);
 		enemyHud.Show(GameManager.Player.CurrentEnemy);
-		lootList = new List<Loot>();
 		for (int i = 0; i < maxUILoot; i++)
 		{
 			uilootList[i] = Instantiate(lootElement).GetComponent<UILootElement>();
@@ -51,42 +50,47 @@ public class UITargetInfo : MonoBehaviour
 		Loot loot = obj.GetComponentInParent<Loot>();
 		if (loot)
 		{
-			lootList.Add(loot);
-			loot.Highlight();
-			if (lootList.Count <= uilootList.Length) uilootList[lootList.Count - 1].Init(this, loot);
+			var uiloot = uilootList.Where(ui => ui.loot == null).FirstOrDefault();
+			if (uiloot)
+			{
+				uiloot.Init(loot);
+				loot.Highlight();
+			}
+			// for (int i = 0; i < maxUILoot; i++)
+			// {
+			// 	if (uilootList[i].loot == null)
+			// 	{
+			// 		uilootList[i].Init(loot);
+			// 		loot.Highlight();
+			// 	}
+			// }
+
+			// if (!lootList.Contains(loot) && lootList.Count < maxUILoot)
+			// {
+			// 	lootList.Add(loot);
+			// 	loot.Highlight();
+			// 	if (lootList.Count <= uilootList.Length) uilootList[lootList.Count - 1].Init(this, loot);
+			// }
 		}
 	}
 
 	void OnItemExit(GameObject obj)
 	{
 		Loot loot = obj.GetComponentInParent<Loot>();
-		if (lootList.Contains(loot))
+		var uiloot = uilootList.Where(ui => ui.loot == loot).FirstOrDefault();
+		if (uiloot)
 		{
-			lootList.Remove(loot);
+			uiloot.loot = null;
 			loot.Dehighlight();
-			for (int i = 0; i < uilootList.Length; i++)
-			{
-				if (uilootList[i].loot == loot) uilootList[i].gameObject.SetActive(false);
-			}
+			uiloot.gameObject.SetActive(false);
 		}
-		else
-		{
-			Debug.LogError("Exit unexpected loot :" + loot);
-		}
+		else Debug.LogError("Exit unexpected loot :" + loot);
 	}
-	public void OnLooted(Loot loot)
-	{
-		if (lootList.Contains(loot))
-		{
-			lootList.Remove(loot);
-			for (int i = 0; i < uilootList.Length; i++)
-			{
-				if (uilootList[i] == loot) uilootList[i].gameObject.SetActive(false);
-			}
-		}
-		else
-		{
-			Debug.LogError("Looted unexpected loot :" + loot);
-		}
-	}
+	// public void OnLooted(Loot loot)
+	// {
+	// 	var uiloot = uilootList.Where(ui => ui.loot == loot).FirstOrDefault();
+	// 	if (uiloot)	
+	// 		if (lootList.Contains(loot)) 
+	// 		else Debug.LogError("Looted unexpected loot :" + loot);
+	// }
 }

@@ -11,10 +11,9 @@ public class UILootElement : MonoBehaviour
 	[SerializeField]
 	Image iconItem;
 	public Loot loot;
-	UITargetInfo owner;
-	public void Init(UITargetInfo ow, Loot lt)
+	//UITargetInfo owner;
+	public void Init(Loot lt)
 	{
-		owner = ow;
 		loot = lt;
 		iconItem.sprite = loot.Item.ItemSprite;
 		gameObject.SetActive(true);
@@ -23,8 +22,8 @@ public class UILootElement : MonoBehaviour
 
 	public void GetLoot()
 	{
-		owner.OnLooted(loot);
 		loot.InteractWith(GameManager.Player.Data);
+		loot = null;
 		gameObject.SetActive(false);
 	}
 }
