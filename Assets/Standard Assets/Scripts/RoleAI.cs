@@ -4,6 +4,7 @@ using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
 
+[RequireComponent(typeof(RoleControl))]
 public class RoleAI : MonoBehaviour
 {
 	public enum Camp
@@ -29,7 +30,7 @@ public class RoleAI : MonoBehaviour
 	}
 	public void HandleState(RoleControl.State state, float during)
 	{
-		//Debug.Log("HandleState :" + state + " during = " + during);
+		//if (camp == Camp.PLAYER) Debug.Log("HandleState :" + state + " during = " + during);
 		if (state == SimpleEnemyController.State.PURSUING)
 		{
 			if (SpottedAudioClip.Length != 0)

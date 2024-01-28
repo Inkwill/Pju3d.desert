@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace CreatorKitCode
 {
@@ -20,7 +22,7 @@ namespace CreatorKitCode
 
 		//Only 32 slots in inventory
 		public InventoryEntry[] Entries = new InventoryEntry[32];
-
+		public Action<InventoryEntry, string> Actions;
 		CharacterData m_Owner;
 
 		public void Init(CharacterData owner)
@@ -48,6 +50,7 @@ namespace CreatorKitCode
 				{
 					Entries[i].Count += 1;
 					found = true;
+					Actions?.Invoke(Entries[i], "Add");
 				}
 			}
 
@@ -58,6 +61,7 @@ namespace CreatorKitCode
 				entry.Count = 1;
 
 				Entries[firstEmpty] = entry;
+				Actions?.Invoke(entry, "Add");
 			}
 		}
 
@@ -67,6 +71,7 @@ namespace CreatorKitCode
 			{
 				if (i == InventoryID)
 				{
+					Actions?.Invoke(Entries[i], "Remove");
 					Entries[i] = null;
 					break;
 				}
@@ -101,7 +106,7 @@ namespace CreatorKitCode
 						}
 					}
 				}
-
+				Actions?.Invoke(item, "Use");
 				return true;
 			}
 

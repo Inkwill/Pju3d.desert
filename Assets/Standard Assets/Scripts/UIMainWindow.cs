@@ -67,10 +67,10 @@ public class UIMainWindow : UIWindow
 		// default:
 		// 		SwitchButton(null);
 		// break;
-		if (Input.GetMouseButton(1))
-		{
-			Debug.Log("OnClick winMain!");
-		}
+		// if (Input.GetMouseButton(1))
+		// {
+		// 	Debug.Log("OnClick winMain!");
+		// }
 	}
 
 	public override void OnButtonClick(string eventName)

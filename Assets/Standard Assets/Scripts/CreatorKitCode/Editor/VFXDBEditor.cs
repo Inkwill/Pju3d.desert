@@ -11,7 +11,7 @@ public class VFXDBEditor : Editor
 {
     SerializedProperty m_EntryProperty;
     bool m_NeedGeneration;
-    
+
     void OnEnable()
     {
         m_EntryProperty = serializedObject.FindProperty(nameof(VFXDatabase.Entries));
@@ -30,21 +30,21 @@ public class VFXDBEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        
+
         if (GUILayout.Button("New Entry"))
         {
             m_EntryProperty.InsertArrayElementAtIndex(m_EntryProperty.arraySize);
         }
 
         int toDelete = -1;
-        
+
         GUILayout.BeginHorizontal();
         GUILayout.Label("Name");
         GUILayout.Label("Prefab");
         GUILayout.Label("PoolSize");
         GUILayout.EndHorizontal();
-        
-        
+
+
         for (int i = 0; i < m_EntryProperty.arraySize; ++i)
         {
             GUILayout.BeginHorizontal();
@@ -63,7 +63,7 @@ public class VFXDBEditor : Editor
             {
                 toDelete = i;
             }
-            
+
             GUILayout.EndHorizontal();
         }
 
@@ -82,7 +82,7 @@ public class VFXDBEditor : Editor
     void RegenerateEnum()
     {
         serializedObject.Update();
-        
+
         //first we clean all null entry, as we don't want to generate an identifier for it
         for (int i = 0; i < m_EntryProperty.arraySize; ++i)
         {
@@ -112,7 +112,7 @@ public class VFXDBEditor : Editor
 
         if (typeFile.Length != 1)
         {
-            if(typeFile.Length == 0)
+            if (typeFile.Length == 0)
                 Debug.LogError("You have no VFXTypes.cs file in the project!");
             else
                 Debug.LogError("You have more than one VFXTypes.cs files in the project!");
@@ -121,17 +121,17 @@ public class VFXDBEditor : Editor
         {
             string path = AssetDatabase.GUIDToAssetPath(typeFile[0]);
             File.WriteAllText(path.Replace("Assets", Application.dataPath), resultingEnum);
-            
+
             AssetDatabase.Refresh();
         }
     }
 
-    [MenuItem("Assets/Create/Beginner Code/VFXDatabase", priority = -800)]
+    [MenuItem("Assets/Create/Data/VFXDatabase", priority = -800)]
     static void CreateAssetDB()
     {
         var existingDb = AssetDatabase.FindAssets("t:VFXDatabase");
         string selectionPath = "";
-        
+
         if (existingDb.Length > 0)
         {
             Debug.LogError("A VFXDatabase already exists.");
@@ -139,7 +139,7 @@ public class VFXDBEditor : Editor
         }
         else
         {
-            string path = AssetDatabase.GetAssetPath (Selection.activeObject);
+            string path = AssetDatabase.GetAssetPath(Selection.activeObject);
 
             if (path == "")
             {
@@ -147,7 +147,7 @@ public class VFXDBEditor : Editor
             }
             else if (Path.GetExtension(path) != "")
             {
-                path = path.Replace(Path.GetFileName (AssetDatabase.GetAssetPath (Selection.activeObject)), "");
+                path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
             }
 
             var newDb = CreateInstance<VFXDatabase>();
@@ -155,7 +155,7 @@ public class VFXDBEditor : Editor
             AssetDatabase.CreateAsset(newDb, assetPath);
             selectionPath = assetPath;
         }
-        
+
         Selection.activeObject = AssetDatabase.LoadAssetAtPath<VFXDatabase>(selectionPath);
     }
 }

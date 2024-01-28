@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DemoData", menuName = "ScriptableObjects/KeyValueData", order = 1)]
+[CreateAssetMenu(fileName = "DemoData", menuName = "Data/KeyValueData", order = 1)]
 public class KeyValueData : ScriptableObject
 {
 	[Serializable]

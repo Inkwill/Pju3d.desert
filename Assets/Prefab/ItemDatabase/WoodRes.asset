@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b403f04301a8c514a973de9073835732, type: 3}
+  m_Name: WoodRes
+  m_EditorClassIdentifier: 
+  ItemName: Wood
+  ItemSprite: {fileID: 21300000, guid: dcaf4c3e70883730fb13caa83341c2d3, type: 3}
+  Description: 
+  WorldObjectPrefab: {fileID: 4171029783028862324, guid: 40777583afbf3224c86b02eae35fa41b,
+    type: 3}
+  SpawnClip: {fileID: 0}

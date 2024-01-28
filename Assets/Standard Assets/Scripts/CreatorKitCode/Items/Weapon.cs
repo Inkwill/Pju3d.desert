@@ -236,7 +236,7 @@ public class WeaponEditor : Editor
     
     SerializedProperty m_WeaponStatProperty;
 
-    [MenuItem("Assets/Create/Beginner Code/Weapon", priority = -999)]
+    [MenuItem("Assets/Create/Data/Weapon", priority = -999)]
     static public void CreateWeapon()
     {
         var newWeapon = CreateInstance<Weapon>();

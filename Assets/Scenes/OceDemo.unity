@@ -1455,7 +1455,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &70389070
 BoxCollider:
@@ -10637,7 +10636,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &415108486
 BoxCollider:
@@ -16602,7 +16600,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!114 &602745411
 MonoBehaviour:
@@ -17352,7 +17349,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &613455127
 BoxCollider:
@@ -23388,7 +23384,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!114 &775166170
 MonoBehaviour:
@@ -24226,7 +24221,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &806258208
 BoxCollider:
@@ -33114,7 +33108,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &1055522268
 BoxCollider:
@@ -33644,7 +33637,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &1059361573
 BoxCollider:
@@ -36758,7 +36750,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &1149803696
 BoxCollider:
@@ -38915,7 +38906,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &1197289736
 BoxCollider:
@@ -47295,7 +47285,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &1395455706
 BoxCollider:
@@ -49392,7 +49381,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &1443302174
 BoxCollider:
@@ -51600,7 +51588,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &1508432497
 BoxCollider:
@@ -56275,6 +56262,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1403258736278220211, guid: 2035adf7c54e5624f88f30e554b854a4,
+        type: 3}
+      propertyPath: Item
+      value: 
+      objectReference: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1,
+        type: 2}
     - target: {fileID: 2768226103183460623, guid: 2035adf7c54e5624f88f30e554b854a4,
         type: 3}
       propertyPath: m_Name
@@ -68286,7 +68279,6 @@ MonoBehaviour:
       agility: 0
       elementalProtection: 00000000000000000000000000000000
       elementalBoosts: 00000000000000000000000000000000
-  StartingWeapon: {fileID: 0}
   HitClip: []
 --- !u!65 &2030677052
 BoxCollider:

@@ -39,7 +39,9 @@ namespace CreatorKitCodeInternal
 		public UICharacterHud hud;
 		public Transform WeaponLocator;
 		protected State m_State;
-		float m_stateDuring;
+		float m_StateDuring;
+		float m_AiBeat = 0.1f;
+		float m_AiDuring;
 		protected RoleAI m_Ai;
 		protected CharacterData m_Enemy;
 		protected Vector3 m_StartingAnchor;
@@ -66,7 +68,6 @@ namespace CreatorKitCodeInternal
 		{
 			m_Animator = GetComponentInChildren<Animator>();
 			m_Agent = GetComponent<NavMeshAgent>();
-			m_Ai = GetComponent<RoleAI>();
 
 			m_DeathParamID = Animator.StringToHash("Death");
 			m_SpeedParamID = Animator.StringToHash("Speed");
@@ -87,6 +88,7 @@ namespace CreatorKitCodeInternal
 			m_CharacterData.Init();
 			m_CharacterData.Equipment.InitWeapon(DefaultWeapon);
 
+			m_Ai = GetComponent<RoleAI>();
 
 			m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
 
@@ -119,7 +121,7 @@ namespace CreatorKitCodeInternal
 
 		void Update()
 		{
-			m_stateDuring += Time.deltaTime;
+			m_StateDuring += Time.deltaTime;
 			if (m_CharacterData.Stats.CurrentHealth == 0 && m_State != State.DEAD)
 			{
 				SetState(State.DEAD);
@@ -131,6 +133,12 @@ namespace CreatorKitCodeInternal
 				CheckAttack();
 				return;
 			}
+			if (Vector3.SqrMagnitude(m_Destination - transform.position) <= 1 && m_State == State.MOVE)
+			{
+				SetState(State.IDLE);
+				return;
+			}
+			m_Animator.SetFloat(m_SpeedParamID, m_Agent.velocity.magnitude / Speed);
 			// if (m_Enemy && m_State == State.PURSUING)
 			// {
 			// 	m_Agent.SetDestination(m_Enemy.gameObject.transform.position);
@@ -162,13 +170,8 @@ namespace CreatorKitCodeInternal
 			// 		}
 			// 	}
 			// }
-			if (Vector3.SqrMagnitude(m_Destination - transform.position) <= 1 && m_State == State.MOVE)
-			{
-				SetState(State.IDLE);
-				return;
-			}
-			m_Animator.SetFloat(m_SpeedParamID, m_Agent.velocity.magnitude / Speed);
-			if (m_Ai) m_Ai.HandleState(m_State, m_stateDuring);
+			m_AiDuring += Time.deltaTime;
+			if (m_AiDuring >= m_AiBeat && m_Ai) { m_Ai.HandleState(m_State, m_StateDuring); m_AiDuring = 0; }
 		}
 
 		protected void SetState(State nextState)
@@ -176,8 +179,8 @@ namespace CreatorKitCodeInternal
 			if (m_State != nextState)
 			{
 				m_State = nextState;
-				m_stateDuring = 0;
-				GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
+				m_StateDuring = 0;
+				m_eventSender?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
 				switch (m_State)
 				{
 					case State.IDLE:

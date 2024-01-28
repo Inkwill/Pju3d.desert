@@ -34,10 +34,6 @@ public class GameManager : MonoBehaviour
 	{
 		Instance = this;
 		Player = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterControl>();
-		// Player.eventSender.events.AddListener((player, eventName) =>
-		// {
-		// 	if (eventName == "playerEvent_OnInit") Debug.Log("player Init Ok!");
-		// });
 		SFXManager.ListenerTarget = Player.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();
 		GameUI.transform.SetParent(ui_trans);
