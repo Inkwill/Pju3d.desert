@@ -6,25 +6,28 @@ using AirFishLab.ScrollingList;
 using AirFishLab.ScrollingList.ContentManagement;
 using CreatorKitCode;
 
-public class UIItemListBox : ListBox
+public class UIItemListBox : MonoBehaviour
 {
 	[SerializeField]
 	Image _image;
 	[SerializeField]
-	Text _title;
+	Text _num;
 	public Item item;
 
-	protected override void UpdateDisplayContent(IListContent content)
+	public void Init(KeyValuePair<string, int> itemInfo)
 	{
-		item = (Item)content;
-		if (item)
-		{
-			_image.sprite = item.ItemSprite;
-			_title.text = item.ItemName;
-		}
+		item = KeyValueData.GetValue<Item>(GameManager.Data.Item, itemInfo.Key);
+		if (item) _image.sprite = item.ItemSprite;
+		_num.text = itemInfo.Value.ToString();
+
 	}
-	// public void OnClick()
+	// protected override void UpdateDisplayContent(IListContent content)
 	// {
-	// 	Debug.Log("OnClick:" + m_weapon);
+	// 	item = (Item)content;
+	// 	if (item)
+	// 	{
+	// 		_image.sprite = item.ItemSprite;
+	// 		_title.text = item.ItemName;
+	// 	}
 	// }
 }

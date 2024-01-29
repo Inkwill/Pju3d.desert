@@ -387,7 +387,6 @@ GameObject:
   - component: {fileID: 5023124422781355409}
   - component: {fileID: 5080284611790458164}
   - component: {fileID: 8300954991940791599}
-  - component: {fileID: 8592146192376414798}
   m_Layer: 5
   m_Name: bt_Map
   m_TagString: Untagged
@@ -509,27 +508,6 @@ MonoBehaviour:
           m_StringArgument: plant
           m_BoolArgument: 0
         m_CallState: 2
---- !u!95 &8592146192376414798
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2078829330241738325}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 340b56e671718d048b8137e2b427089d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2144020096325606371
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,7 +761,6 @@ GameObject:
   - component: {fileID: 8985455539560657729}
   - component: {fileID: 3672405811924943789}
   - component: {fileID: 1730524249881782488}
-  - component: {fileID: 9194043482825275681}
   m_Layer: 5
   m_Name: bt_Troop
   m_TagString: Untagged
@@ -905,27 +882,6 @@ MonoBehaviour:
           m_StringArgument: plant
           m_BoolArgument: 0
         m_CallState: 2
---- !u!95 &9194043482825275681
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3804660134526202393}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 340b56e671718d048b8137e2b427089d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3849370118762245833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,7 +1218,6 @@ GameObject:
   - component: {fileID: 1641916084968323720}
   - component: {fileID: 4616744387439298294}
   - component: {fileID: 901665087326404028}
-  - component: {fileID: 7740698465069099280}
   m_Layer: 5
   m_Name: bt_Package
   m_TagString: Untagged
@@ -1384,27 +1339,6 @@ MonoBehaviour:
           m_StringArgument: package
           m_BoolArgument: 0
         m_CallState: 2
---- !u!95 &7740698465069099280
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4630994139739370535}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 340b56e671718d048b8137e2b427089d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4724119319224802733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1631,7 +1565,6 @@ GameObject:
   - component: {fileID: 3403334312419366411}
   - component: {fileID: 1238986889637158633}
   - component: {fileID: 433327084858145417}
-  - component: {fileID: 352140541002056619}
   m_Layer: 5
   m_Name: bt_camCtrl
   m_TagString: Untagged
@@ -1753,27 +1686,6 @@ MonoBehaviour:
           m_StringArgument: camCtrl
           m_BoolArgument: 0
         m_CallState: 2
---- !u!95 &352140541002056619
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5459852121327606316}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 340b56e671718d048b8137e2b427089d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5737502643283218112
 GameObject:
   m_ObjectHideFlags: 0
@@ -2053,7 +1965,6 @@ GameObject:
   - component: {fileID: 5658983211019488935}
   - component: {fileID: 4204370534971556449}
   - component: {fileID: 6549199480978788791}
-  - component: {fileID: 8046202418015799209}
   m_Layer: 5
   m_Name: bt_Role
   m_TagString: Untagged
@@ -2175,27 +2086,6 @@ MonoBehaviour:
           m_StringArgument: plant
           m_BoolArgument: 0
         m_CallState: 2
---- !u!95 &8046202418015799209
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6092438946927246114}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 340b56e671718d048b8137e2b427089d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6436415098065684928
 GameObject:
   m_ObjectHideFlags: 0
@@ -2208,7 +2098,6 @@ GameObject:
   - component: {fileID: 3373659566695402771}
   - component: {fileID: 6890304856051185331}
   - component: {fileID: 4056122534920944955}
-  - component: {fileID: 3382092010012196931}
   m_Layer: 5
   m_Name: bt_League
   m_TagString: Untagged
@@ -2330,27 +2219,6 @@ MonoBehaviour:
           m_StringArgument: plant
           m_BoolArgument: 0
         m_CallState: 2
---- !u!95 &3382092010012196931
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6436415098065684928}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 340b56e671718d048b8137e2b427089d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6594055956285294772
 GameObject:
   m_ObjectHideFlags: 0

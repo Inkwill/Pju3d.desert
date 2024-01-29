@@ -25,3 +25,8 @@ MonoBehaviour:
     Value: {fileID: 8300000, guid: e0554fb81bb64c942833ae78f8c873a6, type: 3}
   - Key: useitem
     Value: {fileID: 8300000, guid: 5f17cbf980ad98646aa52d56b67f654a, type: 3}
+  Item:
+  - Key: Wood
+    Value: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
+  - Key: Money
+    Value: {fileID: 11400000, guid: a0d631c24b3e80c4893034ac481dd1bd, type: 2}

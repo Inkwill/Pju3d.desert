@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,6 +22,33 @@ namespace CreatorKitCode
 			public Item Item;
 		}
 
+		public class ItemDemand
+		{
+			public ItemDemand(Dictionary<string, int> demand)
+			{
+				Demand = demand;
+				DemandLeft = new Dictionary<string, int>(demand);
+			}
+
+			public bool Completed
+			{
+				get { return DemandLeft.Values.Sum() < 1; }
+				set { }
+			}
+			public Dictionary<string, int> Demand;
+			public Dictionary<string, int> DemandLeft;
+			public void Fulfill(InventorySystem inventory)
+			{
+				if (Completed) { Debug.LogError("ItemDemand had completed! : " + Helpers.DictionaryToString(DemandLeft)); return; }
+				foreach (var demand in Demand)
+				{
+					int id = inventory.EntryID(demand.Key);
+					if (id != -1)
+						DemandLeft[demand.Key] -= inventory.MinusItem(id, DemandLeft[demand.Key]);
+				}
+			}
+		}
+
 		//Only 32 slots in inventory
 		public InventoryEntry[] Entries = new InventoryEntry[32];
 		public Action<InventoryEntry, string> Actions;
@@ -30,6 +59,17 @@ namespace CreatorKitCode
 			m_Owner = owner;
 		}
 
+		public int EntryID(string ItemName)
+		{
+			for (int i = 0; i < 32; ++i)
+			{
+				if (Entries[i] != null)
+				{
+					if (Entries[i].Item.ItemName == ItemName) return i;
+				}
+			}
+			return -1;
+		}
 		/// <summary>
 		/// Add an item to the inventory. This will look if this item already exist in one of the slot and increment the
 		/// stack counter there instead of using another slot.
@@ -76,6 +116,30 @@ namespace CreatorKitCode
 					break;
 				}
 			}
+		}
+
+		public int MinusItem(int InventoryID, int minusCount)
+		{
+			return MinusItem(Entries[InventoryID], minusCount);
+		}
+		public int MinusItem(InventoryEntry minusEntry, int minusCount)
+		{
+			int minusNum = 0;
+			for (int i = 0; i < 32; ++i)
+			{
+				if (Entries[i] == minusEntry)
+				{
+					minusNum = Math.Min(minusCount, Entries[i].Count);
+					Entries[i].Count -= minusNum;
+					Actions?.Invoke(Entries[i], "Minus");
+					if (Entries[i].Count < 1)
+					{
+						RemoveItem(i);
+					}
+					break;
+				}
+			}
+			return minusNum;
 		}
 
 		/// <summary>

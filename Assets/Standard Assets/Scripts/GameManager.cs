@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	KeyValueData DemoData;
 
+	InventorySystem.ItemDemand testDemand;
 	private void Awake()
 	{
 		Instance = this;
@@ -46,6 +47,16 @@ public class GameManager : MonoBehaviour
 		Application.targetFrameRate = 60;
 	}
 
+	void Start()
+	{
+		var dic = new Dictionary<string, int>
+		{
+			{ "Wood", 1 },
+			{ "Money", 1 },
+		};
+		testDemand = new InventorySystem.ItemDemand(dic);
+	}
+
 	void OnApplicationQuit()
 	{
 		Debug.Log("OnApplicationQuit!,terrian= " + Terrain.activeTerrain);
@@ -54,11 +65,10 @@ public class GameManager : MonoBehaviour
 
 	private void Update()
 	{
-		// if (Input.GetKeyDown("space"))
-		// {
-		// 	GetTerrainTextureInfo(gameObject.transform.position, 10);
-
-		// }
+		if (Input.GetKeyDown("space"))
+		{
+			testDemand.Fulfill(Player.Data.Inventory);
+		}
 
 		// if (Input.GetKeyDown(KeyCode.Return))
 		// {
@@ -70,7 +80,7 @@ public class GameManager : MonoBehaviour
 		// }
 		if (Input.GetKeyDown(KeyCode.Return))
 		{
-			Debug.Log(DemoData.AudioDic[0].Key);
+			Debug.Log(testDemand.Completed);
 		}
 
 		float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
