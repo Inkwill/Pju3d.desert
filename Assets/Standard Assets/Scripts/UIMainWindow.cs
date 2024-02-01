@@ -8,6 +8,7 @@ using AirFishLab.ScrollingList;
 
 public class UIMainWindow : UIWindow
 {
+	public Button btDig;
 	public Toggle tgDigTool;
 	public Button btWeapon;
 	public Button btSwitchWeapon;
@@ -16,14 +17,14 @@ public class UIMainWindow : UIWindow
 	public Text infoTerrian;
 	public Text infoTime;
 	public UITargetInfo targetUI;
+	public Skill digSkill;
 
 	void Start()
 	{
 		switch_buttons = new List<Button>();
 		targetUI.Init();
 		tgDigTool.onValueChanged.AddListener(SetDigTool);
-		// GameManager.Player.Detector_item.OnEnter.AddListener(obj => { Debug.Log("OnItemEnter"); });
-		// GameManager.Player.Detector_item.OnExit.AddListener(obj => { Debug.Log("OnItemExit"); });
+		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
 	}
 	protected override void OnOpen()
 	{
@@ -32,6 +33,11 @@ public class UIMainWindow : UIWindow
 		//if (GameManager.Player.Data.Equipment.Weapon == null) GameManager.Player.Data.Equipment.EquipWeapon();
 		//SetDig(GameManager.Player.Data.Equipment.Weapon.Stats.Dig > 0);
 		//tgDigTool.onValueChanged += value => { GameManager.Player.DigTool.BuildModel = value; };
+	}
+
+	void OnPlayerEvent(GameObject obj, string eventName)
+	{
+		btDig.interactable = (eventName == "roleEvent_OnState_IDLE");
 	}
 
 	void UpdateWeapon(EquipmentSystem equipment)
@@ -48,7 +54,7 @@ public class UIMainWindow : UIWindow
 		infoPos.text = GameManager.Player.gameObject.transform.position.ToString();
 		infoTerrian.text = GameManager.Player.DigTool.SceneBoxInfo(true);
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
-		btWeapon.interactable = btSwitchWeapon.interactable = GameManager.Player.canWork;
+		btWeapon.interactable = btSwitchWeapon.interactable = GameManager.Player.isIdle;
 		//if (tgDig.isOn) SetButton(btDig, GameManager.Player.canWork && GameManager.Player.DigTool.CanDig);
 		//else if (btDig.interactable) SetButton(btDig, false);
 
@@ -78,7 +84,7 @@ public class UIMainWindow : UIWindow
 		switch (eventName)
 		{
 			case "UseWeapon":
-				if (GameManager.Player.canWork && GameManager.Player.DigTool.CanDig && GameManager.Player.DigTool.BuildModel) GameManager.Player.DigTool.DoCreate("pit");
+				//GameManager.Player.UseSkill(digSkill);
 				break;
 			case "SwitchWeapon":
 				GameManager.Player.Data.Equipment.SwitchWeapon();
@@ -90,6 +96,9 @@ public class UIMainWindow : UIWindow
 				break;
 			case "package":
 				GameManager.GameUI.SwitchWindow("winInventory");
+				break;
+			case "Dig":
+				if (GameManager.Player.DigTool.CanDig) GameManager.Player.UseSkill(digSkill);
 				break;
 			default:
 				break;

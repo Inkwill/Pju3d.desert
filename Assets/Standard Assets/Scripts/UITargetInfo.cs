@@ -5,13 +5,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
+using TMPro;
 
 public class UITargetInfo : MonoBehaviour
 {
 	[SerializeField]
 	Text infoText;
 	[SerializeField]
-	UICharacterHud enemyHud;
+	TMP_Text enemyName;
+	[SerializeField]
+	Slider enemyHp;
 	[SerializeField]
 	RectTransform lootRoot;
 	const int maxUILoot = 7;
@@ -24,7 +27,7 @@ public class UITargetInfo : MonoBehaviour
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
 		GameManager.Player.Detector_item.OnEnter.AddListener(OnItemEnter);
 		GameManager.Player.Detector_item.OnExit.AddListener(OnItemExit);
-		enemyHud.Show(GameManager.Player.CurrentEnemy);
+		SetEnemy();
 		for (int i = 0; i < maxUILoot; i++)
 		{
 			uilootList[i] = Instantiate(lootElement).GetComponent<UILootElement>();
@@ -33,13 +36,42 @@ public class UITargetInfo : MonoBehaviour
 		}
 	}
 
+	void SetEnemy()
+	{
+		if (GameManager.Player.CurrentEnemy)
+		{
+			RoleControl enemy = GameManager.Player.CurrentEnemy.GetComponent<RoleControl>();
+			enemy.eventSender.events.AddListener(OnEnemyEvent);
+			enemyName.text = GameManager.Player.CurrentEnemy.CharacterName;
+			enemyHp.maxValue = GameManager.Player.CurrentEnemy.Stats.stats.health;
+			enemyHp.value = GameManager.Player.CurrentEnemy.Stats.CurrentHealth;
+			enemyHp.gameObject.SetActive(true);
+		}
+		else
+		{
+			enemyName.text = "";
+			enemyHp.gameObject.SetActive(false);
+		}
+	}
 	void OnPlayerEvent(GameObject obj, string eventName)
 	{
 		infoText.text = eventName;
 		switch (eventName)
 		{
 			case "roleEvent_OnSetCurrentEnemy":
-				enemyHud.Show(GameManager.Player.CurrentEnemy);
+				SetEnemy();
+				break;
+			default:
+				break;
+		}
+	}
+
+	void OnEnemyEvent(GameObject obj, string eventName)
+	{
+		switch (eventName)
+		{
+			case "roleEvent_OnDamage":
+				enemyHp.value = GameManager.Player.CurrentEnemy.Stats.CurrentHealth;
 				break;
 			default:
 				break;
@@ -77,6 +109,7 @@ public class UITargetInfo : MonoBehaviour
 	void OnItemExit(GameObject obj)
 	{
 		Loot loot = obj.GetComponentInParent<Loot>();
+		if (loot == null) return;
 		var uiloot = uilootList.Where(ui => ui.loot == loot).FirstOrDefault();
 		if (uiloot)
 		{
@@ -84,7 +117,7 @@ public class UITargetInfo : MonoBehaviour
 			loot.Dehighlight();
 			uiloot.gameObject.SetActive(false);
 		}
-		else Debug.LogError("Exit unexpected loot :" + loot);
+		//else Debug.LogError("Exit unexpected loot :" + loot);
 	}
 	// public void OnLooted(Loot loot)
 	// {

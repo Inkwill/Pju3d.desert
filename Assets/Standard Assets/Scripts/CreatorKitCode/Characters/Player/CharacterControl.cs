@@ -14,12 +14,10 @@ namespace CreatorKitCodeInternal
 {
 	public class CharacterControl : RoleControl,
 		AnimationControllerDispatcher.IAttackFrameReceiver,
-		AnimationControllerDispatcher.IFootstepFrameReceiver
+		AnimationControllerDispatcher.IFootstepFrameReceiver,
+		AnimationControllerDispatcher.ISkillstepFrameReceiver
 	{
 
-		public ParticleSystem fx_Working;
-
-		public DigTool DigTool;
 		public InteractOnTrigger Detector_item;
 
 
@@ -51,7 +49,7 @@ namespace CreatorKitCodeInternal
 
 		void FixedUpdate()
 		{
-			if (m_State == State.DEAD || m_State == State.WORKING) return;
+			if (m_State == State.DEAD || m_State == State.SKILLING) return;
 
 			Vector3 direction = Vector3.forward * GameManager.GameUI.JoyStick.Vertical + Vector3.right * GameManager.GameUI.JoyStick.Horizontal;
 			if (direction.magnitude > 0)
@@ -69,7 +67,6 @@ namespace CreatorKitCodeInternal
 				SetState(State.IDLE);
 			}
 		}
-
 		// public void ChangeState(State state, bool active)
 		// {
 		// 	switch (state)

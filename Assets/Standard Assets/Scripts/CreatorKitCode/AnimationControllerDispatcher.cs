@@ -1,61 +1,81 @@
 ﻿using UnityEngine;
 
-namespace CreatorKitCodeInternal 
+namespace CreatorKitCodeInternal
 {
-    /// <summary>
-    /// Need to be added to the GameObject that have the AnimatorController. This will receive the Event defined in the
-    /// import of the animations and can dispatch them to some receivers. Used by step event and attack frame event on
-    /// characters.
-    /// </summary>
-    public class AnimationControllerDispatcher : MonoBehaviour
-    {
-        public interface IAttackFrameReceiver
-        {
-            void AttackFrame();
-        }
+	/// <summary>
+	/// Need to be added to the GameObject that have the AnimatorController. This will receive the Event defined in the
+	/// import of the animations and can dispatch them to some receivers. Used by step event and attack frame event on
+	/// characters.
+	/// </summary>
+	public class AnimationControllerDispatcher : MonoBehaviour
+	{
+		public interface IAttackFrameReceiver
+		{
+			void AttackFrame();
+		}
 
-        public interface IFootstepFrameReceiver
-        {
-            void FootstepFrame();
-        }
+		public interface IFootstepFrameReceiver
+		{
+			void FootstepFrame();
+		}
 
-        public MonoBehaviour AttackFrameReceiver;
-        public MonoBehaviour FootstepFrameReceiver;
+		public interface ISkillstepFrameReceiver
+		{
+			void SkillstepFrame();
+		}
 
-        IAttackFrameReceiver m_AttackReceiver;
-        IFootstepFrameReceiver m_FootstepFrameReceiver;
+		public MonoBehaviour AttackFrameReceiver;
+		public MonoBehaviour FootstepFrameReceiver;
+		public MonoBehaviour SkillstepFrameReceiver;
 
-        void Awake()
-        {
-            if (AttackFrameReceiver != null)
-            {
-                m_AttackReceiver = AttackFrameReceiver as IAttackFrameReceiver;
+		IAttackFrameReceiver m_AttackReceiver;
+		IFootstepFrameReceiver m_FootstepFrameReceiver;
+		ISkillstepFrameReceiver m_SkillstepFrameReceiver;
 
-                if (m_AttackReceiver == null)
-                {
-                    Debug.LogError("The Monobehaviour set as Attack Frame Receiver don't implement the IAttackFrameReceiver interface!", AttackFrameReceiver);
-                }
-            }
+		void Awake()
+		{
+			if (AttackFrameReceiver != null)
+			{
+				m_AttackReceiver = AttackFrameReceiver as IAttackFrameReceiver;
 
-            if (FootstepFrameReceiver)
-            {
-                m_FootstepFrameReceiver = FootstepFrameReceiver as IFootstepFrameReceiver;
-            
-                if (m_AttackReceiver == null)
-                {
-                    Debug.LogError("The Monobehaviour set as Footstep Frame Receiver don't implement the IFootstepFrameReceiver interface!", FootstepFrameReceiver);
-                }
-            }
-        }
+				if (m_AttackReceiver == null)
+				{
+					Debug.LogError("The Monobehaviour set as Attack Frame Receiver don't implement the IAttackFrameReceiver interface!", AttackFrameReceiver);
+				}
+			}
 
-        void AttackEvent()
-        {
-            m_AttackReceiver?.AttackFrame();
-        }
+			if (FootstepFrameReceiver)
+			{
+				m_FootstepFrameReceiver = FootstepFrameReceiver as IFootstepFrameReceiver;
 
-        void FootstepEvent()
-        {
-            m_FootstepFrameReceiver?.FootstepFrame();
-        }
-    }
+				if (m_FootstepFrameReceiver == null)
+				{
+					Debug.LogError("The Monobehaviour set as Footstep Frame Receiver don't implement the IFootstepFrameReceiver interface!", FootstepFrameReceiver);
+				}
+			}
+			if (SkillstepFrameReceiver)
+			{
+				m_SkillstepFrameReceiver = SkillstepFrameReceiver as ISkillstepFrameReceiver;
+
+				if (m_AttackReceiver == null)
+				{
+					Debug.LogError("The Monobehaviour set as Skillstep Frame Receiver don't implement the ISkillstepFrameReceiver interface!", SkillstepFrameReceiver);
+				}
+			}
+		}
+
+		void AttackEvent()
+		{
+			m_AttackReceiver?.AttackFrame();
+		}
+
+		void FootstepEvent()
+		{
+			m_FootstepFrameReceiver?.FootstepFrame();
+		}
+		void SkillstepEvent()
+		{
+			m_SkillstepFrameReceiver?.SkillstepFrame();
+		}
+	}
 }

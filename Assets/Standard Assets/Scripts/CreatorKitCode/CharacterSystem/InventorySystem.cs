@@ -44,14 +44,21 @@ namespace CreatorKitCode
 				{
 					int id = inventory.EntryID(demand.Key);
 					if (id != -1)
-						DemandLeft[demand.Key] -= inventory.MinusItem(id, DemandLeft[demand.Key]);
+					{
+						for (int i = 0; i < DemandLeft[demand.Key]; i++)
+						{
+							if (inventory.MinusItem(id) > 0) DemandLeft[demand.Key]--;
+							else break;
+						}
+						inventory.Actions?.Invoke(demand.Key, "Fulfill");
+					}
 				}
 			}
 		}
 
 		//Only 32 slots in inventory
 		public InventoryEntry[] Entries = new InventoryEntry[32];
-		public Action<InventoryEntry, string> Actions;
+		public Action<string, string> Actions;
 		CharacterData m_Owner;
 
 		public void Init(CharacterData owner)
@@ -66,6 +73,18 @@ namespace CreatorKitCode
 				if (Entries[i] != null)
 				{
 					if (Entries[i].Item.ItemName == ItemName) return i;
+				}
+			}
+			return -1;
+		}
+
+		public int ItemCount(string ItemName)
+		{
+			for (int i = 0; i < 32; ++i)
+			{
+				if (Entries[i] != null)
+				{
+					if (Entries[i].Item.ItemName == ItemName) return Entries[i].Count;
 				}
 			}
 			return -1;
@@ -90,7 +109,7 @@ namespace CreatorKitCode
 				{
 					Entries[i].Count += 1;
 					found = true;
-					Actions?.Invoke(Entries[i], "Add");
+					Actions?.Invoke(item.ItemName, "Add");
 				}
 			}
 
@@ -101,7 +120,7 @@ namespace CreatorKitCode
 				entry.Count = 1;
 
 				Entries[firstEmpty] = entry;
-				Actions?.Invoke(entry, "Add");
+				Actions?.Invoke(item.ItemName, "Add");
 			}
 		}
 
@@ -111,27 +130,28 @@ namespace CreatorKitCode
 			{
 				if (i == InventoryID)
 				{
-					Actions?.Invoke(Entries[i], "Remove");
+					Actions?.Invoke(Entries[i].Item.ItemName, "Remove");
 					Entries[i] = null;
 					break;
 				}
 			}
 		}
 
-		public int MinusItem(int InventoryID, int minusCount)
+		public int MinusItem(int InventoryID)
 		{
-			return MinusItem(Entries[InventoryID], minusCount);
+			return MinusItem(Entries[InventoryID]);
 		}
-		public int MinusItem(InventoryEntry minusEntry, int minusCount)
+		public int MinusItem(InventoryEntry minusEntry)
 		{
 			int minusNum = 0;
+			if (minusEntry == null) return minusNum;
 			for (int i = 0; i < 32; ++i)
 			{
-				if (Entries[i] == minusEntry)
+				if (minusEntry != null && Entries[i] == minusEntry)
 				{
-					minusNum = Math.Min(minusCount, Entries[i].Count);
+					minusNum = Math.Min(1, Entries[i].Count);
 					Entries[i].Count -= minusNum;
-					Actions?.Invoke(Entries[i], "Minus");
+					if (minusNum > 0) Actions?.Invoke(Entries[i].Item.ItemName, "Minus");
 					if (Entries[i].Count < 1)
 					{
 						RemoveItem(i);
@@ -170,7 +190,7 @@ namespace CreatorKitCode
 						}
 					}
 				}
-				Actions?.Invoke(item, "Use");
+				Actions?.Invoke(item.Item.ItemName, "Use");
 				return true;
 			}
 

@@ -7,8 +7,7 @@ using UnityEngine.AI;
 
 public class DigTool : MonoBehaviour
 {
-	public CharacterControl m_character;
-
+	RoleControl m_role;
 	InteractOnTrigger m_Detector;
 	Renderer m_Renderer;
 
@@ -33,9 +32,11 @@ public class DigTool : MonoBehaviour
 	private void Start()
 	{
 		m_Detector = GetComponent<InteractOnTrigger>();
-		m_Detector.OnEnter.AddListener(OnEnter);
-		m_Detector.OnExit.AddListener(OnExit);
+		m_role = GetComponentInParent<RoleControl>();
+		//m_Detector.OnEnter.AddListener(OnEnter);
+		//m_Detector.OnExit.AddListener(OnExit);
 		m_Renderer = GetComponent<Renderer>();
+		m_role.eventSender.events.AddListener(OnRoleEvent);
 	}
 
 	void FixedUpdate()
@@ -56,14 +57,9 @@ public class DigTool : MonoBehaviour
 				break;
 		}
 	}
-	void OnEnter(GameObject enter)
+	void OnRoleEvent(GameObject role, string eventName)
 	{
 		//Debug.Log("DigTool OnEnter: " + enter);
-	}
-
-	void OnExit(GameObject exiter)
-	{
-		//Debug.Log("DigTool OnExit:" + exiter);
 	}
 
 	void HighlightTarget(GameObject obj, bool active)
@@ -76,13 +72,13 @@ public class DigTool : MonoBehaviour
 		}
 	}
 
-	void OnWorkCompleted(GameObject sender, string eventMessage)
-	{
-		if (eventMessage == "event_work_completed")
-		{
-			//m_character.ChangeState(CharacterControl.State.WORKING, false);
-		}
-	}
+	// void OnWorkCompleted(GameObject sender, string eventMessage)
+	// {
+	// 	if (eventMessage == "event_work_completed")
+	// 	{
+	// 		//m_character.ChangeState(CharacterControl.State.WORKING, false);
+	// 	}
+	// }
 
 	public string SceneBoxInfo(bool display)
 	{
@@ -109,32 +105,35 @@ public class DigTool : MonoBehaviour
 		return display ? "空地" : "blank";
 	}
 
-	public Creater DoCreate(string pbName)
+	public T Create<T>(string pbName)
 	{
-		Creater creater = Resources.Load<Creater>("creater");
-		creater = Instantiate(creater, transform.position, Quaternion.Euler(0, 180, 0));
-		//creater.GetComponent<EventSender>()?.m_event.AddListener(OnWorkCompleted);
-		//m_character.PlayWork(true);
-		creater.DoCreate(m_character, pbName);
-		return creater;
-	}
+		GameObject pbObj = Resources.Load(pbName) as GameObject;
+		T target = default(T);
+		if (pbObj) target = Instantiate(pbObj, transform.position, Quaternion.Euler(0, 180, 0)).GetComponent<T>();
 
-	public void DoPlant(string pbName)
-	{
-		Pit pit = GetLastInner<Pit>();
-		if (pit) pit.DoCreate(m_character, pbName);
-		//creater = Instantiate(creater, transform.position, Quaternion.Euler(0, 180, 0));
 		//creater.GetComponent<EventSender>()?.m_event.AddListener(OnWorkCompleted);
 		//m_character.PlayWork(true);
+		//GameObject obj = Instantiate(prefab, builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
 		//creater.DoCreate(m_character, pbName);
+		return target;
 	}
 
-	public T GetLastInner<T>()
-	{
-		if (m_Detector.lastInner)
-		{
-			return m_Detector.lastInner.GetComponent<T>();
-		}
-		else { return default(T); }
-	}
+	// public void DoPlant(string pbName)
+	// {
+	// 	Pit pit = GetLastInner<Pit>();
+	// 	if (pit) pit.DoCreate(m_character, pbName);
+	//creater = Instantiate(creater, transform.position, Quaternion.Euler(0, 180, 0));
+	//creater.GetComponent<EventSender>()?.m_event.AddListener(OnWorkCompleted);
+	//m_character.PlayWork(true);
+	//creater.DoCreate(m_character, pbName);
+	//}
+
+	// public T GetLastInner<T>()
+	// {
+	// 	if (m_Detector.lastInner)
+	// 	{
+	// 		return m_Detector.lastInner.GetComponent<T>();
+	// 	}
+	// 	else { return default(T); }
+	// }
 }

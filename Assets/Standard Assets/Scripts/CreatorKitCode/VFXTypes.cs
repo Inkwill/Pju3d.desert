@@ -5,5 +5,6 @@ public enum VFXType
 	StepPuff,
 	Healing,
 	Negative,
-	Stronger
+	Stronger,
+	SmokePoof
 }

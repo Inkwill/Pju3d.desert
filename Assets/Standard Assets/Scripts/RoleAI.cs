@@ -16,22 +16,32 @@ public class RoleAI : MonoBehaviour
 	public AudioClip[] SpottedAudioClip;
 	public InteractOnTrigger Detector;
 	RoleControl m_role;
-	Vector3[] m_paths;
+	Transform[] m_paths;
 	int m_curPathIndex;
 
 	void Awake()
 	{
 		m_role = GetComponent<RoleControl>();
+		m_role.eventSender.events.AddListener(OnRoleEvent);
 		Detector.OnEnter.AddListener(OnTargetEnter);
 		Detector.OnExit.AddListener(OnTargetExit);
 		Detector.OnEvent.AddListener(OnTargetEvent);
 		Detector.layers = (camp == Camp.ENEMY) ? LayerMask.GetMask("Player") : LayerMask.GetMask("Enemy");
 		m_role.gameObject.layer = (camp == Camp.ENEMY) ? LayerMask.NameToLayer("Enemy") : LayerMask.NameToLayer("Player");
 	}
+
+	void OnRoleEvent(GameObject obj, string eventName)
+	{
+		if (camp == Camp.ENEMY && eventName == "roleEvent_OnMoveEnd" && m_paths.Length > m_curPathIndex)
+		{
+			m_curPathIndex++;
+		}
+	}
+
 	public void HandleState(RoleControl.State state, float during)
 	{
 		//if (camp == Camp.PLAYER) Debug.Log("HandleState :" + state + " during = " + during);
-		if (state == SimpleEnemyController.State.PURSUING)
+		if (state == RoleControl.State.PURSUING)
 		{
 			if (SpottedAudioClip.Length != 0)
 			{
@@ -42,15 +52,19 @@ public class RoleAI : MonoBehaviour
 				});
 			}
 		}
+		if (state == RoleControl.State.IDLE && camp == Camp.ENEMY && m_paths.Length > m_curPathIndex)
+		{
+			m_role.MoveTo(m_paths[m_curPathIndex].position);
+		}
 	}
-	public void SetPath(Vector3[] path)
+	public void SetPath(Transform pathRoot)
 	{
-		m_paths = path;
+		m_paths = pathRoot.GetComponentsInChildren<Transform>();
 		m_curPathIndex = 0;
 	}
 	void OnTargetEnter(GameObject enter)
 	{
-		if (!m_role.CurrentEnemy) m_role.CurrentEnemy = enter.GetComponent<CharacterData>();
+		if (m_role.isStandby) m_role.CurrentEnemy = enter.GetComponent<CharacterData>();
 		//enter.GetComponent<EventSender>()?.events.AddListener(OnTargetEvent);
 		//m_eventSender.Send(enter, "roleEvent_OnTargetEnter");
 	}
@@ -65,6 +79,10 @@ public class RoleAI : MonoBehaviour
 	}
 	void OnTargetEvent(GameObject sender, string eventMessage)
 	{
-		if (eventMessage == "roleEvent_OnState_DEAD") Debug.Log("OnTargetEvent: target= " + sender + "event= " + eventMessage);
+		if (eventMessage == "roleEvent_OnState_DEAD")
+		{
+			m_role.CurState = RoleControl.State.IDLE;
+			Debug.Log("OnTargetEvent: target= " + sender + "event= " + eventMessage);
+		}
 	}
 }

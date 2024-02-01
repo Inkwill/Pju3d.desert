@@ -109,7 +109,7 @@ public class UIInventoryWindow : UIWindow
 				GameObject lootObj = Resources.Load("Loot") as GameObject;
 				if (lootObj)
 				{
-					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
+					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID);
 					Loot loot = Instantiate(lootObj, GameManager.Player.transform.position, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
 					loot.Item = m_SelectedSlot.item;
 					m_SelectedSlot.tog.isOn = false;

@@ -17,7 +17,6 @@ public class UILootElement : MonoBehaviour
 		loot = lt;
 		iconItem.sprite = loot.Item.ItemSprite;
 		gameObject.SetActive(true);
-		//GetComponent<Animator>()?.SetBool("show", true);
 	}
 
 	public void GetLoot()

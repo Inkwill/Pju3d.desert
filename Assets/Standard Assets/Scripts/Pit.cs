@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 
-public class Pit : Creater
+public class Pit : TimerBehaviour
 {
 
 	public Text text_Title;
@@ -26,23 +26,23 @@ public class Pit : Creater
 	}
 	protected override void OnProcessing(float completed)
 	{
-		curDeep -= 0.01f;
+		//curDeep -= 0.01f;
 	}
 	protected override void OnInterval()
 	{
-		if (curDeep <= 0)
-		{
-			curDeep = 0;
-			Destroy(gameObject, interval / 2.0f);
-		}
-		else
-		{
-			curDeep -= 0.01f;
+		// if (curDeep <= 0)
+		// {
+		// 	curDeep = 0;
+		// 	Destroy(gameObject, interval / 2.0f);
+		// }
+		// else
+		// {
+		// 	curDeep -= 0.01f;
 
-		}
+		// }
 		// terrainTool.RaiseTerrain(transform.position, 0.01f * 0.01f, 8, 8);
 		// float curDeep = 10 - Terrain.activeTerrain.SampleHeight(transform.position);
-		text_Info.text = "deep:" + curDeep.ToString("f2");
+		if (text_Info) text_Info.text = "deep:" + curDeep.ToString("f2");
 
 	}
 	//{

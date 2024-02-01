@@ -23,7 +23,6 @@ public class Creater : TimerBehaviour
 		{
 			case "pit":
 				digDeep = 0.1f;
-				if (m_character) progressSlider = m_character.hud.sliderPg;
 				break;
 			default:
 				break;

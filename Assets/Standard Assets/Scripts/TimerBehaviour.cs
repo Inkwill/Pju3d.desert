@@ -18,6 +18,7 @@ public class TimerBehaviour : MonoBehaviour
 		get { return m_started; }
 		set
 		{
+			if (times == 0 && value) return;
 			m_started = value;
 			if (progressSlider)
 			{

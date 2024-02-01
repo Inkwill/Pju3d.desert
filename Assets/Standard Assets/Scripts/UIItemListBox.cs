@@ -12,22 +12,13 @@ public class UIItemListBox : MonoBehaviour
 	Image _image;
 	[SerializeField]
 	Text _num;
-	public Item item;
 
-	public void Init(KeyValuePair<string, int> itemInfo)
+	public void UpdateInfo(KeyValuePair<string, int> itemInfo, int leftNum)
 	{
-		item = KeyValueData.GetValue<Item>(GameManager.Data.Item, itemInfo.Key);
+		Item item = KeyValueData.GetValue<Item>(GameManager.Data.Item, itemInfo.Key);
 		if (item) _image.sprite = item.ItemSprite;
-		_num.text = itemInfo.Value.ToString();
-
+		_num.text = $"{itemInfo.Value - leftNum}/ {itemInfo.Value}";
+		_num.color = leftNum < 1 ? Color.green : Color.black;
 	}
-	// protected override void UpdateDisplayContent(IListContent content)
-	// {
-	// 	item = (Item)content;
-	// 	if (item)
-	// 	{
-	// 		_image.sprite = item.ItemSprite;
-	// 		_title.text = item.ItemName;
-	// 	}
-	// }
+
 }

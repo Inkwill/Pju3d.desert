@@ -8,24 +8,36 @@ namespace CreatorKitCodeInternal
 {
 	public class RoleControl : MonoBehaviour,
 		AnimationControllerDispatcher.IAttackFrameReceiver,
-		AnimationControllerDispatcher.IFootstepFrameReceiver
+		AnimationControllerDispatcher.IFootstepFrameReceiver,
+		AnimationControllerDispatcher.ISkillstepFrameReceiver
 	{
 		public enum State
 		{
 			IDLE,
 			MOVE,
 			PURSUING,
-			HIT,
 			ATTACKING,
-			WORKING,
+			SKILLING,
 			DEAD
 		}
+		[Header("Base")]
 		public float Speed = 6.0f;
 		public Weapon DefaultWeapon;
+		public DigTool DigTool;
+		protected CharacterData m_CharacterData;
+		protected EventSender m_eventSender;
+
+		[Header("Locator")]
+		public Transform WeaponLocator;
+
 		public State CurState { get { return m_State; } set { SetState(value); } }
+		public float CurStateDuring { get { return m_StateDuring; } protected set { } }
 		public EventSender eventSender { get { return m_eventSender; } }
-		public bool canWork { get { return (m_State == State.IDLE) && !m_Enemy; } protected set { } }
+		public bool isIdle { get { return (m_State == State.IDLE) && !m_Enemy; } protected set { } }
+		public bool isStandby { get { return (m_State == State.IDLE || m_State == State.MOVE) && !m_Enemy; } protected set { } }
 		public CharacterData Data => m_CharacterData;
+		public Skill CurSkill => m_skill;
+		public RoleAI BaseAI => m_Ai;
 		public CharacterData CurrentEnemy
 		{
 			get { return m_Enemy; }
@@ -36,33 +48,30 @@ namespace CreatorKitCodeInternal
 				m_eventSender.Send(target, "roleEvent_OnSetCurrentEnemy");
 			}
 		}
-		public UICharacterHud hud;
-		public Transform WeaponLocator;
+
+		[Header("AI")]
 		protected State m_State;
+		protected RoleAI m_Ai;
+		protected CharacterData m_Enemy;
+		protected Vector3 m_Destination;
+		protected Skill m_skill;
 		float m_StateDuring;
 		float m_AiBeat = 0.1f;
 		float m_AiDuring;
-		protected RoleAI m_Ai;
-		protected CharacterData m_Enemy;
-		protected Vector3 m_StartingAnchor;
-		protected Vector3 m_Destination;
+
+		[Header("Animator")]
 		protected Animator m_Animator;
 		protected NavMeshAgent m_Agent;
-		protected CharacterData m_CharacterData;
-		protected EventSender m_eventSender;
-
-		[Header("Audio")]
-		public AudioClip[] SpurSoundClips;
-		CharacterAudio m_CharacterAudio;
-
-
 		int m_DeathParamID;
 		int m_SpeedParamID;
 		int m_AttackParamID;
 		int m_HitParamID;
-		//int m_FaintParamID;
 		int m_RespawnParamID;
-		protected int m_WokingID;
+
+		[Header("Audio")]
+		public AudioClip[] SpurSoundClips;
+		public CharacterAudio AudioPlayer => m_CharacterAudio;
+		protected CharacterAudio m_CharacterAudio;
 
 		void Awake()
 		{
@@ -75,14 +84,11 @@ namespace CreatorKitCodeInternal
 			m_HitParamID = Animator.StringToHash("Hit");
 			//m_FaintParamID = Animator.StringToHash("Faint");
 			m_RespawnParamID = Animator.StringToHash("Respawn");
-			m_WokingID = Animator.StringToHash("Attack");
 
 			m_eventSender = GetComponent<EventSender>();
 
 			m_Agent.speed = Speed;
 			m_Agent.angularSpeed = 360.0f;
-
-			m_StartingAnchor = transform.position;
 
 			m_CharacterData = GetComponent<CharacterData>();
 			m_CharacterData.Init();
@@ -96,7 +102,7 @@ namespace CreatorKitCodeInternal
 			{
 				m_Animator.SetTrigger(m_HitParamID);
 				m_CharacterAudio.Hit(transform.position);
-				hud.UpdateHp();
+				m_eventSender?.Send(gameObject, "roleEvent_OnDamage");
 			};
 
 			m_CharacterData.Equipment.OnEquiped += item =>
@@ -135,8 +141,25 @@ namespace CreatorKitCodeInternal
 			}
 			if (Vector3.SqrMagnitude(m_Destination - transform.position) <= 1 && m_State == State.MOVE)
 			{
+				m_eventSender?.Send(gameObject, "roleEvent_OnMoveEnd");
 				SetState(State.IDLE);
 				return;
+			}
+			if (m_State == State.SKILLING)
+			{
+				if (m_StateDuring < m_skill.Duration)
+				{
+					m_Animator.SetTrigger(m_skill.SkillAnim);
+					m_skill.Operating(this);
+					m_eventSender?.Send(gameObject, "roleEvent_OnOperatSkill");
+				}
+				else
+				{
+					m_skill.Implement(this);
+					m_eventSender?.Send(gameObject, "roleEvent_OnImplementSkill");
+					SetState(State.IDLE);
+					return;
+				}
 			}
 			m_Animator.SetFloat(m_SpeedParamID, m_Agent.velocity.magnitude / Speed);
 			// if (m_Enemy && m_State == State.PURSUING)
@@ -187,13 +210,16 @@ namespace CreatorKitCodeInternal
 						m_Agent.isStopped = true;
 						break;
 					case State.MOVE:
-						//m_Agent.SetDestination(m_Destination);
 						m_Agent.isStopped = false;
+						m_Agent.SetDestination(m_Destination);
 						break;
 					case State.PURSUING:
 						m_Agent.isStopped = false;
 						break;
 					case State.ATTACKING:
+						m_Agent.isStopped = true;
+						break;
+					case State.SKILLING:
 						m_Agent.isStopped = true;
 						break;
 					case State.DEAD:
@@ -249,21 +275,9 @@ namespace CreatorKitCodeInternal
 			}
 			else { m_Agent.SetDestination(m_Enemy.gameObject.transform.position); SetState(State.PURSUING); }
 		}
+
 		public void AttackFrame()
 		{
-			// if (m_State == State.WORKING)
-			// {
-			// 	m_Animator.SetTrigger(m_WokingID);
-			// 	if (fx_Working) fx_Working.Play();
-			// 	return;
-			// }
-
-			// if (m_Enemy == null)
-			// {
-			// 	m_ClearPostAttack = false;
-			// 	return;
-			// }
-
 			//if we can't reach the target anymore when it's time to damage, then that attack miss.
 			if (m_Enemy && m_CharacterData.CanAttackReach(m_Enemy))
 			{
@@ -273,13 +287,6 @@ namespace CreatorKitCodeInternal
 				VFXManager.PlayVFX(VFXType.Hit, attackPos);
 				SFXManager.PlaySound(m_CharacterAudio.UseType, new SFXManager.PlayData() { Clip = m_CharacterData.Equipment.Weapon.GetHitSound(), PitchMin = 0.8f, PitchMax = 1.2f, Position = attackPos });
 			}
-
-			// if (m_ClearPostAttack)
-			// {
-			// 	m_ClearPostAttack = false;
-			// 	CurrentEnemy = null;
-			// 	//m_TargetInteractable = null;
-			// }
 		}
 
 		public void FootstepFrame()
@@ -297,6 +304,25 @@ namespace CreatorKitCodeInternal
 					PitchMax = 1.2f,
 					Volume = 0.3f
 				});
+		}
+		public void SkillstepFrame()
+		{
+			m_skill.StepEffect(this);
+		}
+
+		public void UseSkill(Skill skill)
+		{
+			if (isIdle && skill.CanUsedBy(this))
+			{
+				m_skill = skill;
+				SetState(State.SKILLING);
+			}
+		}
+
+		public void MoveTo(Vector3 pos)
+		{
+			m_Destination = pos;
+			SetState(State.MOVE);
 		}
 	}
 }
