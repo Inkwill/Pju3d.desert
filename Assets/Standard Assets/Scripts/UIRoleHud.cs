@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using CreatorKitCode;
@@ -12,6 +13,10 @@ public class UIRoleHud : MonoBehaviour
 	Slider sliderHp;
 	[SerializeField]
 	Slider sliderPg;
+	[SerializeField]
+	Animator bubble_anim;
+	[SerializeField]
+	Text bubble_text;
 	RoleControl m_role;
 
 	void Start()
@@ -62,5 +67,19 @@ public class UIRoleHud : MonoBehaviour
 	private void Update()
 	{
 		this.transform.forward = Camera.main.transform.forward;
+	}
+
+	public void Bubble(string content, float duration = 1.0f)
+	{
+		bubble_text.text = content;
+		bubble_anim.SetTrigger("show");
+		StartCoroutine(WaitAndPrint(duration));
+
+	}
+	IEnumerator WaitAndPrint(float waitTime)
+	{
+		// 等待一定的时间
+		yield return new WaitForSeconds(waitTime);
+		bubble_anim.SetTrigger("hide");
 	}
 }
