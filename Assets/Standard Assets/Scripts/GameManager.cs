@@ -80,7 +80,8 @@ public class GameManager : MonoBehaviour
 		// }
 		if (Input.GetKeyDown(KeyCode.Return))
 		{
-			Debug.Log(testDemand.Completed);
+			UIRoleHud hud = Player.GetComponentInChildren<UIRoleHud>();
+			if (hud != null) hud.Bubble("你好我好大家好!");
 		}
 
 		float mouseWheel = Input.GetAxis("Mouse ScrollWheel");

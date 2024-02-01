@@ -607,6 +607,7 @@ MonoBehaviour:
   DefaultWeapon: {fileID: 11400000, guid: 44e5dc8ef2e5fc44aa99db53e2c5a1be, type: 2}
   DigTool: {fileID: 5088347702687566400}
   WeaponLocator: {fileID: 226675115136632130}
+  m_Animator: {fileID: 1530321472712605909}
   SpurSoundClips:
   - {fileID: 8300000, guid: daa761ef6c428a344b4858008944ac86, type: 3}
   - {fileID: 8300000, guid: 7b0cf46482c46934e9a0b9dd41b0440a, type: 3}
@@ -3736,6 +3737,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4525128384258049717}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1530321472712605909 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: -6057140222963153312, guid: 02af3baa7b9b95743b17093e5aef9dd1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4525128384258049717}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1546623459970900605 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6072319467140619064, guid: 02af3baa7b9b95743b17093e5aef9dd1,
@@ -4277,6 +4284,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.r
       value: 0.16533852
+      objectReference: {fileID: 0}
+    - target: {fileID: 2342112311742982211, guid: aa96cce25b973164eb6aff0eb2866553,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5322978775957476511, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}

@@ -60,6 +60,7 @@ namespace CreatorKitCodeInternal
 		float m_AiDuring;
 
 		[Header("Animator")]
+		[SerializeField]
 		protected Animator m_Animator;
 		protected NavMeshAgent m_Agent;
 		int m_DeathParamID;
@@ -75,7 +76,6 @@ namespace CreatorKitCodeInternal
 
 		void Awake()
 		{
-			m_Animator = GetComponentInChildren<Animator>();
 			m_Agent = GetComponent<NavMeshAgent>();
 
 			m_DeathParamID = Animator.StringToHash("Death");
