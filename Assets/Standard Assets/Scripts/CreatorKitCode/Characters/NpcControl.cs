@@ -4,7 +4,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyControl : RoleControl,
+public class NpcControl : RoleControl,
 		RoleAnimationDispatcher.IAttackFrameReceiver,
 		RoleAnimationDispatcher.IFootstepFrameReceiver,
 		RoleAnimationDispatcher.ISkillstepFrameReceiver

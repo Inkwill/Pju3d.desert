@@ -12,7 +12,7 @@ public class SummonSkill : Skill
 	public override void Implement(RoleControl user)
 	{
 		GameObject pbObj = Resources.Load(summerName) as GameObject;
-		Instantiate(pbObj, user.DigTool.transform.position, Quaternion.Euler(0, 180, 0));
+		Instantiate(pbObj, user.BaseAI.SceneDetector.transform.position, Quaternion.Euler(0, 180, 0));
 	}
 
 	public override void Operating(RoleControl user)
@@ -21,9 +21,9 @@ public class SummonSkill : Skill
 	}
 	public override void StepEffect(RoleControl user)
 	{
-		var Effectpos = user.DigTool.transform.position;
+		var Effectpos = user.BaseAI.SceneDetector.transform.position;
 		user.AudioPlayer.Attack(Effectpos);
 		VFXManager.PlayVFX(VFXType.SmokePoof, Effectpos);
-		if (digDeep > 0) GameManager.Instance.TerrainTool.LowerTerrain(user.DigTool.transform.position, digDeep * 0.00025f, 5, 10);
+		if (digDeep > 0) GameManager.Instance.TerrainTool.LowerTerrain(user.BaseAI.SceneDetector.transform.position, digDeep * 0.00025f, 5, 10);
 	}
 }

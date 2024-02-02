@@ -21,12 +21,12 @@ TagManager:
   - Player
   - Enemy
   - Interactable
-  - RoleDetector
-  - ItemDetector
+  - Detector
+  - 
   - PlayerEquipment
   - EnemyCorpse
   - PlayerCorpse
-  - SceneDetector
+  - 
   - 
   - 
   - 

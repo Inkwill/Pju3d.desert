@@ -16,8 +16,6 @@ public class CharacterControl : RoleControl,
 	RoleAnimationDispatcher.ISkillstepFrameReceiver
 {
 
-	public InteractOnTrigger Detector_item;
-
 
 	//HighlightableObject m_Highlighted;
 

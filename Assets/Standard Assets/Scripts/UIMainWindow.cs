@@ -47,12 +47,12 @@ public class UIMainWindow : UIWindow
 		iconWeapon.enabled = (equipment.Weapon != null);
 		if (equipment.Weapon) iconWeapon.sprite = equipment.Weapon.ItemSprite;
 		tgDigTool.gameObject.SetActive(equipment.Weapon && equipment.Weapon.Stats.Dig > 0);
-		GameManager.Player.DigTool.BuildModel = tgDigTool.gameObject.activeSelf && tgDigTool.isOn;
+		GameManager.Player.BaseAI.BuildModel = tgDigTool.gameObject.activeSelf && tgDigTool.isOn;
 	}
 	void FixedUpdate()
 	{
 		infoPos.text = GameManager.Player.gameObject.transform.position.ToString();
-		infoTerrian.text = GameManager.Player.DigTool.SceneBoxInfo(true);
+		infoTerrian.text = GameManager.Player.BaseAI.SceneBoxInfo(true);
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
 		btWeapon.interactable = btSwitchWeapon.interactable = GameManager.Player.isIdle;
 		//if (tgDig.isOn) SetButton(btDig, GameManager.Player.canWork && GameManager.Player.DigTool.CanDig);
@@ -98,7 +98,7 @@ public class UIMainWindow : UIWindow
 				GameManager.GameUI.SwitchWindow("winInventory");
 				break;
 			case "Dig":
-				if (GameManager.Player.DigTool.CanDig) GameManager.Player.UseSkill(digSkill);
+				if (GameManager.Player.BaseAI.CanDig) GameManager.Player.UseSkill(digSkill);
 				break;
 			default:
 				break;
@@ -115,7 +115,7 @@ public class UIMainWindow : UIWindow
 	// }
 	public void SetDigTool(bool toggle)
 	{
-		GameManager.Player.DigTool.BuildModel = toggle;
+		GameManager.Player.BaseAI.BuildModel = toggle;
 	}
 	// public void SetWater(bool toggle)
 	// {

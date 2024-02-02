@@ -23,8 +23,6 @@ public class RoleControl : MonoBehaviour,
 	public Weapon DefaultWeapon;
 	[SerializeField]
 	Transform WeaponLocator;
-	public DigTool DigTool => m_DigTool;
-	protected DigTool m_DigTool;
 	protected CharacterData m_CharacterData;
 	public EventSender eventSender => m_eventSender;
 	protected EventSender m_eventSender;
@@ -73,7 +71,6 @@ public class RoleControl : MonoBehaviour,
 	void Awake()
 	{
 		m_Agent = GetComponent<NavMeshAgent>();
-		m_DigTool = GetComponentInChildren<DigTool>();
 		RoleAnimationDispatcher dispatcher = GetComponentInChildren<RoleAnimationDispatcher>();
 		if (dispatcher)
 		{
@@ -99,6 +96,7 @@ public class RoleControl : MonoBehaviour,
 		m_CharacterData.Equipment.InitWeapon(DefaultWeapon);
 
 		m_Ai = GetComponent<RoleAI>();
+		m_Ai.Init(this);
 
 		m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
 
