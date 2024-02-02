@@ -4,7 +4,6 @@ using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
 using UnityEngine.UI;
-using AirFishLab.ScrollingList;
 
 public class UIMainWindow : UIWindow
 {

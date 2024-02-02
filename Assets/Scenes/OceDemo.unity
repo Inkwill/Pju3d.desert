@@ -41883,7 +41883,7 @@ MonoBehaviour:
   progressSlider: {fileID: 0}
   ObjectToSpawn: {fileID: 95224015133262308, guid: e704194e8c40b1d4e856aa64d2b7a137,
     type: 3}
-  pathRoot: {fileID: 0}
+  pathRoot: {fileID: 2056123598}
   radius: 5
   angleStep: 15
   spawnNum: 1

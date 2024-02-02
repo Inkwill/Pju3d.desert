@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AirFishLab.ScrollingList.ContentManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -12,7 +11,7 @@ namespace CreatorKitCode
 	/// Base clase of all items in the game. This is an abstract class and need to be inherited to specify behaviour.
 	/// The project offer 3 type of items : UsableItem, Equipment and Weapon
 	/// </summary>
-	public abstract class Item : ScriptableObject, IListContent
+	public abstract class Item : ScriptableObject
 	{
 		public string ItemName;
 		public Sprite ItemSprite;
