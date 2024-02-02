@@ -19,11 +19,11 @@ public class RoleAI : MonoBehaviour
 	public InteractOnTrigger SceneDetector;
 	public AudioClip[] SpottedAudioClip;
 	RoleControl m_role;
-	Transform[] m_paths;
-	int m_curPathIndex;
+	GameObject m_interactTarget;
+
+
 
 	Renderer m_Renderer;
-
 	bool m_buildmodel = true;
 	public bool BuildModel
 	{
@@ -48,23 +48,28 @@ public class RoleAI : MonoBehaviour
 		EnemyDetector.OnEnter.AddListener(OnEnemyEnter);
 		EnemyDetector.OnExit.AddListener(OnEnemyExit);
 		EnemyDetector.OnEvent.AddListener(OnEnemyEvent);
+		InteractDetector.OnEnter.AddListener(OnInteracterEnter);
+		InteractDetector.OnExit.AddListener(OnInteracterExit);
+		InteractDetector.OnEvent.AddListener(OnInteracterEvent);
 		m_Renderer = SceneDetector.GetComponent<MeshRenderer>();
 		// m_role = role;
-		InteractDetector.layers = LayerMask.GetMask("Interactable");
 		SceneDetector.layers = LayerMask.GetMask("Scene");
 		switch (m_role.BaseAI.camp)
 		{
 			case RoleAI.Camp.PLAYER:
 				m_role.gameObject.layer = LayerMask.NameToLayer("Player");
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
+				InteractDetector.layers = LayerMask.GetMask("Interactable");
 				break;
 			case RoleAI.Camp.ENEMY:
 				m_role.gameObject.layer = LayerMask.NameToLayer("Enemy");
 				EnemyDetector.layers = LayerMask.GetMask("Player");
+				InteractDetector.layers = LayerMask.GetMask("Interactable");
 				break;
 			case RoleAI.Camp.NEUTRAL:
 				m_role.gameObject.layer = LayerMask.NameToLayer("Interactable");
 				EnemyDetector.layers = LayerMask.GetMask("Noting");
+				InteractDetector.layers = LayerMask.GetMask("Interactable", "Player");
 				break;
 			default:
 				break;
@@ -92,16 +97,7 @@ public class RoleAI : MonoBehaviour
 
 	void OnRoleEvent(GameObject obj, string eventName)
 	{
-		if (camp == Camp.ENEMY && eventName == "roleEvent_OnMoveEnd" && m_paths.Length > m_curPathIndex)
-		{
-			m_curPathIndex++;
-		}
-	}
-
-	public void HandleState(RoleControl.State state, float during)
-	{
-		//if (camp == Camp.PLAYER) Debug.Log("HandleState :" + state + " during = " + during);
-		if (state == RoleControl.State.PURSUING)
+		if (eventName == "roleEvent_HandleState_PURSUING")
 		{
 			if (SpottedAudioClip.Length != 0)
 			{
@@ -112,16 +108,23 @@ public class RoleAI : MonoBehaviour
 				});
 			}
 		}
-		if (state == RoleControl.State.IDLE && camp == Camp.ENEMY && m_paths.Length > m_curPathIndex)
-		{
-			m_role.MoveTo(m_paths[m_curPathIndex].position);
-		}
 	}
-	public void SetPath(Transform pathRoot)
-	{
-		m_paths = pathRoot.GetComponentsInChildren<Transform>();
-		m_curPathIndex = 0;
-	}
+
+	//public void HandleState(RoleControl.State state, float during)
+	//{
+	//if (camp == Camp.PLAYER) Debug.Log("HandleState :" + state + " during = " + during);
+	// if (state == RoleControl.State.PURSUING)
+	// {
+	// 	if (SpottedAudioClip.Length != 0)
+	// 	{
+	// 		SFXManager.PlaySound(SFXManager.Use.Enemies, new SFXManager.PlayData()
+	// 		{
+	// 			Clip = SpottedAudioClip[Random.Range(0, SpottedAudioClip.Length)],
+	// 			Position = transform.position
+	// 		});
+	// 	}
+	// }
+	//}
 	void OnEnemyEnter(GameObject enter)
 	{
 		if (m_role.isStandby) m_role.CurrentEnemy = enter.GetComponent<CharacterData>();
@@ -142,8 +145,29 @@ public class RoleAI : MonoBehaviour
 		if (eventMessage == "roleEvent_OnState_DEAD")
 		{
 			m_role.CurState = RoleControl.State.IDLE;
-			Debug.Log("OnEnemyEvent: target= " + sender + "event= " + eventMessage);
+			//Debug.Log("OnEnemyEvent: target= " + sender + "event= " + eventMessage);
 		}
+	}
+
+	void OnInteracterEnter(GameObject enter)
+	{
+		if (m_role.isStandby && m_interactTarget == null) m_interactTarget = enter;
+		GetComponentInChildren<UIRoleHud>()?.Bubble(enter.GetComponent<RoleControl>()?.Data.CharacterName);
+		m_role.LookAt(enter.transform);
+	}
+
+	void OnInteracterExit(GameObject exiter)
+	{
+		if (m_interactTarget && m_interactTarget == exiter) m_interactTarget = InteractDetector.GetNearest();
+	}
+
+	void OnInteracterEvent(GameObject sender, string eventMessage)
+	{
+		if (eventMessage == "roleEvent_OnState_DEAD" && m_interactTarget == sender)
+		{
+			m_interactTarget = InteractDetector.GetNearest();
+		}
+		Debug.Log("OnInteracterEvent: InteracterTarget= " + sender + "event= " + eventMessage);
 	}
 	void HighlightTarget(GameObject obj, bool active)
 	{

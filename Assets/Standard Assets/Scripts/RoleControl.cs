@@ -23,13 +23,12 @@ public class RoleControl : MonoBehaviour,
 	public Weapon DefaultWeapon;
 	[SerializeField]
 	Transform WeaponLocator;
+	public CharacterData Data => m_CharacterData;
 	protected CharacterData m_CharacterData;
 	public EventSender eventSender => m_eventSender;
 	protected EventSender m_eventSender;
 	public bool isIdle { get { return (m_State == State.IDLE) && !m_Enemy; } protected set { } }
 	public bool isStandby { get { return (m_State == State.IDLE || m_State == State.MOVE) && !m_Enemy; } protected set { } }
-	public CharacterData Data => m_CharacterData;
-	public Skill CurSkill => m_skill;
 
 	//[Header("AI")]
 	public State CurState { get { return m_State; } set { SetState(value); } }
@@ -48,6 +47,7 @@ public class RoleControl : MonoBehaviour,
 		}
 	}
 	protected Vector3 m_Destination;
+	public Skill CurSkill => m_skill;
 	protected Skill m_skill;
 	public float CurStateDuring => m_StateDuring;
 	float m_StateDuring;
@@ -196,7 +196,7 @@ public class RoleControl : MonoBehaviour,
 		// 	}
 		// }
 		m_AiDuring += Time.deltaTime;
-		if (m_AiDuring >= m_AiBeat && m_Ai) { m_Ai.HandleState(m_State, m_StateDuring); m_AiDuring = 0; }
+		if (m_AiDuring >= m_AiBeat && m_Ai) { m_eventSender?.Send(gameObject, "roleEvent_HandleState_" + System.Enum.GetName(typeof(State), m_State)); m_AiDuring = 0; }
 	}
 
 	protected void SetState(State nextState)
@@ -262,10 +262,11 @@ public class RoleControl : MonoBehaviour,
 			m_Agent.ResetPath();
 			m_Agent.velocity = Vector3.zero;
 
-			Vector3 forward = (m_Enemy.transform.position - transform.position);
-			forward.y = 0;
-			forward.Normalize();
-			transform.forward = forward;
+			LookAt(m_Enemy.transform);
+			// Vector3 forward = (m_Enemy.transform.position - transform.position);
+			// forward.y = 0;
+			// forward.Normalize();
+			// transform.forward = forward;
 
 			if (m_CharacterData.CanAttackTarget(m_Enemy))
 			{
@@ -278,6 +279,13 @@ public class RoleControl : MonoBehaviour,
 		else { m_Agent.SetDestination(m_Enemy.gameObject.transform.position); SetState(State.PURSUING); }
 	}
 
+	public void LookAt(Transform trans)
+	{
+		Vector3 forward = (trans.position - transform.position);
+		forward.y = 0;
+		forward.Normalize();
+		transform.forward = forward;
+	}
 	public void AttackFrame()
 	{
 		//if we can't reach the target anymore when it's time to damage, then that attack miss.
