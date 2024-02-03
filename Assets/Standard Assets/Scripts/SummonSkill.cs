@@ -9,6 +9,11 @@ public class SummonSkill : Skill
 {
 	public string summerName;
 	public float digDeep;
+
+	public override bool CanUsedBy(RoleControl user)
+	{
+		return user.isIdle;
+	}
 	public override void Implement(RoleControl user)
 	{
 		GameObject pbObj = Resources.Load(summerName) as GameObject;
@@ -23,7 +28,7 @@ public class SummonSkill : Skill
 	{
 		var Effectpos = user.BaseAI.SceneDetector.transform.position;
 		user.AudioPlayer.Attack(Effectpos);
-		VFXManager.PlayVFX(VFXType.SmokePoof, Effectpos);
+		VFXManager.PlayVFX(fxStep, Effectpos);
 		if (digDeep > 0) GameManager.Instance.TerrainTool.LowerTerrain(user.BaseAI.SceneDetector.transform.position, digDeep * 0.00025f, 5, 10);
 	}
 }

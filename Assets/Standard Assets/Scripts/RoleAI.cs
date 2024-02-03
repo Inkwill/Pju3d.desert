@@ -182,7 +182,7 @@ public class RoleAI : MonoBehaviour
 
 		Vector3 randomPos = new Vector3(m_role.BirthPos.x + randomX, m_role.BirthPos.y, m_role.BirthPos.z + randomZ);
 		m_role.MoveTo(randomPos);
-		Debug.Log($"{m_role}-Wandering => {randomPos}");
+		//Debug.Log($"{m_role}-Wandering => {randomPos}");
 	}
 
 	void HighlightTarget(GameObject obj, bool active)

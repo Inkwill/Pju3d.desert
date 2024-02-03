@@ -29,7 +29,8 @@ public class RoleControl : MonoBehaviour,
 	protected EventSender m_eventSender;
 	protected Vector3 m_BirthPos;
 	public Vector3 BirthPos => m_BirthPos;
-	public bool isIdle { get { return (m_State == State.IDLE) && !m_Enemy; } protected set { } }
+	public bool isIdle { get { return (m_State == State.IDLE) && !m_Enemy; } }
+	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 
 	//[Header("AI")]
 	public State CurState { get { return m_State; } set { SetState(value); } }
@@ -276,8 +277,7 @@ public class RoleControl : MonoBehaviour,
 
 	protected void SetState(State nextState)
 	{
-		m_State = nextState;
-		if (m_State != nextState) m_StateDuring = 0;
+		if (m_State != nextState) { m_StateDuring = 0; m_State = nextState; }
 		m_eventSender?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
 		switch (m_State)
 		{
@@ -342,6 +342,14 @@ public class RoleControl : MonoBehaviour,
 			});
 	}
 
+	void OnCollisionEnter(Collision collision)
+	{
+		if (0 != (BaseAI.EnemyDetector.layers & 1 << collision.gameObject.layer))
+		{
+			Debug.Log("OnCollisionEnter: Enemy =" + collision.gameObject);
+		}
+	}
+
 	public void SkillstepFrame()
 	{
 		m_skill.StepEffect(this);
@@ -349,7 +357,7 @@ public class RoleControl : MonoBehaviour,
 
 	public void UseSkill(Skill skill)
 	{
-		if (isIdle && skill.CanUsedBy(this))
+		if (skill.CanUsedBy(this))
 		{
 			m_skill = skill;
 			SetState(State.SKILLING);

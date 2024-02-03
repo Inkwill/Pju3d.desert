@@ -17,6 +17,7 @@ public class UIMainWindow : UIWindow
 	public Text infoTime;
 	public UITargetInfo targetUI;
 	public Skill digSkill;
+	public Skill sprintSkill;
 
 	void Start()
 	{
@@ -98,6 +99,9 @@ public class UIMainWindow : UIWindow
 				break;
 			case "Dig":
 				if (GameManager.Player.BaseAI.CanDig) GameManager.Player.UseSkill(digSkill);
+				break;
+			case "roleSkill":
+				GameManager.Player.UseSkill(sprintSkill);
 				break;
 			default:
 				break;

@@ -10,6 +10,8 @@ public abstract class Skill : ScriptableObject
 	public string Description;
 	public string SkillAnim;
 	public VFXType fxStep;
+	public VFXType fxOperating;
+	public VFXType fxImplement;
 	public AudioClip SkillClip;
 	public float Duration;
 
