@@ -217,6 +217,8 @@ MonoBehaviour:
   InteractDetector: {fileID: 351205572658736870}
   SceneDetector: {fileID: 2822895375687849095}
   m_Offensive: 1
+  m_WanderRadius: 10
+  m_WanderBeat: 5
 --- !u!1001 &3064117141470114346
 PrefabInstance:
   m_ObjectHideFlags: 0

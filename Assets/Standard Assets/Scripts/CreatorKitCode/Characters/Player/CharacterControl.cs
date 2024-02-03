@@ -29,7 +29,7 @@ public class CharacterControl : RoleControl,
 	//Collider m_TargetCollider;
 	//InteractableObject m_TargetInteractable = null;
 
-	NavMeshPath m_CalculatedPath;
+
 
 	//this is a flag that tell the controller it need to clear the target once the attack finished.
 	//usefull for when clicking elwswhere mid attack animation, allow to finish the attack and then exit.
@@ -39,7 +39,6 @@ public class CharacterControl : RoleControl,
 
 	void Start()
 	{
-		m_CalculatedPath = new NavMeshPath();
 		SetState(State.IDLE);
 	}
 
@@ -50,18 +49,27 @@ public class CharacterControl : RoleControl,
 		Vector3 direction = Vector3.forward * GameManager.GameUI.JoyStick.Vertical + Vector3.right * GameManager.GameUI.JoyStick.Horizontal;
 		if (direction.magnitude > 0)
 		{
-			m_Agent.CalculatePath(transform.position + direction, m_CalculatedPath);
-			if (m_CalculatedPath.status == NavMeshPathStatus.PathComplete)
-			{
-				m_Agent.SetPath(m_CalculatedPath);
-				m_CalculatedPath.ClearCorners();
-				SetState(State.MOVE);
-			}
+			if (m_Destination != Vector3.zero) m_Destination = Vector3.zero;
+			Move(direction);
 		}
-		else if (direction.magnitude == 0 && m_State == State.MOVE)
-		{
+		else if (direction.magnitude == 0 && m_State == State.MOVE && m_Destination == Vector3.zero)
 			SetState(State.IDLE);
-		}
+		//else if(m_State == State.MOVE &&)
+		// if (direction.magnitude > 0)
+		// {
+		// 	m_Agent.CalculatePath(transform.position + direction, m_CalculatedPath);
+		// 	if (m_CalculatedPath.status == NavMeshPathStatus.PathComplete)
+		// 	{
+		// 		m_Agent.SetPath(m_CalculatedPath);
+		// 		m_CalculatedPath.ClearCorners();
+		// 		SetState(State.MOVE);
+		// 	}
+		// }
+		//if (direction.magnitude == 0 && )
+		//{
+		//SetState(State.IDLE);
+		//}
+		//else
 	}
 	// public void ChangeState(State state, bool active)
 	// {

@@ -119,7 +119,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7b0cf46482c46934e9a0b9dd41b0440a, type: 3}
   - {fileID: 8300000, guid: 11f81a1d4cbde2f4e943503e5e123e5e, type: 3}
   - {fileID: 8300000, guid: 10f3af480312d4f408f699205054cf74, type: 3}
-  Detector_item: {fileID: 0}
+  SpottedAudioClip: []
 --- !u!114 &2429351864463128572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +271,9 @@ MonoBehaviour:
   EnemyDetector: {fileID: 1134714616160843028}
   InteractDetector: {fileID: 4597439104978932822}
   SceneDetector: {fileID: 2035109682229800503}
-  SpottedAudioClip: []
+  m_Offensive: 0
+  m_WanderRadius: 10
+  m_WanderBeat: 10
 --- !u!114 &844399017392488554
 MonoBehaviour:
   m_ObjectHideFlags: 0

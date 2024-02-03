@@ -18,13 +18,17 @@ public class RoleAI : MonoBehaviour
 	public InteractOnTrigger EnemyDetector;
 	public InteractOnTrigger InteractDetector;
 	public InteractOnTrigger SceneDetector;
-	RoleControl m_role;
-	GameObject m_interactTarget;
+	public bool Offensive { get { return m_Offensive; } set { } }
 
 	[ConditionalField(nameof(camp), false, Camp.ENEMY)]
 	[SerializeField] bool m_Offensive;
-	public bool Offensive { get { return m_Offensive; } set { } }
-
+	[ConditionalField(nameof(camp), true, Camp.PLAYER)]
+	[SerializeField] float m_WanderRadius;
+	[ConditionalField(nameof(camp), true, Camp.PLAYER)]
+	[SerializeField] float m_WanderBeat = 3.0f;
+	float m_IdleDuring;
+	RoleControl m_role;
+	GameObject m_interactTarget;
 
 	Renderer m_Renderer;
 	bool m_buildmodel = true;
@@ -65,6 +69,7 @@ public class RoleAI : MonoBehaviour
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
 				InteractDetector.layers = LayerMask.GetMask("Interactable");
 				m_Offensive = true;
+				m_WanderRadius = 0;
 				break;
 			case RoleAI.Camp.ENEMY:
 				m_role.gameObject.layer = LayerMask.NameToLayer("Enemy");
@@ -103,9 +108,14 @@ public class RoleAI : MonoBehaviour
 
 	void OnRoleEvent(GameObject obj, string eventName)
 	{
-		if (m_role.CurrentEnemy && eventName == "roleEvent_OnIdling")
+		if (eventName == "roleEvent_OnIdling")
 		{
-			//
+			m_IdleDuring += Time.deltaTime;
+			if (m_IdleDuring > m_WanderBeat && m_WanderRadius > 0)
+			{
+				Wandering();
+				m_IdleDuring = 0;
+			}
 		}
 		if (eventName == "roleEvent_OnDamage")
 		{
@@ -162,8 +172,19 @@ public class RoleAI : MonoBehaviour
 			GetComponentInChildren<UIRoleHud>()?.Bubble(sender.GetComponent<RoleControl>()?.Data.CharacterName);
 			m_role.LookAt(sender.transform);
 		}
-		Debug.Log("OnInteracterEvent: InteracterTarget= " + sender + "event= " + eventMessage);
+		//Debug.Log("OnInteracterEvent: InteracterTarget= " + sender + "event= " + eventMessage);
 	}
+
+	void Wandering()
+	{
+		float randomX = Random.Range(0f, m_WanderRadius);
+		float randomZ = Random.Range(0f, m_WanderRadius);
+
+		Vector3 randomPos = new Vector3(m_role.BirthPos.x + randomX, m_role.BirthPos.y, m_role.BirthPos.z + randomZ);
+		m_role.MoveTo(randomPos);
+		Debug.Log($"{m_role}-Wandering => {randomPos}");
+	}
+
 	void HighlightTarget(GameObject obj, bool active)
 	{
 		HighlightableObject target = obj.GetComponent<HighlightableObject>();

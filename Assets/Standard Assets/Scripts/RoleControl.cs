@@ -27,6 +27,8 @@ public class RoleControl : MonoBehaviour,
 	protected CharacterData m_CharacterData;
 	public EventSender eventSender => m_eventSender;
 	protected EventSender m_eventSender;
+	protected Vector3 m_BirthPos;
+	public Vector3 BirthPos => m_BirthPos;
 	public bool isIdle { get { return (m_State == State.IDLE) && !m_Enemy; } protected set { } }
 
 	//[Header("AI")]
@@ -45,17 +47,16 @@ public class RoleControl : MonoBehaviour,
 			m_eventSender.Send(target, "roleEvent_OnSetCurrentEnemy");
 		}
 	}
-	protected Vector3 m_Destination;
+	protected Vector3 m_Destination = Vector3.zero;
 	public Skill CurSkill => m_skill;
 	protected Skill m_skill;
 	public float CurStateDuring => m_StateDuring;
 	float m_StateDuring;
-	float m_AiBeat = 0.1f;
-	float m_AiDuring;
 
-	[Header("Animator")]
+	//[Header("Animator")]
 	protected Animator m_Animator;
 	protected NavMeshAgent m_Agent;
+	NavMeshPath m_CalculatedPath;
 	int m_DeathParamID;
 	int m_SpeedParamID;
 	int m_AttackParamID;
@@ -70,7 +71,12 @@ public class RoleControl : MonoBehaviour,
 
 	void Awake()
 	{
+		m_BirthPos = transform.position;
 		m_Agent = GetComponent<NavMeshAgent>();
+		m_Agent.speed = Speed;
+		m_Agent.angularSpeed = 360.0f;
+		m_CalculatedPath = new NavMeshPath();
+
 		RoleAnimationDispatcher dispatcher = GetComponentInChildren<RoleAnimationDispatcher>();
 		if (dispatcher)
 		{
@@ -87,9 +93,6 @@ public class RoleControl : MonoBehaviour,
 		m_RespawnParamID = Animator.StringToHash("Respawn");
 
 		m_eventSender = GetComponent<EventSender>();
-
-		m_Agent.speed = Speed;
-		m_Agent.angularSpeed = 360.0f;
 
 		m_CharacterData = GetComponent<CharacterData>();
 		m_CharacterData.Init();
@@ -183,13 +186,13 @@ public class RoleControl : MonoBehaviour,
 		//MOVE
 		if (m_State == State.MOVE)
 		{
-			if (Vector3.SqrMagnitude(m_Destination - transform.position) <= 1)
+			if (m_Destination != Vector3.zero && Vector3.SqrMagnitude(m_Destination - transform.position) <= 1)
 			{
 				m_eventSender?.Send(gameObject, "roleEvent_OnMoveEnd");
 				SetState(State.IDLE);
 				return;
 			}
-			else { m_eventSender?.Send(gameObject, "roleEvent_OnMoving"); }
+			m_eventSender?.Send(gameObject, "roleEvent_OnMoving");
 		}
 		//IDLE
 		if (m_State == State.IDLE)
@@ -283,7 +286,7 @@ public class RoleControl : MonoBehaviour,
 				break;
 			case State.MOVE:
 				m_Agent.isStopped = false;
-				m_Agent.SetDestination(m_Destination);
+				if (m_Destination != Vector3.zero) m_Agent.SetDestination(m_Destination);
 				break;
 			case State.PURSUING:
 				m_Agent.isStopped = false;
@@ -353,6 +356,19 @@ public class RoleControl : MonoBehaviour,
 		}
 	}
 
+	public void Move(Vector3 direction)
+	{
+		if (direction.magnitude > 0)
+		{
+			m_Agent.CalculatePath(transform.position + direction, m_CalculatedPath);
+			if (m_CalculatedPath.status == NavMeshPathStatus.PathComplete)
+			{
+				m_Agent.SetPath(m_CalculatedPath);
+				m_CalculatedPath.ClearCorners();
+				SetState(State.MOVE);
+			}
+		}
+	}
 	public void MoveTo(Vector3 pos)
 	{
 		m_Destination = pos;
