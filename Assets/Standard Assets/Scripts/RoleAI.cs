@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
+using MyBox;
 
 [RequireComponent(typeof(RoleControl))]
 public class RoleAI : MonoBehaviour
@@ -20,9 +21,10 @@ public class RoleAI : MonoBehaviour
 	RoleControl m_role;
 	GameObject m_interactTarget;
 
-	[SerializeField]
-	bool m_Offensive;
-	public bool Offensive { get { return m_Offensive; } }
+	[ConditionalField(nameof(camp), false, Camp.ENEMY)]
+	[SerializeField] bool m_Offensive;
+	public bool Offensive { get { return m_Offensive; } set { } }
+
 
 	Renderer m_Renderer;
 	bool m_buildmodel = true;
@@ -196,3 +198,30 @@ public class RoleAI : MonoBehaviour
 		return display ? "空地" : "blank";
 	}
 }
+
+// #if UNITY_EDITOR
+// [CustomEditor(typeof(RoleAI))]
+// public class RoleAIInspector : Editor  
+// {
+// 	SerializedObject obj;  
+// 	RoleAI roleAi;  
+// 	SerializedProperty camp;  
+// 	SerializedProperty m_Offensive; 
+
+// 	void OnEnable()
+// 	{  
+//     	obj = new SerializedObject(target);  
+//     	m_Offensive = obj.FindProperty("m_Offensive");
+// 	}
+
+// 	public override void OnInspectorGUI()
+// 	{
+// 		base.OnInspectorGUI();
+// 		roleAi = (RoleAI)target;
+// 		if (roleAi.camp == RoleAI.Camp.ENEMY)
+// 		{
+// 			EditorGUILayout.PropertyField(m_Offensive);
+// 		}
+// 	}
+// } 
+// #endif

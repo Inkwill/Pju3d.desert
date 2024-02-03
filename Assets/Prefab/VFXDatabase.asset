@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Entries:
   - Name: Hit
-    Prefab: {fileID: 100002, guid: 5d0554b4b6133a0428cbdab0f15661e6, type: 3}
+    Prefab: {fileID: 5035945247045292663, guid: 40e9c26b4fb5ece46aec0b08d269dd01,
+      type: 3}
     PoolSize: 6
   - Name: FireEffect
     Prefab: {fileID: 6530873684951725854, guid: 6a6ca9f774d07de4a9a706f51e0a2092,
