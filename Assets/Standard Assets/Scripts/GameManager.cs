@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (Input.GetKeyDown("space"))
 		{
-			testDemand.Fulfill(Player.Data.Inventory);
+			Player.CurState = RoleControl.State.ATTACKING;
 		}
 
 		// if (Input.GetKeyDown(KeyCode.Return))
@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour
 		{
 			UIRoleHud hud = Player.GetComponentInChildren<UIRoleHud>();
 			if (hud != null) hud.Bubble("你好我好大家好!");
+			Player.CurState = RoleControl.State.DEAD;
 		}
 
 		float mouseWheel = Input.GetAxis("Mouse ScrollWheel");

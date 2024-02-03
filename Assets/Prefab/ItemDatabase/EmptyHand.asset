@@ -17,6 +17,7 @@ MonoBehaviour:
   Description: unarmed
   WorldObjectPrefab: {fileID: 1436811195228682453, guid: 170bb3a4df1e76f448eccfac4174adfc,
     type: 3}
+  SpawnClip: {fileID: 0}
   Slot: 666
   MinimumStrength: 0
   MinimumAgility: 0
@@ -28,5 +29,7 @@ MonoBehaviour:
     Speed: 1
     MinimumDamage: 0
     MaximumDamage: 0
-    MaxRange: 4
+    MaxRange: 2
+    Dig: 0
+    Cut: 0
   AttackEffects: []

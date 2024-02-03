@@ -36,7 +36,7 @@ public class UIMainWindow : UIWindow
 
 	void OnPlayerEvent(GameObject obj, string eventName)
 	{
-		btDig.interactable = (eventName == "roleEvent_OnState_IDLE");
+		//btDig.interactable = (eventName == "roleEvent_OnState_IDLE");
 	}
 
 	void UpdateWeapon(EquipmentSystem equipment)
@@ -53,7 +53,7 @@ public class UIMainWindow : UIWindow
 		infoPos.text = GameManager.Player.gameObject.transform.position.ToString();
 		infoTerrian.text = GameManager.Player.BaseAI.SceneBoxInfo(true);
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
-		btWeapon.interactable = btSwitchWeapon.interactable = GameManager.Player.isIdle;
+		btDig.interactable = btWeapon.interactable = btSwitchWeapon.interactable = GameManager.Player.isIdle;
 		//if (tgDig.isOn) SetButton(btDig, GameManager.Player.canWork && GameManager.Player.DigTool.CanDig);
 		//else if (btDig.interactable) SetButton(btDig, false);
 

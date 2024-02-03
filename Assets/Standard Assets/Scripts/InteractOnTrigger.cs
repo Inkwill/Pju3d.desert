@@ -89,11 +89,11 @@ public class InteractOnTrigger : MonoBehaviour
 
 	void OnInterEvent(GameObject sender, string eventMessage)
 	{
+		OnEvent?.Invoke(sender, eventMessage);
 		if (eventMessage == "roleEvent_OnState_DEAD" && interObjects.Contains(sender))
 		{
 			ExecuteOnExit(sender);
 		}
-		OnEvent?.Invoke(sender, eventMessage);
 	}
 }
 

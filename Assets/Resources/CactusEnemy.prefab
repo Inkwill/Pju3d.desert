@@ -98,9 +98,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 3
-  DefaultWeapon: {fileID: 11400000, guid: 7f1a957562a85434e80c93859ff367a3, type: 2}
+  DefaultWeapon: {fileID: 11400000, guid: 52b81e917921cad46997064d7acebe12, type: 2}
   WeaponLocator: {fileID: 4387020051728443196}
   SpurSoundClips: []
+  SpottedAudioClip: []
 --- !u!114 &5082947502171920998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +216,7 @@ MonoBehaviour:
   EnemyDetector: {fileID: 3795841742008324004}
   InteractDetector: {fileID: 351205572658736870}
   SceneDetector: {fileID: 2822895375687849095}
-  SpottedAudioClip: []
+  m_Offensive: 1
 --- !u!1001 &3064117141470114346
 PrefabInstance:
   m_ObjectHideFlags: 0

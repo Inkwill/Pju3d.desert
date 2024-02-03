@@ -49798,7 +49798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interval: 20
   during: 10
-  times: 100
+  times: 1
   progressSlider: {fileID: 375547312}
   ObjectToSpawn: {fileID: 95224015133262308, guid: 33e53786b21d36541ba67b52e95c304d,
     type: 3}

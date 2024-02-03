@@ -17,11 +17,12 @@ public class RoleAI : MonoBehaviour
 	public InteractOnTrigger EnemyDetector;
 	public InteractOnTrigger InteractDetector;
 	public InteractOnTrigger SceneDetector;
-	public AudioClip[] SpottedAudioClip;
 	RoleControl m_role;
 	GameObject m_interactTarget;
 
-
+	[SerializeField]
+	bool m_Offensive;
+	public bool Offensive { get { return m_Offensive; } }
 
 	Renderer m_Renderer;
 	bool m_buildmodel = true;
@@ -40,6 +41,7 @@ public class RoleAI : MonoBehaviour
 		get { return SceneBoxInfo(false) == "blank"; }
 		set { }
 	}
+
 
 	public void Init(RoleControl role)
 	{
@@ -60,6 +62,7 @@ public class RoleAI : MonoBehaviour
 				m_role.gameObject.layer = LayerMask.NameToLayer("Player");
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
 				InteractDetector.layers = LayerMask.GetMask("Interactable");
+				m_Offensive = true;
 				break;
 			case RoleAI.Camp.ENEMY:
 				m_role.gameObject.layer = LayerMask.NameToLayer("Enemy");
@@ -70,6 +73,7 @@ public class RoleAI : MonoBehaviour
 				m_role.gameObject.layer = LayerMask.NameToLayer("Interactable");
 				EnemyDetector.layers = LayerMask.GetMask("Noting");
 				InteractDetector.layers = LayerMask.GetMask("Interactable", "Player");
+				m_Offensive = false;
 				break;
 			default:
 				break;
@@ -97,37 +101,22 @@ public class RoleAI : MonoBehaviour
 
 	void OnRoleEvent(GameObject obj, string eventName)
 	{
-		if (eventName == "roleEvent_HandleState_PURSUING")
+		if (m_role.CurrentEnemy && eventName == "roleEvent_OnIdling")
 		{
-			if (SpottedAudioClip.Length != 0)
-			{
-				SFXManager.PlaySound(SFXManager.Use.Enemies, new SFXManager.PlayData()
-				{
-					Clip = SpottedAudioClip[Random.Range(0, SpottedAudioClip.Length)],
-					Position = transform.position
-				});
-			}
+			//
 		}
+		if (eventName == "roleEvent_OnDamage")
+		{
+			if (!m_Offensive) m_Offensive = true;
+			if (!m_role.CurrentEnemy) m_role.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+		}
+		UIRoleHud hud = m_role.GetComponentInChildren<UIRoleHud>();
+		if (hud != null) hud.Bubble(eventName);
 	}
 
-	//public void HandleState(RoleControl.State state, float during)
-	//{
-	//if (camp == Camp.PLAYER) Debug.Log("HandleState :" + state + " during = " + during);
-	// if (state == RoleControl.State.PURSUING)
-	// {
-	// 	if (SpottedAudioClip.Length != 0)
-	// 	{
-	// 		SFXManager.PlaySound(SFXManager.Use.Enemies, new SFXManager.PlayData()
-	// 		{
-	// 			Clip = SpottedAudioClip[Random.Range(0, SpottedAudioClip.Length)],
-	// 			Position = transform.position
-	// 		});
-	// 	}
-	// }
-	//}
 	void OnEnemyEnter(GameObject enter)
 	{
-		if (m_role.isStandby) m_role.CurrentEnemy = enter.GetComponent<CharacterData>();
+		if (m_role.CurrentEnemy == null) m_role.CurrentEnemy = enter.GetComponent<CharacterData>();
 		//enter.GetComponent<EventSender>()?.events.AddListener(OnEnemyEvent);
 		//m_eventSender.Send(enter, "roleEvent_OnEnemyEnter");
 	}
@@ -144,16 +133,14 @@ public class RoleAI : MonoBehaviour
 	{
 		if (eventMessage == "roleEvent_OnState_DEAD")
 		{
-			m_role.CurState = RoleControl.State.IDLE;
-			//Debug.Log("OnEnemyEvent: target= " + sender + "event= " + eventMessage);
+			//m_role.CurState = RoleControl.State.IDLE;
+			Debug.Log("OnEnemyEvent: target= " + sender + "event= " + eventMessage);
 		}
 	}
 
 	void OnInteracterEnter(GameObject enter)
 	{
-		if (m_role.isStandby && m_interactTarget == null) m_interactTarget = enter;
-		GetComponentInChildren<UIRoleHud>()?.Bubble(enter.GetComponent<RoleControl>()?.Data.CharacterName);
-		m_role.LookAt(enter.transform);
+
 	}
 
 	void OnInteracterExit(GameObject exiter)
@@ -166,6 +153,12 @@ public class RoleAI : MonoBehaviour
 		if (eventMessage == "roleEvent_OnState_DEAD" && m_interactTarget == sender)
 		{
 			m_interactTarget = InteractDetector.GetNearest();
+		}
+		if (eventMessage == "roleEvent_OnState_IDLE" && m_interactTarget == null && m_role.isIdle)
+		{
+			m_interactTarget = sender;
+			GetComponentInChildren<UIRoleHud>()?.Bubble(sender.GetComponent<RoleControl>()?.Data.CharacterName);
+			m_role.LookAt(sender.transform);
 		}
 		Debug.Log("OnInteracterEvent: InteracterTarget= " + sender + "event= " + eventMessage);
 	}
