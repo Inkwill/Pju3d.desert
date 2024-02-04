@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CreatorKitCode;
 using UnityEngine;
 
-public class VampiricWeaponEffect : Weapon.WeaponAttackEffect
+public class VampiricWeaponEffect : Effect
 {
     public int PercentageHealthStolen;
     

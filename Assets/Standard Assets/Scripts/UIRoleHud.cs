@@ -49,7 +49,7 @@ public class UIRoleHud : MonoBehaviour
 				sliderPg?.gameObject.SetActive(false);
 				m_role.eventSender.events.RemoveListener(OnRoleEvent);
 				break;
-			case "roleEvent_OnDamage":
+			case "statEvent_OnHpChange":
 				if (!sliderHp.gameObject.activeSelf) sliderHp.gameObject.SetActive(true);
 				sliderHp.value = m_role.Data.Stats.CurrentHealth;
 				break;

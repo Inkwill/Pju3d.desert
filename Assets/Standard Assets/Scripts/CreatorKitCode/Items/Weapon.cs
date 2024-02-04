@@ -72,10 +72,10 @@ namespace CreatorKitCode
 
 				//we then add boost per damage type. Not this is called elementalBoost, but physical can also be boosted
 				if (m_Source != null)
-					addedAmount += addedAmount * Mathf.FloorToInt(m_Source.Stats.stats.elementalBoosts[(int)damageType] / 100.0f);
+					addedAmount += addedAmount * Mathf.FloorToInt(m_Source.Stats.stats.damBoosts[(int)damageType] / 100.0f);
 
 				//Then the elemental protection that is a percentage
-				addedAmount -= addedAmount * Mathf.FloorToInt(m_Target.Stats.stats.elementalProtection[(int)damageType] / 100.0f);
+				addedAmount -= addedAmount * Mathf.FloorToInt(m_Target.Stats.stats.damProtection[(int)damageType] / 100.0f);
 
 				m_Damages[(int)damageType] += addedAmount;
 
@@ -116,18 +116,18 @@ namespace CreatorKitCode
 		/// </summary>
 		public abstract class WeaponAttackEffect : ScriptableObject
 		{
-			public string Description;
+			// public string Description;
 
-			//return the amount of physical damage. If no change, just return physicalDamage passed as parameter
-			public virtual void OnAttack(CharacterData target, CharacterData user, ref AttackData data) { }
+			// //return the amount of physical damage. If no change, just return physicalDamage passed as parameter
+			// public virtual void OnAttack(CharacterData target, CharacterData user, ref AttackData data) { }
 
-			//called after all weapon effect where applied, allow to react to the total amount of damage applied
-			public virtual void OnPostAttack(CharacterData target, CharacterData user, AttackData data) { }
+			// //called after all weapon effect where applied, allow to react to the total amount of damage applied
+			// public virtual void OnPostAttack(CharacterData target, CharacterData user, AttackData data) { }
 
-			public virtual string GetDescription()
-			{
-				return Description;
-			}
+			// public virtual string GetDescription()
+			// {
+			// 	return Description;
+			// }
 		}
 
 		[System.Serializable]
@@ -146,7 +146,7 @@ namespace CreatorKitCode
 		[Header("Stats")]
 		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1 };
 
-		public List<WeaponAttackEffect> AttackEffects;
+		public List<Effect> AttackEffects;
 
 		public void Attack(CharacterData attacker, CharacterData target)
 		{
@@ -259,14 +259,14 @@ public class WeaponEditor : Editor
         m_ItemEditor = new ItemEditor();
         m_ItemEditor.Init(serializedObject);
 
-        var lookup = typeof(EquipmentItem.EquippedEffect);
+        var lookup = typeof(Effect);
         m_AvailableEquipEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))
             .Select(type => type.Name)
             .ToList();
         
-        lookup = typeof(Weapon.WeaponAttackEffect);
+        lookup = typeof(Effect);
         m_AvailableWeaponAttackEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))

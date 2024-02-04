@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CreatorKitCode;
 using UnityEngine;
 
-public class ApplyBurnWeaponEffect : Weapon.WeaponAttackEffect
+public class ApplyBurnWeaponEffect : Effect
 {
     public float PercentageChance;
     public int Damage;

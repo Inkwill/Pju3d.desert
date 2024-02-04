@@ -26,18 +26,18 @@ namespace CreatorKitCode
 			Accessory,
 		}
 
-		public abstract class EquippedEffect : ScriptableObject
-		{
-			public string Description;
-			//return true if could be used, false otherwise.
-			public abstract void Equipped(CharacterData user);
-			public abstract void Removed(CharacterData user);
+		//public abstract class EquippedEffect : ScriptableObject
+		//{
+			// public string Description;
+			// //return true if could be used, false otherwise.
+			// public abstract void Equipped(CharacterData user);
+			// public abstract void Removed(CharacterData user);
 
-			public virtual string GetDescription()
-			{
-				return Description;
-			}
-		}
+			// public virtual string GetDescription()
+			// {
+			// 	return Description;
+			// }
+		//}
 
 		public EquipmentSlot Slot;
 
@@ -46,24 +46,7 @@ namespace CreatorKitCode
 		public int MinimumAgility;
 		public int MinimumDefense;
 
-		public List<EquippedEffect> EquippedEffects;
-
-		// public override bool UsedBy(CharacterData user)
-		// {
-		// 	var userStat = user.Stats.stats;
-
-		// 	if (userStat.agility < MinimumAgility
-		// 		|| userStat.strength < MinimumStrength
-		// 		|| userStat.defense < MinimumDefense)
-		// 	{
-		// 		return false;
-		// 	}
-
-		// 	if (Slot == (EquipmentSlot)666) user.Equipment.EquipWeapon(this as Weapon);
-		// 	else user.Equipment.Equip(this);
-
-		// 	return true;
-		// }
+		public List<Effect> EquippedEffects;
 
 		public override string GetDescription()
 		{
@@ -99,17 +82,16 @@ namespace CreatorKitCode
 			return desc;
 		}
 
-
 		public void EquippedBy(CharacterData user)
 		{
 			foreach (var effect in EquippedEffects)
-				effect.Equipped(user);
+				effect.OnEquip(user);
 		}
 
 		public void UnequippedBy(CharacterData user)
 		{
 			foreach (var effect in EquippedEffects)
-				effect.Removed(user);
+				effect.OnUnEquip(user);
 		}
 	}
 }
@@ -145,7 +127,7 @@ public class EquipmentItemEditor : Editor
         m_ItemEditor = new ItemEditor();
         m_ItemEditor.Init(serializedObject);
 
-        var lookup = typeof(EquipmentItem.EquippedEffect);
+        var lookup = typeof(Effect);
         m_AvailableEquipEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))

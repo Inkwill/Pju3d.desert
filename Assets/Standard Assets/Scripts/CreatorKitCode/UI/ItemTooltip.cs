@@ -28,9 +28,11 @@ namespace CreatorKitCodeInternal
 				Name.text = slot.item.ItemName;
 				DescriptionText.text = slot.item.GetDescription();
 				EquipmentItem equItem = slot.item as EquipmentItem;
+				UsableItem useItem = slot.item as UsableItem;
 				btEquip.gameObject.SetActive(!slot.equipment && equItem);
 				btUnEquip.gameObject.SetActive(slot.equipment);
 				btDrop.gameObject.SetActive(!slot.equipment);
+				btUse.gameObject.SetActive(useItem);
 			}
 			else
 			{

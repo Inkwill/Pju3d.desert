@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using CreatorKitCode;
 using UnityEngine;
 
-public class IncreaseStrengthEffect : UsableItem.UsageEffect
+public class IncreaseStrengthEffect : Effect
 {
     public float Duration = 10.0f;
     public int StrengthChange = 5;
     public Sprite EffectSprite;
     
-    public override bool Use(CharacterData user)
+    public override bool OnUse(CharacterData user)
     {
         StatSystem.StatModifier modifier = new StatSystem.StatModifier();
         modifier.ModifierMode = StatSystem.StatModifier.Mode.Absolute;

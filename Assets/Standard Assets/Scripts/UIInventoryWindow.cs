@@ -117,6 +117,14 @@ public class UIInventoryWindow : UIWindow
 					//GameObject obj = Instantiate(prefab, builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
 				}
 				break;
+			case "Use":
+				UsableItem item = m_SelectedSlot.item as UsableItem;
+				if(item.UsedBy(GameManager.Player.Data)){	
+					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID);
+					Load();
+					m_SelectedSlot.tog.isOn = GameManager.Player.Data.Inventory.ItemCount(item.ItemName)>1;
+				}
+				break;
 			default:
 				break;
 		}

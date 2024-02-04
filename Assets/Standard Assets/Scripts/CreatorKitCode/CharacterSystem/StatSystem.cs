@@ -26,8 +26,8 @@ namespace CreatorKitCode
 		{
 			Physical,
 			Fire,
-			Cold,
-			Electric
+			Warter,
+			Wood
 			//ADD YOUR CUSTOM TYPE AFTER
 		}
 
@@ -43,11 +43,12 @@ namespace CreatorKitCode
 			public int strength;
 			public int defense;
 			public int agility;
+			public int spirit;
 
 
 			//use an array indexed by the DamageType enum for easy extensibility
-			public int[] elementalProtection = new int[Enum.GetValues(typeof(DamageType)).Length];
-			public int[] elementalBoosts = new int[Enum.GetValues(typeof(DamageType)).Length];
+			public int[] damProtection = new int[Enum.GetValues(typeof(DamageType)).Length];
+			public int[] damBoosts = new int[Enum.GetValues(typeof(DamageType)).Length];
 
 			public void Copy(Stats other)
 			{
@@ -55,9 +56,10 @@ namespace CreatorKitCode
 				strength = other.strength;
 				defense = other.defense;
 				agility = other.agility;
+				spirit = other.spirit;
 
-				Array.Copy(other.elementalProtection, elementalProtection, other.elementalProtection.Length);
-				Array.Copy(other.elementalBoosts, elementalBoosts, other.elementalBoosts.Length);
+				Array.Copy(other.damProtection, damProtection, other.damProtection.Length);
+				Array.Copy(other.damBoosts, damBoosts, other.damBoosts.Length);
 			}
 
 			/// <summary>
@@ -73,12 +75,13 @@ namespace CreatorKitCode
 					strength += Mathf.FloorToInt(strength * (modifier.Stats.strength / 100.0f));
 					defense += Mathf.FloorToInt(defense * (modifier.Stats.defense / 100.0f));
 					agility += Mathf.FloorToInt(agility * (modifier.Stats.agility / 100.0f));
+					spirit += Mathf.FloorToInt(spirit * (modifier.Stats.spirit / 100.0f));
 
-					for (int i = 0; i < elementalProtection.Length; ++i)
-						elementalProtection[i] += Mathf.FloorToInt(elementalProtection[i] * (modifier.Stats.elementalProtection[i] / 100.0f));
+					for (int i = 0; i < damProtection.Length; ++i)
+						damProtection[i] += Mathf.FloorToInt(damProtection[i] * (modifier.Stats.damProtection[i] / 100.0f));
 
-					for (int i = 0; i < elementalBoosts.Length; ++i)
-						elementalBoosts[i] += Mathf.FloorToInt(elementalBoosts[i] * (modifier.Stats.elementalBoosts[i] / 100.0f));
+					for (int i = 0; i < damBoosts.Length; ++i)
+						damBoosts[i] += Mathf.FloorToInt(damBoosts[i] * (modifier.Stats.damBoosts[i] / 100.0f));
 				}
 				else
 				{
@@ -86,12 +89,13 @@ namespace CreatorKitCode
 					strength += modifier.Stats.strength;
 					defense += modifier.Stats.defense;
 					agility += modifier.Stats.agility;
+					spirit += modifier.Stats.spirit;
 
-					for (int i = 0; i < elementalProtection.Length; ++i)
-						elementalProtection[i] += modifier.Stats.elementalProtection[i];
+					for (int i = 0; i < damProtection.Length; ++i)
+						damProtection[i] += modifier.Stats.damProtection[i];
 
-					for (int i = 0; i < elementalBoosts.Length; ++i)
-						elementalBoosts[i] += modifier.Stats.elementalBoosts[i];
+					for (int i = 0; i < damBoosts.Length; ++i)
+						damBoosts[i] += modifier.Stats.damBoosts[i];
 				}
 			}
 		}
@@ -298,6 +302,7 @@ namespace CreatorKitCode
 		public void ChangeHealth(int amount)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.health);
+			m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject,"statEvent_OnHpChange");
 		}
 
 		void UpdateFinalStats()
@@ -400,8 +405,8 @@ public class StatsDrawer : PropertyDrawer
 
         var names = Enum.GetNames(typeof(StatSystem.DamageType));
 
-        var elementalProtectionProp = property.FindPropertyRelative(nameof(StatSystem.Stats.elementalProtection));
-        var elementalBoostProp = property.FindPropertyRelative(nameof(StatSystem.Stats.elementalBoosts));
+        var damProtectionProp = property.FindPropertyRelative(nameof(StatSystem.Stats.damProtection));
+        var elementalBoostProp = property.FindPropertyRelative(nameof(StatSystem.Stats.damBoosts));
         
         for (int i = 0; i < names.Length; ++i)
         {
@@ -410,7 +415,7 @@ public class StatsDrawer : PropertyDrawer
             EditorGUI.LabelField(currentRect, names[i]);
             
             currentRect.x += currentRect.width;
-            EditorGUI.PropertyField(currentRect, elementalProtectionProp.GetArrayElementAtIndex(i), GUIContent.none);
+            EditorGUI.PropertyField(currentRect, damProtectionProp.GetArrayElementAtIndex(i), GUIContent.none);
             
             currentRect.x += currentRect.width;
             EditorGUI.PropertyField(currentRect, elementalBoostProp.GetArrayElementAtIndex(i), GUIContent.none);

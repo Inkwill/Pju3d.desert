@@ -4,12 +4,12 @@ using CreatorKitCode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class AddHealthUsageEffect : UsableItem.UsageEffect
+public class AddHealthUsageEffect : Effect
 {
     [FormerlySerializedAs("HealthPurcentageAmount")] 
     public int HealthPercentageAmount = 20;
     
-    public override bool Use(CharacterData user)
+    public override bool OnUse(CharacterData user)
     {
         if (user.Stats.CurrentHealth == user.Stats.stats.health)
             return false;

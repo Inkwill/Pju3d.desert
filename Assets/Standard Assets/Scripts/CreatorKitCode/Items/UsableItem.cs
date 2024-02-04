@@ -20,19 +20,19 @@ namespace CreatorKitCode
     {
         public abstract class UsageEffect : ScriptableObject
         {
-            public string Description;
-            //return true if could be used, false otherwise.
-            public abstract bool Use(CharacterData user);
+            // public string Description;
+            // //return true if could be used, false otherwise.
+            // public abstract bool Use(CharacterData user);
         }
 
-        public List<UsageEffect> UsageEffects;
+        public List<Effect> UsageEffects;
 
         public override bool UsedBy(CharacterData user)
         {
             bool wasUsed = false;
             foreach (var effect in UsageEffects)
             {
-                wasUsed |= effect.Use(user);
+                wasUsed |= effect.OnUse(user);
             }
 
             return wasUsed;
