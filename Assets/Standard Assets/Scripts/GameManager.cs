@@ -94,4 +94,29 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	public static string SceneBoxInfo(bool display)
+	{
+		GameObject sceneBox = Player.BaseAI.SceneDetector.lastInner;
+		if (!sceneBox) return display ? "空地" : "blank";
+		string sceneTag = sceneBox.tag;
+		switch (sceneTag)
+		{
+			case "road":
+				return display ? "道路" : sceneTag;
+			case "building":
+				return display ? "建筑:" + sceneBox : sceneTag;
+			case "pit":
+				return display ? "坑:" + sceneBox : sceneTag;
+			case "mount":
+				return display ? "山体:" : sceneTag;
+			case "npc":
+				return display ? "npc:" + sceneBox : sceneTag;
+			case "creater":
+				return display ? "建造中..." : sceneTag;
+			default:
+				break;
+		}
+		return display ? "空地" : "blank";
+	}
+
 }

@@ -32,22 +32,10 @@ public class RoleAI : MonoBehaviour
 
 	Renderer m_Renderer;
 	bool m_buildmodel = true;
-	public bool BuildModel
+	public Renderer BuildRender
 	{
-		get { return m_buildmodel; }
-		set
-		{
-			m_buildmodel = value;
-			if (m_Renderer) m_Renderer.enabled = m_buildmodel;
-		}
+		get { return m_Renderer; }
 	}
-
-	public bool CanDig
-	{
-		get { return SceneBoxInfo(false) == "blank"; }
-		set { }
-	}
-
 
 	public void Init(RoleControl role)
 	{
@@ -83,25 +71,6 @@ public class RoleAI : MonoBehaviour
 				m_Offensive = false;
 				break;
 			default:
-				break;
-		}
-	}
-
-	void FixedUpdate()
-	{
-		switch (SceneBoxInfo(false))
-		{
-			case "blank":
-				m_Renderer.material.color = Color.green;
-				break;
-			case "pit":
-				m_Renderer.material.color = Color.red;
-				break;
-			case "npc":
-				m_Renderer.material.color = Color.red;
-				break;
-			default:
-				m_Renderer.material.color = Color.red;
 				break;
 		}
 	}
@@ -193,30 +162,6 @@ public class RoleAI : MonoBehaviour
 			if (active) target.Highlight();
 			else target.Dehighlight();
 		}
-	}
-	public string SceneBoxInfo(bool display)
-	{
-		GameObject sceneBox = SceneDetector.lastInner;
-		if (!sceneBox) return display ? "空地" : "blank";
-		string sceneTag = sceneBox.tag;
-		switch (sceneTag)
-		{
-			case "road":
-				return display ? "道路" : sceneTag;
-			case "building":
-				return display ? "建筑:" + sceneBox : sceneTag;
-			case "pit":
-				return display ? "坑:" + sceneBox : sceneTag;
-			case "mount":
-				return display ? "山体:" : sceneTag;
-			case "npc":
-				return display ? "npc:" + sceneBox : sceneTag;
-			case "creater":
-				return display ? "建造中..." : sceneTag;
-			default:
-				break;
-		}
-		return display ? "空地" : "blank";
 	}
 }
 

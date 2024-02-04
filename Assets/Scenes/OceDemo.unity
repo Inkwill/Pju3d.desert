@@ -49796,16 +49796,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interval: 20
+  interval: 60
   during: 10
-  times: 1
+  times: 10
   progressSlider: {fileID: 375547312}
   ObjectToSpawn: {fileID: 95224015133262308, guid: 33e53786b21d36541ba67b52e95c304d,
     type: 3}
   pathRoot: {fileID: 2056123598}
-  radius: 3
+  radius: 5
   angleStep: 90
-  spawnNum: 2
+  spawnNum: 1
   auto: 1
 --- !u!135 &1483239280
 SphereCollider:
