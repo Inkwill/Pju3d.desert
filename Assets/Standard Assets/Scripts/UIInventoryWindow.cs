@@ -80,7 +80,7 @@ public class UIInventoryWindow : UIWindow
 
 	public override void OnButtonClick(string eventName)
 	{
-		EquipmentItem equip = m_SelectedSlot.item as EquipmentItem;
+		EquipmentItem equip = m_SelectedSlot?.item as EquipmentItem;
 		Weapon wp = equip as Weapon;
 		switch (eventName)
 		{
@@ -119,11 +119,15 @@ public class UIInventoryWindow : UIWindow
 				break;
 			case "Use":
 				UsableItem item = m_SelectedSlot.item as UsableItem;
-				if(item.UsedBy(GameManager.Player.Data)){	
+				if (item.UsedBy(GameManager.Player.Data))
+				{
 					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID);
 					Load();
-					m_SelectedSlot.tog.isOn = GameManager.Player.Data.Inventory.ItemCount(item.ItemName)>1;
+					m_SelectedSlot.tog.isOn = GameManager.Player.Data.Inventory.ItemCount(item.ItemName) > 1;
 				}
+				break;
+			case "Add":
+				GameManager.GameUI.OpenWindow("winConfirm");
 				break;
 			default:
 				break;

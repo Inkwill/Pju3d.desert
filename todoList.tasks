@@ -1,8 +1,22 @@
 	--- ✄ -----------------------@@created(24-02-04 11:47)
 	✔	sublime开发环境 @done (24-02-04 11:20)
 	✔	搞清楚SceneLinkedSMB和AttackState作用 : 简单说是给动作绑定音效的，可以在初始调用一次GetComponet<T>而不用每次动作播放前都调用，SceneLinkedSMB是通过某个TMonoBehaviour绑定动作状态 @done (24-02-04 11:45)
-	☐	class dev: effect @critical	
+	✔	class dev: effect @critical @done (24-02-04 22:28)
 	✔	调整主Hud(暂时干掉建造模式的显示) @done (24-02-04 16:42)
 	☐	技能CD及显示
 	☐	calss dev: ToolItem
-	☐	背包界面：道具使用按钮
+	✔	背包界面：道具使用按钮 @done (24-02-04 22:27)
+	☐	优化受击表现（伤害数字、miss、调用)
+	☐	建筑交资源表现优化(交互区域、资源动画、音效)
+	☐	优化背包界面(工具栏、道具tooltips)
+	☐	基础资源的设计与实现 @critical
+	☐	技能效果逻辑完善 
+	☐	新建筑：钉板
+	☐	新建筑：陷阱
+	☐	新建筑：箭塔
+	☐	怪物掉落 @critical	
+	☐	设计：NPC交互
+	☐	设计：NPC委托
+	☐	设计:坑交互
+	☐	设计：种树
+	☐	设计:捉怪

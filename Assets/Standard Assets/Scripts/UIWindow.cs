@@ -8,6 +8,7 @@ using CreatorKitCodeInternal;
 public class UIWindow : MonoBehaviour
 {
 	public Text winTitle;
+	public Image winMask;
 	public AudioClip OpenClip;
 	public AudioClip CloseClip;
 	protected List<Button> switch_buttons;
@@ -15,6 +16,7 @@ public class UIWindow : MonoBehaviour
 	void OnEnable()
 	{
 		if (OpenClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = OpenClip });
+		if (winMask) winMask.enabled = false;
 		OnOpen();
 	}
 
@@ -25,12 +27,13 @@ public class UIWindow : MonoBehaviour
 	}
 	public void Close()
 	{
+		if (winMask) winMask.enabled = false;
 		Animator anim = GetComponent<Animator>();
 		if (anim) anim.SetTrigger("close");
 		else OnClosed();
 	}
 	protected virtual void OnOpen() { }
-	protected virtual void OnOpened() { }
+	protected virtual void OnOpened() { if (winMask) winMask.enabled = true; }
 	protected virtual void OnClose() { }
 	void OnClosed() { gameObject.SetActive(false); }
 

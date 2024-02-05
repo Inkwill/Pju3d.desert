@@ -22,19 +22,19 @@ public class UIManager : MonoBehaviour
 		OpenWindow("winMain");
 	}
 
-	void FixedUpdate()
-	{
-		if (win_LastOpen)
-		{
-			during_check += Time.deltaTime;
-			if (during_check >= 2.0f)
-			{
-				if (!win_LastOpen.gameObject.activeSelf)
-					win_LastOpen.gameObject.SetActive(true);
-				during_check = 0;
-			}
-		}
-	}
+	// void FixedUpdate()
+	// {
+	// 	if (win_LastOpen)
+	// 	{
+	// 		during_check += Time.deltaTime;
+	// 		if (during_check >= 2.0f)
+	// 		{
+	// 			if (!win_LastOpen.gameObject.activeSelf)
+	// 				win_LastOpen.gameObject.SetActive(true);
+	// 			during_check = 0;
+	// 		}
+	// 	}
+	// }
 	public UIWindow OpenWindow(string winName)
 	{
 		//Debug.Log("OpenWindow: " + winName);
