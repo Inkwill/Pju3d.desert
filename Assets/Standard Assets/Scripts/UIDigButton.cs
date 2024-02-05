@@ -18,7 +18,7 @@ public class UIDigButton : UIEventSender
 				{
 					if (GameManager.SceneBoxInfo(false) == "blank")
 					{
-						GameManager.Player.UseSkill(digSkill);
+						GameManager.Player.SkillUser.UseSkill(digSkill);
 						SetBuildToggle(false);
 					}
 				});

@@ -1453,8 +1453,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &70389070
 BoxCollider:
@@ -10431,8 +10432,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &415108486
 BoxCollider:
@@ -17131,8 +17133,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &613455127
 BoxCollider:
@@ -23073,8 +23076,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!114 &775166170
 MonoBehaviour:
@@ -23910,8 +23914,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &806258208
 BoxCollider:
@@ -32797,8 +32802,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &1055522268
 BoxCollider:
@@ -33326,8 +33332,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &1059361573
 BoxCollider:
@@ -36241,8 +36248,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &1149803696
 BoxCollider:
@@ -38401,8 +38409,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &1197289736
 BoxCollider:
@@ -46803,8 +46812,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &1395455706
 BoxCollider:
@@ -48780,8 +48790,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &1443302174
 BoxCollider:
@@ -51002,8 +51013,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &1508432497
 BoxCollider:
@@ -56091,8 +56103,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!1001 &1645669875
 PrefabInstance:
@@ -68037,8 +68050,9 @@ MonoBehaviour:
       strength: 0
       defense: 0
       agility: 0
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip: []
 --- !u!65 &2030677052
 BoxCollider:

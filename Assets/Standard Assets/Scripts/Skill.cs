@@ -14,6 +14,7 @@ public abstract class Skill : ScriptableObject
 	public VFXType fxImplement;
 	public AudioClip SkillClip;
 	public float Duration;
+	public float CD;
 
 	public virtual bool CanUsedBy(RoleControl user)
 	{

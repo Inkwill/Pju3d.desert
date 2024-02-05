@@ -4,10 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CreatorKitCode;
 
-public class RoleControl : MonoBehaviour,
-	RoleAnimationDispatcher.IAttackFrameReceiver,
-	RoleAnimationDispatcher.IFootstepFrameReceiver,
-	RoleAnimationDispatcher.ISkillstepFrameReceiver
+public class RoleControl : MonoBehaviour
 {
 	public enum State
 	{
@@ -29,6 +26,7 @@ public class RoleControl : MonoBehaviour,
 	protected EventSender m_eventSender;
 	protected Vector3 m_BirthPos;
 	public Vector3 BirthPos => m_BirthPos;
+
 	public bool isIdle { get { return (m_State == State.IDLE) && !m_Enemy; } }
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 
@@ -49,8 +47,8 @@ public class RoleControl : MonoBehaviour,
 		}
 	}
 	protected Vector3 m_Destination = Vector3.zero;
-	public Skill CurSkill => m_skill;
-	protected Skill m_skill;
+	public SkillUser SkillUser => m_SkillUser;
+	SkillUser m_SkillUser;
 	public float CurStateDuring => m_StateDuring;
 	float m_StateDuring;
 
@@ -78,10 +76,11 @@ public class RoleControl : MonoBehaviour,
 		m_Agent.angularSpeed = 360.0f;
 		m_CalculatedPath = new NavMeshPath();
 
-		RoleAnimationDispatcher dispatcher = GetComponentInChildren<RoleAnimationDispatcher>();
+		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
 		if (dispatcher)
 		{
-			dispatcher.Init(this);
+			dispatcher.AttackStep.AddListener(AttackFrame);
+			dispatcher.FootStep.AddListener(FootstepFrame);
 			m_Animator = dispatcher.GetComponent<Animator>();
 		}
 		else m_Animator = GetComponentInChildren<Animator>();
@@ -101,6 +100,8 @@ public class RoleControl : MonoBehaviour,
 
 		m_Ai = GetComponent<RoleAI>();
 		m_Ai.Init(this);
+
+		m_SkillUser = GetComponent<SkillUser>();
 
 		m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
 
@@ -142,22 +143,8 @@ public class RoleControl : MonoBehaviour,
 		}
 		if (m_State == State.DEAD) return;
 		//Skill
-		if (m_State == State.SKILLING)
-		{
-			if (m_StateDuring < m_skill.Duration)
-			{
-				m_Animator.SetTrigger(m_skill.SkillAnim);
-				m_skill.Operating(this);
-				m_eventSender?.Send(gameObject, "roleEvent_OnOperatSkill");
-			}
-			else
-			{
-				m_skill.Implement(this);
-				m_eventSender?.Send(gameObject, "roleEvent_OnImplementSkill");
-				SetState(State.IDLE);
-				return;
-			}
-		}
+		if (m_SkillUser && m_State != State.SKILLING && m_SkillUser.CurSkill!=null)	{SetState(State.SKILLING);return;}
+		if (m_SkillUser && m_State == State.SKILLING && m_SkillUser.CurSkill==null)	{SetState(State.IDLE);return;}
 		//ATTACK
 		if (m_State == State.ATTACKING)
 		{
@@ -228,7 +215,7 @@ public class RoleControl : MonoBehaviour,
 		}
 		else SetState(State.PURSUING);
 	}
-	public void AttackFrame()
+	void AttackFrame()
 	{
 		//if we can't reach the target anymore when it's time to damage, then that attack miss.
 		if (m_Enemy && m_CharacterData.CanAttackReach(m_Enemy))
@@ -325,7 +312,7 @@ public class RoleControl : MonoBehaviour,
 		transform.forward = forward;
 	}
 
-	public void FootstepFrame()
+	void FootstepFrame()
 	{
 		Vector3 pos = transform.position;
 		m_CharacterAudio.Step(pos);
@@ -342,28 +329,6 @@ public class RoleControl : MonoBehaviour,
 			});
 	}
 
-	void OnCollisionEnter(Collision collision)
-	{
-		if (0 != (BaseAI.EnemyDetector.layers & 1 << collision.gameObject.layer))
-		{
-			Debug.Log("OnCollisionEnter: Enemy =" + collision.gameObject);
-		}
-	}
-
-	public void SkillstepFrame()
-	{
-		m_skill.StepEffect(this);
-	}
-
-	public void UseSkill(Skill skill)
-	{
-		if (skill.CanUsedBy(this))
-		{
-			m_skill = skill;
-			SetState(State.SKILLING);
-		}
-	}
-
 	public void Move(Vector3 direction)
 	{
 		if (direction.magnitude > 0)
@@ -377,6 +342,7 @@ public class RoleControl : MonoBehaviour,
 			}
 		}
 	}
+
 	public void MoveTo(Vector3 pos)
 	{
 		m_Destination = pos;

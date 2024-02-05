@@ -51,6 +51,7 @@ GameObject:
   - component: {fileID: 8207529441758577494}
   - component: {fileID: 845677456049730892}
   - component: {fileID: 844399017392488554}
+  - component: {fileID: 8083394617915932574}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -139,8 +140,9 @@ MonoBehaviour:
       strength: 5
       defense: 5
       agility: 5
-      elementalProtection: 00000000000000000000000000000000
-      elementalBoosts: 00000000000000000000000000000000
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   HitClip:
   - {fileID: 8300000, guid: f8f4ccf89f1c24a45950bc9d619a7448, type: 3}
 --- !u!114 &8038204361242864812
@@ -288,6 +290,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ResType: 0
   root: {fileID: 7139229339681852041}
+--- !u!114 &8083394617915932574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8112423057566066908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14aca5e7c8020c34f961bda6c9916e03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9066320245022399288
 GameObject:
   m_ObjectHideFlags: 0

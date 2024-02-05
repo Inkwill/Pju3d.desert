@@ -10,10 +10,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
-public class CharacterControl : RoleControl,
-	RoleAnimationDispatcher.IAttackFrameReceiver,
-	RoleAnimationDispatcher.IFootstepFrameReceiver,
-	RoleAnimationDispatcher.ISkillstepFrameReceiver
+public class CharacterControl : RoleControl
 {
 
 

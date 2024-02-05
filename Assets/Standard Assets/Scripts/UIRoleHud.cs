@@ -42,7 +42,7 @@ public class UIRoleHud : MonoBehaviour
 				break;
 			case "roleEvent_OnState_SKILLING":
 				sliderPg?.gameObject.SetActive(true);
-				sliderPg.maxValue = m_role.CurSkill.Duration;
+				sliderPg.maxValue = m_role.SkillUser.CurSkill.skill.Duration;
 				break;
 			case "roleEvent_OnState_DEAD":
 				sliderHp?.gameObject.SetActive(false);
@@ -53,11 +53,11 @@ public class UIRoleHud : MonoBehaviour
 				if (!sliderHp.gameObject.activeSelf) sliderHp.gameObject.SetActive(true);
 				sliderHp.value = m_role.Data.Stats.CurrentHealth;
 				break;
-			case "roleEvent_OnOperatSkill":
+			case "skillEvent_OnOperat":
 				if (!sliderPg.gameObject.activeSelf) sliderPg.gameObject.SetActive(true);
 				sliderPg.value = m_role.CurStateDuring;
 				break;
-			case "roleEvent_OnImplementSkill":
+			case "skillEvent_OnImplement":
 				sliderPg?.gameObject.SetActive(false);
 				break;
 			default:

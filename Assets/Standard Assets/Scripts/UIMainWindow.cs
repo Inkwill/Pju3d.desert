@@ -68,7 +68,7 @@ public class UIMainWindow : UIWindow
 				GameManager.GameUI.SwitchWindow("winInventory");
 				break;
 			case "roleSkill":
-				GameManager.Player.UseSkill(sprintSkill);
+				GameManager.Player.SkillUser.UseSkill(sprintSkill);
 				break;
 			default:
 				break;
