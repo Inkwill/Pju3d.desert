@@ -16,7 +16,7 @@ namespace CreatorKitCodeInternal {
             m_CharData = GetComponent<CharacterData>();
             m_CharData.Init();
 
-            m_CharData.OnDamage += () =>
+            m_CharData.OnEffectTake += (effect) =>
             {
                 m_HealTimer = 3.0f;
             };

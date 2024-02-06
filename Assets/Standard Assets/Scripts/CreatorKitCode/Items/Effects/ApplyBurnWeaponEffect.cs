@@ -9,7 +9,7 @@ public class ApplyBurnWeaponEffect : EffectData
     public int Damage;
     public float Time;
     
-    public override void OnAttack(CharacterData target, CharacterData user, ref Effect attackEffect)
+    public override void OnAttack(CharacterData target, CharacterData user, ref DamageEffect attackEffect)
     {
         if (Random.value < (PercentageChance / 100.0f))
         {

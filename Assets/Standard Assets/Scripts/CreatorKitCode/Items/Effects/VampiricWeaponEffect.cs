@@ -12,7 +12,7 @@ public class VampiricWeaponEffect : EffectData
         return $"Convert {PercentageHealthStolen}% of physical damage into Health";
     }
 
-    public override void OnPostAttack(CharacterData target, CharacterData user, Effect effect)
+    public override void OnPostAttack(CharacterData target, CharacterData user, DamageEffect effect)
     {
         int amount = Mathf.FloorToInt(effect.GetDamage(StatSystem.DamageType.Physical) * (PercentageHealthStolen / 100.0f));
         user.Stats.ChangeHealth(amount);

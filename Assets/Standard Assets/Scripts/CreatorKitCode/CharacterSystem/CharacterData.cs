@@ -27,7 +27,7 @@ namespace CreatorKitCode
 		/// Callback for when that CharacterData receive damage. E.g. used by the player character to trigger the right
 		/// animation
 		/// </summary>
-		public Action OnDamage { get; set; }
+		public Action<Effect> OnEffectTake { get; set; }
 
 		/// <summary>
 		/// Will return true if the attack cooldown have reached 0. False otherwise.
@@ -124,26 +124,25 @@ namespace CreatorKitCode
 			//Agility reduce by 0.5% the cooldown to attack (e.g. if agility = 50, 25% faster to attack)
 			m_AttackCoolDown = Equipment.Weapon.Stats.Speed - (Stats.stats.agility * 0.5f * 0.001f * Equipment.Weapon.Stats.Speed);
 		}
-
-		/// <summary>
-		/// Damage the Character by the AttackData given as parameter. See the documentation for that class for how to
-		/// add damage to that attackData. (this will be done automatically by weapons, but you may need to fill it
-		/// manually when writing special elemental effect)
-		/// </summary>
-		/// <param name="attackData"></param>
-		public void OnTakeEffect(Effect attackEffect)
-		{
-			if (HitClip.Length != 0)
-			{
-				SFXManager.PlaySound(SFXManager.Use.Player, new SFXManager.PlayData()
-				{
-					Clip = HitClip[Random.Range(0, HitClip.Length)],
-					PitchMax = 1.1f,
-					PitchMin = 0.8f,
-					Position = transform.position
-				});
-			}
-			OnDamage?.Invoke();
-		}
+		// /// <summary>
+		// /// Damage the Character by the AttackData given as parameter. See the documentation for that class for how to
+		// /// add damage to that attackData. (this will be done automatically by weapons, but you may need to fill it
+		// /// manually when writing special elemental effect)
+		// /// </summary>
+		// /// <param name="attackData"></param>
+		// public void OnTakeEffect(Effect attackEffect)
+		// {
+		// 	if (HitClip.Length != 0)
+		// 	{
+		// 		SFXManager.PlaySound(SFXManager.Use.Player, new SFXManager.PlayData()
+		// 		{
+		// 			Clip = HitClip[Random.Range(0, HitClip.Length)],
+		// 			PitchMax = 1.1f,
+		// 			PitchMin = 0.8f,
+		// 			Position = transform.position
+		// 		});
+		// 	}
+		// 	OnEffectTake?.Invoke();
+		// }
 	}
 }

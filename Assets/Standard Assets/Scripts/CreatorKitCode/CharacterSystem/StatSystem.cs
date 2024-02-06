@@ -302,7 +302,7 @@ namespace CreatorKitCode
 		public void ChangeHealth(int amount)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.health);
-			m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject,"statEvent_OnHpChange");
+			m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject, "statEvent_OnHpChange");
 		}
 
 		void UpdateFinalStats()
@@ -334,21 +334,6 @@ namespace CreatorKitCode
 				float percentage = CurrentHealth / (float)previousHealth;
 				CurrentHealth = Mathf.RoundToInt(percentage * stats.health);
 			}
-		}
-
-		/// <summary>
-		/// Will damage (change negatively health) of the amount of damage stored in the attackData. If the damage are
-		/// negative, this heal instead.
-		///
-		/// This will also notify the DamageUI so a damage number is displayed.
-		/// </summary>
-		/// <param name="attackData"></param>
-		public void Damage(Effect attackEffect)
-		{
-			int totalDamage = attackEffect.GetFullDamage();
-
-			ChangeHealth(-totalDamage);
-			DamageUI.Instance.NewDamage(totalDamage, m_Owner.transform.position);
 		}
 	}
 }

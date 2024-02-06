@@ -105,7 +105,7 @@ public class RoleControl : MonoBehaviour
 
 		m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
 
-		m_CharacterData.OnDamage += () =>
+		m_CharacterData.OnEffectTake += (effect) =>
 		{
 			m_Animator.SetTrigger(m_HitParamID);
 			m_CharacterAudio.Hit(transform.position);
@@ -143,8 +143,8 @@ public class RoleControl : MonoBehaviour
 		}
 		if (m_State == State.DEAD) return;
 		//Skill
-		if (m_SkillUser && m_State != State.SKILLING && m_SkillUser.CurSkill!=null)	{SetState(State.SKILLING);return;}
-		if (m_SkillUser && m_State == State.SKILLING && m_SkillUser.CurSkill==null)	{SetState(State.IDLE);return;}
+		if (m_SkillUser && m_State != State.SKILLING && m_SkillUser.CurSkill != null) { SetState(State.SKILLING); return; }
+		if (m_SkillUser && m_State == State.SKILLING && m_SkillUser.CurSkill == null) { SetState(State.IDLE); return; }
 		//ATTACK
 		if (m_State == State.ATTACKING)
 		{

@@ -57,7 +57,7 @@ namespace CreatorKitCode
 
 		public void Attack(CharacterData attacker, CharacterData target)
 		{
-			Effect attackEffect = new Effect(target, attacker);
+			DamageEffect attackEffect = new DamageEffect(target, attacker);
 
 			int damage = Random.Range(Stats.MinimumDamage, Stats.MaximumDamage + 1);
 
