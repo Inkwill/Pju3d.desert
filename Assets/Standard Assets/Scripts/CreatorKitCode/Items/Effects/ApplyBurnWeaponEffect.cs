@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using CreatorKitCode;
 using UnityEngine;
 
-public class ApplyBurnWeaponEffect : Effect
+public class ApplyBurnWeaponEffect : EffectData
 {
     public float PercentageChance;
     public int Damage;
     public float Time;
     
-    public override void OnAttack(CharacterData target, CharacterData user, ref Weapon.AttackData attackData)
+    public override void OnAttack(CharacterData target, CharacterData user, ref Effect attackEffect)
     {
         if (Random.value < (PercentageChance / 100.0f))
         {

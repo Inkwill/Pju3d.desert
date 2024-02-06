@@ -25,7 +25,7 @@ namespace CreatorKitCode
             // public abstract bool Use(CharacterData user);
         }
 
-        public List<Effect> UsageEffects;
+        public List<EffectData> UsageEffects;
 
         public override bool UsedBy(CharacterData user)
         {

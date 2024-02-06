@@ -131,7 +131,7 @@ namespace CreatorKitCode
 		/// manually when writing special elemental effect)
 		/// </summary>
 		/// <param name="attackData"></param>
-		public void Damage(Weapon.AttackData attackData)
+		public void OnTakeEffect(Effect attackEffect)
 		{
 			if (HitClip.Length != 0)
 			{
@@ -143,9 +143,6 @@ namespace CreatorKitCode
 					Position = transform.position
 				});
 			}
-
-			Stats.Damage(attackData);
-
 			OnDamage?.Invoke();
 		}
 	}

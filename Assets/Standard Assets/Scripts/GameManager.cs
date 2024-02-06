@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using Cinemachine;
 using CreatorKitCode;
@@ -11,12 +12,13 @@ public class GameManager : MonoBehaviour
 	public static CharacterControl Player;
 	public static UIManager GameUI;
 	public static KeyValueData Data => Instance.DemoData;
+	public static EffectData Effect => Instance.m_effectData;
 	public LightManager DayNight;
 	public CinemachineVirtualCamera VCamera;
 	public CameraController CameraCtrl;
 	public SFXManager SFXManager;
-
 	public TerrainTool TerrainTool;
+	EffectData m_effectData;
 
 	[SerializeField]
 	Transform ui_trans;
@@ -40,6 +42,7 @@ public class GameManager : MonoBehaviour
 		GameUI.transform.SetParent(ui_trans);
 		VCamera.Follow = Player.gameObject.transform;
 		VCamera.LookAt = Player.gameObject.transform;
+		m_effectData = new EffectData();
 
 		// 注册应用退出事件
 		Application.quitting += OnApplicationQuit;
@@ -80,9 +83,7 @@ public class GameManager : MonoBehaviour
 		// }
 		if (Input.GetKeyDown(KeyCode.Return))
 		{
-			UIRoleHud hud = Player.GetComponentInChildren<UIRoleHud>();
-			if (hud != null) hud.Bubble("你好我好大家好!");
-			Player.CurState = RoleControl.State.DEAD;
+			EffectAction("Test", new string[] { "EffectAcion Test!" });
 		}
 
 		float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
@@ -119,4 +120,12 @@ public class GameManager : MonoBehaviour
 		return display ? "空地" : "blank";
 	}
 
+	public static void EffectAction(string effectName, object[] param)
+	{
+		MethodInfo effectF = typeof(EffectData).GetMethod(effectName);
+		if (effectF != null)
+		{
+			effectF.Invoke(Effect, param);
+		}
+	}
 }

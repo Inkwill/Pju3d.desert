@@ -21,4 +21,5 @@ MonoBehaviour:
   fxImplement: 0
   SkillClip: {fileID: 0}
   Duration: 0.3
+  CD: 10
   Speed: 30

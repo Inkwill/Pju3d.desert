@@ -13,6 +13,7 @@ public class UIDigButton : UIEventSender
 	void Start()
 	{
 		SetBuildToggle(false);
+		GameManager.Player.SkillUser.AddSkill(digSkill);
 		OnLonePress.AddListener(() => SetBuildToggle(!m_buildToggle));
 		OnClick.AddListener(() =>
 				{

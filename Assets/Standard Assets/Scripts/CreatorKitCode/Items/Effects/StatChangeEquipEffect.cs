@@ -4,7 +4,7 @@ using System.Text;
 using CreatorKitCode;
 using UnityEngine;
 
-public class StatChangeEquipEffect : Effect
+public class StatChangeEquipEffect : EffectData
 {
     
     public StatSystem.StatModifier StatModifierEquip;

@@ -9,6 +9,7 @@ public class SkillUser : MonoBehaviour
 	{
 		public Skill skill;
 		public float cd;
+		public int mp;
 	}
 
 	public SkillEntry CurSkill => m_UseEntry;
@@ -54,10 +55,21 @@ public class SkillUser : MonoBehaviour
 		}
 	}
 
-	public SkillEntry GetEntry(string index)
+	SkillEntry GetEntry(string index)
 	{
 		if (m_SkillEntries.Count < 1) return null;
 		return m_SkillEntries.Where(sk => sk.skill.SkillName == index).FirstOrDefault();
+	}
+
+	public void AddSkill(Skill skill)
+	{
+		SkillEntry entry = GetEntry(skill.SkillName);
+		if (entry != null) return;
+		entry = new SkillEntry();
+		entry.skill = skill;
+		entry.cd = entry.skill.CD;
+		m_SkillEntries.Add(entry);
+		Debug.Log("AddSkill:" + skill.SkillName);
 	}
 
 	public bool UseSkill(Skill skill)
@@ -66,7 +78,7 @@ public class SkillUser : MonoBehaviour
 		SkillEntry entry = GetEntry(skill.SkillName);
 		if (entry != null)
 		{
-			if (entry.cd > 0)
+			if (entry.cd > 0 || entry.mp < entry.skill.MP)
 			{
 				Debug.Log("Can't UseSkill:" + skill.SkillName + "cd =" + entry.cd);
 				return false;
@@ -75,22 +87,23 @@ public class SkillUser : MonoBehaviour
 			{
 				Debug.Log("UseSkill: " + skill.SkillName + "cd =" + entry.cd);
 				entry.cd = entry.skill.CD;
+				entry.mp = 0;
 				m_UseEntry = entry;
 				return true;
 			}
 		}
 		else
 		{
-			entry = new SkillEntry();
-			entry.skill = skill;
-			entry.cd = entry.skill.CD;
-			m_UseEntry = entry;
-			m_SkillEntries.Add(entry);
-			Debug.Log("UseSkill:" + skill.SkillName + "cd =" + entry.cd);
-			return true;
+			// entry = new SkillEntry();
+			// entry.skill = skill;
+			// entry.cd = entry.skill.CD;
+			// if(!once)	m_SkillEntries.Add(entry);
+			// m_UseEntry = entry;
+			// Debug.Log("UseSkill:" + skill.SkillName + "once =" + once);
+			Debug.LogError("Can't Use NoOwner Skill:" + skill.SkillName);
+			return false;
 		}
 	}
-
 	void SkillStep()
 	{
 		m_UseEntry?.skill.StepEffect(m_role);

@@ -18,99 +18,6 @@ namespace CreatorKitCode
 	public class Weapon : EquipmentItem
 	{
 		/// <summary>
-		/// This class will store damage done to a target CharacterData by a source CharacterData. The function to add
-		/// damage will take care of applied all the strength/boost of the source and remove defense/resistance of the
-		/// target.
-		///
-		/// The source can be null when its done by an non CharacterData source (elemental effect, environment etc.)
-		/// </summary>
-		public class AttackData
-		{
-			public CharacterData Target => m_Target;
-			public CharacterData Source => m_Source;
-
-			CharacterData m_Target;
-			CharacterData m_Source;
-
-			int[] m_Damages = new int[System.Enum.GetValues(typeof(StatSystem.DamageType)).Length];
-
-			/// <summary>
-			/// Build a new AttackData. All AttackData need a target, but source is optional. If source is null, the
-			/// damage is assume to be from a non CharacterData source (elemental effect, environment) and no boost will
-			/// be applied to damage (target defense is still taken in account).
-			/// </summary>
-			/// <param name="target"></param>
-			/// <param name="source"></param>
-			public AttackData(CharacterData target, CharacterData source = null)
-			{
-				m_Target = target;
-				m_Source = source;
-			}
-
-			/// <summary>
-			/// Add an amount of damage given in the given type. The source (if non null, see class documentation for
-			/// info) boost will be applied and the target defense will be removed from that amount.
-			/// </summary>
-			/// <param name="damageType">The type of damage</param>
-			/// <param name="amount">The amount of damage</param>
-			/// <returns></returns>
-			public int AddDamage(StatSystem.DamageType damageType, int amount)
-			{
-				int addedAmount = amount;
-
-				//Physical damage are increase by 1% for each point of strength
-				if (damageType == StatSystem.DamageType.Physical)
-				{
-					//source cna be null when it's elemental or effect damage
-					if (m_Source != null)
-						addedAmount += Mathf.FloorToInt(addedAmount * m_Source.Stats.stats.strength * 0.01f);
-
-					//each poitn of defense remove 1 damage, with a minimum of 1 damage
-					if (m_Target != null)
-						addedAmount = Mathf.Max(addedAmount - m_Target.Stats.stats.defense, 1);
-				}
-
-				//we then add boost per damage type. Not this is called elementalBoost, but physical can also be boosted
-				if (m_Source != null)
-					addedAmount += addedAmount * Mathf.FloorToInt(m_Source.Stats.stats.damBoosts[(int)damageType] / 100.0f);
-
-				//Then the elemental protection that is a percentage
-				addedAmount -= addedAmount * Mathf.FloorToInt(m_Target.Stats.stats.damProtection[(int)damageType] / 100.0f);
-
-				m_Damages[(int)damageType] += addedAmount;
-
-				return addedAmount;
-			}
-
-			/// <summary>
-			/// Return the current amount of damage of the given type stored in that AttackData. This is the *effective*
-			/// amount of damage, boost and defense have already been applied.
-			/// </summary>
-			/// <param name="damageType">The type of damage</param>
-			/// <returns>How much damage of that type is stored in that AttackData</returns>
-			public int GetDamage(StatSystem.DamageType damageType)
-			{
-				return m_Damages[(int)damageType];
-			}
-
-			/// <summary>
-			/// Return the total amount of damage across all type stored in that AttackData. This is *effective* damage,
-			/// that mean all boost/defense was already applied.
-			/// </summary>
-			/// <returns>The total amount of damage across all type in that Attack Data</returns>
-			public int GetFullDamage()
-			{
-				int totalDamage = 0;
-				for (int i = 0; i < m_Damages.Length; ++i)
-				{
-					totalDamage += m_Damages[i];
-				}
-
-				return totalDamage;
-			}
-		}
-
-		/// <summary>
 		/// Base class of all effect you can add on a weapon to specialize it. See documentation on How to write a new
 		/// Weapon Effect.
 		/// </summary>
@@ -146,23 +53,24 @@ namespace CreatorKitCode
 		[Header("Stats")]
 		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1 };
 
-		public List<Effect> AttackEffects;
+		public List<EffectData> AttackEffects;
 
 		public void Attack(CharacterData attacker, CharacterData target)
 		{
-			AttackData attackData = new AttackData(target, attacker);
+			Effect attackEffect = new Effect(target, attacker);
 
 			int damage = Random.Range(Stats.MinimumDamage, Stats.MaximumDamage + 1);
 
-			attackData.AddDamage(StatSystem.DamageType.Physical, damage);
+			attackEffect.AddDamage(StatSystem.DamageType.Physical, damage);
 
 			foreach (var wae in AttackEffects)
-				wae.OnAttack(target, attacker, ref attackData);
+				wae.OnAttack(target, attacker, ref attackEffect);
 
-			target.Damage(attackData);
+			//target.TakeEffect(attackEffect);
+			attackEffect.Take();
 
 			foreach (var wae in AttackEffects)
-				wae.OnPostAttack(target, attacker, attackData);
+				wae.OnPostAttack(target, attacker, attackEffect);
 		}
 
 		public bool CanHit(CharacterData attacker, CharacterData target)
@@ -259,14 +167,14 @@ public class WeaponEditor : Editor
         m_ItemEditor = new ItemEditor();
         m_ItemEditor.Init(serializedObject);
 
-        var lookup = typeof(Effect);
+        var lookup = typeof(EffectData);
         m_AvailableEquipEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))
             .Select(type => type.Name)
             .ToList();
         
-        lookup = typeof(Effect);
+        lookup = typeof(EffectData);
         m_AvailableWeaponAttackEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))

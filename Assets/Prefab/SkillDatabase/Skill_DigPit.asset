@@ -16,8 +16,11 @@ MonoBehaviour:
   SkillSprite: {fileID: 0}
   Description: 
   SkillAnim: Skill
-  fxSkilling: {fileID: 0}
+  fxStep: 0
+  fxOperating: 0
+  fxImplement: 0
   SkillClip: {fileID: 0}
   Duration: 10
+  CD: 10
   summerName: Pit
   digDeep: 1

@@ -46,7 +46,7 @@ namespace CreatorKitCode
 		public int MinimumAgility;
 		public int MinimumDefense;
 
-		public List<Effect> EquippedEffects;
+		public List<EffectData> EquippedEffects;
 
 		public override string GetDescription()
 		{
@@ -127,7 +127,7 @@ public class EquipmentItemEditor : Editor
         m_ItemEditor = new ItemEditor();
         m_ItemEditor.Init(serializedObject);
 
-        var lookup = typeof(Effect);
+        var lookup = typeof(EffectData);
         m_AvailableEquipEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))

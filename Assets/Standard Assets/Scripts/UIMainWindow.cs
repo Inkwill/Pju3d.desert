@@ -22,6 +22,7 @@ public class UIMainWindow : UIWindow
 		switch_buttons = new List<Button>();
 		targetUI.Init();
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
+		GameManager.Player.SkillUser.AddSkill(sprintSkill);
 	}
 	protected override void OnOpen()
 	{

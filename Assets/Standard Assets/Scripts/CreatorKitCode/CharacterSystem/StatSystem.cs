@@ -343,9 +343,9 @@ namespace CreatorKitCode
 		/// This will also notify the DamageUI so a damage number is displayed.
 		/// </summary>
 		/// <param name="attackData"></param>
-		public void Damage(Weapon.AttackData attackData)
+		public void Damage(Effect attackEffect)
 		{
-			int totalDamage = attackData.GetFullDamage();
+			int totalDamage = attackEffect.GetFullDamage();
 
 			ChangeHealth(-totalDamage);
 			DamageUI.Instance.NewDamage(totalDamage, m_Owner.transform.position);

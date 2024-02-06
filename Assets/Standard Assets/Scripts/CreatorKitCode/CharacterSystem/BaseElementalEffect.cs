@@ -80,11 +80,11 @@ namespace CreatorKitCode
             {
                 m_SinceLastDamage = 0;
 
-                Weapon.AttackData data = new Weapon.AttackData(m_Target);
+                Effect effect = new Effect(m_Target);
 
-                data.AddDamage(m_DamageType, m_Damage);
+                effect.AddDamage(m_DamageType, m_Damage);
                 
-                statSystem.Damage(data);
+                statSystem.Damage(effect);
             }
             
             //we do not parent as if the original object is destroy it would destroy the instance

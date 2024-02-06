@@ -15,6 +15,7 @@ public abstract class Skill : ScriptableObject
 	public AudioClip SkillClip;
 	public float Duration;
 	public float CD;
+	public float MP;
 
 	public virtual bool CanUsedBy(RoleControl user)
 	{

@@ -4,7 +4,7 @@ using CreatorKitCode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class AddHealthUsageEffect : Effect
+public class AddHealthUsageEffect : EffectData
 {
     [FormerlySerializedAs("HealthPurcentageAmount")] 
     public int HealthPercentageAmount = 20;

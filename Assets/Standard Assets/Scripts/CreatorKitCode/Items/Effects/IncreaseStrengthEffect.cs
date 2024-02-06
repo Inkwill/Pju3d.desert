@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CreatorKitCode;
 using UnityEngine;
 
-public class IncreaseStrengthEffect : Effect
+public class IncreaseStrengthEffect : EffectData
 {
     public float Duration = 10.0f;
     public int StrengthChange = 5;
