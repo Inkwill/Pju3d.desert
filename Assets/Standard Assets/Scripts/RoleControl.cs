@@ -116,7 +116,7 @@ public class RoleControl : MonoBehaviour
 
 		m_CharacterData.Equipment.OnEquiped += item =>
 		{
-			if (item.Slot == (EquipmentItem.EquipmentSlot)666 && WeaponLocator)
+			if (item.Slot == EquipmentItem.EquipmentSlot.Weapon && WeaponLocator)
 			{
 				if (!item.WorldObjectPrefab) return;
 				var obj = Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
@@ -126,7 +126,7 @@ public class RoleControl : MonoBehaviour
 
 		m_CharacterData.Equipment.OnUnequip += item =>
 		{
-			if (item.Slot == (EquipmentItem.EquipmentSlot)666)
+			if (item.Slot == EquipmentItem.EquipmentSlot.Weapon)
 			{
 				foreach (Transform t in WeaponLocator)
 					Destroy(t.gameObject);

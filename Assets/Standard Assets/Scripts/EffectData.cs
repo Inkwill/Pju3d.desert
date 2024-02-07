@@ -5,54 +5,77 @@ using System.Reflection;
 using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
-public abstract class EffectData : ScriptableObject
-{
-	public string Description;
+using MyBox;
 
-	public virtual bool OnUse(CharacterData user)
+[CreateAssetMenu(fileName = "EffectData", menuName = "Data/EffectData", order = 1)]
+public class EffectData : ScriptableObject
+{
+	public enum EffectType
 	{
-		return false;
+		DAMAGE,
+		EQUIP,
+		HPCHANGE
 	}
+	public EffectType Type;
+	public string Description;
+	[ConditionalField(nameof(Type), false, EffectType.DAMAGE)]
+	public StatSystem.DamageType damageType;
+	[ConditionalField(nameof(Type), false, EffectType.DAMAGE)]
+	public int damageMount;
+	[ConditionalField(nameof(Type), false, EffectType.EQUIP)]
+	public StatSystem.StatModifier StatModifier;
+	[ConditionalField(nameof(Type), false, EffectType.HPCHANGE)]
+	public int HealthAmount;
+
 	public virtual string GetDescription()
 	{
-		return Description;
-	}
-
-
-	[CreateAssetMenu(fileName = "DemoData", menuName = "Data/DamageEffect", order = 2)]
-	public class DamageEffect : EffectData
-	{
-		public StatSystem.DamageType damageType;
-		public int damageMount;
-	}
-
-	[CreateAssetMenu(fileName = "DemoData", menuName = "Data/EquipEffect", order = 3)]
-	public class EquipEffect : EffectData
-	{
-		public StatSystem.StatModifier Modifier;
-		public override string GetDescription()
+		switch (Type)
 		{
-			string desc = Description + "\n";
+			case EffectType.EQUIP:
+				string desc = Description + "\n";
 
-			string unit = Modifier.ModifierMode == StatSystem.StatModifier.Mode.Percentage ? "%" : "";
+				string unit = StatModifier.ModifierMode == StatSystem.StatModifier.Mode.Percentage ? "%" : "";
 
-			if (Modifier.Stats.strength != 0)
-				desc += $"Str : {Modifier.Stats.strength:+0;-#}{unit}\n"; //format specifier to force the + sign to appear
-			if (Modifier.Stats.agility != 0)
-				desc += $"Agi : {Modifier.Stats.agility:+0;-#}{unit}\n";
-			if (Modifier.Stats.defense != 0)
-				desc += $"Def : {Modifier.Stats.defense:+0;-#}{unit}\n";
-			if (Modifier.Stats.health != 0)
-				desc += $"HP : {Modifier.Stats.health:+0;-#}{unit}\n";
+				if (StatModifier.Stats.strength != 0)
+					desc += $"Str : {StatModifier.Stats.strength:+0;-#}{unit}\n"; //format specifier to force the + sign to appear
+				if (StatModifier.Stats.agility != 0)
+					desc += $"Agi : {StatModifier.Stats.agility:+0;-#}{unit}\n";
+				if (StatModifier.Stats.defense != 0)
+					desc += $"Def : {StatModifier.Stats.defense:+0;-#}{unit}\n";
+				if (StatModifier.Stats.health != 0)
+					desc += $"HP : {StatModifier.Stats.health:+0;-#}{unit}\n";
 
-			return desc;
+				return desc;
+			default:
+				return Description;
 		}
 	}
 
-	[CreateAssetMenu(fileName = "DemoData", menuName = "Data/HpEffect", order = 4)]
-	public class HpEffect : EffectData
+	public bool Take(CharacterData user, string[] para, CharacterData target = null)
 	{
-		public int HealthAmount;
+		switch (Type)
+		{
+			case EffectType.DAMAGE:
+				return true;
+			case EffectType.HPCHANGE:
+				int mount = para.Length > 0 ? int.Parse(para[0]) : 0;
+				user.Stats.ChangeHealth(mount);
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	public void Equip(CharacterData user)
+	{
+		if (Type != EffectType.EQUIP) return;
+		if (StatModifier != null) user.Stats.AddModifier(StatModifier);
+	}
+
+	public void UnEquip(CharacterData user)
+	{
+		if (Type != EffectType.EQUIP) return;
+		if (StatModifier != null) user.Stats.RemoveModifier(StatModifier);
 	}
 
 	public class VampiricWeaponEffect : EffectData

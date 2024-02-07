@@ -47,22 +47,19 @@ MonoBehaviour:
   Description: a base weapon
   WorldObjectPrefab: {fileID: 8115497767533682948, guid: 2ce28e09982cac64fa114271e3976374,
     type: 3}
-  Slot: 666
-  MinimumStrength: 0
-  MinimumAgility: 0
-  MinimumDefense: 0
+  SpawnClip: {fileID: 0}
+  Slot: 5
   EquippedEffects:
   - {fileID: 5115130312174508207}
-  HitSounds: []
-  SwingSounds: []
+  damageType: 0
   Stats:
     Speed: 0.7
     MinimumDamage: 10
     MaximumDamage: 15
     MaxRange: 3
-  AttackEffects:
-  - {fileID: -2342415642362553291}
-  - {fileID: -2514061823003640309}
+  AttackEffects: []
+  HitSounds: []
+  SwingSounds: []
 --- !u!114 &5115130312174508207
 MonoBehaviour:
   m_ObjectHideFlags: 0

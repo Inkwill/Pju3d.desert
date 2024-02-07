@@ -36,7 +36,7 @@ namespace CreatorKitCode
 			// 	return Description;
 			// }
 		}
-        public StatSystem.DamageType damageType;
+		public StatSystem.DamageType damageType;
 		[System.Serializable]
 		public struct Stat
 		{
@@ -45,14 +45,15 @@ namespace CreatorKitCode
 			public int MaximumDamage;
 			public float MaxRange;
 		}
+		[Header("Stats")]
+		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1 };
+		public List<EffectData> AttackEffects;
 
 		[Header("Sounds")]
 		public AudioClip[] HitSounds;
 		public AudioClip[] SwingSounds;
 
-		[Header("Stats")]
-		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1 };
-		public List<EffectData> AttackEffects;
+
 
 		public void Attack(CharacterData attacker, CharacterData target)
 		{
@@ -113,182 +114,182 @@ namespace CreatorKitCode
 	}
 }
 
-#if UNITY_EDITOR
-[CustomEditor(typeof(Weapon))]
-public class WeaponEditor : Editor
-{
-    Weapon m_Target;
-    
-    ItemEditor m_ItemEditor;
+// #if UNITY_EDITOR
+// [CustomEditor(typeof(Weapon))]
+// public class WeaponEditor : Editor
+// {
+//     Weapon m_Target;
 
-    List<string> m_AvailableEquipEffectType;
-    SerializedProperty m_EquippedEffectListProperty;
+//     ItemEditor m_ItemEditor;
 
-    List<string> m_AvailableWeaponAttackEffectType;
-    SerializedProperty m_WeaponAttackEffectListProperty;
+//     List<string> m_AvailableEquipEffectType;
+//     SerializedProperty m_EquippedEffectListProperty;
 
-    SerializedProperty m_HitSoundProps;
-    SerializedProperty m_SwingSoundProps;
-    
-    SerializedProperty m_MinimumStrengthProperty;
-    SerializedProperty m_MinimumAgilityProperty;
-    SerializedProperty m_MinimumDefenseProperty;
-    
-    SerializedProperty m_WeaponStatProperty;
+//     List<string> m_AvailableWeaponAttackEffectType;
+//     SerializedProperty m_WeaponAttackEffectListProperty;
 
-    [MenuItem("Assets/Create/Data/Weapon", priority = -999)]
-    static public void CreateWeapon()
-    {
-        var newWeapon = CreateInstance<Weapon>();
-        newWeapon.Slot = (EquipmentItem.EquipmentSlot)666;
-        
-        ProjectWindowUtil.CreateAsset(newWeapon, "weapon.asset");
-    }
-    
-    void OnEnable()
-    {
-        m_Target = target as Weapon;
-        m_EquippedEffectListProperty = serializedObject.FindProperty(nameof(Weapon.EquippedEffects));
-        m_WeaponAttackEffectListProperty = serializedObject.FindProperty(nameof(Weapon.AttackEffects));
+//     SerializedProperty m_HitSoundProps;
+//     SerializedProperty m_SwingSoundProps;
 
-        m_MinimumStrengthProperty = serializedObject.FindProperty(nameof(EquipmentItem.MinimumStrength));
-        m_MinimumAgilityProperty = serializedObject.FindProperty(nameof(EquipmentItem.MinimumAgility));
-        m_MinimumDefenseProperty = serializedObject.FindProperty(nameof(EquipmentItem.MinimumDefense));
-        
-        m_WeaponStatProperty = serializedObject.FindProperty(nameof(Weapon.Stats));
+//     SerializedProperty m_MinimumStrengthProperty;
+//     SerializedProperty m_MinimumAgilityProperty;
+//     SerializedProperty m_MinimumDefenseProperty;
 
-        m_HitSoundProps = serializedObject.FindProperty(nameof(Weapon.HitSounds));
-        m_SwingSoundProps = serializedObject.FindProperty(nameof(Weapon.SwingSounds));
-        
-        m_ItemEditor = new ItemEditor();
-        m_ItemEditor.Init(serializedObject);
+//     SerializedProperty m_WeaponStatProperty;
 
-        var lookup = typeof(EffectData);
-        m_AvailableEquipEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(assembly => assembly.GetTypes())
-            .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))
-            .Select(type => type.Name)
-            .ToList();
-        
-        lookup = typeof(EffectData);
-        m_AvailableWeaponAttackEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(assembly => assembly.GetTypes())
-            .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))
-            .Select(type => type.Name)
-            .ToList();
-    }
+//     [MenuItem("Assets/Create/Data/Weapon", priority = -999)]
+//     static public void CreateWeapon()
+//     {
+//         var newWeapon = CreateInstance<Weapon>();
+//         newWeapon.Slot = (EquipmentItem.EquipmentSlot)666;
 
-    public override void OnInspectorGUI()
-    {
-        m_ItemEditor.GUI();
+//         ProjectWindowUtil.CreateAsset(newWeapon, "weapon.asset");
+//     }
 
-        EditorGUILayout.PropertyField(m_MinimumStrengthProperty);
-        EditorGUILayout.PropertyField(m_MinimumAgilityProperty);
-        EditorGUILayout.PropertyField(m_MinimumDefenseProperty);
-        
-        //EditorGUILayout.PropertyField(m_WeaponStatProperty, true);
-        var child = m_WeaponStatProperty.Copy();
-        var depth = child.depth;
-        child.NextVisible(true);
-        
-        EditorGUILayout.LabelField("Weapon Stats", EditorStyles.boldLabel);
-        while (child.depth > depth)
-        {
-            EditorGUILayout.PropertyField(child, true);
-            child.NextVisible(false);
-        }
-        
-        EditorGUILayout.PropertyField(m_HitSoundProps, true);
-        EditorGUILayout.PropertyField(m_SwingSoundProps, true);
-        
-        int choice = EditorGUILayout.Popup("Add new Equipment Effect", -1, m_AvailableEquipEffectType.ToArray());
+//     void OnEnable()
+//     {
+//         m_Target = target as Weapon;
+//         m_EquippedEffectListProperty = serializedObject.FindProperty(nameof(Weapon.EquippedEffects));
+//         m_WeaponAttackEffectListProperty = serializedObject.FindProperty(nameof(Weapon.AttackEffects));
 
-        if (choice != -1)
-        {
-            var newInstance = ScriptableObject.CreateInstance(m_AvailableEquipEffectType[choice]);
-            
-            AssetDatabase.AddObjectToAsset(newInstance, target);
-            
-            m_EquippedEffectListProperty.InsertArrayElementAtIndex(m_EquippedEffectListProperty.arraySize);
-            m_EquippedEffectListProperty.GetArrayElementAtIndex(m_EquippedEffectListProperty.arraySize - 1).objectReferenceValue = newInstance;
-        }
+//         m_MinimumStrengthProperty = serializedObject.FindProperty(nameof(EquipmentItem.MinimumStrength));
+//         m_MinimumAgilityProperty = serializedObject.FindProperty(nameof(EquipmentItem.MinimumAgility));
+//         m_MinimumDefenseProperty = serializedObject.FindProperty(nameof(EquipmentItem.MinimumDefense));
+
+//         m_WeaponStatProperty = serializedObject.FindProperty(nameof(Weapon.Stats));
+
+//         m_HitSoundProps = serializedObject.FindProperty(nameof(Weapon.HitSounds));
+//         m_SwingSoundProps = serializedObject.FindProperty(nameof(Weapon.SwingSounds));
+
+//         m_ItemEditor = new ItemEditor();
+//         m_ItemEditor.Init(serializedObject);
+
+//         var lookup = typeof(EffectData);
+//         m_AvailableEquipEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
+//             .SelectMany(assembly => assembly.GetTypes())
+//             .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))
+//             .Select(type => type.Name)
+//             .ToList();
+
+//         lookup = typeof(EffectData);
+//         m_AvailableWeaponAttackEffectType = System.AppDomain.CurrentDomain.GetAssemblies()
+//             .SelectMany(assembly => assembly.GetTypes())
+//             .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(lookup))
+//             .Select(type => type.Name)
+//             .ToList();
+//     }
+
+//     public override void OnInspectorGUI()
+//     {
+//         m_ItemEditor.GUI();
+
+//         EditorGUILayout.PropertyField(m_MinimumStrengthProperty);
+//         EditorGUILayout.PropertyField(m_MinimumAgilityProperty);
+//         EditorGUILayout.PropertyField(m_MinimumDefenseProperty);
+
+//         //EditorGUILayout.PropertyField(m_WeaponStatProperty, true);
+//         var child = m_WeaponStatProperty.Copy();
+//         var depth = child.depth;
+//         child.NextVisible(true);
+
+//         EditorGUILayout.LabelField("Weapon Stats", EditorStyles.boldLabel);
+//         while (child.depth > depth)
+//         {
+//             EditorGUILayout.PropertyField(child, true);
+//             child.NextVisible(false);
+//         }
+
+//         EditorGUILayout.PropertyField(m_HitSoundProps, true);
+//         EditorGUILayout.PropertyField(m_SwingSoundProps, true);
+
+//         int choice = EditorGUILayout.Popup("Add new Equipment Effect", -1, m_AvailableEquipEffectType.ToArray());
+
+//         if (choice != -1)
+//         {
+//             var newInstance = ScriptableObject.CreateInstance(m_AvailableEquipEffectType[choice]);
+
+//             AssetDatabase.AddObjectToAsset(newInstance, target);
+
+//             m_EquippedEffectListProperty.InsertArrayElementAtIndex(m_EquippedEffectListProperty.arraySize);
+//             m_EquippedEffectListProperty.GetArrayElementAtIndex(m_EquippedEffectListProperty.arraySize - 1).objectReferenceValue = newInstance;
+//         }
 
 
-        Editor ed = null;
-        int toDelete = -1;
-        for (int i = 0; i < m_EquippedEffectListProperty.arraySize; ++i)
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.BeginVertical();
-            var item = m_EquippedEffectListProperty.GetArrayElementAtIndex(i);           
-            SerializedObject obj = new SerializedObject(item.objectReferenceValue);
+//         Editor ed = null;
+//         int toDelete = -1;
+//         for (int i = 0; i < m_EquippedEffectListProperty.arraySize; ++i)
+//         {
+//             EditorGUILayout.BeginHorizontal();
+//             EditorGUILayout.BeginVertical();
+//             var item = m_EquippedEffectListProperty.GetArrayElementAtIndex(i);           
+//             SerializedObject obj = new SerializedObject(item.objectReferenceValue);
 
-            Editor.CreateCachedEditor(item.objectReferenceValue, null, ref ed);
-            
-            ed.OnInspectorGUI();
-            EditorGUILayout.EndVertical();
+//             Editor.CreateCachedEditor(item.objectReferenceValue, null, ref ed);
 
-            if (GUILayout.Button("-", GUILayout.Width(32)))
-            {
-                toDelete = i;
-            }
-            EditorGUILayout.EndHorizontal();
-        }
+//             ed.OnInspectorGUI();
+//             EditorGUILayout.EndVertical();
 
-        if (toDelete != -1)
-        {
-            var item = m_EquippedEffectListProperty.GetArrayElementAtIndex(toDelete).objectReferenceValue;
-            DestroyImmediate(item, true);
-            
-            //need to do it twice, first time just nullify the entry, second actually remove it.
-            m_EquippedEffectListProperty.DeleteArrayElementAtIndex(toDelete);
-            m_EquippedEffectListProperty.DeleteArrayElementAtIndex(toDelete);
-        }
-        
-        //attack
-        choice = EditorGUILayout.Popup("Add new Weapon Attack Effect", -1, m_AvailableWeaponAttackEffectType.ToArray());
+//             if (GUILayout.Button("-", GUILayout.Width(32)))
+//             {
+//                 toDelete = i;
+//             }
+//             EditorGUILayout.EndHorizontal();
+//         }
 
-        if (choice != -1)
-        {
-            var newInstance = ScriptableObject.CreateInstance(m_AvailableWeaponAttackEffectType[choice]);
-            
-            AssetDatabase.AddObjectToAsset(newInstance, target);
-            
-            m_WeaponAttackEffectListProperty.InsertArrayElementAtIndex(m_WeaponAttackEffectListProperty.arraySize);
-            m_WeaponAttackEffectListProperty.GetArrayElementAtIndex(m_WeaponAttackEffectListProperty.arraySize - 1).objectReferenceValue = newInstance;
-        }
-        
-        toDelete = -1;
-        for (int i = 0; i < m_WeaponAttackEffectListProperty.arraySize; ++i)
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.BeginVertical();
-            var item = m_WeaponAttackEffectListProperty.GetArrayElementAtIndex(i);           
-            SerializedObject obj = new SerializedObject(item.objectReferenceValue);
+//         if (toDelete != -1)
+//         {
+//             var item = m_EquippedEffectListProperty.GetArrayElementAtIndex(toDelete).objectReferenceValue;
+//             DestroyImmediate(item, true);
 
-            Editor.CreateCachedEditor(item.objectReferenceValue, null, ref ed);
-            
-            ed.OnInspectorGUI();
-            EditorGUILayout.EndVertical();
+//             //need to do it twice, first time just nullify the entry, second actually remove it.
+//             m_EquippedEffectListProperty.DeleteArrayElementAtIndex(toDelete);
+//             m_EquippedEffectListProperty.DeleteArrayElementAtIndex(toDelete);
+//         }
 
-            if (GUILayout.Button("-", GUILayout.Width(32)))
-            {
-                toDelete = i;
-            }
-            EditorGUILayout.EndHorizontal();
-        }
+//         //attack
+//         choice = EditorGUILayout.Popup("Add new Weapon Attack Effect", -1, m_AvailableWeaponAttackEffectType.ToArray());
 
-        if (toDelete != -1)
-        {
-            var item = m_WeaponAttackEffectListProperty.GetArrayElementAtIndex(toDelete).objectReferenceValue;
-            DestroyImmediate(item, true);
-            
-            //need to do it twice, first time just nullify the entry, second actually remove it.
-            m_WeaponAttackEffectListProperty.DeleteArrayElementAtIndex(toDelete);
-            m_WeaponAttackEffectListProperty.DeleteArrayElementAtIndex(toDelete);
-        }
+//         if (choice != -1)
+//         {
+//             var newInstance = ScriptableObject.CreateInstance(m_AvailableWeaponAttackEffectType[choice]);
 
-        serializedObject.ApplyModifiedProperties();
-    }
-}
-#endif
+//             AssetDatabase.AddObjectToAsset(newInstance, target);
+
+//             m_WeaponAttackEffectListProperty.InsertArrayElementAtIndex(m_WeaponAttackEffectListProperty.arraySize);
+//             m_WeaponAttackEffectListProperty.GetArrayElementAtIndex(m_WeaponAttackEffectListProperty.arraySize - 1).objectReferenceValue = newInstance;
+//         }
+
+//         toDelete = -1;
+//         for (int i = 0; i < m_WeaponAttackEffectListProperty.arraySize; ++i)
+//         {
+//             EditorGUILayout.BeginHorizontal();
+//             EditorGUILayout.BeginVertical();
+//             var item = m_WeaponAttackEffectListProperty.GetArrayElementAtIndex(i);           
+//             SerializedObject obj = new SerializedObject(item.objectReferenceValue);
+
+//             Editor.CreateCachedEditor(item.objectReferenceValue, null, ref ed);
+
+//             ed.OnInspectorGUI();
+//             EditorGUILayout.EndVertical();
+
+//             if (GUILayout.Button("-", GUILayout.Width(32)))
+//             {
+//                 toDelete = i;
+//             }
+//             EditorGUILayout.EndHorizontal();
+//         }
+
+//         if (toDelete != -1)
+//         {
+//             var item = m_WeaponAttackEffectListProperty.GetArrayElementAtIndex(toDelete).objectReferenceValue;
+//             DestroyImmediate(item, true);
+
+//             //need to do it twice, first time just nullify the entry, second actually remove it.
+//             m_WeaponAttackEffectListProperty.DeleteArrayElementAtIndex(toDelete);
+//             m_WeaponAttackEffectListProperty.DeleteArrayElementAtIndex(toDelete);
+//         }
+
+//         serializedObject.ApplyModifiedProperties();
+//     }
+// }
+// #endif

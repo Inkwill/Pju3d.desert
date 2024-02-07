@@ -97,7 +97,7 @@ namespace CreatorKitCode
 					}
 					break;
 				//special value for weapon
-				case (EquipmentItem.EquipmentSlot)666:
+				case EquipmentItem.EquipmentSlot.Weapon:
 					Debug.LogError("is weapon, shoud use EquipWeapon()!" + item.ToString());
 					break;
 				default:
@@ -237,7 +237,7 @@ namespace CreatorKitCode
 						m_AccessorySlot = null;
 					}
 					break;
-				case (EquipmentItem.EquipmentSlot)666:
+				case EquipmentItem.EquipmentSlot.Weapon:
 					Debug.LogError("is weapon, shoud use UnWeapon()!" + slot.ToString());
 					break;
 				default:

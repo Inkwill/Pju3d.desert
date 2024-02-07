@@ -17,18 +17,15 @@ MonoBehaviour:
   Description: Your trusty Axe
   WorldObjectPrefab: {fileID: 5482170467533448303, guid: 56ca1676619f33d48b134bb4a8b721c8,
     type: 3}
-  Slot: 666
-  MinimumStrength: 0
-  MinimumAgility: 0
-  MinimumDefense: 0
+  SpawnClip: {fileID: 0}
+  Slot: 5
   EquippedEffects: []
-  HitSounds: []
-  SwingSounds: []
+  damageType: 0
   Stats:
     Speed: 1
     MinimumDamage: 0
     MaximumDamage: 0
     MaxRange: 4
-    Dig: 0
-    Cut: 0
   AttackEffects: []
+  HitSounds: []
+  SwingSounds: []

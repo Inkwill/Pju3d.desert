@@ -17,11 +17,13 @@ MonoBehaviour:
   Description: Your trusty Rake
   WorldObjectPrefab: {fileID: 7022561314472484388, guid: e445cf79239d58a4a9b58b1d2ed99d63,
     type: 3}
-  Slot: 666
+  SpawnClip: {fileID: 0}
+  Slot: 5
   MinimumStrength: 0
   MinimumAgility: 0
   MinimumDefense: 0
   EquippedEffects: []
+  damageType: 0
   HitSounds: []
   SwingSounds: []
   Stats:
