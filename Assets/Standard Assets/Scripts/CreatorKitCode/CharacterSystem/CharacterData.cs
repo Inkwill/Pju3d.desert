@@ -27,7 +27,7 @@ namespace CreatorKitCode
 		/// Callback for when that CharacterData receive damage. E.g. used by the player character to trigger the right
 		/// animation
 		/// </summary>
-		public Action<Effect> OnEffectTake { get; set; }
+		public Action<Damage> OnDamage { get; set; }
 
 		/// <summary>
 		/// Will return true if the attack cooldown have reached 0. False otherwise.

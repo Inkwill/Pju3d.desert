@@ -16,6 +16,7 @@ public class KeyValueData : ScriptableObject
 
 	public List<KeyValue<string, AudioClip>> AudioDic;
 	public List<KeyValue<string, Item>> Item;
+	public List<KeyValue<string, EffectData>> Effect;
 	public static T GetValue<T>(List<KeyValue<string, T>> dic, string key)
 	{
 		foreach (KeyValue<string, T> data in dic)

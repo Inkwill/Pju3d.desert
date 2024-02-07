@@ -3,20 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
-
-public class DamageEffect : Effect
+public class Damage
 {
-	public DamageEffect(CharacterData target, CharacterData source = null)
+	public CharacterData Target => m_Target;
+	public CharacterData Source => m_Source;
+	CharacterData m_Target;
+	CharacterData m_Source;
+	int[] m_Damages = new int[System.Enum.GetValues(typeof(StatSystem.DamageType)).Length];
+
+	public Damage(CharacterData target, CharacterData sourcer = null)
 	{
 		m_Target = target;
-		m_Source = source;
+		m_Source = sourcer;
 	}
-	int[] m_Damages = new int[System.Enum.GetValues(typeof(StatSystem.DamageType)).Length];
+
+	public void Take(CharacterData target)
+	{
+		int totalDamage = GetFullDamage();
+		target.Stats.ChangeHealth(-totalDamage);
+		if (target.HitClip.Length != 0)
+		{
+			SFXManager.PlaySound(SFXManager.Use.Player, new SFXManager.PlayData()
+			{
+				Clip = target.HitClip[Random.Range(0, target.HitClip.Length)],
+				PitchMax = 1.1f,
+				PitchMin = 0.8f,
+				Position = target.transform.position
+			});
+		}
+		target.OnDamage?.Invoke(this);
+	}
+	
+	public void Take() { Take(m_Target); }
 
 	public int AddDamage(StatSystem.DamageType damageType, int amount)
 	{
 		int addedAmount = amount;
-
 		//Physical damage are increase by 1% for each point of strength
 		if (damageType == StatSystem.DamageType.Physical)
 		{
@@ -40,7 +62,6 @@ public class DamageEffect : Effect
 
 		return addedAmount;
 	}
-
 	/// <summary>
 	/// Return the current amount of damage of the given type stored in that AttackData. This is the *effective*
 	/// amount of damage, boost and defense have already been applied.
@@ -51,7 +72,6 @@ public class DamageEffect : Effect
 	{
 		return m_Damages[(int)damageType];
 	}
-
 	/// <summary>
 	/// Return the total amount of damage across all type stored in that AttackData. This is *effective* damage,
 	/// that mean all boost/defense was already applied.
@@ -66,22 +86,5 @@ public class DamageEffect : Effect
 		}
 		return totalDamage;
 	}
-
-	public override void Take(CharacterData target)
-	{
-		int totalDamage = GetFullDamage();
-		target.Stats.ChangeHealth(-totalDamage);
-		if (target.HitClip.Length != 0)
-		{
-			SFXManager.PlaySound(SFXManager.Use.Player, new SFXManager.PlayData()
-			{
-				Clip = target.HitClip[Random.Range(0, target.HitClip.Length)],
-				PitchMax = 1.1f,
-				PitchMin = 0.8f,
-				Position = target.transform.position
-			});
-		}
-		target.OnEffectTake?.Invoke(this);
-		DamageUI.Instance.NewDamage(totalDamage, target.transform.position);
-	}
 }
+

@@ -55,18 +55,16 @@ namespace CreatorKitCode
     /// </summary>
     public class ElementalEffect : BaseElementalEffect
     {
-        int m_Damage;
-        StatSystem.DamageType m_DamageType;
+        EffectData m_EffectData;
         float m_DamageSpeed;
         float m_SinceLastDamage = 0.0f;
 
         VFXManager.VFXInstance m_FireInstance;
 
-        public ElementalEffect(float duration, StatSystem.DamageType damageType, int damage, float speed = 1.0f) :
+        public ElementalEffect(float duration, EffectData data, float speed = 1.0f) :
             base(duration)
         {
-            m_Damage = damage;
-            m_DamageType = damageType;
+            m_EffectData = data;
             m_DamageSpeed = speed;
         }
         
@@ -80,11 +78,8 @@ namespace CreatorKitCode
             {
                 m_SinceLastDamage = 0;
 
-                DamageEffect effect = new DamageEffect(m_Target);
-
-                effect.AddDamage(m_DamageType, m_Damage);
-                
-                effect.Take();
+                Damage damage = new Damage(m_Target);
+                damage.Take();
             }
             
             //we do not parent as if the original object is destroy it would destroy the instance
@@ -98,7 +93,7 @@ namespace CreatorKitCode
             if (other == null)
                 return false;
 
-            return eff.m_DamageType == m_DamageType;
+            return eff.m_EffectData == m_EffectData;
         }
 
         public override void Applied(CharacterData target)

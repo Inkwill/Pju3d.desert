@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 using CreatorKitCode;
+using CreatorKitCodeInternal;
 
 public class RoleControl : MonoBehaviour
 {
@@ -105,11 +106,12 @@ public class RoleControl : MonoBehaviour
 
 		m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
 
-		m_CharacterData.OnEffectTake += (effect) =>
+		m_CharacterData.OnDamage += (damage) =>
 		{
 			m_Animator.SetTrigger(m_HitParamID);
 			m_CharacterAudio.Hit(transform.position);
 			m_eventSender?.Send(gameObject, "roleEvent_OnDamage");
+			DamageUI.Instance.NewDamage(damage.GetFullDamage(), transform.position);
 		};
 
 		m_CharacterData.Equipment.OnEquiped += item =>

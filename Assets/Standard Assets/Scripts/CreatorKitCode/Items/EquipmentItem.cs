@@ -28,15 +28,15 @@ namespace CreatorKitCode
 
 		//public abstract class EquippedEffect : ScriptableObject
 		//{
-			// public string Description;
-			// //return true if could be used, false otherwise.
-			// public abstract void Equipped(CharacterData user);
-			// public abstract void Removed(CharacterData user);
+		// public string Description;
+		// //return true if could be used, false otherwise.
+		// public abstract void Equipped(CharacterData user);
+		// public abstract void Removed(CharacterData user);
 
-			// public virtual string GetDescription()
-			// {
-			// 	return Description;
-			// }
+		// public virtual string GetDescription()
+		// {
+		// 	return Description;
+		// }
 		//}
 
 		public EquipmentSlot Slot;
@@ -46,7 +46,7 @@ namespace CreatorKitCode
 		public int MinimumAgility;
 		public int MinimumDefense;
 
-		public List<EffectData> EquippedEffects;
+		public List<EffectData.EquipEffect> EquippedEffects;
 
 		public override string GetDescription()
 		{
@@ -85,13 +85,13 @@ namespace CreatorKitCode
 		public void EquippedBy(CharacterData user)
 		{
 			foreach (var effect in EquippedEffects)
-				effect.OnEquip(user);
+				user.Stats.AddModifier(effect.Modifier);
 		}
 
 		public void UnequippedBy(CharacterData user)
 		{
 			foreach (var effect in EquippedEffects)
-				effect.OnUnEquip(user);
+				user.Stats.RemoveModifier(effect.Modifier);
 		}
 	}
 }

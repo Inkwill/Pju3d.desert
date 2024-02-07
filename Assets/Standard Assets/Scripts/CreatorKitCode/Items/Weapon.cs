@@ -36,7 +36,7 @@ namespace CreatorKitCode
 			// 	return Description;
 			// }
 		}
-
+        public StatSystem.DamageType damageType;
 		[System.Serializable]
 		public struct Stat
 		{
@@ -52,25 +52,21 @@ namespace CreatorKitCode
 
 		[Header("Stats")]
 		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1 };
-
 		public List<EffectData> AttackEffects;
 
 		public void Attack(CharacterData attacker, CharacterData target)
 		{
-			DamageEffect attackEffect = new DamageEffect(target, attacker);
-
-			int damage = Random.Range(Stats.MinimumDamage, Stats.MaximumDamage + 1);
-
-			attackEffect.AddDamage(StatSystem.DamageType.Physical, damage);
-
-			foreach (var wae in AttackEffects)
-				wae.OnAttack(target, attacker, ref attackEffect);
+			Damage damage = new Damage(target, attacker);
+			int damageNum = Random.Range(Stats.MinimumDamage, Stats.MaximumDamage + 1);
+			damage.AddDamage(damageType, damageNum);
+			damage.Take();
+			//foreach (var wae in AttackEffects)
+			//wae.OnAttack(target, attacker, ref attackEffect);
 
 			//target.TakeEffect(attackEffect);
-			attackEffect.Take();
 
-			foreach (var wae in AttackEffects)
-				wae.OnPostAttack(target, attacker, attackEffect);
+			//foreach (var wae in AttackEffects)
+			//wae.OnPostAttack(target, attacker, attackEffect);
 		}
 
 		public bool CanHit(CharacterData attacker, CharacterData target)
