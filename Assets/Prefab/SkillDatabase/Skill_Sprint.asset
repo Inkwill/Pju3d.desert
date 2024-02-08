@@ -22,4 +22,7 @@ MonoBehaviour:
   SkillClip: {fileID: 0}
   Duration: 0.3
   CD: 10
+  MP: 0
+  implementEffects: []
+  stepEffects: []
   Speed: 30

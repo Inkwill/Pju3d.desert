@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CreatorKitCode;
 
 public class SkillUser : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SkillUser : MonoBehaviour
 		public Skill skill;
 		public float cd;
 		public int mp;
+		public GameObject target;
 	}
 
 	public SkillEntry CurSkill => m_UseEntry;
@@ -47,7 +49,7 @@ public class SkillUser : MonoBehaviour
 			}
 			else
 			{
-				m_UseEntry.skill.Implement(m_role);
+				m_UseEntry.skill.Implement(m_role, m_UseEntry.target);
 				m_eventSender?.Send(gameObject, "skillEvent_OnImplement");
 				m_UseEntry = null;
 				m_During = 0;
@@ -72,7 +74,7 @@ public class SkillUser : MonoBehaviour
 		Debug.Log("AddSkill:" + skill.SkillName);
 	}
 
-	public bool UseSkill(Skill skill)
+	public bool UseSkill(Skill skill, GameObject target = null)
 	{
 		if (m_UseEntry != null) return false;
 		SkillEntry entry = GetEntry(skill.SkillName);
@@ -88,6 +90,7 @@ public class SkillUser : MonoBehaviour
 				Debug.Log("UseSkill: " + skill.SkillName + "cd =" + entry.cd);
 				entry.cd = entry.skill.CD;
 				entry.mp = 0;
+				entry.target = target;
 				m_UseEntry = entry;
 				return true;
 			}
@@ -106,6 +109,6 @@ public class SkillUser : MonoBehaviour
 	}
 	void SkillStep()
 	{
-		m_UseEntry?.skill.StepEffect(m_role);
+		m_UseEntry?.skill.StepEffect(m_role, m_UseEntry.target);
 	}
 }

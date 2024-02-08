@@ -6,6 +6,7 @@ using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
 using MyBox;
+using UnityEditor.PackageManager;
 
 [CreateAssetMenu(fileName = "EffectData", menuName = "Data/EffectData", order = 1)]
 public class EffectData : ScriptableObject
@@ -14,7 +15,10 @@ public class EffectData : ScriptableObject
 	{
 		DAMAGE,
 		EQUIP,
-		HPCHANGE
+		HPCHANGE,
+		SPEEDUP,
+		DIG,
+		SUMMON
 	}
 	public EffectType Type;
 	public string Description;
@@ -24,8 +28,8 @@ public class EffectData : ScriptableObject
 	public int damageMount;
 	[ConditionalField(nameof(Type), false, EffectType.EQUIP)]
 	public StatSystem.StatModifier StatModifier;
-	[ConditionalField(nameof(Type), false, EffectType.HPCHANGE)]
-	public int HealthAmount;
+	public int EffectAmount;
+	public StatSystem.StatModifier.Mode EffectMode;
 
 	public virtual string GetDescription()
 	{
@@ -51,17 +55,39 @@ public class EffectData : ScriptableObject
 		}
 	}
 
-	public bool Take(CharacterData user, string[] para, CharacterData target = null)
+	public bool Take(CharacterData user, string[] param = null, GameObject target = null)
 	{
 		switch (Type)
 		{
 			case EffectType.DAMAGE:
 				return true;
 			case EffectType.HPCHANGE:
-				int mount = para.Length > 0 ? int.Parse(para[0]) : 0;
-				user.Stats.ChangeHealth(mount);
-				return true;
+				int addMount;
+				if (param != null && param.Length > 0 && int.TryParse(param[0], out addMount))
+					return ChangeHealth(user, EffectAmount + addMount);
+				else return ChangeHealth(user, EffectAmount);
+			case EffectType.DIG:
+				if (target != null)
+				{
+					int deep = 1;
+					if (param != null && param.Length > 0 && int.TryParse(param[0], out deep))
+					{
+						GameManager.Instance.TerrainTool.LowerTerrain(target.transform.position, deep * 0.00025f, 5, 10);
+						return true;
+					}
+				}
+				return false;
+			case EffectType.SUMMON:
+				Vector3 pos = (target != null) ? target.transform.position : user.transform.position;
+				if (param != null && param.Length > 0)
+				{
+					GameObject pbObj = Resources.Load(param[0]) as GameObject;
+					if (pbObj != null) { Instantiate(pbObj, pos, Quaternion.Euler(0, 180, 0)); return true; }
+					else return false;
+				}
+				return false;
 			default:
+				Debug.LogError("Take a illegal Effect:" + this);
 				return false;
 		}
 	}
@@ -76,6 +102,23 @@ public class EffectData : ScriptableObject
 	{
 		if (Type != EffectType.EQUIP) return;
 		if (StatModifier != null) user.Stats.RemoveModifier(StatModifier);
+	}
+
+	bool ChangeHealth(CharacterData user, int value)
+	{
+		if (EffectMode == StatSystem.StatModifier.Mode.Absolute)
+		{
+			user.Stats.ChangeHealth(value);
+			return true;
+		}
+		else if (EffectMode == StatSystem.StatModifier.Mode.Percentage)
+		{
+			if (user.Stats.CurrentHealth == user.Stats.stats.health)
+				return true;
+			user.Stats.ChangeHealth(Mathf.FloorToInt(value / 100.0f * user.Stats.stats.health));
+			return true;
+		}
+		return false;
 	}
 
 	public class VampiricWeaponEffect : EffectData
@@ -94,23 +137,23 @@ public class EffectData : ScriptableObject
 		}
 	}
 
-	public class AddHealthUsageEffect : EffectData
-	{
-		//[FormerlySerializedAs("HealthPurcentageAmount")]
-		public int HealthPercentageAmount = 20;
+	// public class AddHealthUsageEffect : EffectData
+	// {
+	// 	//[FormerlySerializedAs("HealthPurcentageAmount")]
+	// 	public int HealthPercentageAmount = 20;
 
-		public bool OnUse(CharacterData user)
-		{
-			if (user.Stats.CurrentHealth == user.Stats.stats.health)
-				return false;
+	// 	public bool OnUse(CharacterData user)
+	// 	{
+	// 		if (user.Stats.CurrentHealth == user.Stats.stats.health)
+	// 			return false;
 
-			VFXManager.PlayVFX(VFXType.Healing, user.transform.position);
+	// 		VFXManager.PlayVFX(VFXType.Healing, user.transform.position);
 
-			user.Stats.ChangeHealth(Mathf.FloorToInt(HealthPercentageAmount / 100.0f * user.Stats.stats.health));
+	// 		user.Stats.ChangeHealth(Mathf.FloorToInt(HealthPercentageAmount / 100.0f * user.Stats.stats.health));
 
-			return true;
-		}
-	}
+	// 		return true;
+	// 	}
+	// }
 
 	public class IncreaseStrengthEffect : EffectData
 	{

@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: 
   damageType: 0
   damageMount: 0
-  Modifier:
+  StatModifier:
     ModifierMode: 1
     Stats:
       health: 0
@@ -26,4 +26,5 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  HealthAmount: 10
+  EffectAmount: 10
+  EffectMode: 0

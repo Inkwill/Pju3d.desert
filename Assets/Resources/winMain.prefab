@@ -1839,7 +1839,7 @@ MonoBehaviour:
   OnLonePress:
     m_PersistentCalls:
       m_Calls: []
-  digSkill: {fileID: 11400000, guid: 1fc82fc3d5698504b84c150aaa48b59a, type: 2}
+  digSkill: {fileID: 11400000, guid: 7f60ce579d8803b43ba7a611bd95cafd, type: 2}
   bg: {fileID: 3121940511239542199}
   buildToggle: {fileID: 8166265232534555963}
 --- !u!1 &5459852121327606316
@@ -3170,6 +3170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   winTitle: {fileID: 0}
+  winMask: {fileID: 0}
   OpenClip: {fileID: 0}
   CloseClip: {fileID: 0}
   btWeapon: {fileID: 6583886385307271680}

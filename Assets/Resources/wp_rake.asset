@@ -19,7 +19,8 @@ MonoBehaviour:
     type: 3}
   SpawnClip: {fileID: 0}
   Slot: 5
-  EquippedEffects: []
+  EquippedEffects:
+  - {fileID: 11400000, guid: 878d83a822abf5343be75c7941912664, type: 2}
   damageType: 0
   Stats:
     Speed: 1

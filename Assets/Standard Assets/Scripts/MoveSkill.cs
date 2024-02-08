@@ -10,13 +10,10 @@ public class MoveSkill : Skill
 	public float Speed;
 	float m_baseSpeed = 0;
 
-	public override bool CanUsedBy(RoleControl user)
-	{
-		return user.isStandBy;
-	}
-	public override void Implement(RoleControl user)
+	public override void Implement(RoleControl user, GameObject target = null)
 	{
 		user.Speed = m_baseSpeed;
+		base.Implement(user, target);
 	}
 
 	public override void Operating(RoleControl user)
