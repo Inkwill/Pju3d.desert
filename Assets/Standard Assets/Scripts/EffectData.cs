@@ -6,7 +6,6 @@ using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
 using MyBox;
-using UnityEditor.PackageManager;
 
 [CreateAssetMenu(fileName = "EffectData", menuName = "Data/EffectData", order = 1)]
 public class EffectData : ScriptableObject
