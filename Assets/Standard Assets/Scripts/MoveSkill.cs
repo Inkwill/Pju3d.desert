@@ -10,13 +10,13 @@ public class MoveSkill : Skill
 	public float Speed;
 	float m_baseSpeed = 0;
 
-	public override void Implement(RoleControl user, GameObject target = null)
+	public override void Implement(RoleControl user, List<GameObject> targets = null)
 	{
 		user.Speed = m_baseSpeed;
-		base.Implement(user, target);
+		base.Implement(user, targets);
 	}
 
-	public override void Operating(RoleControl user)
+	public override void Operating(RoleControl user, List<GameObject> targets = null)
 	{
 		if (m_baseSpeed == 0) m_baseSpeed = user.Speed;
 		user.transform.Translate(Vector3.forward * Speed * Time.deltaTime);

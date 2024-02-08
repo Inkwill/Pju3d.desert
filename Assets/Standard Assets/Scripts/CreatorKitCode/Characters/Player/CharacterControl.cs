@@ -46,6 +46,8 @@ public class CharacterControl : RoleControl
 		Vector3 direction = Vector3.forward * GameManager.GameUI.JoyStick.Vertical + Vector3.right * GameManager.GameUI.JoyStick.Horizontal;
 		if (direction.magnitude > 0)
 		{
+			if (m_State == State.ATTACKING)
+				m_Animator.StopPlayback();
 			if (m_Destination != Vector3.zero) m_Destination = Vector3.zero;
 			Move(direction);
 		}

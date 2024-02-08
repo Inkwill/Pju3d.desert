@@ -23,10 +23,14 @@ public class Skill : ScriptableObject
 	[Header("Limit")]
 	public float CD;
 	public float MP;
+	public int EffectiveRadius;
+	public int MaxTargets = 1;
+	public LayerMask layers;
 	public bool IdleSkill;
 	[Header("Effect")]
 	public List<KeyValueData.KeyValue<EffectData, string[]>> implementEffects;
 	public List<KeyValueData.KeyValue<EffectData, string[]>> stepEffects;
+	public List<KeyValueData.KeyValue<EffectData, string[]>> operatEffects;
 
 	public virtual bool CanUsedBy(RoleControl user)
 	{
@@ -34,30 +38,35 @@ public class Skill : ScriptableObject
 		else return user.isStandBy;
 	}
 
-	public virtual void Implement(RoleControl user, GameObject target = null)
+	public virtual void Implement(RoleControl user, List<GameObject> targets = null)
 	{
-		foreach (var effect in implementEffects)
-		{
-			effect.Key.Take(user.Data, effect.Value, target);
-		}
+		if (implementEffects.Count > 0) TakeEffects(implementEffects, user, targets);
 		Debug.Log("Implement Skill:" + SkillName);
 	}
 
-	public virtual void Operating(RoleControl user)
+	public virtual void Operating(RoleControl user, List<GameObject> targets = null)
 	{
-		//Debug.Log("Operating Skill:" + SkillName);
+		if (operatEffects.Count > 0) TakeEffects(operatEffects, user, targets);
 	}
 
-	public virtual void StepEffect(RoleControl user, GameObject target = null)
+	public virtual void StepEffect(RoleControl user, List<GameObject> targets = null)
 	{
-		foreach (var effect in stepEffects)
-		{
-			effect.Key.Take(user.Data, effect.Value, target);
-		}
-		var Effectpos = (target != null) ? target.transform.position : user.transform.position;
+		if (stepEffects.Count > 0) TakeEffects(stepEffects, user, targets);
+		var Effectpos = (targets != null && targets.Count > 0) ? targets[0].transform.position : user.transform.position;
 		user.AudioPlayer.Attack(Effectpos);
 		VFXManager.PlayVFX(fxStep, Effectpos);
-		Debug.Log("StepEffect Skill:" + SkillName);
+		//Debug.Log("StepEffect Skill:" + SkillName);
 	}
 
+	void TakeEffects(List<KeyValueData.KeyValue<EffectData, string[]>> effectGroup, RoleControl user, List<GameObject> targets)
+	{
+		foreach (var effect in effectGroup)
+		{
+			foreach (var target in targets)
+			{
+				effect.Key.Take(user.Data, effect.Value, target);
+				Debug.Log("OnSkillTakeEffects: target= " + target);
+			}
+		}
+	}
 }

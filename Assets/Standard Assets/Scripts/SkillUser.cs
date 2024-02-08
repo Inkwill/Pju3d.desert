@@ -11,7 +11,7 @@ public class SkillUser : MonoBehaviour
 		public Skill skill;
 		public float cd;
 		public int mp;
-		public GameObject target;
+		public List<GameObject> targets;
 	}
 
 	public SkillEntry CurSkill => m_UseEntry;
@@ -43,16 +43,17 @@ public class SkillUser : MonoBehaviour
 			if (m_During < m_UseEntry.skill.Duration)
 			{
 				if (m_Animator) m_Animator.SetTrigger(m_UseEntry.skill.SkillAnim);
-				m_UseEntry.skill.Operating(m_role);
+				m_UseEntry.skill.Operating(m_role, m_UseEntry.targets);
 				m_eventSender?.Send(gameObject, "skillEvent_OnOperat");
 				m_During += Time.deltaTime;
 			}
 			else
 			{
-				m_UseEntry.skill.Implement(m_role, m_UseEntry.target);
+				m_UseEntry.skill.Implement(m_role, m_UseEntry.targets);
 				m_eventSender?.Send(gameObject, "skillEvent_OnImplement");
 				m_UseEntry = null;
 				m_During = 0;
+				m_role.BaseAI.SkillDetector.layers = LayerMask.GetMask("Nothing");
 			}
 		}
 	}
@@ -90,7 +91,10 @@ public class SkillUser : MonoBehaviour
 				Debug.Log("UseSkill: " + skill.SkillName + "cd =" + entry.cd);
 				entry.cd = entry.skill.CD;
 				entry.mp = 0;
-				entry.target = target;
+				m_role.BaseAI.SkillDetector.layers = entry.skill.layers;
+				m_role.BaseAI.SkillDetector.Radius = entry.skill.EffectiveRadius;
+				entry.targets = new List<GameObject>();
+				if (target && (entry.skill.layers & (1 << target.gameObject.layer)) != 0) entry.targets.Add(target);
 				m_UseEntry = entry;
 				return true;
 			}
@@ -109,6 +113,24 @@ public class SkillUser : MonoBehaviour
 	}
 	void SkillStep()
 	{
-		m_UseEntry?.skill.StepEffect(m_role, m_UseEntry.target);
+		m_UseEntry?.skill.StepEffect(m_role, m_UseEntry.targets);
+	}
+
+	public void AddTarget(GameObject target)
+	{
+		if (m_UseEntry != null && m_UseEntry.targets != null)
+		{
+			if (!m_UseEntry.targets.Contains(target) && m_UseEntry.targets.Count < m_UseEntry.skill.MaxTargets)
+				m_UseEntry.targets.Add(target);
+		}
+	}
+
+	public void RemoveTarget(GameObject target)
+	{
+		if (m_UseEntry != null && m_UseEntry.targets != null)
+		{
+			if (m_UseEntry.targets.Contains(target))
+				m_UseEntry.targets.Remove(target);
+		}
 	}
 }

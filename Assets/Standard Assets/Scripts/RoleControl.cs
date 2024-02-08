@@ -118,6 +118,8 @@ public class RoleControl : MonoBehaviour
 		{
 			if (item.Slot == EquipmentItem.EquipmentSlot.Weapon && WeaponLocator)
 			{
+				Weapon wp = item as Weapon;
+				BaseAI.EnemyDetector.Radius = System.Math.Max(wp.Stats.MaxRange, BaseAI.EnemyDetector.Radius);
 				if (!item.WorldObjectPrefab) return;
 				var obj = Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
 				Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
@@ -148,7 +150,7 @@ public class RoleControl : MonoBehaviour
 		if (m_SkillUser && m_State != State.SKILLING && m_SkillUser.CurSkill != null) { SetState(State.SKILLING); return; }
 		if (m_SkillUser && m_State == State.SKILLING && m_SkillUser.CurSkill == null) { SetState(State.IDLE); return; }
 		//ATTACK
-		if (m_State == State.ATTACKING)
+		if (m_State == State.ATTACKING && Data.CanAttack)
 		{
 			if (m_Enemy) CheckAttack();
 			else { SetState(State.IDLE); return; }
@@ -169,7 +171,7 @@ public class RoleControl : MonoBehaviour
 				LookAt(m_Enemy.transform);
 				m_Agent.SetDestination(m_Enemy.gameObject.transform.position);
 				m_eventSender?.Send(gameObject, "roleEvent_OnPursuing");
-				CheckAttack();
+				if (Data.CanAttack) CheckAttack();
 			}
 			else { SetState(State.IDLE); return; }
 		}
@@ -212,6 +214,8 @@ public class RoleControl : MonoBehaviour
 			LookAt(m_Enemy.transform);
 			if (m_CharacterData.CanAttackTarget(m_Enemy))
 			{
+				m_Animator.SetTrigger(m_AttackParamID);
+				m_CharacterData.AttackTriggered();
 				SetState(State.ATTACKING);
 			}
 		}
@@ -228,7 +232,7 @@ public class RoleControl : MonoBehaviour
 			VFXManager.PlayVFX(VFXType.Hit, attackPos);
 			SFXManager.PlaySound(m_CharacterAudio.UseType, new SFXManager.PlayData() { Clip = m_CharacterData.Equipment.Weapon.GetHitSound(), PitchMin = 0.8f, PitchMax = 1.2f, Position = attackPos });
 		}
-		else Debug.Log("Miss Attack! " + Data.CharacterName);
+		//else Debug.Log("Miss Attack! " + Data.CharacterName);
 		//SetState(State.PURSUING);
 	}
 	// if (m_Enemy && m_State == State.PURSUING)
@@ -266,7 +270,8 @@ public class RoleControl : MonoBehaviour
 
 	protected void SetState(State nextState)
 	{
-		if (m_State != nextState) { m_StateDuring = 0; m_State = nextState; }
+		if (m_State == nextState) return;
+		m_State = nextState;
 		m_eventSender?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
 		switch (m_State)
 		{
@@ -282,8 +287,6 @@ public class RoleControl : MonoBehaviour
 				break;
 			case State.ATTACKING:
 				m_Agent.isStopped = true;
-				m_CharacterData.AttackTriggered();
-				m_Animator.SetTrigger(m_AttackParamID);
 				break;
 			case State.SKILLING:
 				m_Agent.isStopped = true;

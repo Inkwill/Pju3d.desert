@@ -18,6 +18,7 @@ public class RoleAI : MonoBehaviour
 	public InteractOnTrigger EnemyDetector;
 	public InteractOnTrigger InteractDetector;
 	public InteractOnTrigger SceneDetector;
+	public InteractOnTrigger SkillDetector;
 	public bool Offensive { get { return m_Offensive; } set { } }
 
 	[ConditionalField(nameof(camp), false, Camp.ENEMY)]
@@ -41,15 +42,30 @@ public class RoleAI : MonoBehaviour
 	{
 		m_role = role;
 		m_role.eventSender.events.AddListener(OnRoleEvent);
-		EnemyDetector.OnEnter.AddListener(OnEnemyEnter);
-		EnemyDetector.OnExit.AddListener(OnEnemyExit);
-		EnemyDetector.OnEvent.AddListener(OnEnemyEvent);
-		InteractDetector.OnEnter.AddListener(OnInteracterEnter);
-		InteractDetector.OnExit.AddListener(OnInteracterExit);
-		InteractDetector.OnEvent.AddListener(OnInteracterEvent);
-		m_Renderer = SceneDetector.GetComponent<MeshRenderer>();
+		if (EnemyDetector)
+		{
+			EnemyDetector.OnEnter.AddListener(OnEnemyEnter);
+			EnemyDetector.OnExit.AddListener(OnEnemyExit);
+			EnemyDetector.OnEvent.AddListener(OnEnemyEvent);
+		}
+		if (InteractDetector)
+		{
+			InteractDetector.OnEnter.AddListener(OnInteracterEnter);
+			InteractDetector.OnExit.AddListener(OnInteracterExit);
+			InteractDetector.OnEvent.AddListener(OnInteracterEvent);
+		}
+		if (SkillDetector)
+		{
+			SkillDetector.OnEnter.AddListener(OnSkillTargetEnter);
+			SkillDetector.OnExit.AddListener(OnSkillTargetExit);
+			SkillDetector.OnEvent.AddListener(OnSkillTargetEvent);
+		}
+		if (SceneDetector)
+		{
+			m_Renderer = SceneDetector?.GetComponent<MeshRenderer>();
+			SceneDetector.layers = LayerMask.GetMask("Scene");
+		}
 		// m_role = role;
-		SceneDetector.layers = LayerMask.GetMask("Scene");
 		switch (m_role.BaseAI.camp)
 		{
 			case RoleAI.Camp.PLAYER:
@@ -115,7 +131,7 @@ public class RoleAI : MonoBehaviour
 		if (eventMessage == "roleEvent_OnState_DEAD")
 		{
 			//m_role.CurState = RoleControl.State.IDLE;
-			Debug.Log("OnEnemyEvent: target= " + sender + "event= " + eventMessage);
+			//Debug.Log("OnEnemyEvent: target= " + sender + "event= " + eventMessage);
 		}
 	}
 
@@ -144,6 +160,24 @@ public class RoleAI : MonoBehaviour
 		//Debug.Log("OnInteracterEvent: InteracterTarget= " + sender + "event= " + eventMessage);
 	}
 
+	void OnSkillTargetEnter(GameObject enter)
+	{
+		if (m_role.SkillUser && m_role.SkillUser.CurSkill != null) m_role.SkillUser.AddTarget(enter);
+		Debug.Log("OnSkillTargetEnter: enter= " + enter);
+	}
+
+	void OnSkillTargetExit(GameObject exiter)
+	{
+		if (m_role.SkillUser && m_role.SkillUser.CurSkill != null) m_role.SkillUser.RemoveTarget(exiter);
+		Debug.Log("OnSkillTargetExit: exiter= " + exiter);
+	}
+	void OnSkillTargetEvent(GameObject sender, string eventMessage)
+	{
+		if (eventMessage == "roleEvent_OnState_DEAD")
+		{
+			Debug.Log("OnSkillTargetEvent: target= " + sender + "event= " + eventMessage);
+		}
+	}
 	void Wandering()
 	{
 		float randomX = Random.Range(0f, m_WanderRadius);

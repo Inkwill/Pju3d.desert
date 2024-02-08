@@ -23,10 +23,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 878d83a822abf5343be75c7941912664, type: 2}
   damageType: 0
   Stats:
-    Speed: 1
+    Speed: 10
     MinimumDamage: 0
     MaximumDamage: 0
-    MaxRange: 4
+    MaxRange: 10
   AttackEffects: []
   HitSounds: []
   SwingSounds: []

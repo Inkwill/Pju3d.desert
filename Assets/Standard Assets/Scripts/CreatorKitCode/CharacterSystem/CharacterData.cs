@@ -122,7 +122,7 @@ namespace CreatorKitCode
 		public void AttackTriggered()
 		{
 			//Agility reduce by 0.5% the cooldown to attack (e.g. if agility = 50, 25% faster to attack)
-			m_AttackCoolDown = Equipment.Weapon.Stats.Speed - (Stats.stats.agility * 0.5f * 0.001f * Equipment.Weapon.Stats.Speed);
+			m_AttackCoolDown = Math.Min(0.1f, Equipment.Weapon.Stats.Speed - (Stats.stats.agility * 0.5f * 0.001f * Equipment.Weapon.Stats.Speed));
 		}
 		// /// <summary>
 		// /// Damage the Character by the AttackData given as parameter. See the documentation for that class for how to

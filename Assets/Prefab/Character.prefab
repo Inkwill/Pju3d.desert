@@ -273,6 +273,7 @@ MonoBehaviour:
   EnemyDetector: {fileID: 1134714616160843028}
   InteractDetector: {fileID: 4597439104978932822}
   SceneDetector: {fileID: 2035109682229800503}
+  SkillDetector: {fileID: 2222825981694970673}
   m_Offensive: 0
   m_WanderRadius: 10
   m_WanderBeat: 10
@@ -422,6 +423,18 @@ Transform:
 --- !u!114 &2035109682229800503 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 772668495364327086, guid: 54707c86cb650ed41a8c70adb389a0b9,
+    type: 3}
+  m_PrefabInstance: {fileID: 1623328442534619289}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a8342e09fc664842a38a661849c3696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2222825981694970673 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 602964386396529576, guid: 54707c86cb650ed41a8c70adb389a0b9,
     type: 3}
   m_PrefabInstance: {fileID: 1623328442534619289}
   m_PrefabAsset: {fileID: 0}
@@ -3092,6 +3105,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3d267ff6fabdc4e8b9a091ba04c8df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AttackStep:
+    m_PersistentCalls:
+      m_Calls: []
+  FootStep:
+    m_PersistentCalls:
+      m_Calls: []
+  SkillStep:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &8914532985230110127 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 02af3baa7b9b95743b17093e5aef9dd1,

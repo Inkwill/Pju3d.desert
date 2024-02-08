@@ -7,9 +7,23 @@ using UnityEngine.Events;
 public class InteractOnTrigger : MonoBehaviour
 {
 	public LayerMask layers;
+	public float Radius
+	{
+		get
+		{
+			if (m_capCollider) return m_capCollider.radius;
+			else return m_boxCollier.size.y;
+		}
+		set
+		{
+			if (m_capCollider) m_capCollider.radius = value;
+			else m_boxCollier.size = new Vector3(value, value, value);
+		}
+	}
 	public UnityEvent<GameObject> OnEnter, OnExit;
 	public UnityEvent<GameObject, string> OnEvent;
 
+	public List<GameObject> Inners { get { return interObjects; } }
 	public GameObject lastInner { get; private set; }
 	public GameObject lastExiter { get; private set; }
 
@@ -17,12 +31,15 @@ public class InteractOnTrigger : MonoBehaviour
 	bool once;
 
 	List<GameObject> interObjects;
-	Collider m_collider;
+	CapsuleCollider m_capCollider;
+	BoxCollider m_boxCollier;
 
 	void Start()
 	{
-		m_collider = GetComponent<Collider>();
-		m_collider.isTrigger = true;
+		m_capCollider = GetComponent<CapsuleCollider>();
+		m_boxCollier = GetComponent<BoxCollider>();
+		if (m_capCollider) m_capCollider.isTrigger = true;
+		if (m_boxCollier) m_boxCollier.isTrigger = true;
 		interObjects = new List<GameObject>();
 	}
 
@@ -48,7 +65,6 @@ public class InteractOnTrigger : MonoBehaviour
 
 	void OnTriggerExit(Collider other)
 	{
-
 		if (interObjects.Contains(other.gameObject))
 		{
 			lastExiter = other.gameObject;
@@ -65,6 +81,14 @@ public class InteractOnTrigger : MonoBehaviour
 		}
 		exiter.GetComponent<EventSender>()?.events.RemoveListener(OnInterEvent);
 		OnExit?.Invoke(exiter);
+	}
+
+	void OnTriggerStay(Collider other)
+	{
+		if (0 != (layers.value & 1 << other.gameObject.layer) && !interObjects.Contains(other.gameObject))
+		{
+			OnTriggerEnter(other);
+		}
 	}
 
 	public GameObject GetNearest()

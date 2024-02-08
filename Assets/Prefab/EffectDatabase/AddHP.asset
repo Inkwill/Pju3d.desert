@@ -26,5 +26,5 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  EffectAmount: 10
-  EffectMode: 0
+  EffectAmount: 0
+  EffectMode: 1

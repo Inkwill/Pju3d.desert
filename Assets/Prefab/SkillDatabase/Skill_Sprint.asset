@@ -15,14 +15,25 @@ MonoBehaviour:
   SkillName: Sprint
   SkillSprite: {fileID: 0}
   Description: 
+  Duration: 0.3
   SkillAnim: Skill
+  SkillClip: {fileID: 0}
   fxStep: 6
   fxOperating: 5
   fxImplement: 0
-  SkillClip: {fileID: 0}
-  Duration: 0.3
   CD: 10
   MP: 0
+  MaxTargets: 5
+  layers:
+    serializedVersion: 2
+    m_Bits: 128
+  IdleSkill: 0
   implementEffects: []
   stepEffects: []
+  operatEffects:
+  - Key: {fileID: 11400000, guid: 714b81e529d08a946ad472a661d85fcb, type: 2}
+    Value:
+    - -20
+  - Key: {fileID: 11400000, guid: 714b81e529d08a946ad472a661d85fcb, type: 2}
+    Value: []
   Speed: 30

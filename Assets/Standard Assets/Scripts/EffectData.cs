@@ -62,10 +62,12 @@ public class EffectData : ScriptableObject
 			case EffectType.DAMAGE:
 				return true;
 			case EffectType.HPCHANGE:
+				CharacterData changer = target ? target.GetComponent<CharacterData>() : user;
+				if (changer == null) return false;
 				int addMount;
 				if (param != null && param.Length > 0 && int.TryParse(param[0], out addMount))
-					return ChangeHealth(user, EffectAmount + addMount);
-				else return ChangeHealth(user, EffectAmount);
+					return ChangeHealth(changer, EffectAmount + addMount);
+				else return ChangeHealth(changer, EffectAmount);
 			case EffectType.DIG:
 				if (target != null)
 				{
@@ -113,7 +115,7 @@ public class EffectData : ScriptableObject
 		}
 		else if (EffectMode == StatSystem.StatModifier.Mode.Percentage)
 		{
-			if (user.Stats.CurrentHealth == user.Stats.stats.health)
+			if (user.Stats.CurrentHealth == user.Stats.stats.health && value > 0)
 				return true;
 			user.Stats.ChangeHealth(Mathf.FloorToInt(value / 100.0f * user.Stats.stats.health));
 			return true;
