@@ -91,6 +91,13 @@ public class RoleAI : MonoBehaviour
 		}
 	}
 
+	void Update()
+	{
+		if (m_role.isIdle && EnemyDetector.Inners.Count > 0)
+			m_role.CurrentEnemy = EnemyDetector.GetNearest().GetComponent<CharacterData>();
+
+	}
+
 	void OnRoleEvent(GameObject obj, string eventName)
 	{
 		if (eventName == "roleEvent_OnIdling")

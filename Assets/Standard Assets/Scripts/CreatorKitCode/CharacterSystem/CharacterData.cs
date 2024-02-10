@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CreatorKitCodeInternal;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ namespace CreatorKitCode
 		public EquipmentSystem Equipment = new EquipmentSystem();
 
 		public AudioClip[] HitClip;
+		public CharacterAudio AudioPlayer => m_CharacterAudio;
+		protected CharacterAudio m_CharacterAudio;
 
 		/// <summary>
 		/// Callback for when that CharacterData receive damage. E.g. used by the player character to trigger the right
@@ -51,6 +54,7 @@ namespace CreatorKitCode
 			Animator anim = GetComponentInChildren<Animator>();
 			if (anim != null)
 				SceneLinkedSMB<CharacterData>.Initialise(anim, this);
+			m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
 		}
 
 		// Update is called once per frame
@@ -110,7 +114,23 @@ namespace CreatorKitCode
 		/// <param name="target">The CharacterData you want to attack</param>
 		public void Attack(CharacterData target)
 		{
-			if (Equipment.Weapon) Equipment.Weapon.Attack(this, target);
+			if (Equipment.Weapon)
+			{
+				Equipment.Weapon.Attack(this, target);
+				if (Equipment.Weapon.Stats.AdditionalTargets > 0)
+				{
+					List<GameObject> targets = GetComponent<RoleAI>()?.EnemyDetector.Inners;
+					int addNum = 0;
+					foreach (GameObject t in targets)
+					{
+						if (t != target.gameObject && addNum < Equipment.Weapon.Stats.AdditionalTargets)
+						{
+							Equipment.Weapon.Attack(this, t.GetComponent<CharacterData>());
+							addNum++;
+						}
+					}
+				}
+			}
 			else Debug.LogError("Character missing weapon : " + gameObject);
 		}
 

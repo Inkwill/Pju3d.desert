@@ -93,9 +93,8 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public static string SceneBoxInfo(bool display)
+	public static string SceneBoxInfo(GameObject sceneBox, bool display)
 	{
-		GameObject sceneBox = Player.BaseAI.SceneDetector.lastInner;
 		if (!sceneBox) return display ? "空地" : "blank";
 		string sceneTag = sceneBox.tag;
 		switch (sceneTag)

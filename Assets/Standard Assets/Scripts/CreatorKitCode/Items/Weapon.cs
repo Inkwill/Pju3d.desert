@@ -17,26 +17,11 @@ namespace CreatorKitCode
 	/// </summary>
 	public class Weapon : EquipmentItem
 	{
-		/// <summary>
-		/// Base class of all effect you can add on a weapon to specialize it. See documentation on How to write a new
-		/// Weapon Effect.
-		/// </summary>
-		public abstract class WeaponAttackEffect : ScriptableObject
-		{
-			// public string Description;
-
-			// //return the amount of physical damage. If no change, just return physicalDamage passed as parameter
-			// public virtual void OnAttack(CharacterData target, CharacterData user, ref AttackData data) { }
-
-			// //called after all weapon effect where applied, allow to react to the total amount of damage applied
-			// public virtual void OnPostAttack(CharacterData target, CharacterData user, AttackData data) { }
-
-			// public virtual string GetDescription()
-			// {
-			// 	return Description;
-			// }
-		}
 		public StatSystem.DamageType damageType;
+		public Skill WeaponSkill;
+		public Bullet bulletPb;
+		public Transform bulletTrans;
+
 		[System.Serializable]
 		public struct Stat
 		{
@@ -44,9 +29,10 @@ namespace CreatorKitCode
 			public int MinimumDamage;
 			public int MaximumDamage;
 			public float MaxRange;
+			public int AdditionalTargets;
 		}
 		[Header("Stats")]
-		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1 };
+		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1, AdditionalTargets = 0 };
 		public List<EffectData> AttackEffects;
 
 		[Header("Sounds")]
@@ -60,7 +46,14 @@ namespace CreatorKitCode
 			Damage damage = new Damage(target, attacker);
 			int damageNum = Random.Range(Stats.MinimumDamage, Stats.MaximumDamage + 1);
 			damage.AddDamage(damageType, damageNum);
-			damage.Take();
+			if (bulletPb != null)
+			{
+				Vector3 bulletPos = attacker.GetComponent<RoleControl>().WeaponLocator.position;
+				Bullet bullet = Instantiate(bulletPb, bulletPos, Quaternion.Euler(0, 180, 0));
+				bullet.damage = damage;
+				bullet.target = target;
+			}
+			else damage.Take();
 			//foreach (var wae in AttackEffects)
 			//wae.OnAttack(target, attacker, ref attackEffect);
 

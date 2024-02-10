@@ -19,8 +19,7 @@ public class RoleControl : MonoBehaviour
 	[Header("Base")]
 	public float Speed = 6.0f;
 	public Weapon DefaultWeapon;
-	[SerializeField]
-	Transform WeaponLocator;
+	public Transform WeaponLocator;
 	public CharacterData Data => m_CharacterData;
 	protected CharacterData m_CharacterData;
 	public EventSender eventSender => m_eventSender;
@@ -66,8 +65,7 @@ public class RoleControl : MonoBehaviour
 	[Header("Audio")]
 	public AudioClip[] SpurSoundClips;
 	public AudioClip[] SpottedAudioClip;
-	public CharacterAudio AudioPlayer => m_CharacterAudio;
-	protected CharacterAudio m_CharacterAudio;
+
 
 	void Awake()
 	{
@@ -104,12 +102,10 @@ public class RoleControl : MonoBehaviour
 
 		m_SkillUser = GetComponent<SkillUser>();
 
-		m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
-
 		m_CharacterData.OnDamage += (damage) =>
 		{
 			m_Animator.SetTrigger(m_HitParamID);
-			m_CharacterAudio.Hit(transform.position);
+			Data.AudioPlayer.Hit(transform.position);
 			m_eventSender?.Send(gameObject, "roleEvent_OnDamage");
 			DamageUI.Instance.NewDamage(damage.GetFullDamage(), transform.position);
 		};
@@ -120,6 +116,7 @@ public class RoleControl : MonoBehaviour
 			{
 				Weapon wp = item as Weapon;
 				BaseAI.EnemyDetector.Radius = System.Math.Max(wp.Stats.MaxRange, BaseAI.EnemyDetector.Radius);
+				wp.bulletTrans = WeaponLocator;
 				if (!item.WorldObjectPrefab) return;
 				var obj = Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
 				Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
@@ -227,10 +224,6 @@ public class RoleControl : MonoBehaviour
 		if (m_Enemy && m_CharacterData.CanAttackReach(m_Enemy))
 		{
 			m_CharacterData.Attack(m_Enemy);
-
-			var attackPos = m_Enemy.transform.position + transform.up * 0.5f;
-			VFXManager.PlayVFX(VFXType.Hit, attackPos);
-			SFXManager.PlaySound(m_CharacterAudio.UseType, new SFXManager.PlayData() { Clip = m_CharacterData.Equipment.Weapon.GetHitSound(), PitchMin = 0.8f, PitchMax = 1.2f, Position = attackPos });
 		}
 		//else Debug.Log("Miss Attack! " + Data.CharacterName);
 		//SetState(State.PURSUING);
@@ -272,6 +265,7 @@ public class RoleControl : MonoBehaviour
 	{
 		if (m_State == nextState) return;
 		m_State = nextState;
+		m_StateDuring = 0;
 		m_eventSender?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
 		switch (m_State)
 		{
@@ -295,7 +289,7 @@ public class RoleControl : MonoBehaviour
 				m_Agent.isStopped = true;
 				m_Agent.enabled = false;
 				m_Animator.SetTrigger(m_DeathParamID);
-				m_CharacterAudio.Death(transform.position);
+				Data.AudioPlayer.Death(transform.position);
 				m_CharacterData.Death();
 				Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("EnemyCorpse"));
 				// if (m_LootSpawner != null)
@@ -320,7 +314,7 @@ public class RoleControl : MonoBehaviour
 	void FootstepFrame()
 	{
 		Vector3 pos = transform.position;
-		m_CharacterAudio.Step(pos);
+		Data.AudioPlayer.Step(pos);
 		VFXManager.PlayVFX(VFXType.StepPuff, pos);
 
 		if (SpurSoundClips.Length > 0)

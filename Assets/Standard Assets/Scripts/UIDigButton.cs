@@ -3,33 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIDigButton : UIEventSender
+public class UIDigButton : UISkillButton
 {
-	public Skill digSkill;
 	public Image bg;
 	public Image buildToggle;
 	bool m_buildToggle;
 
-	void Start()
+	protected override void OnStart()
 	{
 		SetBuildToggle(false);
-		GameManager.Player.SkillUser.AddSkill(digSkill);
-		OnLonePress.AddListener(() => SetBuildToggle(!m_buildToggle));
-		OnClick.AddListener(() =>
-				{
-					if (GameManager.SceneBoxInfo(false) == "blank")
-					{
-						GameManager.Player.SkillUser.UseSkill(digSkill);
-						SetBuildToggle(false);
-					}
-				});
 	}
+
+	protected override void ShowSkillTips()
+	{
+		SetBuildToggle(!m_buildToggle);
+		base.ShowSkillTips();
+	}
+
+
 	void FixedUpdate()
 	{
-		switch (GameManager.SceneBoxInfo(false))
+		switch (GameManager.SceneBoxInfo(GameManager.Player.BaseAI.SceneDetector.lastInner, false))
 		{
 			case "blank":
-				bg.color = GameManager.Player.BaseAI.BuildRender.material.color = Color.green;
+				bg.color = GameManager.Player.BaseAI.BuildRender.material.color = Color.white;
 				break;
 			default:
 				bg.color = GameManager.Player.BaseAI.BuildRender.material.color = Color.red;

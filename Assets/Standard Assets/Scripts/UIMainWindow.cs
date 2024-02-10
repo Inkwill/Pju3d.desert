@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class UIMainWindow : UIWindow
 {
 
-	public Button btWeapon;
+	public UISkillButton btWeapon;
 	public Button btSwitchWeapon;
 	public Image iconWeapon;
 	public Text infoPos;
@@ -22,7 +22,6 @@ public class UIMainWindow : UIWindow
 		switch_buttons = new List<Button>();
 		targetUI.Init();
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
-		GameManager.Player.SkillUser.AddSkill(sprintSkill);
 	}
 	protected override void OnOpen()
 	{
@@ -37,26 +36,27 @@ public class UIMainWindow : UIWindow
 
 	void UpdateWeapon(EquipmentSystem equipment)
 	{
-		btWeapon.gameObject.SetActive(equipment.Weapon || equipment.ViceWeapon);
+		btWeapon.gameObject.SetActive(equipment.Weapon && equipment.Weapon != GameManager.Player.DefaultWeapon);
 		btSwitchWeapon.gameObject.SetActive(equipment.ViceWeapon != null);
-		iconWeapon.enabled = (equipment.Weapon != null);
-		if (equipment.Weapon) iconWeapon.sprite = equipment.Weapon.ItemSprite;
+		iconWeapon.enabled = (btWeapon.gameObject.activeSelf);
+		if (btWeapon.gameObject.activeSelf)
+		{
+			btWeapon.Init(equipment.Weapon.WeaponSkill);
+			iconWeapon.sprite = equipment.Weapon.ItemSprite;
+		}
 	}
 	void FixedUpdate()
 	{
 		infoPos.text = GameManager.Player.gameObject.transform.position.ToString();
-		infoTerrian.text = GameManager.SceneBoxInfo(true);
+		infoTerrian.text = GameManager.SceneBoxInfo(GameManager.Player.BaseAI.SceneDetector.lastInner, true);
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
-		btWeapon.interactable = btSwitchWeapon.interactable = GameManager.Player.isIdle;
+		btSwitchWeapon.interactable = GameManager.Player.isStandBy;
 	}
 
 	public override void OnButtonClick(string eventName)
 	{
 		switch (eventName)
 		{
-			case "UseWeapon":
-				//GameManager.Player.UseSkill(digSkill);
-				break;
 			case "SwitchWeapon":
 				GameManager.Player.Data.Equipment.SwitchWeapon();
 				UpdateWeapon(GameManager.Player.Data.Equipment);
@@ -67,9 +67,6 @@ public class UIMainWindow : UIWindow
 				break;
 			case "package":
 				GameManager.GameUI.SwitchWindow("winInventory");
-				break;
-			case "roleSkill":
-				GameManager.Player.SkillUser.UseSkill(sprintSkill, GameManager.Player.gameObject);
 				break;
 			default:
 				break;

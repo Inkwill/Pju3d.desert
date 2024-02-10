@@ -21,6 +21,7 @@ public class Damage
 	{
 		int totalDamage = GetFullDamage();
 		target.Stats.ChangeHealth(-totalDamage);
+		var damagePos = target.transform.position + target.transform.up * 0.5f;
 		if (target.HitClip.Length != 0)
 		{
 			SFXManager.PlaySound(SFXManager.Use.Player, new SFXManager.PlayData()
@@ -28,12 +29,14 @@ public class Damage
 				Clip = target.HitClip[Random.Range(0, target.HitClip.Length)],
 				PitchMax = 1.1f,
 				PitchMin = 0.8f,
-				Position = target.transform.position
+				Position = damagePos
 			});
 		}
+		VFXManager.PlayVFX(VFXType.Hit, damagePos);
+		SFXManager.PlaySound(m_Source.AudioPlayer.UseType, new SFXManager.PlayData() { Clip = m_Source.Equipment.Weapon.GetHitSound(), PitchMin = 0.8f, PitchMax = 1.2f, Position = damagePos });
 		target.OnDamage?.Invoke(this);
 	}
-	
+
 	public void Take() { Take(m_Target); }
 
 	public int AddDamage(StatSystem.DamageType damageType, int amount)

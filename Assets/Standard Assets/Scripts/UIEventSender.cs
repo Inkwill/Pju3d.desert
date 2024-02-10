@@ -9,6 +9,8 @@ public class UIEventSender : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 //, IPointerEnterHandler, IPointerExitHandler,IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	public float longPressDuration = 1.0f;
+	public bool canClick { get { return m_canClick; } set { m_canClick = value; } }
+	bool m_canClick;
 	float pressTime;
 	bool m_longpress;
 
@@ -26,12 +28,16 @@ public class UIEventSender : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 				OnLonePress?.Invoke();
 				m_longpress = true;
 				pressTime = 0; // 重置长按持续时间
+				return;
 			}
 		}
+		OnUpdate();
 	}
+
+	protected virtual void OnUpdate() { }
 	public void OnPointerClick(PointerEventData eventData)
 	{
-		if (!m_longpress) OnClick?.Invoke();
+		if (!m_longpress && m_canClick) OnClick?.Invoke();
 	}
 
 	public void OnPointerDown(PointerEventData eventData)

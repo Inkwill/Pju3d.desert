@@ -71,7 +71,8 @@ public class UITargetInfo : MonoBehaviour
 		switch (eventName)
 		{
 			case "roleEvent_OnDamage":
-				enemyHp.value = GameManager.Player.CurrentEnemy.Stats.CurrentHealth;
+				CharacterData data = obj.GetComponent<CharacterData>();
+				enemyHp.value = data != null ? data.Stats.CurrentHealth : 0;
 				break;
 			default:
 				break;

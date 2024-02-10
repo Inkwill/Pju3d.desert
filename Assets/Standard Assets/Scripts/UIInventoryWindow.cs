@@ -59,7 +59,14 @@ public class UIInventoryWindow : UIWindow
 	{
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
+		GameManager.Instance.CameraCtrl.SetDistance(0);
 		Load();
+	}
+
+	protected override void OnClose()
+	{
+		GameManager.Instance.CameraCtrl.SetDistance();
+		base.OnClose();
 	}
 	public void Load()
 	{

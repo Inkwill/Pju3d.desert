@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCodeInternal;
 using CreatorKitCode;
+using MyBox;
 
 [CreateAssetMenu(fileName = "Skill", menuName = "Data/Skill", order = 1)]
 public class Skill : ScriptableObject
@@ -20,17 +21,30 @@ public class Skill : ScriptableObject
 	public VFXType fxOperating;
 	public VFXType fxImplement;
 
+	public enum TargetType
+	{
+		SELF,
+		SCENEBOX,
+		CURRENT,
+		NONE
+	}
+
 	[Header("Limit")]
+	public TargetType TType;
 	public float CD;
 	public float MP;
-	public int EffectiveRadius;
-	public int MaxTargets = 1;
-	public LayerMask layers;
 	public bool IdleSkill;
 	[Header("Effect")]
 	public List<KeyValueData.KeyValue<EffectData, string[]>> implementEffects;
 	public List<KeyValueData.KeyValue<EffectData, string[]>> stepEffects;
 	public List<KeyValueData.KeyValue<EffectData, string[]>> operatEffects;
+	[ConditionalField(nameof(TType), false, TargetType.NONE)]
+	public int radius;
+	[ConditionalField(nameof(TType), false, TargetType.NONE)]
+	public int AddTargets;
+	[ConditionalField(nameof(TType), false, TargetType.NONE)]
+	public LayerMask layers;
+
 
 	public virtual bool CanUsedBy(RoleControl user)
 	{
@@ -53,7 +67,7 @@ public class Skill : ScriptableObject
 	{
 		if (stepEffects.Count > 0) TakeEffects(stepEffects, user, targets);
 		var Effectpos = (targets != null && targets.Count > 0) ? targets[0].transform.position : user.transform.position;
-		user.AudioPlayer.Attack(Effectpos);
+		user.Data.AudioPlayer.Attack(Effectpos);
 		VFXManager.PlayVFX(fxStep, Effectpos);
 		//Debug.Log("StepEffect Skill:" + SkillName);
 	}

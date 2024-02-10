@@ -12,29 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84953c7d7aa09894983e5c336685d041, type: 3}
   m_Name: Skill_Dig
   m_EditorClassIdentifier: 
-  SkillName: DigPit
+  SkillName: Dig
   SkillSprite: {fileID: 0}
   Description: 
-  Duration: 5
+  Duration: 10
   SkillAnim: Skill
   SkillClip: {fileID: 0}
   fxStep: 0
   fxOperating: 0
   fxImplement: 6
+  TType: 1
   CD: 10
   MP: 0
-  EffectiveRadius: 10
-  MaxTargets: 3
-  layers:
-    serializedVersion: 2
-    m_Bits: 128
   IdleSkill: 1
   implementEffects:
   - Key: {fileID: 11400000, guid: 5a5deaa6e62beb846b029334991f1576, type: 2}
     Value:
     - Pit
   stepEffects:
-  - Key: {fileID: 11400000, guid: 714b81e529d08a946ad472a661d85fcb, type: 2}
+  - Key: {fileID: 11400000, guid: 5c9188bcde34db54787a9bf9632b2c37, type: 2}
     Value:
-    - -1
+    - 1
   operatEffects: []
+  radius: 0
+  AddTargets: 0
+  layers:
+    serializedVersion: 2
+    m_Bits: 0

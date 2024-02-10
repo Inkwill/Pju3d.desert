@@ -58,7 +58,7 @@ public class SkillUser : MonoBehaviour
 		}
 	}
 
-	SkillEntry GetEntry(string index)
+	public SkillEntry GetEntry(string index)
 	{
 		if (m_SkillEntries.Count < 1) return null;
 		return m_SkillEntries.Where(sk => sk.skill.SkillName == index).FirstOrDefault();
@@ -75,7 +75,23 @@ public class SkillUser : MonoBehaviour
 		Debug.Log("AddSkill:" + skill.SkillName);
 	}
 
-	public bool UseSkill(Skill skill, GameObject target = null)
+
+	public bool UseSkill(Skill skill)
+	{
+		switch (skill.TType)
+		{
+			case Skill.TargetType.SELF:
+				return UseSkill(skill, m_role.gameObject);
+			case Skill.TargetType.SCENEBOX:
+				return UseSkill(skill, m_role.BaseAI.SceneDetector?.gameObject);
+			case Skill.TargetType.CURRENT:
+				return UseSkill(skill, m_role.CurrentEnemy?.gameObject);
+			default:
+				return UseSkill(skill, null);
+		}
+
+	}
+	public bool UseSkill(Skill skill, GameObject target)
 	{
 		if (m_UseEntry != null) return false;
 		SkillEntry entry = GetEntry(skill.SkillName);
@@ -86,18 +102,26 @@ public class SkillUser : MonoBehaviour
 				Debug.Log("Can't UseSkill:" + skill.SkillName + "cd =" + entry.cd);
 				return false;
 			}
-			else
+			if (entry.skill.TType == Skill.TargetType.CURRENT && target == null)
 			{
-				Debug.Log("UseSkill: " + skill.SkillName + "cd =" + entry.cd);
-				entry.cd = entry.skill.CD;
-				entry.mp = 0;
-				m_role.BaseAI.SkillDetector.layers = entry.skill.layers;
-				m_role.BaseAI.SkillDetector.Radius = entry.skill.EffectiveRadius;
-				entry.targets = new List<GameObject>();
-				if (target && (entry.skill.layers & (1 << target.gameObject.layer)) != 0) entry.targets.Add(target);
-				m_UseEntry = entry;
-				return true;
+				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_role.CurrentEnemy);
+				return false;
+				// if (m_role.CurrentEnemy == null || (entry.skill.layers & (1 << m_role.CurrentEnemy.gameObject.layer)) == 0)
 			}
+			if (entry.skill.TType == Skill.TargetType.SCENEBOX && GameManager.SceneBoxInfo(m_role.BaseAI.SceneDetector.lastInner, false) != "blank")
+			{
+				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + GameManager.SceneBoxInfo(m_role.BaseAI.SceneDetector.lastInner, false));
+				return false;
+			}
+			Debug.Log("UseSkill: " + skill.SkillName + "cd =" + entry.cd);
+			m_role.BaseAI.SkillDetector.layers = entry.skill.layers;
+			m_role.BaseAI.SkillDetector.Radius = entry.skill.radius;
+			entry.targets = new List<GameObject>();
+			if (target != null) entry.targets.Add(target);
+			entry.cd = entry.skill.CD;
+			entry.mp = 0;
+			m_UseEntry = entry;
+			return true;
 		}
 		else
 		{
@@ -120,7 +144,7 @@ public class SkillUser : MonoBehaviour
 	{
 		if (m_UseEntry != null && m_UseEntry.targets != null)
 		{
-			if (!m_UseEntry.targets.Contains(target) && m_UseEntry.targets.Count < m_UseEntry.skill.MaxTargets)
+			if (!m_UseEntry.targets.Contains(target) && m_UseEntry.targets.Count < 1 + m_UseEntry.skill.AddTargets)
 				m_UseEntry.targets.Add(target);
 		}
 	}
