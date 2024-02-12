@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
 	KeyValueData DemoData;
 
 	InventorySystem.ItemDemand testDemand;
+
+	public DropBox testDropBox;
 	private void Awake()
 	{
 		Instance = this;
@@ -68,7 +70,10 @@ public class GameManager : MonoBehaviour
 	{
 		if (Input.GetKeyDown("space"))
 		{
-			Player.CurState = RoleControl.State.ATTACKING;
+			foreach (var dropbox in testDropBox.GetDropItem())
+			{
+				Debug.Log("drop item : " + dropbox.item + " num= " + dropbox.itemNum);
+			}
 		}
 
 		// if (Input.GetKeyDown(KeyCode.Return))

@@ -114,8 +114,12 @@ public class RoleAI : MonoBehaviour
 			if (!m_Offensive) m_Offensive = true;
 			if (!m_role.CurrentEnemy) m_role.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
 		}
-		UIRoleHud hud = m_role.GetComponentInChildren<UIRoleHud>();
-		if (hud != null) hud.Bubble(eventName);
+		if (camp != Camp.PLAYER && eventName == "roleEvent_OnPursuing")
+		{
+			m_role.Pursuing();
+		}
+		// UIRoleHud hud = m_role.GetComponentInChildren<UIRoleHud>();
+		// if (hud != null) hud.Bubble(eventName);
 	}
 
 	void OnEnemyEnter(GameObject enter)

@@ -121,7 +121,7 @@ namespace CreatorKitCodeInternal
 
 			RectTransform t = transform as RectTransform;
 
-			transform.SetParent(Owner.CurrentlyDragged.OriginalParent, true);
+			//transform.SetParent(Owner.CurrentlyDragged.OriginalParent, true);
 
 			t.offsetMax = -Vector2.one * 4;
 			t.offsetMin = Vector2.one * 4;

@@ -231,7 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameplayCamera: {fileID: 963194227}
   MinAngle: 10
-  MaxAngle: 30
+  MaxAngle: 35
   MinDistance: 10
   MaxDistance: 15
 --- !u!114 &3218443
@@ -73678,6 +73678,7 @@ MonoBehaviour:
   prefab_gameui: {fileID: 3615227413832385651, guid: 14fb6a8134ee17941a103a80c429a6b3,
     type: 3}
   DemoData: {fileID: 11400000, guid: 507527e0e127b97469cb84425e490aef, type: 2}
+  testDropBox: {fileID: 11400000, guid: 1e1f26041e5ddf942a4012d99e22b604, type: 2}
 --- !u!224 &5564097808944322120
 RectTransform:
   m_ObjectHideFlags: 0

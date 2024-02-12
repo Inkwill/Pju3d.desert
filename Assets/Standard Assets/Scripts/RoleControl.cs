@@ -166,7 +166,6 @@ public class RoleControl : MonoBehaviour
 			if (m_Enemy)
 			{
 				LookAt(m_Enemy.transform);
-				m_Agent.SetDestination(m_Enemy.gameObject.transform.position);
 				m_eventSender?.Send(gameObject, "roleEvent_OnPursuing");
 				if (Data.CanAttack) CheckAttack();
 			}
@@ -346,6 +345,11 @@ public class RoleControl : MonoBehaviour
 	{
 		m_Destination = pos;
 		SetState(State.MOVE);
+	}
+
+	public void Pursuing()
+	{
+		m_Agent.SetDestination(m_Enemy.gameObject.transform.position);
 	}
 }
 

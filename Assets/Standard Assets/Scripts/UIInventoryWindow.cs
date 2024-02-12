@@ -7,14 +7,14 @@ using CreatorKitCodeInternal;
 
 public class UIInventoryWindow : UIWindow
 {
-	public class DragData
-	{
-		public UIInventorySlot DraggedEntry;
-		public RectTransform OriginalParent;
-	}
+	// public class DragData
+	// {
+	// 	public UIInventorySlot DraggedEntry;
+	// 	public RectTransform OriginalParent;
+	// }
 
 	public RectTransform ItemSlots;
-
+	public Text textStats;
 	public Item testItem;
 	public Item testItem1;
 
@@ -28,7 +28,7 @@ public class UIInventoryWindow : UIWindow
 	public UIInventorySlot WeaponSlot_1;
 	public UIInventorySlot WeaponSlot_2;
 
-	public DragData CurrentlyDragged { get; set; }
+	//public DragData CurrentlyDragged { get; set; }
 	public CanvasScaler DragCanvasScaler { get; private set; }
 
 	UIInventorySlot[] m_ItemEntries;
@@ -36,7 +36,7 @@ public class UIInventoryWindow : UIWindow
 
 	void Awake()
 	{
-		CurrentlyDragged = null;
+		//CurrentlyDragged = null;
 
 		DragCanvasScaler = GameManager.GameUI.DragCanvas.GetComponentInParent<CanvasScaler>();
 		m_ItemEntries = ItemSlots.GetComponentsInChildren<UIInventorySlot>();
@@ -60,6 +60,8 @@ public class UIInventoryWindow : UIWindow
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
 		GameManager.Instance.CameraCtrl.SetDistance(0);
+		StatSystem.Stats stats = GameManager.Player.Data.Stats.stats;
+		textStats.text = $"Str : {stats.strength} Def : {stats.defense} Agi : {stats.agility}  Spr : {stats.spirit}";
 		Load();
 	}
 
