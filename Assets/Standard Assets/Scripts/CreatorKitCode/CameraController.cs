@@ -102,7 +102,7 @@ namespace CreatorKitCodeInternal
 					m_setDistance = 1.0f;
 					break;
 				case 1.0f:
-					m_setDistance = 0f;
+					m_setDistance = 0.5f;
 					break;
 				default:
 					break;

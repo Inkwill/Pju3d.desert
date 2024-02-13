@@ -24,7 +24,7 @@ public class DropBox : ScriptableObject
     public List<DropItem> BoxContent;
 
     [ContextMenu("Initialize")]
-    private void Initialize()
+    void Initialize()
     {
         BoxContent = AccumulateWeight(BoxContent);
     }

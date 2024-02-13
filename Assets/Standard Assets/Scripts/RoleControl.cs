@@ -290,7 +290,6 @@ public class RoleControl : MonoBehaviour
 				m_Animator.SetTrigger(m_DeathParamID);
 				Data.AudioPlayer.Death(transform.position);
 				m_CharacterData.Death();
-				Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("EnemyCorpse"));
 				// if (m_LootSpawner != null)
 				// 	m_LootSpawner.SpawnLoot();
 				//Destroy(m_Agent);

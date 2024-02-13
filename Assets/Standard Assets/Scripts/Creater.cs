@@ -6,8 +6,6 @@ using CreatorKitCodeInternal;
 public class Creater : TimerBehaviour
 {
 	public GameObject fxProgress;
-
-	protected float digDeep;
 	protected float m_initialDeep;
 	[SerializeField]
 	protected string creatPrefab;
@@ -19,14 +17,6 @@ public class Creater : TimerBehaviour
 	{
 		creatPrefab = pbName;
 		m_character = character;
-		switch (pbName)
-		{
-			case "pit":
-				digDeep = 0.1f;
-				break;
-			default:
-				break;
-		}
 		isStarted = true;
 	}
 
@@ -63,10 +53,5 @@ public class Creater : TimerBehaviour
 			GameObject obj = Instantiate(createObj, trans.position, Quaternion.Euler(0, 180, 0)) as GameObject;
 			//GameObject obj = Instantiate(prefab, builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
 		}
-	}
-
-	protected override void OnProcessing(float completed)
-	{
-		if (digDeep > 0) GameManager.Instance.TerrainTool.LowerTerrain(transform.position, digDeep * 0.01f, 5, 5);
 	}
 }
