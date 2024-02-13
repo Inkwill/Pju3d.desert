@@ -185,7 +185,7 @@ public class RoleControl : MonoBehaviour
 		//IDLE
 		if (m_State == State.IDLE)
 		{
-			if (m_Enemy && m_Ai.Offensive) { SetState(State.PURSUING); return; }
+			if (m_Enemy) { SetState(State.PURSUING); return; }
 			m_eventSender?.Send(gameObject, "roleEvent_OnIdling");
 		}
 		//PlayMove
@@ -349,6 +349,7 @@ public class RoleControl : MonoBehaviour
 	public void Pursuing()
 	{
 		m_Agent.SetDestination(m_Enemy.gameObject.transform.position);
+		SetState(State.PURSUING);
 	}
 }
 

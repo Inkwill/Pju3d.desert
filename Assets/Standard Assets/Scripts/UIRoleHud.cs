@@ -36,6 +36,9 @@ public class UIRoleHud : MonoBehaviour
 	{
 		switch (eventName)
 		{
+			case "roleEvent_OnState_IDLE":
+				sliderHp?.gameObject.SetActive(false);
+				break;
 			case "roleEvent_OnState_ATTACKING":
 			case "roleEvent_OnState_PURSUING":
 				sliderHp?.gameObject.SetActive(true);

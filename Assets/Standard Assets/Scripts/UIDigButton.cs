@@ -26,10 +26,10 @@ public class UIDigButton : UISkillButton
 		switch (GameManager.SceneBoxInfo(GameManager.Player.BaseAI.SceneDetector.lastInner, false))
 		{
 			case "blank":
-				bg.color = GameManager.Player.BaseAI.BuildRender.material.color = Color.white;
+				bg.color = Color.white;
 				break;
 			default:
-				bg.color = GameManager.Player.BaseAI.BuildRender.material.color = Color.red;
+				bg.color = Color.red;
 				break;
 		}
 	}
@@ -38,6 +38,6 @@ public class UIDigButton : UISkillButton
 	{
 		m_buildToggle = value;
 		buildToggle.enabled = value;
-		GameManager.Player.BaseAI.BuildRender.enabled = value;
+		//GameManager.Player.BaseAI.BuildRender.enabled = value;
 	}
 }
