@@ -7,5 +7,6 @@ public enum VFXType
 	Negative,
 	Stronger,
 	SmokePoof,
-	Death
+	Death,
+	NONE
 }

@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
-using Random = UnityEngine.Random;
 
-public class InteractSystem : MonoBehaviour
+public class InteractSystem : HighlightableObject
 {
 	RoleControl m_role;
-	public DropBox dropBox;
-
+	public List<EffectData> DeadEffects;
 	void Start()
 	{
 		m_role = GetComponent<RoleControl>();
@@ -19,34 +17,19 @@ public class InteractSystem : MonoBehaviour
 	{
 		if (eventName == "roleEvent_OnState_DEAD")
 		{
-			foreach (var drop in dropBox.GetDropItem())
+			foreach (var eff in DeadEffects)
 			{
-				DropItem(drop.item, drop.itemNum);
-				Debug.Log("drop item : " + drop.item + " num= " + drop.itemNum);
+				eff.Take(m_role.Data);
 			}
 			Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("EnemyCorpse"));
 			StartCoroutine(DestroyCorpse());
 		}
-
 	}
 
 	IEnumerator DestroyCorpse()
 	{
-		VFXManager.PlayVFX(VFXType.SmokePoof, transform.position);
 		yield return new WaitForSeconds(1.0f);
 		VFXManager.PlayVFX(VFXType.Death, transform.position);
 		Destroy(gameObject);
-	}
-
-	void DropItem(Item item, int num)
-	{
-		GameObject lootObj = Resources.Load("Loot") as GameObject;
-		Vector3 direction = Quaternion.Euler(0, Random.Range(0, 360), 0) * Vector3.right;
-		Vector3 spawnPosition = transform.position + direction * Random.Range(0, 2);
-		for (int i = 0; i < num; i++)
-		{
-			Loot loot = Instantiate(lootObj, spawnPosition, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
-			loot.Item = item;
-		}
 	}
 }

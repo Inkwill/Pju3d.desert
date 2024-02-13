@@ -60,8 +60,6 @@ public class UIInventoryWindow : UIWindow
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
 		GameManager.Instance.CameraCtrl.SetDistance(0);
-		StatSystem.Stats stats = GameManager.Player.Data.Stats.stats;
-		textStats.text = $"Str : {stats.strength} Def : {stats.defense} Agi : {stats.agility}  Spr : {stats.spirit}";
 		Load();
 	}
 
@@ -78,6 +76,8 @@ public class UIInventoryWindow : UIWindow
 		{
 			m_ItemEntries[i].UpdateEntry(GameManager.Player.Data);
 		}
+		StatSystem.Stats stats = GameManager.Player.Data.Stats.stats;
+		textStats.text = $"Str : {stats.strength} Def : {stats.defense} Agi : {stats.agility}  Spr : {stats.spirit}";
 	}
 
 	public void OnSlotSelected(UIInventorySlot slot, bool selected)

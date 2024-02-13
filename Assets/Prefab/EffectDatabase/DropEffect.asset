@@ -10,21 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd59d6612e8c0f64e851fbc14d980b1e, type: 3}
-  m_Name: EquipEffect
+  m_Name: DropEffect
   m_EditorClassIdentifier: 
-  Type: 1
+  Type: 5
+  TakeVFX: 6
   Description: 
-  damageType: 0
-  damageMount: 0
-  StatModifier:
-    ModifierMode: 1
-    Stats:
-      health: 0
-      strength: 0
-      defense: 0
-      agility: 0
-      spirit: 0
-      damProtection: 00000000000000000000000000000000
-      damBoosts: 00000000000000000000000000000000
   EffectAmount: 0
   EffectMode: 0
+  dropBox: {fileID: 11400000, guid: 1e1f26041e5ddf942a4012d99e22b604, type: 2}
+  damageType: 0

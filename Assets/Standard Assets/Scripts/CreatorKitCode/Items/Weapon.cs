@@ -17,11 +17,6 @@ namespace CreatorKitCode
 	/// </summary>
 	public class Weapon : EquipmentItem
 	{
-		public StatSystem.DamageType damageType;
-		public Skill WeaponSkill;
-		public Bullet bulletPb;
-		public Transform bulletTrans;
-
 		[System.Serializable]
 		public struct Stat
 		{
@@ -31,15 +26,17 @@ namespace CreatorKitCode
 			public float MaxRange;
 			public int AdditionalTargets;
 		}
-		[Header("Stats")]
+		[Header("WeaponStats")]
 		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1, AdditionalTargets = 0 };
+		public StatSystem.DamageType damageType;
 		public List<EffectData> AttackEffects;
+		public Skill WeaponSkill;
+		public Bullet bulletPb;
+		public Transform bulletTrans;
 
 		[Header("Sounds")]
 		public AudioClip[] HitSounds;
 		public AudioClip[] SwingSounds;
-
-
 
 		public void Attack(CharacterData attacker, CharacterData target)
 		{

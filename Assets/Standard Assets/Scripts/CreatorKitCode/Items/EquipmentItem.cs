@@ -27,26 +27,13 @@ namespace CreatorKitCode
 			Weapon
 		}
 
-		//public abstract class EquippedEffect : ScriptableObject
-		//{
-		// public string Description;
-		// //return true if could be used, false otherwise.
-		// public abstract void Equipped(CharacterData user);
-		// public abstract void Removed(CharacterData user);
-
-		// public virtual string GetDescription()
-		// {
-		// 	return Description;
-		// }
-		//}
-
 		public EquipmentSlot Slot;
-		public List<EffectData> EquippedEffects;
+		public StatSystem.StatModifier EquippedStat;
 
 		public override string GetDescription()
 		{
 			string desc = base.GetDescription();
-
+			desc += StatsDescription();
 			// foreach (var effect in EquippedEffects)
 			// 	desc += "\n" + effect.GetDescription();
 
@@ -77,15 +64,29 @@ namespace CreatorKitCode
 		}
 		public void EquippedBy(CharacterData user)
 		{
-			foreach (var effect in EquippedEffects)
-				effect.Equip(user);
+			user.Stats.AddModifier(EquippedStat);
 		}
 
 		public void UnequippedBy(CharacterData user)
 		{
-			foreach (var effect in EquippedEffects)
-				effect.UnEquip(user);
-			//user.Stats.RemoveModifier(effect.Modifier);
+			user.Stats.RemoveModifier(EquippedStat);
+		}
+
+		string StatsDescription()
+		{
+			string desc = "\n";
+			string unit = EquippedStat.ModifierMode == StatSystem.StatModifier.Mode.Percentage ? "%" : "";
+
+			if (EquippedStat.Stats.strength != 0)
+				desc += $"Str : {EquippedStat.Stats.strength:+0;-#}{unit}\n"; //format specifier to force the + sign to appear
+			if (EquippedStat.Stats.agility != 0)
+				desc += $"Agi : {EquippedStat.Stats.agility:+0;-#}{unit}\n";
+			if (EquippedStat.Stats.defense != 0)
+				desc += $"Def : {EquippedStat.Stats.defense:+0;-#}{unit}\n";
+			if (EquippedStat.Stats.health != 0)
+				desc += $"HP : {EquippedStat.Stats.health:+0;-#}{unit}\n";
+
+			return desc;
 		}
 	}
 }

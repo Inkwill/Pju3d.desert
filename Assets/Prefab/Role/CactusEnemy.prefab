@@ -234,7 +234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35c1f19f981871445b0f935b1793db29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropBox: {fileID: 11400000, guid: 1e1f26041e5ddf942a4012d99e22b604, type: 2}
+  DeadEffects:
+  - {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
 --- !u!1001 &4229250126243815178
 PrefabInstance:
   m_ObjectHideFlags: 0

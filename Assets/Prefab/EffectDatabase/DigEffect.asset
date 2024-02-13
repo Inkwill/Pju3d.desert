@@ -12,19 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd59d6612e8c0f64e851fbc14d980b1e, type: 3}
   m_Name: DigEffect
   m_EditorClassIdentifier: 
-  Type: 4
+  Type: 3
+  TakeVFX: 6
   Description: 
-  damageType: 0
-  damageMount: 0
-  StatModifier:
-    ModifierMode: 1
-    Stats:
-      health: 0
-      strength: 0
-      defense: 0
-      agility: 0
-      spirit: 0
-      damProtection: 00000000000000000000000000000000
-      damBoosts: 00000000000000000000000000000000
   EffectAmount: 0
   EffectMode: 0
+  dropBox: {fileID: 0}
+  damageType: 0

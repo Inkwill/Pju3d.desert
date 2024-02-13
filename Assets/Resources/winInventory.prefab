@@ -3589,6 +3589,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 689490766022457667, guid: 4449c4f0bc9d35747934c73a44ad8004,
         type: 3}
+      propertyPath: m_IsOn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 689490766022457667, guid: 4449c4f0bc9d35747934c73a44ad8004,
+        type: 3}
       propertyPath: m_Group
       value: 
       objectReference: {fileID: 5893732665920561153}
@@ -4302,66 +4307,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 689490766022457667, guid: 4449c4f0bc9d35747934c73a44ad8004,
         type: 3}
-      propertyPath: m_IsOn
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 689490766022457667, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
       propertyPath: m_Group
       value: 
       objectReference: {fileID: 5893732665920561153}
-    - target: {fileID: 2587717807825157729, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
-      propertyPath: actived
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2587717807825157729, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
-      propertyPath: typeSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: fee1d85819da082459912a02dad9911b,
-        type: 3}
-    - target: {fileID: 2587717807825157729, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
-      propertyPath: defaultSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 9d1acd1853428214d940783285bd9d78,
-        type: 3}
-    - target: {fileID: 6186352204739584934, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 9d1acd1853428214d940783285bd9d78,
-        type: 3}
-    - target: {fileID: 6722357644356267574, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6722357644356267574, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6722357644356267574, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7952083622575888246, guid: 4449c4f0bc9d35747934c73a44ad8004,
         type: 3}
       propertyPath: m_Name
       value: ui_item_slot_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7952083622575888246, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8112198432075575761, guid: 4449c4f0bc9d35747934c73a44ad8004,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
