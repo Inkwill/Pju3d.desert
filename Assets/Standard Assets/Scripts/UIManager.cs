@@ -17,11 +17,6 @@ public class UIManager : MonoBehaviour
 
 	float during_check;
 
-	private void Start()
-	{
-		OpenWindow("winMain");
-	}
-
 	// void FixedUpdate()
 	// {
 	// 	if (win_LastOpen)

@@ -11,6 +11,7 @@ TagManager:
   - mount
   - npc
   - creater
+  - item
   layers:
   - Default
   - TransparentFX
@@ -22,8 +23,8 @@ TagManager:
   - Enemy
   - Interactable
   - Detector
-  - 
-  - PlayerEquipment
+  - Neutral
+  - SceneDetector
   - EnemyCorpse
   - PlayerCorpse
   - 

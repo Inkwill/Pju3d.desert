@@ -1,5 +1,5 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using Cinemachine;
@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
 	public static CharacterControl Player;
+	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
 	public static UIManager GameUI;
 	public static KeyValueData Data => Instance.DemoData;
 	public LightManager DayNight;
@@ -52,12 +53,7 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
-		var dic = new Dictionary<string, int>
-		{
-			{ "Wood", 1 },
-			{ "Money", 1 },
-		};
-		testDemand = new InventorySystem.ItemDemand(dic);
+		GameUI.OpenWindow("winMain");
 	}
 
 	void OnApplicationQuit()
@@ -70,10 +66,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (Input.GetKeyDown("space"))
 		{
-			foreach (var dropbox in testDropBox.GetDropItem())
-			{
-				Debug.Log("drop item : " + dropbox.item + " num= " + dropbox.itemNum);
-			}
+			StoryListener.CompletedNode(StoryListener.testNode);
 		}
 
 		// if (Input.GetKeyDown(KeyCode.Return))
@@ -98,29 +91,13 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public static string SceneBoxInfo(GameObject sceneBox, bool display)
+	public IEnumerator WaitAction(float waitTime, Action action)
 	{
-		if (!sceneBox) return display ? "空地" : "blank";
-		string sceneTag = sceneBox.tag;
-		switch (sceneTag)
-		{
-			case "road":
-				return display ? "道路" : sceneTag;
-			case "building":
-				return display ? "建筑:" + sceneBox : sceneTag;
-			case "pit":
-				return display ? "坑:" + sceneBox : sceneTag;
-			case "mount":
-				return display ? "山体:" : sceneTag;
-			case "npc":
-				return display ? "npc:" + sceneBox : sceneTag;
-			case "creater":
-				return display ? "建造中..." : sceneTag;
-			default:
-				break;
-		}
-		return display ? "空地" : "blank";
+		// 等待一定的时间
+		yield return new WaitForSeconds(waitTime);
+		action?.Invoke();
 	}
+
 	// public static void EffectAction(string effectName, object[] param)
 	// {
 	// 	MethodInfo effectF = typeof(EffectData).GetMethod(effectName);

@@ -16,8 +16,7 @@ GameObject:
   - component: {fileID: 465574281672476321}
   - component: {fileID: 5817519303227255321}
   - component: {fileID: 6988488352939760593}
-  - component: {fileID: 7966473244002447519}
-  - component: {fileID: 1747188174729651827}
+  - component: {fileID: 6965520328728932451}
   m_Layer: 7
   m_Name: Enemy_CactusBoss
   m_TagString: Untagged
@@ -101,6 +100,10 @@ MonoBehaviour:
   Speed: 2
   DefaultWeapon: {fileID: 11400000, guid: 52b81e917921cad46997064d7acebe12, type: 2}
   WeaponLocator: {fileID: 0}
+  SceneDetector: {fileID: 9178825797900625146}
+  InteractDetector: {fileID: 6670665123328122523}
+  EnemyDetector: {fileID: 7845487128010620889}
+  SkillDetector: {fileID: 9045062465431077372}
   SpurSoundClips: []
   SpottedAudioClip: []
 --- !u!114 &7891112361038545364
@@ -202,7 +205,7 @@ MonoBehaviour:
   events:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7966473244002447519
+--- !u!114 &6965520328728932451
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,30 +214,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8975583521343429159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b97291c3ecc5a742b087a681ae68440, type: 3}
+  m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camp: 1
-  EnemyDetector: {fileID: 7845487128010620889}
-  InteractDetector: {fileID: 6670665123328122523}
-  SceneDetector: {fileID: 9178825797900625146}
-  SkillDetector: {fileID: 0}
+  camp: 0
+  dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
+  CorpseChance: 100
+  m_CorpseRetention: 120
   m_Offensive: 1
-  m_WanderRadius: 10
-  m_WanderBeat: 5
---- !u!114 &1747188174729651827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8975583521343429159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35c1f19f981871445b0f935b1793db29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropBox: {fileID: 11400000, guid: 1e1f26041e5ddf942a4012d99e22b604, type: 2}
+  m_WanderRadius: 5
+  m_WanderBeat: 3
 --- !u!1001 &4601448470541522448
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -613,6 +602,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8491726804373824084}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9045062465431077372 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 602964386396529576, guid: 54707c86cb650ed41a8c70adb389a0b9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8491726804373824084}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a8342e09fc664842a38a661849c3696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &9178825797900625146 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 772668495364327086, guid: 54707c86cb650ed41a8c70adb389a0b9,

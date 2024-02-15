@@ -11,7 +11,6 @@ public class UIWindow : MonoBehaviour
 	public Image winMask;
 	public AudioClip OpenClip;
 	public AudioClip CloseClip;
-	protected List<Button> switch_buttons;
 
 	void OnEnable()
 	{
@@ -57,14 +56,6 @@ public class UIWindow : MonoBehaviour
 		// {
 		// 	img.color = active ? Color.red : Color.gray;
 		// }
-	}
-
-	protected void SwitchButton(Button bt)
-	{
-		foreach (Button button in switch_buttons)
-		{
-			SetButton(button, bt == button);
-		}
 	}
 
 	public virtual void OnButtonClick(string eventName) { }

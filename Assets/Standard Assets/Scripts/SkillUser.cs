@@ -53,7 +53,7 @@ public class SkillUser : MonoBehaviour
 				m_eventSender?.Send(gameObject, "skillEvent_OnImplement");
 				m_UseEntry = null;
 				m_During = 0;
-				m_role.BaseAI.SkillDetector.layers = LayerMask.GetMask("Nothing");
+				m_role.SkillDetector.layers = LayerMask.GetMask("Nothing");
 			}
 		}
 	}
@@ -83,7 +83,7 @@ public class SkillUser : MonoBehaviour
 			case Skill.TargetType.SELF:
 				return UseSkill(skill, m_role.gameObject);
 			case Skill.TargetType.SCENEBOX:
-				return UseSkill(skill, m_role.BaseAI.SceneDetector?.gameObject);
+				return UseSkill(skill, m_role.Interactor.SceneDetector?.gameObject);
 			case Skill.TargetType.CURRENT:
 				return UseSkill(skill, m_role.CurrentEnemy?.gameObject);
 			default:
@@ -108,14 +108,14 @@ public class SkillUser : MonoBehaviour
 				return false;
 				// if (m_role.CurrentEnemy == null || (entry.skill.layers & (1 << m_role.CurrentEnemy.gameObject.layer)) == 0)
 			}
-			if (entry.skill.TType == Skill.TargetType.SCENEBOX && GameManager.SceneBoxInfo(m_role.BaseAI.SceneDetector.lastInner, false) != "blank")
+			if (entry.skill.TType == Skill.TargetType.SCENEBOX && m_role.Interactor.SceneBox != "blank")
 			{
-				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + GameManager.SceneBoxInfo(m_role.BaseAI.SceneDetector.lastInner, false));
+				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_role.Interactor.SceneBox);
 				return false;
 			}
 			Debug.Log("UseSkill: " + skill.SkillName + "cd =" + entry.cd);
-			m_role.BaseAI.SkillDetector.layers = entry.skill.layers;
-			m_role.BaseAI.SkillDetector.Radius = entry.skill.radius;
+			m_role.SkillDetector.layers = entry.skill.layers;
+			m_role.SkillDetector.Radius = entry.skill.radius;
 			entry.targets = new List<GameObject>();
 			if (target != null) entry.targets.Add(target);
 			entry.cd = entry.skill.CD;

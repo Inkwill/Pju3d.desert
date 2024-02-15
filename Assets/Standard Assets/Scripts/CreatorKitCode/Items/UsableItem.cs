@@ -25,7 +25,7 @@ namespace CreatorKitCode
 			bool wasUsed = false;
 			for (int i = 0; i < UsageEffects.Count; i++)
 			{
-				wasUsed |= UsageEffects[i].Key.Take(user, UsageEffects[i].Value);
+				wasUsed |= UsageEffects[i].Key.Take(user.gameObject, UsageEffects[i].Value);
 			}
 			// foreach (var effect in UsageEffects)
 			// {

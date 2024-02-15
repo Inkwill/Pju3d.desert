@@ -21,8 +21,11 @@ public class UILootElement : MonoBehaviour
 
 	public void GetLoot()
 	{
-		loot.InteractWith(GameManager.Player.Data);
-		loot = null;
+		if (loot)
+		{
+			loot.InteractWith(GameManager.Player.Data);
+			loot = null;
+		}
 		gameObject.SetActive(false);
 	}
 }

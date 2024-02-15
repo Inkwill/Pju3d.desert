@@ -16,13 +16,13 @@ namespace CreatorKitCode
 	///
 	/// Finally it will notify the LootUI that a new loot is available in the world so the UI displays the name.
 	/// </summary>
-	public class Loot : InteractableObject
+	public class Loot : HighlightableObject
 	{
 		static float AnimationTime = 0.5f;
 
 		public Item Item;
 
-		public override bool IsInteractable => m_AnimationTimer >= AnimationTime;
+		//public override bool IsInteractable => m_AnimationTimer >= AnimationTime;
 
 		Vector3 m_OriginalPosition;
 		Vector3 m_TargetPoint;
@@ -58,12 +58,12 @@ namespace CreatorKitCode
 
 			Debug.DrawLine(m_TargetPoint, m_TargetPoint + Vector3.up, Color.magenta);
 		}
-
-		public override void InteractWith(CharacterData target)
+		public void InteractWith(CharacterData target)
 		{
 			target.Inventory.AddItem(Item);
 			SFXManager.PlayClip("picked");
 			Destroy(gameObject);
+
 		}
 
 		/// <summary>
@@ -110,6 +110,7 @@ namespace CreatorKitCode
 				var obj = Instantiate(Item.WorldObjectPrefab, transform, false);
 				obj.transform.localPosition = Vector3.zero;
 				obj.layer = LayerMask.NameToLayer("Interactable");
+				obj.tag = "item";
 			}
 			else
 			{//...otherwise, we create a billboard using the item sprite

@@ -8,47 +8,32 @@ using MyBox;
 [RequireComponent(typeof(RoleControl))]
 public class RoleAI : MonoBehaviour
 {
-	public InteractOnTrigger EnemyDetector;
-	public InteractOnTrigger InteractDetector;
-	public InteractOnTrigger SceneDetector;
-	public InteractOnTrigger SkillDetector;
-
 	protected RoleControl m_role;
-	GameObject m_interactTarget;
 
-	public virtual void Init(RoleControl role)
+	public virtual void Init()
 	{
-		m_role = role;
+		m_role = GetComponent<RoleControl>();
 		m_role.eventSender.events.AddListener(OnRoleEvent);
 
-		if (EnemyDetector)
+		if (m_role.EnemyDetector)
 		{
-			EnemyDetector.OnEnter.AddListener(OnEnemyEnter);
-			EnemyDetector.OnExit.AddListener(OnEnemyExit);
-			EnemyDetector.OnEvent.AddListener(OnEnemyEvent);
+			m_role.EnemyDetector.OnEnter.AddListener(OnEnemyEnter);
+			m_role.EnemyDetector.OnExit.AddListener(OnEnemyExit);
+			m_role.EnemyDetector.OnEvent.AddListener(OnEnemyEvent);
 		}
-		if (InteractDetector)
+		if (m_role.SkillDetector)
 		{
-			InteractDetector.OnEnter.AddListener(OnInteracterEnter);
-			InteractDetector.OnExit.AddListener(OnInteracterExit);
-			InteractDetector.OnEvent.AddListener(OnInteracterEvent);
+			m_role.SkillDetector.OnEnter.AddListener(OnSkillTargetEnter);
+			m_role.SkillDetector.OnExit.AddListener(OnSkillTargetExit);
+			m_role.SkillDetector.OnEvent.AddListener(OnSkillTargetEvent);
 		}
-		if (SkillDetector)
-		{
-			SkillDetector.OnEnter.AddListener(OnSkillTargetEnter);
-			SkillDetector.OnExit.AddListener(OnSkillTargetExit);
-			SkillDetector.OnEvent.AddListener(OnSkillTargetEvent);
-		}
-		if (SceneDetector)
-		{
-			SceneDetector.layers = LayerMask.GetMask("Scene");
-		}
+		if (m_role.Interactor) m_role.Interactor.OnInteracting.AddListener(OnInteracting);
 	}
 
 	void Update()
 	{
-		if (m_role.isIdle && EnemyDetector.Inners.Count > 0)
-			m_role.CurrentEnemy = EnemyDetector.GetNearest().GetComponent<CharacterData>();
+		if (m_role.isIdle && m_role.EnemyDetector.Inners.Count > 0)
+			m_role.CurrentEnemy = m_role.EnemyDetector.GetNearest().GetComponent<CharacterData>();
 	}
 
 	protected virtual void OnRoleEvent(GameObject obj, string eventName)
@@ -68,7 +53,7 @@ public class RoleAI : MonoBehaviour
 	{
 		if (m_role.CurrentEnemy && m_role.CurrentEnemy.gameObject == exiter)
 		{
-			m_role.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+			m_role.CurrentEnemy = m_role.EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
 			//m_eventSender.Send(exiter, "roleEvent_OnEnemyExit");
 		}
 	}
@@ -81,41 +66,16 @@ public class RoleAI : MonoBehaviour
 		}
 	}
 
-	void OnInteracterEnter(GameObject enter)
-	{
-
-	}
-
-	void OnInteracterExit(GameObject exiter)
-	{
-		if (m_interactTarget && m_interactTarget == exiter) m_interactTarget = InteractDetector.GetNearest();
-	}
-
-	void OnInteracterEvent(GameObject sender, string eventMessage)
-	{
-		if (eventMessage == "roleEvent_OnState_DEAD" && m_interactTarget == sender)
-		{
-			m_interactTarget = InteractDetector.GetNearest();
-		}
-		if (eventMessage == "roleEvent_OnState_IDLE" && m_interactTarget == null && m_role.isIdle)
-		{
-			m_interactTarget = sender;
-			GetComponentInChildren<UIRoleHud>()?.Bubble(sender.GetComponent<RoleControl>()?.Data.CharacterName);
-			m_role.LookAt(sender.transform);
-		}
-		//Debug.Log("OnInteracterEvent: InteracterTarget= " + sender + "event= " + eventMessage);
-	}
-
 	void OnSkillTargetEnter(GameObject enter)
 	{
 		if (m_role.SkillUser && m_role.SkillUser.CurSkill != null) m_role.SkillUser.AddTarget(enter);
-		Debug.Log("OnSkillTargetEnter: enter= " + enter);
+		//Debug.Log("OnSkillTargetEnter: enter= " + enter);
 	}
 
 	void OnSkillTargetExit(GameObject exiter)
 	{
 		if (m_role.SkillUser && m_role.SkillUser.CurSkill != null) m_role.SkillUser.RemoveTarget(exiter);
-		Debug.Log("OnSkillTargetExit: exiter= " + exiter);
+		//Debug.Log("OnSkillTargetExit: exiter= " + exiter);
 	}
 	void OnSkillTargetEvent(GameObject sender, string eventMessage)
 	{
@@ -125,6 +85,12 @@ public class RoleAI : MonoBehaviour
 		}
 	}
 
+	protected virtual void OnInteracting(InteractHandle interactor, string eventName)
+	{
+		if (eventName == "Start") m_role.LookAt(interactor.gameObject.transform);
+		//HighlightTarget(interactor.gameObject, true);
+		//Debug.Log("[RoleAI-" + m_role + "] OnInteracting with : " + interactor.gameObject);
+	}
 	void HighlightTarget(GameObject obj, bool active)
 	{
 		HighlightableObject target = obj.GetComponent<HighlightableObject>();

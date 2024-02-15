@@ -30,6 +30,11 @@ public class RoleControl : MonoBehaviour
 	public bool isIdle { get { return (m_State == State.IDLE) && !m_Enemy; } }
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 
+	[Header("Detector")]
+	public InteractHandle Interactor;
+	public InteractOnTrigger EnemyDetector;
+	public InteractOnTrigger SkillDetector;
+
 	//[Header("AI")]
 	public State CurState { get { return m_State; } set { SetState(value); } }
 	protected State m_State;
@@ -97,8 +102,11 @@ public class RoleControl : MonoBehaviour
 		m_CharacterData.Init();
 		m_CharacterData.Equipment.InitWeapon(DefaultWeapon);
 
+		Interactor = GetComponent<InteractHandle>();
 		m_Ai = GetComponent<RoleAI>();
-		m_Ai.Init(this);
+		m_Ai.Init();
+
+
 
 		m_SkillUser = GetComponent<SkillUser>();
 
@@ -115,7 +123,7 @@ public class RoleControl : MonoBehaviour
 			if (item.Slot == EquipmentItem.EquipmentSlot.Weapon && WeaponLocator)
 			{
 				Weapon wp = item as Weapon;
-				BaseAI.EnemyDetector.Radius = System.Math.Max(wp.Stats.MaxRange, BaseAI.EnemyDetector.Radius);
+				EnemyDetector.Radius = System.Math.Max(wp.Stats.MaxRange, EnemyDetector.Radius);
 				wp.bulletTrans = WeaponLocator;
 				if (!item.WorldObjectPrefab) return;
 				var obj = Instantiate(item.WorldObjectPrefab, WeaponLocator, false);

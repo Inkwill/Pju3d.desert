@@ -22,7 +22,7 @@ public class EffectData : ScriptableObject
 	[ConditionalField(nameof(Type), false, EffectType.HPCHANGE)]
 	public int EffectAmount;
 
-	[ConditionalField(nameof(Type), true, EffectType.DROPBOX)]
+	[ConditionalField(nameof(Type), false, EffectType.HPCHANGE)]
 	public StatSystem.StatModifier.Mode EffectMode;
 	[ConditionalField(nameof(Type), false, EffectType.DROPBOX)]
 	public DropBox dropBox;
@@ -36,7 +36,7 @@ public class EffectData : ScriptableObject
 		return Description;
 	}
 
-	public bool Take(CharacterData user, string[] param = null, GameObject target = null)
+	public bool Take(GameObject user, string[] param = null, GameObject target = null)
 	{
 		bool success = false;
 		switch (Type)
@@ -44,7 +44,7 @@ public class EffectData : ScriptableObject
 			case EffectType.DAMAGE:
 				break;
 			case EffectType.HPCHANGE:
-				CharacterData changer = target ? target.GetComponent<CharacterData>() : user;
+				CharacterData changer = target ? target.GetComponent<CharacterData>() : user.GetComponent<CharacterData>();
 				if (changer == null) break;
 				int addMount;
 				if (param != null && param.Length > 0 && int.TryParse(param[0], out addMount))

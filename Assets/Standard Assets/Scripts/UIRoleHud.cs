@@ -1,9 +1,10 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using CreatorKitCode;
+using System;
 using CreatorKitCodeInternal;
 using TMPro;
+using UnityEngine.InputSystem.Controls;
 
 public class UIRoleHud : MonoBehaviour
 {
@@ -17,12 +18,19 @@ public class UIRoleHud : MonoBehaviour
 	Animator bubble_anim;
 	[SerializeField]
 	Text bubble_text;
+	[SerializeField]
+	Animator story_anim;
 	RoleControl m_role;
 
 	void Start()
 	{
 		m_role = GetComponentInParent<RoleControl>();
-		if (m_role) m_role.eventSender.events.AddListener(OnRoleEvent);
+		if (m_role)
+		{
+			m_role.eventSender.events.AddListener(OnRoleEvent);
+			m_role.Data.Inventory.Actions += OnInventoryAction;
+		}
+
 		if (sliderHp)
 		{
 			sliderHp.maxValue = m_role.Data.Stats.stats.health;
@@ -30,6 +38,8 @@ public class UIRoleHud : MonoBehaviour
 			sliderHp.gameObject.SetActive(false);
 		}
 		sliderPg?.gameObject.SetActive(false);
+		GetComponentInParent<StoryTeller>()?.tellerEvent.AddListener(OnTellerEvent);
+		//iconStory?.gameObject.SetActive(false);
 	}
 
 	void OnRoleEvent(GameObject role, string eventName)
@@ -67,6 +77,21 @@ public class UIRoleHud : MonoBehaviour
 				break;
 		}
 	}
+
+	void OnInventoryAction(string itemName, string actionName)
+	{
+		Bubble(actionName + "item = " + itemName);
+	}
+
+	void OnTellerEvent(StoryNode node, string eventName)
+	{
+		if (eventName == "tellStory")
+		{
+			if (node != null) story_anim.SetTrigger("show");
+			else story_anim.SetTrigger("hide");
+		}
+
+	}
 	private void Update()
 	{
 		this.transform.forward = Camera.main.transform.forward;
@@ -74,15 +99,15 @@ public class UIRoleHud : MonoBehaviour
 
 	public void Bubble(string content, float duration = 1.0f)
 	{
-		bubble_text.text = content;
-		bubble_anim.SetTrigger("show");
-		StartCoroutine(WaitAndPrint(duration));
-
-	}
-	IEnumerator WaitAndPrint(float waitTime)
-	{
-		// 等待一定的时间
-		yield return new WaitForSeconds(waitTime);
-		bubble_anim.SetTrigger("hide");
+		if (bubble_anim.GetCurrentAnimatorStateInfo(0).IsName("hide"))
+		{
+			bubble_text.text = content;
+			bubble_anim.SetTrigger("show");
+			StartCoroutine(GameManager.Instance.WaitAction(duration, () => bubble_anim.SetTrigger("hide")));
+		}
+		else
+		{
+			StartCoroutine(GameManager.Instance.WaitAction(1.0f, () => Bubble(content, duration)));
+		}
 	}
 }

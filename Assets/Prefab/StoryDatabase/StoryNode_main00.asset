@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76a5a952de46f774891bb8db4986d740, type: 3}
+  m_Name: StoryNode_main00
+  m_EditorClassIdentifier: 
+  StoryName: main
+  Content: main-00
+  Previous: {fileID: 0}
+  Next: {fileID: 11400000, guid: d88c89255068dd140a77d29989494ce9, type: 2}

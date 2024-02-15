@@ -78,7 +78,7 @@ public class Skill : ScriptableObject
 		{
 			foreach (var target in targets)
 			{
-				effect.Key.Take(user.Data, effect.Value, target);
+				effect.Key.Take(user.gameObject, effect.Value, target);
 				Debug.Log("OnSkillTakeEffects: target= " + target);
 			}
 		}

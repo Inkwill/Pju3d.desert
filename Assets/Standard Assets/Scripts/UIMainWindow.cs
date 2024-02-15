@@ -19,7 +19,6 @@ public class UIMainWindow : UIWindow
 
 	void Start()
 	{
-		switch_buttons = new List<Button>();
 		targetUI.Init();
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
 	}
@@ -48,7 +47,7 @@ public class UIMainWindow : UIWindow
 	void FixedUpdate()
 	{
 		infoPos.text = GameManager.Player.gameObject.transform.position.ToString();
-		infoTerrian.text = GameManager.SceneBoxInfo(GameManager.Player.BaseAI.SceneDetector.lastInner, true);
+		infoTerrian.text = GameManager.Player.Interactor.SceneBoxName;
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
 		btSwitchWeapon.interactable = GameManager.Player.isStandBy;
 	}
@@ -66,6 +65,9 @@ public class UIMainWindow : UIWindow
 				GameManager.Instance.CameraCtrl.SwitchModel();
 				break;
 			case "package":
+				GameManager.GameUI.SwitchWindow("winInventory");
+				break;
+			case "talk":
 				GameManager.GameUI.SwitchWindow("winInventory");
 				break;
 			default:

@@ -6,10 +6,12 @@ using TMPro;
 
 public class TimerBehaviour : MonoBehaviour
 {
-	public float interval = 1.0f;
 	public float during = 10.0f;
+	float interval = 1.0f;
+	//public virtual int TotalTimes { get { return times; } }
 	public int times = -1;  //times <= 0  means loop
 	public Slider progressSlider;
+	public bool destroyOnEnd;
 	float m_curTimer = 0f;
 	float m_step = 0f;
 	bool m_started = false;
@@ -49,7 +51,12 @@ public class TimerBehaviour : MonoBehaviour
 				OnTimer();
 				m_curTimer = 0f;
 				times--;
-				if (times == 0) isStarted = false;
+				if (times == 0)
+				{
+					isStarted = false;
+					if (destroyOnEnd) Destroy(gameObject);
+				}
+
 			}
 			else if (m_step >= interval)
 			{

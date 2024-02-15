@@ -237,7 +237,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6439487730059844170}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIBuildWindow, Assembly-CSharp-firstpass
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -621,7 +621,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6439487730059844170}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIWindow, Assembly-CSharp-firstpass
         m_MethodName: Back
         m_Mode: 1
@@ -715,7 +715,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6439487730059844170}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIBuildWindow, Assembly-CSharp-firstpass
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -1084,7 +1084,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6439487730059844170}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIBuildWindow, Assembly-CSharp-firstpass
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -1130,7 +1130,6 @@ GameObject:
   - component: {fileID: 5276125141585531691}
   - component: {fileID: 5276125141585531689}
   - component: {fileID: 4277982533273059656}
-  - component: {fileID: 6439487730059844170}
   m_Layer: 5
   m_Name: winBuild
   m_TagString: Untagged
@@ -1247,21 +1246,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6439487730059844170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5276125141575279099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76a5a952de46f774891bb8db4986d740, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  winTitle: {fileID: 0}
-  OpenClip: {fileID: 0}
-  CloseClip: {fileID: 0}
 --- !u!1 &5424465777785949682
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,7 +1486,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6439487730059844170}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIBuildWindow, Assembly-CSharp-firstpass
         m_MethodName: OnButtonClick
         m_Mode: 5

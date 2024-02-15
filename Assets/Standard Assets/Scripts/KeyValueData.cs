@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
+using TMPro;
 
 [CreateAssetMenu(fileName = "DemoData", menuName = "Data/KeyValueData", order = 1)]
 public class KeyValueData : ScriptableObject
@@ -25,4 +26,15 @@ public class KeyValueData : ScriptableObject
 		}
 		return default(T);
 	}
+
+	public static Dictionary<string, int> ToDic(List<KeyValue<Item, int>> data)
+	{
+		Dictionary<string, int> result = new Dictionary<string, int>();
+		foreach (var da in data)
+		{
+			result[da.Key.ItemName] = da.Value;
+		}
+		return result;
+	}
+
 }

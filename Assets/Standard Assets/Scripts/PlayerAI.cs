@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PlayerAI : RoleAI
 {
-    public override void Init(RoleControl role)
+    public override void Init()
     {
-        base.Init(role);
+        base.Init();
         m_role.gameObject.layer = LayerMask.NameToLayer("Player");
-        EnemyDetector.layers = LayerMask.GetMask("Enemy");
-        InteractDetector.layers = LayerMask.GetMask("Interactable");
+        m_role.EnemyDetector.layers = LayerMask.GetMask("Enemy");
+        m_role.Interactor.layers = LayerMask.GetMask("Interactable", "Player", "Neutral");
     }
 }

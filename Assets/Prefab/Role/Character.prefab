@@ -52,6 +52,7 @@ GameObject:
   - component: {fileID: 844399017392488554}
   - component: {fileID: 8083394617915932574}
   - component: {fileID: 4272129805801271086}
+  - component: {fileID: 5042174915953302677}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -115,6 +116,9 @@ MonoBehaviour:
   Speed: 4
   DefaultWeapon: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
   WeaponLocator: {fileID: 226675115136632130}
+  Interactor: {fileID: 0}
+  EnemyDetector: {fileID: 1134714616160843028}
+  SkillDetector: {fileID: 2222825981694970673}
   SpurSoundClips:
   - {fileID: 8300000, guid: daa761ef6c428a344b4858008944ac86, type: 3}
   - {fileID: 8300000, guid: 7b0cf46482c46934e9a0b9dd41b0440a, type: 3}
@@ -295,10 +299,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1c58a18c6857d41bac517b20c0efc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyDetector: {fileID: 1134714616160843028}
-  InteractDetector: {fileID: 4597439104978932822}
+--- !u!114 &5042174915953302677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8112423057566066908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdeaa424fc33d114bbd2e6af2a7a8292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layers:
+    serializedVersion: 2
+    m_Bits: 0
   SceneDetector: {fileID: 2035109682229800503}
-  SkillDetector: {fileID: 2222825981694970673}
+  InteractDetector: {fileID: 4597439104978932822}
+  OnItemEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnItemExit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTargetStay:
+    m_PersistentCalls:
+      m_Calls: []
+  OnInteracting:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &9066320245022399288
 GameObject:
   m_ObjectHideFlags: 0

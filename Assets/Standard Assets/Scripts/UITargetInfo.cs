@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CreatorKitCode;
-using CreatorKitCodeInternal;
 using TMPro;
 
 public class UITargetInfo : MonoBehaviour
@@ -20,13 +19,16 @@ public class UITargetInfo : MonoBehaviour
 	const int maxUILoot = 7;
 	[SerializeField]
 	GameObject lootElement;
+	[SerializeField]
+	Animator btTalk;
 
 	UILootElement[] uilootList = new UILootElement[maxUILoot];
 	public void Init()
 	{
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
-		GameManager.Player.BaseAI.InteractDetector.OnEnter.AddListener(OnItemEnter);
-		GameManager.Player.BaseAI.InteractDetector.OnExit.AddListener(OnItemExit);
+		GameManager.Player.Interactor.OnItemEnter.AddListener(OnItemEnter);
+		GameManager.Player.Interactor.OnItemExit.AddListener(OnItemExit);
+		GameManager.Player.Interactor.OnInteracting.AddListener(OnInteracting);
 		SetEnemy();
 		for (int i = 0; i < maxUILoot; i++)
 		{
@@ -78,9 +80,8 @@ public class UITargetInfo : MonoBehaviour
 				break;
 		}
 	}
-	void OnItemEnter(GameObject obj)
+	void OnItemEnter(Loot loot)
 	{
-		Loot loot = obj.GetComponentInParent<Loot>();
 		if (loot)
 		{
 			var uiloot = uilootList.Where(ui => ui.loot == null).FirstOrDefault();
@@ -107,9 +108,8 @@ public class UITargetInfo : MonoBehaviour
 		}
 	}
 
-	void OnItemExit(GameObject obj)
+	void OnItemExit(Loot loot)
 	{
-		Loot loot = obj.GetComponentInParent<Loot>();
 		if (loot == null) return;
 		var uiloot = uilootList.Where(ui => ui.loot == loot).FirstOrDefault();
 		if (uiloot)
@@ -120,11 +120,10 @@ public class UITargetInfo : MonoBehaviour
 		}
 		//else Debug.LogError("Exit unexpected loot :" + loot);
 	}
-	// public void OnLooted(Loot loot)
-	// {
-	// 	var uiloot = uilootList.Where(ui => ui.loot == loot).FirstOrDefault();
-	// 	if (uiloot)	
-	// 		if (lootList.Contains(loot)) 
-	// 		else Debug.LogError("Looted unexpected loot :" + loot);
-	// }
+
+	void OnInteracting(InteractHandle interactor, string eventName)
+	{
+		if (eventName == "Enter" || eventName == "Interacting") btTalk.SetTrigger("show");
+		if (eventName == "Stop") btTalk.SetTrigger("hide");
+	}
 }

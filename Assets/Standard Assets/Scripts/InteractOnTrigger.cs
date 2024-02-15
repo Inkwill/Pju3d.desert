@@ -20,7 +20,7 @@ public class InteractOnTrigger : MonoBehaviour
 			else m_boxCollier.size = new Vector3(value, value, value);
 		}
 	}
-	public UnityEvent<GameObject> OnEnter, OnExit;
+	public UnityEvent<GameObject> OnEnter, OnExit, OnStay;
 	public UnityEvent<GameObject, string> OnEvent;
 
 	public List<GameObject> Inners { get { return interObjects; } }
@@ -33,6 +33,7 @@ public class InteractOnTrigger : MonoBehaviour
 	List<GameObject> interObjects;
 	CapsuleCollider m_capCollider;
 	BoxCollider m_boxCollier;
+	float m_stayDuring;
 
 	void Start()
 	{
@@ -45,6 +46,8 @@ public class InteractOnTrigger : MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
+		if (other.gameObject == gameObject) return;
+
 		if (0 != (layers.value & 1 << other.gameObject.layer))
 		{
 			ExecuteOnEnter(other.gameObject);
@@ -85,9 +88,20 @@ public class InteractOnTrigger : MonoBehaviour
 
 	void OnTriggerStay(Collider other)
 	{
+		if (other.gameObject == gameObject) return;
+
 		if (0 != (layers.value & 1 << other.gameObject.layer) && !interObjects.Contains(other.gameObject))
 		{
 			OnTriggerEnter(other);
+		}
+		else if (other.gameObject == lastInner)
+		{
+			m_stayDuring += Time.deltaTime;
+			if (m_stayDuring >= 1.0f)
+			{
+				OnStay?.Invoke(other.gameObject);
+				m_stayDuring = 0;
+			}
 		}
 	}
 
