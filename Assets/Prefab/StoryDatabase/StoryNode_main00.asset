@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: StoryNode_main00
   m_EditorClassIdentifier: 
   StoryName: main
-  Content: main-00
+  Content: An Ox came down to a reedy pool to drink. As he splashed heavily into
+    the water, he crushed a young Frog into the mud. The old Frog soon missed the
+    little one and asked his brothers and sisters what had become of him.
   Previous: {fileID: 0}
   Next: {fileID: 11400000, guid: d88c89255068dd140a77d29989494ce9, type: 2}

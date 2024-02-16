@@ -9,17 +9,22 @@ public class StoryTeller : MonoBehaviour
 	public List<StoryNode> storyNodes;
 	public UnityEvent<StoryNode, string> tellerEvent;
 	public StoryNode CurrentNode { get { return m_currentNode; } set { m_currentNode = value; tellerEvent?.Invoke(m_currentNode, "tellStory"); } }
+	public string RoleName { get { return m_role.Data.CharacterName; } }
+	public List<Entrustment> entrustments;
 	StoryNode m_currentNode;
 	InteractHandle m_interactHandle;
+	RoleControl m_role;
 
 
 	void Start()
 	{
 		GameManager.StoryListener.nodeEvents.AddListener(OnListenerEvent);
-		RoleControl role = GetComponent<RoleControl>();
-		role?.eventSender.events.AddListener(OnRoleEvent);
+		m_role = GetComponent<RoleControl>();
+		m_role?.eventSender.events.AddListener(OnRoleEvent);
 		m_interactHandle = GetComponent<InteractHandle>();
 		m_interactHandle?.InteractEvent.AddListener(OnInteractEvent);
+		entrustments = new List<Entrustment>();
+		AddEntrustment();
 	}
 
 	public void OnInteractEvent(RoleControl actor, string eventName)
@@ -61,5 +66,15 @@ public class StoryTeller : MonoBehaviour
 			}
 		}
 		CurrentNode = null;
+	}
+
+	void AddEntrustment()
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			Entrustment entrust = new Entrustment(this);
+			entrustments.Add(entrust);
+		}
+		entrustments.Sort();
 	}
 }

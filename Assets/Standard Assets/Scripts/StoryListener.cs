@@ -10,6 +10,7 @@ public class StoryListener : MonoBehaviour
 	public UnityEvent<StoryNode, string> nodeEvents;
 	List<string> m_stories;
 	List<StoryNode> m_completed;
+	Dictionary<string, int> m_FriendlyValue;
 	public StoryTeller CurrentTeller => m_currentTeller;
 	StoryTeller m_currentTeller;
 
@@ -17,6 +18,7 @@ public class StoryListener : MonoBehaviour
 	{
 		m_stories = new List<string>();
 		m_completed = new List<StoryNode>();
+		m_FriendlyValue = new Dictionary<string, int>();
 		AddStory("main");
 	}
 	public void AddStory(string storyName)
@@ -46,8 +48,8 @@ public class StoryListener : MonoBehaviour
 
 	public void StartListening(StoryTeller teller)
 	{
-		GameManager.GameUI.SwitchWindow("winTalk");
 		m_currentTeller = teller;
+		GameManager.GameUI.SwitchWindow("winTalk");
 	}
 
 	public void StopListening(StoryTeller teller)
@@ -59,5 +61,22 @@ public class StoryListener : MonoBehaviour
 	{
 		if (!m_stories.Contains(storyName)) return null;
 		return m_completed.Where(node => node.StoryName == storyName) as List<StoryNode>;
+	}
+
+	public int GetFriendlyValue()
+	{
+		return GetFriendlyValue(CurrentTeller.RoleName);
+
+	}
+	public int GetFriendlyValue(string roleName)
+	{
+		var data = m_FriendlyValue.Where(kv => kv.Key == roleName).FirstOrDefault();
+		return data.Value;
+	}
+
+	public void AddFriendlyValue(string roleName, int value)
+	{
+		if (m_FriendlyValue.ContainsKey(roleName)) m_FriendlyValue[roleName] += value;
+		else m_FriendlyValue.Add(roleName, value);
 	}
 }

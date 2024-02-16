@@ -26,6 +26,7 @@ public class UIWindow : MonoBehaviour
 	}
 	public void Close()
 	{
+		if (!gameObject.activeSelf) return;
 		if (winMask) winMask.enabled = false;
 		Animator anim = GetComponent<Animator>();
 		if (anim) anim.SetTrigger("close");
