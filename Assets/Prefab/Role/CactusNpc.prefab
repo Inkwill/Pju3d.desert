@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: 3979037842759899946}
   - component: {fileID: 7991770003483007082}
   - component: {fileID: -450254041917130182}
-  - component: {fileID: 7433562476817198457}
   - component: {fileID: 1259360024789658391}
+  - component: {fileID: -1269887426886504858}
   m_Layer: 8
   m_Name: CactusNpc
   m_TagString: Untagged
@@ -102,7 +102,8 @@ MonoBehaviour:
   Speed: 3
   DefaultWeapon: {fileID: 11400000, guid: 7f1a957562a85434e80c93859ff367a3, type: 2}
   WeaponLocator: {fileID: 4387020051728443196}
-  Interactor: {fileID: 0}
+  SceneDetector: {fileID: 8642832973775765013}
+  InteractDetector: {fileID: 6053622076570223732}
   EnemyDetector: {fileID: 7237560969698338102}
   SkillDetector: {fileID: 8437137391455312659}
   SpurSoundClips: []
@@ -225,35 +226,6 @@ MonoBehaviour:
   m_Offensive: 0
   m_WanderRadius: 1
   m_WanderBeat: 5
---- !u!114 &7433562476817198457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 95224015133262308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdeaa424fc33d114bbd2e6af2a7a8292, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layers:
-    serializedVersion: 2
-    m_Bits: 0
-  SceneDetector: {fileID: 8642832973775765013}
-  InteractDetector: {fileID: 6053622076570223732}
-  OnItemEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  OnItemExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTargetStay:
-    m_PersistentCalls:
-      m_Calls: []
-  OnInteracting:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1259360024789658391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +245,24 @@ MonoBehaviour:
   tellerEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-1269887426886504858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95224015133262308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 379bc15926d879049950d1d2859120b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InteractEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  Detector: {fileID: 6053622076570223732}
+  handleTime: 1
+  slider: {fileID: 5703468976174348274}
 --- !u!1001 &3064117141470114346
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -281,26 +271,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6085662302964769022}
     m_Modifications:
-    - target: {fileID: 653586547211128516, guid: aa96cce25b973164eb6aff0eb2866553,
+    - target: {fileID: 1583755592681558826, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 100
+      propertyPath: m_AnchorMax.x
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5322978775957476511, guid: aa96cce25b973164eb6aff0eb2866553,
+    - target: {fileID: 1583755592681558826, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 32
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5712880437704622802, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5754491169340107577, guid: aa96cce25b973164eb6aff0eb2866553,
-        type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 5082947502171920998}
     - target: {fileID: 6569298571137308718, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
       propertyPath: m_Name
@@ -411,16 +396,23 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8989373823891722991, guid: aa96cce25b973164eb6aff0eb2866553,
-        type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 5082947502171920998}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa96cce25b973164eb6aff0eb2866553, type: 3}
+--- !u!114 &5703468976174348274 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7323737682471273944, guid: aa96cce25b973164eb6aff0eb2866553,
+    type: 3}
+  m_PrefabInstance: {fileID: 3064117141470114346}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6895017158096155082 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8445916009198093280, guid: aa96cce25b973164eb6aff0eb2866553,

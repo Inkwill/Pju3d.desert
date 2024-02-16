@@ -7,6 +7,8 @@ using CreatorKitCodeInternal;
 public class ItemDemander : TimerBehaviour
 {
 	[SerializeField]
+	InteractOnTrigger detector;
+	[SerializeField]
 	UIItemDemand ui_demand;
 	[SerializeField]
 	List<KeyValueData.KeyValue<Item, int>> DemandData;
@@ -18,18 +20,46 @@ public class ItemDemander : TimerBehaviour
 		m_Demand = new InventorySystem.ItemDemand(KeyValueData.ToDic(DemandData));
 		ui_demand.Show(m_Demand);
 
-		GetComponent<InteractHandle>()?.OnTargetStay.AddListener(OnInterStay);
+		//detector?.OnEnter.AddListener(OnInterEnter);
+		//detector?.OnExit.AddListener(OnInterExit);
+		//detector?.OnStay.AddListener(OnInterStay);
 	}
 
-	void OnInterStay(GameObject inter)
+	public void OnInteractEvent(RoleControl actor, string eventName)
 	{
-		RoleControl role = inter.GetComponent<RoleControl>();
-		if (role && role.isIdle)
+		if (eventName == "Completed")
 		{
-			if (m_Demand.Completed) { isStarted = true; role.Data.Inventory.Actions -= OnInventoryAction; }
-			else { role.Data.Inventory.Actions += OnInventoryAction; m_Demand.Fulfill(role.Data.Inventory); }
+			if (actor.isIdle)
+			{
+				if (m_Demand.Completed) { isStarted = true; actor.Data.Inventory.Actions -= OnInventoryAction; }
+				else { actor.Data.Inventory.Actions += OnInventoryAction; m_Demand.Fulfill(actor.Data.Inventory); }
+			}
 		}
 	}
+
+	// void OnInterEnter(GameObject enter)
+	// {
+	// 	Helpers.Log(this, "OninterEnter", "enter= " + enter);
+	// }
+
+	// void OnInterExit(GameObject exiter)
+	// {
+	// 	Helpers.Log(this, "OninterEnter", "exiter= " + exiter);
+	// }
+
+	// void OnInterStay(GameObject stayer, float during)
+	// {
+	// 	Helpers.Log(this, "OninterEnter", "stayer= " + stayer);
+	// }
+
+
+	// RoleControl role = inter.GetComponent<RoleControl>();
+	// if (role && role.isIdle)
+	// {
+	// 	if (m_Demand.Completed) { isStarted = true; role.Data.Inventory.Actions -= OnInventoryAction; }
+	// 	else { role.Data.Inventory.Actions += OnInventoryAction; m_Demand.Fulfill(role.Data.Inventory); }
+	// }
+
 
 	// protected override void OnInterval()
 	// {
@@ -40,30 +70,8 @@ public class ItemDemander : TimerBehaviour
 	// 	}
 
 	// }
-	// public void OnRoleEnter(GameObject enter)
-	// {
-	// 	if (isStarted) return;
-	// 	if (m_role == null) m_role = enter.GetComponent<RoleControl>();
-	// 	if (m_role.Data.Inventory != null)
-	// 	{
-	// 		m_role.Data.Inventory.Actions += OnInventoryAction;
-	// 		Debug.Log("OnRoleEnter: " + m_role);
-	// 	}
-	// }
 
 
-
-	// public void OnRoleExit(GameObject enter)
-	// {
-	// 	if (isStarted) return;
-	// 	RoleControl role = enter.GetComponent<RoleControl>();
-	// 	if (role && role == m_role)
-	// 	{
-	// 		m_role.Data.Inventory.Actions -= OnInventoryAction;
-	// 		Debug.Log("OnRoleExit: " + m_role);
-	// 		m_role = null;
-	// 	}
-	// }
 
 	protected override void OnStart()
 	{

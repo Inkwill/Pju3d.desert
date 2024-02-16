@@ -7,7 +7,7 @@ using CreatorKitCodeInternal;
 
 public class UIWindow : MonoBehaviour
 {
-	public Text winTitle;
+	public string winName;
 	public Image winMask;
 	public AudioClip OpenClip;
 	public AudioClip CloseClip;

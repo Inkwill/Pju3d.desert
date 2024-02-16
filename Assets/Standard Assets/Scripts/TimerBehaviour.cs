@@ -63,7 +63,11 @@ public class TimerBehaviour : MonoBehaviour
 				OnProcessing(m_curTimer / during);
 				m_step = 0f;
 			}
-			if (progressSlider) progressSlider.value = m_curTimer;
+			if (progressSlider)
+			{
+				if (!progressSlider.gameObject.activeSelf) progressSlider.gameObject.SetActive(true);
+				progressSlider.value = m_curTimer;
+			}
 		}
 		else if (m_step >= interval)
 		{

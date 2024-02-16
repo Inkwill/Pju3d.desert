@@ -9,7 +9,8 @@ using MyBox;
 public class RoleAI : MonoBehaviour
 {
 	protected RoleControl m_role;
-
+	public string SceneBox { get { return GameManager.SceneBoxInfo(m_role.SceneDetector.lastInner, false); } }
+	public string SceneBoxName { get { return GameManager.SceneBoxInfo(m_role.SceneDetector.lastInner, true); } }
 	public virtual void Init()
 	{
 		m_role = GetComponent<RoleControl>();
@@ -27,7 +28,12 @@ public class RoleAI : MonoBehaviour
 			m_role.SkillDetector.OnExit.AddListener(OnSkillTargetExit);
 			m_role.SkillDetector.OnEvent.AddListener(OnSkillTargetEvent);
 		}
-		if (m_role.Interactor) m_role.Interactor.OnInteracting.AddListener(OnInteracting);
+		if (m_role.InteractDetector)
+		{
+			m_role.InteractDetector.OnStay.AddListener(OnInteractStay);
+			// m_role.InteractDetector.OnExit.AddListener(OnInteracterExit);
+			// m_role.InteractDetector.OnEvent.AddListener(OnInteractorEvent);
+		}
 	}
 
 	void Update()
@@ -85,9 +91,9 @@ public class RoleAI : MonoBehaviour
 		}
 	}
 
-	protected virtual void OnInteracting(InteractHandle interactor, string eventName)
+	protected virtual void OnInteractStay(GameObject interactor, float during)
 	{
-		if (eventName == "Start") m_role.LookAt(interactor.gameObject.transform);
+		if (interactor.tag != "item") m_role.LookAt(interactor.transform);
 		//HighlightTarget(interactor.gameObject, true);
 		//Debug.Log("[RoleAI-" + m_role + "] OnInteracting with : " + interactor.gameObject);
 	}

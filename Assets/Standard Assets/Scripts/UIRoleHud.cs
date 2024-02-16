@@ -20,6 +20,8 @@ public class UIRoleHud : MonoBehaviour
 	Text bubble_text;
 	[SerializeField]
 	Animator story_anim;
+	[SerializeField]
+	Slider sliderInteract;
 	RoleControl m_role;
 
 	void Start()
@@ -38,6 +40,7 @@ public class UIRoleHud : MonoBehaviour
 			sliderHp.gameObject.SetActive(false);
 		}
 		sliderPg?.gameObject.SetActive(false);
+		sliderInteract?.gameObject.SetActive(false);
 		GetComponentInParent<StoryTeller>()?.tellerEvent.AddListener(OnTellerEvent);
 		//iconStory?.gameObject.SetActive(false);
 	}

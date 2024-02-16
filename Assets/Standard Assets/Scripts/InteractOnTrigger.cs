@@ -20,12 +20,14 @@ public class InteractOnTrigger : MonoBehaviour
 			else m_boxCollier.size = new Vector3(value, value, value);
 		}
 	}
-	public UnityEvent<GameObject> OnEnter, OnExit, OnStay;
+	public UnityEvent<GameObject> OnEnter, OnExit;
+	public UnityEvent<GameObject, float> OnStay;
 	public UnityEvent<GameObject, string> OnEvent;
 
 	public List<GameObject> Inners { get { return interObjects; } }
 	public GameObject lastInner { get; private set; }
 	public GameObject lastExiter { get; private set; }
+	public GameObject curStayer { get; private set; }
 
 	[SerializeField]
 	bool once;
@@ -82,6 +84,11 @@ public class InteractOnTrigger : MonoBehaviour
 		{
 			lastInner = interObjects.Count > 0 ? interObjects[interObjects.Count - 1] : null;
 		}
+		if (exiter == curStayer)
+		{
+			curStayer = null;
+			m_stayDuring = 0;
+		}
 		exiter.GetComponent<EventSender>()?.events.RemoveListener(OnInterEvent);
 		OnExit?.Invoke(exiter);
 	}
@@ -93,16 +100,14 @@ public class InteractOnTrigger : MonoBehaviour
 		if (0 != (layers.value & 1 << other.gameObject.layer) && !interObjects.Contains(other.gameObject))
 		{
 			OnTriggerEnter(other);
+			return;
 		}
-		else if (other.gameObject == lastInner)
+		if (other.gameObject == curStayer)
 		{
 			m_stayDuring += Time.deltaTime;
-			if (m_stayDuring >= 1.0f)
-			{
-				OnStay?.Invoke(other.gameObject);
-				m_stayDuring = 0;
-			}
+			OnStay?.Invoke(curStayer, m_stayDuring);
 		}
+		else if (curStayer == null) curStayer = other.gameObject;
 	}
 
 	public GameObject GetNearest()
@@ -128,10 +133,19 @@ public class InteractOnTrigger : MonoBehaviour
 	void OnInterEvent(GameObject sender, string eventMessage)
 	{
 		OnEvent?.Invoke(sender, eventMessage);
-		if (eventMessage == "roleEvent_OnState_DEAD" && interObjects.Contains(sender))
+		if (eventMessage == "roleEvent_OnState_DEAD")
 		{
-			ExecuteOnExit(sender);
+			RemoveTarget(sender);
 		}
+	}
+
+	public void RemoveTarget(GameObject obj)
+	{
+		if (interObjects.Contains(obj))
+		{
+			ExecuteOnExit(obj);
+		}
+
 	}
 }
 

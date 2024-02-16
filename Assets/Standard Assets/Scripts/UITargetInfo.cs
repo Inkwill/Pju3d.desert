@@ -26,9 +26,9 @@ public class UITargetInfo : MonoBehaviour
 	public void Init()
 	{
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
-		GameManager.Player.Interactor.OnItemEnter.AddListener(OnItemEnter);
-		GameManager.Player.Interactor.OnItemExit.AddListener(OnItemExit);
-		GameManager.Player.Interactor.OnInteracting.AddListener(OnInteracting);
+		GameManager.Player.InteractDetector.OnEnter.AddListener(OnInteractEnter);
+		GameManager.Player.InteractDetector.OnExit.AddListener(OnInteractExit);
+		//GameManager.Player.InteractDetector.OnStay.AddListener(OnInteractStay);
 		SetEnemy();
 		for (int i = 0; i < maxUILoot; i++)
 		{
@@ -80,8 +80,9 @@ public class UITargetInfo : MonoBehaviour
 				break;
 		}
 	}
-	void OnItemEnter(Loot loot)
+	void OnInteractEnter(GameObject enter)
 	{
+		Loot loot = enter.GetComponentInParent<Loot>();
 		if (loot)
 		{
 			var uiloot = uilootList.Where(ui => ui.loot == null).FirstOrDefault();
@@ -108,8 +109,9 @@ public class UITargetInfo : MonoBehaviour
 		}
 	}
 
-	void OnItemExit(Loot loot)
+	void OnInteractExit(GameObject exiter)
 	{
+		Loot loot = exiter.GetComponentInParent<Loot>();
 		if (loot == null) return;
 		var uiloot = uilootList.Where(ui => ui.loot == loot).FirstOrDefault();
 		if (uiloot)
@@ -119,11 +121,5 @@ public class UITargetInfo : MonoBehaviour
 			uiloot.gameObject.SetActive(false);
 		}
 		//else Debug.LogError("Exit unexpected loot :" + loot);
-	}
-
-	void OnInteracting(InteractHandle interactor, string eventName)
-	{
-		if (eventName == "Enter" || eventName == "Interacting") btTalk.SetTrigger("show");
-		if (eventName == "Stop") btTalk.SetTrigger("hide");
 	}
 }

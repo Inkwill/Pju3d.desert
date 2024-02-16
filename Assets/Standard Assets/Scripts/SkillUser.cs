@@ -83,7 +83,7 @@ public class SkillUser : MonoBehaviour
 			case Skill.TargetType.SELF:
 				return UseSkill(skill, m_role.gameObject);
 			case Skill.TargetType.SCENEBOX:
-				return UseSkill(skill, m_role.Interactor.SceneDetector?.gameObject);
+				return UseSkill(skill, m_role.SceneDetector?.gameObject);
 			case Skill.TargetType.CURRENT:
 				return UseSkill(skill, m_role.CurrentEnemy?.gameObject);
 			default:
@@ -108,9 +108,9 @@ public class SkillUser : MonoBehaviour
 				return false;
 				// if (m_role.CurrentEnemy == null || (entry.skill.layers & (1 << m_role.CurrentEnemy.gameObject.layer)) == 0)
 			}
-			if (entry.skill.TType == Skill.TargetType.SCENEBOX && m_role.Interactor.SceneBox != "blank")
+			if (entry.skill.TType == Skill.TargetType.SCENEBOX && m_role.BaseAI.SceneBox != "blank")
 			{
-				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_role.Interactor.SceneBox);
+				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_role.BaseAI.SceneBox);
 				return false;
 			}
 			Debug.Log("UseSkill: " + skill.SkillName + "cd =" + entry.cd);

@@ -47,7 +47,7 @@ public class UIMainWindow : UIWindow
 	void FixedUpdate()
 	{
 		infoPos.text = GameManager.Player.gameObject.transform.position.ToString();
-		infoTerrian.text = GameManager.Player.Interactor.SceneBoxName;
+		infoTerrian.text = GameManager.Player.BaseAI.SceneBoxName;
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
 		btSwitchWeapon.interactable = GameManager.Player.isStandBy;
 	}
@@ -65,9 +65,6 @@ public class UIMainWindow : UIWindow
 				GameManager.Instance.CameraCtrl.SwitchModel();
 				break;
 			case "package":
-				GameManager.GameUI.SwitchWindow("winInventory");
-				break;
-			case "talk":
 				GameManager.GameUI.SwitchWindow("winInventory");
 				break;
 			default:

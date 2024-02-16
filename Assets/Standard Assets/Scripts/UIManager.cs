@@ -47,22 +47,21 @@ public class UIManager : MonoBehaviour
 		if (newWindow)
 		{
 			newWindow = Instantiate(newWindow, transform);
-			newWindow.gameObject.name = winName;
-			if (newWindow.winTitle) newWindow.winTitle.text = winName;
+			newWindow.gameObject.name = newWindow.winName = winName;
 			m_winList.Add(newWindow);
 			win_LastOpen = newWindow;
 		}
 		return newWindow;
 	}
 
-	public void SwitchWindow(string winName)
+	public UIWindow SwitchWindow(string winName)
 	{
 		if (win_LastOpen)
 		{
 			win_LastOpen.Close();
 			win_LastClose = win_LastOpen;
 		}
-		OpenWindow(winName);
+		return OpenWindow(winName);
 	}
 
 	public void BackWindow(UIWindow curWindow)
@@ -73,5 +72,9 @@ public class UIManager : MonoBehaviour
 		}
 		curWindow.Close();
 		win_LastClose = curWindow;
+	}
+	public void BackWindow()
+	{
+		BackWindow(win_LastOpen);
 	}
 }

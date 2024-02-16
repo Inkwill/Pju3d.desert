@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 2813869115654108682}
   - component: {fileID: 9141399745136244042}
   - component: {fileID: 7936165839796859715}
-  - component: {fileID: -4792410456992527834}
   m_Layer: 7
   m_Name: CactusEnemy
   m_TagString: Untagged
@@ -101,7 +100,8 @@ MonoBehaviour:
   Speed: 2
   DefaultWeapon: {fileID: 11400000, guid: 52b81e917921cad46997064d7acebe12, type: 2}
   WeaponLocator: {fileID: 3230608863334042140}
-  Interactor: {fileID: -4792410456992527834}
+  SceneDetector: {fileID: 3970009624236308903}
+  InteractDetector: {fileID: 1507304276479509446}
   EnemyDetector: {fileID: 2637199733257052804}
   SkillDetector: {fileID: 3890960223070805153}
   SpurSoundClips: []
@@ -224,33 +224,6 @@ MonoBehaviour:
   m_Offensive: 1
   m_WanderRadius: 5
   m_WanderBeat: 3
---- !u!114 &-4792410456992527834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1253957173911874756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdeaa424fc33d114bbd2e6af2a7a8292, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layer:
-    serializedVersion: 2
-    m_Bits: 256
-  SceneDetector: {fileID: 3970009624236308903}
-  InteractDetector: {fileID: 1507304276479509446}
-  data: {fileID: 0}
-  OnItemEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  OnItemExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRoleStay:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &4229250126243815178
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -263,6 +236,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2786381923677283886, guid: aa96cce25b973164eb6aff0eb2866553,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5322978775957476511, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}

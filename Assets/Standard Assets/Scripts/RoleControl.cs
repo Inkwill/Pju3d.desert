@@ -31,7 +31,8 @@ public class RoleControl : MonoBehaviour
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 
 	[Header("Detector")]
-	public InteractHandle Interactor;
+	public InteractOnTrigger SceneDetector;
+	public InteractOnTrigger InteractDetector;
 	public InteractOnTrigger EnemyDetector;
 	public InteractOnTrigger SkillDetector;
 
@@ -102,10 +103,8 @@ public class RoleControl : MonoBehaviour
 		m_CharacterData.Init();
 		m_CharacterData.Equipment.InitWeapon(DefaultWeapon);
 
-		Interactor = GetComponent<InteractHandle>();
 		m_Ai = GetComponent<RoleAI>();
 		m_Ai.Init();
-
 
 
 		m_SkillUser = GetComponent<SkillUser>();
