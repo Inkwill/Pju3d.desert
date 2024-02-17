@@ -12,7 +12,7 @@ public class UIInventoryWindow : UIWindow
 	// 	public UIInventorySlot DraggedEntry;
 	// 	public RectTransform OriginalParent;
 	// }
-
+	public GameObject EquipRoot;
 	public RectTransform ItemSlots;
 	public Text textStats;
 	public Item testItem;
@@ -59,13 +59,14 @@ public class UIInventoryWindow : UIWindow
 	{
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
-		GameManager.Instance.CameraCtrl.SetDistance(0);
+		EquipRoot.SetActive(GameManager.StoryListener.CurrentTeller == null);
+		GameManager.Instance.CameraCtrl.CloseTo();
 		Load();
 	}
 
 	protected override void OnClose()
 	{
-		GameManager.Instance.CameraCtrl.SetDistance();
+		GameManager.Instance.CameraCtrl.Reset();
 		base.OnClose();
 	}
 	public void Load()
@@ -131,12 +132,18 @@ public class UIInventoryWindow : UIWindow
 				if (item.UsedBy(GameManager.Player.Data))
 				{
 					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID);
-					Load();
 					m_SelectedSlot.tog.isOn = GameManager.Player.Data.Inventory.ItemCount(item.ItemName) > 1;
+					Load();
 				}
 				break;
 			case "Add":
 				GameManager.GameUI.OpenWindow("winConfirm");
+				break;
+			case "Give":
+				if (GameManager.StoryListener.CurrentTeller.GiveItem(m_SelectedSlot.item))
+					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID);
+				m_SelectedSlot.tog.isOn = false;
+				Load();
 				break;
 			default:
 				break;

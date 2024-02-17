@@ -10,6 +10,7 @@ Library: C:\Pju3d.desert\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_ge
 --target-framework=NetFramework
 --float-mode=Fast
 --assembly-defines=Assembly-CSharp-firstpass;
+--assembly-defines=Assembly-CSharp;
 --assembly-defines=CFXRDemo;
 --assembly-defines=CFXRRuntime;
 --assembly-defines=Cinemachine;
@@ -64,6 +65,7 @@ Library: C:\Pju3d.desert\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_ge
 --float-precision=Standard
 --target-framework=NetFramework
 --assembly-defines=Assembly-CSharp-firstpass;
+--assembly-defines=Assembly-CSharp;
 --assembly-defines=CFXRDemo;
 --assembly-defines=CFXRRuntime;
 --assembly-defines=Cinemachine;

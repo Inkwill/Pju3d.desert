@@ -77,4 +77,10 @@ public class StoryTeller : MonoBehaviour
 		}
 		entrustments.Sort();
 	}
+
+	public bool GiveItem(Item item)
+	{
+		m_role.Data.Inventory.AddItem(item);
+		return true;
+	}
 }

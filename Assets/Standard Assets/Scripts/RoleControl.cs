@@ -126,7 +126,7 @@ public class RoleControl : MonoBehaviour
 				wp.bulletTrans = WeaponLocator;
 				if (!item.WorldObjectPrefab) return;
 				var obj = Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
-				Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
+				//Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
 			}
 		};
 

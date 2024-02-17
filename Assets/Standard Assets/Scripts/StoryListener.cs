@@ -8,6 +8,7 @@ public class StoryListener : MonoBehaviour
 {
 	public StoryNode testNode;
 	public UnityEvent<StoryNode, string> nodeEvents;
+	public UnityEvent<string> ListenerEvents;
 	List<string> m_stories;
 	List<StoryNode> m_completed;
 	Dictionary<string, int> m_FriendlyValue;
@@ -49,13 +50,16 @@ public class StoryListener : MonoBehaviour
 	public void StartListening(StoryTeller teller)
 	{
 		m_currentTeller = teller;
-		GameManager.GameUI.SwitchWindow("winTalk");
+		ListenerEvents?.Invoke("StartListening");
 	}
 
 	public void StopListening(StoryTeller teller)
 	{
-		if (GameManager.GameUI.win_LastOpen.winName == "winTalk") GameManager.GameUI.BackWindow();
-		if (m_currentTeller = teller) m_currentTeller = null;
+		if (m_currentTeller = teller)
+		{
+			m_currentTeller = null;
+			ListenerEvents?.Invoke("StopListening");
+		}
 	}
 	List<StoryNode> GetCompleted(string storyName)
 	{

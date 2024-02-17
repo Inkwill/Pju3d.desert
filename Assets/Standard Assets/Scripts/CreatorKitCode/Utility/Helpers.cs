@@ -45,7 +45,7 @@ public class Helpers
 		return result.ToString();
 	}
 
-	public static void Log(object logger, string key, string log)
+	public static void Log(object logger, string key = "", string log = "")
 	{
 		Debug.Log($"<{key}>{log}---[{logger.ToString()}]");
 	}

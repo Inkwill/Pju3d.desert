@@ -42,6 +42,11 @@ public class UIWindow : MonoBehaviour
 		GameManager.GameUI.BackWindow(this);
 	}
 
+	public void BackToMain()
+	{
+		GameManager.GameUI.SwitchWindow("winMain");
+	}
+
 	public static void SetButton(Button bt, bool active)
 	{
 		if (bt.interactable == active) return;

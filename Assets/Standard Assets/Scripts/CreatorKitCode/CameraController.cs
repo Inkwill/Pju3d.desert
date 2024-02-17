@@ -38,7 +38,7 @@ namespace CreatorKitCodeInternal
 		protected CinemachineFramingTransposer m_FramingTransposer;
 
 		float m_setDistance;
-		float m_lastDistance;
+		float m_currentSet;
 		bool m_setTrigger = false;
 
 		void Awake()
@@ -84,30 +84,34 @@ namespace CreatorKitCodeInternal
 
 			AmbiencePlayer.UpdateVolume(m_CurrentDistance);
 		}
-
-		public void SetDistance(float distance = -1f)
+		public void CloseTo()
 		{
-			if (distance < 0) m_setDistance = m_lastDistance;
-			else { m_lastDistance = m_setDistance; m_setDistance = distance; }
+			m_setDistance = 0;
+			m_setTrigger = true;
+		}
+
+		public void Reset()
+		{
+			m_setDistance = m_currentSet;
 			m_setTrigger = true;
 		}
 		public void SwitchModel()
 		{
-			switch (m_setDistance)
+			switch (m_currentSet)
 			{
 				case 0:
-					m_setDistance = 0.5f;
+					m_currentSet = 0.5f;
 					break;
 				case 0.5f:
-					m_setDistance = 1.0f;
+					m_currentSet = 1.0f;
 					break;
 				case 1.0f:
-					m_setDistance = 0.5f;
+					m_currentSet = 0.5f;
 					break;
 				default:
 					break;
 			}
-			m_setTrigger = true;
+			Reset();
 		}
 	}
 }

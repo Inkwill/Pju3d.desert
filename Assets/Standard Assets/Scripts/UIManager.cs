@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCodeInternal;
 using UnityEngine.UI;
+using System.Linq;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,11 +11,11 @@ public class UIManager : MonoBehaviour
 
 	public Canvas DragCanvas;
 
+	public UIMainWindow WinMain => GetWindow("winMain") as UIMainWindow;
 	public List<UIWindow> m_winList;
 
 	public UIWindow win_LastOpen;
 	public UIWindow win_LastClose;
-
 	float during_check;
 
 	// void FixedUpdate()
@@ -52,6 +53,12 @@ public class UIManager : MonoBehaviour
 			win_LastOpen = newWindow;
 		}
 		return newWindow;
+	}
+
+	public UIWindow GetWindow(string name)
+	{
+		UIWindow window = m_winList.Where(win => win.winName == name).FirstOrDefault();
+		return window;
 	}
 
 	public UIWindow SwitchWindow(string winName)

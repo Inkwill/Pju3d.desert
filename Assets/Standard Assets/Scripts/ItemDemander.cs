@@ -88,7 +88,7 @@ public class ItemDemander : TimerBehaviour
 	}
 	protected override void OnTimer()
 	{
-		Debug.Log("Building Completed!");
+		Helpers.Log(this, "OnTimer");
 		// GameObject createObj = Resources.Load(creatPrefab) as GameObject;
 		// if (createObj)
 		// {
@@ -102,8 +102,8 @@ public class ItemDemander : TimerBehaviour
 		if (actionName == "Fulfill")
 		{
 			ui_demand.Show(m_Demand);
-			//if (m_Demand.Completed) isStarted = true;
-			Debug.Log("fulfill entry,item =" + itemName);
+			if (m_Demand.Completed) isStarted = true;
+			Helpers.Log(this, "Fulfill", "item= " + itemName);
 		}
 	}
 }
