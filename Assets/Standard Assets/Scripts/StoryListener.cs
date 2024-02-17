@@ -57,8 +57,8 @@ public class StoryListener : MonoBehaviour
 	{
 		if (m_currentTeller = teller)
 		{
-			m_currentTeller = null;
 			ListenerEvents?.Invoke("StopListening");
+			m_currentTeller = null;
 		}
 	}
 	List<StoryNode> GetCompleted(string storyName)

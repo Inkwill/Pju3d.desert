@@ -86,13 +86,13 @@ public class UIRoleHud : MonoBehaviour
 		Bubble(actionName + "item = " + itemName);
 	}
 
-	void OnTellerEvent(StoryNode node, string eventName)
+	void OnTellerEvent(StoryTeller teller, string eventName)
 	{
-		if (eventName == "tellStory")
-		{
-			if (node != null) story_anim.SetTrigger("show");
-			else story_anim.SetTrigger("hide");
-		}
+		// if (eventName == "tellStory")
+		// {
+		// 	if (teller.CurrentNode != null) story_anim.SetTrigger("show");
+		// 	else story_anim.SetTrigger("hide");
+		// }
 
 	}
 	private void Update()

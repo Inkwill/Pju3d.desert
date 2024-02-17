@@ -7,8 +7,8 @@ using CreatorKitCode;
 public class StoryTeller : MonoBehaviour
 {
 	public List<StoryNode> storyNodes;
-	public UnityEvent<StoryNode, string> tellerEvent;
-	public StoryNode CurrentNode { get { return m_currentNode; } set { m_currentNode = value; tellerEvent?.Invoke(m_currentNode, "tellStory"); } }
+	public UnityEvent<StoryTeller, string> tellerEvent;
+	public StoryNode CurrentNode { get { return m_currentNode; } set { m_currentNode = value; tellerEvent?.Invoke(this, "GetStoryNode"); } }
 	public string RoleName { get { return m_role.Data.CharacterName; } }
 	public List<Entrustment> entrustments;
 	StoryNode m_currentNode;
@@ -35,6 +35,7 @@ public class StoryTeller : MonoBehaviour
 			{
 				if (m_interactHandle) m_interactHandle.CurrentTarget = actor;
 				GameManager.StoryListener.StartListening(this);
+				TellStory();
 			}
 		}
 		if (eventName == "Exit")
@@ -51,8 +52,8 @@ public class StoryTeller : MonoBehaviour
 
 	void OnRoleEvent(GameObject role, string eventName)
 	{
-		if (eventName == "aiEvent_wandering" && m_currentNode == null)
-			TellStory();
+		// if (eventName == "aiEvent_wandering" && m_currentNode == null)
+		// 	TellStory();
 	}
 
 	void TellStory()

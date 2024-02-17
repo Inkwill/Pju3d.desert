@@ -10,7 +10,7 @@ public class UIEventSender : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 {
 	public float longPressDuration = 1.0f;
 	public bool canClick { get { return m_canClick; } set { m_canClick = value; } }
-	bool m_canClick;
+	bool m_canClick = true;
 	float pressTime;
 	bool m_longpress;
 

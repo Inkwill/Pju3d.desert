@@ -17,7 +17,7 @@ public class UITalkWindow : UIWindow
 	{
 		if (GameManager.StoryListener.CurrentTeller != null)
 		{
-			textNpc.text = GameManager.StoryListener.CurrentTeller.CurrentNode.Content;
+			textNpc.text = GameManager.StoryListener.CurrentTeller.CurrentNode.Content[0].Key;
 			textFriendlyValue.text = GameManager.StoryListener.GetFriendlyValue().ToString();
 		}
 		if (uiEntrustList == null) uiEntrustList = new List<UIEntrustElement>();
