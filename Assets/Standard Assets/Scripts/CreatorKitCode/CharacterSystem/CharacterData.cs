@@ -119,7 +119,7 @@ namespace CreatorKitCode
 				Equipment.Weapon.Attack(this, target);
 				if (Equipment.Weapon.Stats.AdditionalTargets > 0)
 				{
-					List<GameObject> targets = GetComponent<RoleControl>()?.EnemyDetector.Inners;
+					List<GameObject> targets = GetComponent<RoleControl>()?.BaseAI.EnemyDetector.Inners;
 					int addNum = 0;
 					foreach (GameObject t in targets)
 					{

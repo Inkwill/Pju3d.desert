@@ -95,9 +95,9 @@ public class InteractOnTrigger : MonoBehaviour
 
 	void OnTriggerStay(Collider other)
 	{
-		if (other.gameObject == gameObject) return;
+		if (other.gameObject == gameObject || 0 == (layers.value & 1 << other.gameObject.layer)) return;
 
-		if (0 != (layers.value & 1 << other.gameObject.layer) && !interObjects.Contains(other.gameObject))
+		if (!interObjects.Contains(other.gameObject))
 		{
 			OnTriggerEnter(other);
 			return;

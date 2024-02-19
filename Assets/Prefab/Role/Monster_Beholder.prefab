@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5227243799845401904}
   - component: {fileID: 85117475064497869}
   - component: {fileID: 2181113161490572368}
-  - component: {fileID: 4026332706393330652}
+  - component: {fileID: 6232073841664365103}
   m_Layer: 7
   m_Name: Monster_Beholder
   m_TagString: Untagged
@@ -100,6 +100,10 @@ MonoBehaviour:
   Speed: 2
   DefaultWeapon: {fileID: 11400000, guid: 52b81e917921cad46997064d7acebe12, type: 2}
   WeaponLocator: {fileID: 0}
+  SceneDetector: {fileID: 8686177504629337041}
+  InteractDetector: {fileID: 6591241889224724912}
+  EnemyDetector: {fileID: 7713252172596359410}
+  SkillDetector: {fileID: 8821629619986255575}
   SpurSoundClips: []
   SpottedAudioClip: []
 --- !u!114 &3349377060174317668
@@ -117,7 +121,7 @@ MonoBehaviour:
   CharacterName: Cactus Nails
   Stats:
     baseStats:
-      health: 10
+      health: 3
       strength: 2
       defense: 1
       agility: 0
@@ -201,7 +205,7 @@ MonoBehaviour:
   events:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4026332706393330652
+--- !u!114 &6232073841664365103
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -210,17 +214,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7187396258787047546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b97291c3ecc5a742b087a681ae68440, type: 3}
+  m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camp: 1
-  EnemyDetector: {fileID: 7713252172596359410}
-  InteractDetector: {fileID: 6591241889224724912}
-  SceneDetector: {fileID: 8686177504629337041}
-  SkillDetector: {fileID: 0}
+  camp: 0
+  dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
+  CorpseChance: 50
+  m_CorpseRetention: 10
   m_Offensive: 1
-  m_WanderRadius: 10
-  m_WanderBeat: 5
+  m_WanderRadius: 5
+  m_WanderBeat: 3
 --- !u!1001 &7004147645579896727
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -475,6 +478,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a8342e09fc664842a38a661849c3696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8821629619986255575 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 602964386396529576, guid: 54707c86cb650ed41a8c70adb389a0b9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8228799500986625407}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a8342e09fc664842a38a661849c3696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &9087486896945292056 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 878110269401255527, guid: 54707c86cb650ed41a8c70adb389a0b9,
@@ -498,6 +513,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BeholderPBRDefault
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530003306004526970, guid: a281aaaef0214dbbb7a0c5e5d4d370d1,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530003306004526970, guid: a281aaaef0214dbbb7a0c5e5d4d370d1,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530003306004526970, guid: a281aaaef0214dbbb7a0c5e5d4d370d1,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4530003306004526970, guid: a281aaaef0214dbbb7a0c5e5d4d370d1,
         type: 3}

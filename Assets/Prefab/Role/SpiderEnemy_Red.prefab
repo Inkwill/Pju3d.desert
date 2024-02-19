@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1956787967552379151}
   - component: {fileID: 3422330615315412849}
   - component: {fileID: 5877316409514240190}
-  - component: {fileID: 5688696637730325475}
+  - component: {fileID: 9015557579248510583}
   m_Layer: 7
   m_Name: SpiderEnemy_Red
   m_TagString: Untagged
@@ -121,7 +121,7 @@ MonoBehaviour:
   CharacterName: Cactus Nails
   Stats:
     baseStats:
-      health: 10
+      health: 5
       strength: 2
       defense: 1
       agility: 0
@@ -205,7 +205,7 @@ MonoBehaviour:
   events:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5688696637730325475
+--- !u!114 &9015557579248510583
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,9 +214,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7778956338015736396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b97291c3ecc5a742b087a681ae68440, type: 3}
+  m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camp: 0
+  dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
+  CorpseChance: 0
+  m_CorpseRetention: 0
+  m_Offensive: 1
+  m_WanderRadius: 5
+  m_WanderBeat: 3
 --- !u!1001 &1838993880767983941
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -511,6 +518,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 6.24042e-31
+      objectReference: {fileID: 0}
+    - target: {fileID: 7122654101855557399, guid: 91d4749f098c66442b36767a17342765,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7122654101855557399, guid: 91d4749f098c66442b36767a17342765,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7122654101855557399, guid: 91d4749f098c66442b36767a17342765,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7122654101855557399, guid: 91d4749f098c66442b36767a17342765,
         type: 3}

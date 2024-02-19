@@ -9,11 +9,11 @@ public class Creater : TimerBehaviour
 	protected float m_initialDeep;
 	[SerializeField]
 	protected string creatPrefab;
-	protected CharacterControl m_character;
+	protected RoleControl m_character;
 
 	public bool Auto = false;
 
-	public void DoCreate(CharacterControl character, string pbName)
+	public void DoCreate(RoleControl character, string pbName)
 	{
 		creatPrefab = pbName;
 		m_character = character;

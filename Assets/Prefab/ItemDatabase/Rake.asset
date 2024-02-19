@@ -19,16 +19,26 @@ MonoBehaviour:
     type: 3}
   SpawnClip: {fileID: 0}
   Slot: 5
-  MinimumStrength: 0
-  MinimumAgility: 0
-  MinimumDefense: 0
-  EquippedEffects: []
-  damageType: 0
-  HitSounds: []
-  SwingSounds: []
+  EquippedStat:
+    ModifierMode: 1
+    Stats:
+      health: 0
+      strength: 0
+      defense: 0
+      agility: 0
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   Stats:
     Speed: 1
-    MinimumDamage: 0
-    MaximumDamage: 0
+    MinimumDamage: 1
+    MaximumDamage: 2
     MaxRange: 4
+    AdditionalTargets: 0
+  damageType: 0
   AttackEffects: []
+  WeaponSkill: {fileID: 0}
+  bulletPb: {fileID: 0}
+  bulletTrans: {fileID: 0}
+  HitSounds: []
+  SwingSounds: []

@@ -14,7 +14,7 @@ namespace CreatorKitCodeInternal
 		public static UISystem Instance { get; private set; }
 
 		[Header("Player")]
-		public CharacterControl PlayerCharacter;
+		public RoleControl PlayerCharacter;
 		public Slider PlayerHealthSlider;
 		public Text MaxHealth;
 		public Text CurrentHealth;

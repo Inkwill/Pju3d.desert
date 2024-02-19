@@ -99,7 +99,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: b79ff7bb68348be479d3db6b7fe8a569, type: 2}
+  m_Motion: {fileID: 1827226128182048838, guid: c478f0b0473df094591a7e24b4a53dfb,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: Speed
   m_MirrorParameter: 
@@ -126,7 +127,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: eccbae3cfc77ad245ade46e143aa3200, type: 2}
+  m_Motion: {fileID: 1827226128182048838, guid: c478f0b0473df094591a7e24b4a53dfb,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -188,7 +190,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SoliderDogController
+  m_Name: TowerController
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Speed
@@ -327,7 +329,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 9f0e03164414016409d28995a128ba98, type: 2}
+  m_Motion: {fileID: 1827226128182048838, guid: c478f0b0473df094591a7e24b4a53dfb,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: Speed
   m_MirrorParameter: 
@@ -428,7 +431,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 6019f1b4a095b0b4396f5561a51fee89, type: 2}
+  m_Motion: {fileID: 1827226128182048838, guid: 1304befd334bbbf4abb0eab7c2c2ed07,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -479,7 +483,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 5d190d8211c88a64281f7b90c69f3eb3, type: 2}
+  m_Motion: {fileID: 1827226128182048838, guid: c478f0b0473df094591a7e24b4a53dfb,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -595,7 +600,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 1588532e68f51a040bda71c68cfab177, type: 2}
+  m_Motion: {fileID: 1827226128182048838, guid: c478f0b0473df094591a7e24b4a53dfb,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

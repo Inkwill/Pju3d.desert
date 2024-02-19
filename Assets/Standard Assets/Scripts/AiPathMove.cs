@@ -17,13 +17,13 @@ public class AiPathMove : MonoBehaviour
 	}
 	void OnRoleEvent(GameObject obj, string eventName)
 	{
-		if (eventName == "roleEvent_OnMoveEnd" && m_paths.Length > m_curPathIndex)
+		if (eventName == "roleAIEvent_OnMoveEnd" && m_paths.Length > m_curPathIndex)
 		{
 			m_curPathIndex++;
 		}
 		if (eventName == "roleEvent_OnIdling" && m_paths.Length > m_curPathIndex)
 		{
-			m_role.MoveTo(m_paths[m_curPathIndex].position);
+			m_role.BaseAI.MoveTo(m_paths[m_curPathIndex].position);
 		}
 		if (eventName == "roleEvent_OnMoving" && m_Offensive)
 		{

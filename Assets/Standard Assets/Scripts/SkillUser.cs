@@ -53,7 +53,7 @@ public class SkillUser : MonoBehaviour
 				m_eventSender?.Send(gameObject, "skillEvent_OnImplement");
 				m_UseEntry = null;
 				m_During = 0;
-				m_role.SkillDetector.layers = LayerMask.GetMask("Nothing");
+				m_role.BaseAI.SkillDetector.layers = LayerMask.GetMask("Nothing");
 			}
 		}
 	}
@@ -83,7 +83,7 @@ public class SkillUser : MonoBehaviour
 			case Skill.TargetType.SELF:
 				return UseSkill(skill, m_role.gameObject);
 			case Skill.TargetType.SCENEBOX:
-				return UseSkill(skill, m_role.SceneDetector?.gameObject);
+				return UseSkill(skill, m_role.BaseAI.SceneDetector?.gameObject);
 			case Skill.TargetType.CURRENT:
 				return UseSkill(skill, m_role.CurrentEnemy?.gameObject);
 			default:
@@ -114,8 +114,8 @@ public class SkillUser : MonoBehaviour
 				return false;
 			}
 			Debug.Log("UseSkill: " + skill.SkillName + "cd =" + entry.cd);
-			m_role.SkillDetector.layers = entry.skill.layers;
-			m_role.SkillDetector.Radius = entry.skill.radius;
+			m_role.BaseAI.SkillDetector.layers = entry.skill.layers;
+			m_role.BaseAI.SkillDetector.Radius = entry.skill.radius;
 			entry.targets = new List<GameObject>();
 			if (target != null) entry.targets.Add(target);
 			entry.cd = entry.skill.CD;

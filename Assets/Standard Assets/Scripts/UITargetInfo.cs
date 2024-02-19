@@ -26,8 +26,8 @@ public class UITargetInfo : MonoBehaviour
 	public void Init()
 	{
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
-		GameManager.Player.InteractDetector.OnEnter.AddListener(OnInteractEnter);
-		GameManager.Player.InteractDetector.OnExit.AddListener(OnInteractExit);
+		GameManager.Player.BaseAI.InteractDetector.OnEnter.AddListener(OnInteractEnter);
+		GameManager.Player.BaseAI.InteractDetector.OnExit.AddListener(OnInteractExit);
 		//GameManager.Player.InteractDetector.OnStay.AddListener(OnInteractStay);
 		SetEnemy();
 		for (int i = 0; i < maxUILoot; i++)

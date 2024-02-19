@@ -22,20 +22,20 @@ MonoBehaviour:
     Value: listen_main_03
   Chats:
   - Key:
-    - tell_chat_1_1
-    - tell_chat_1_2
-    - tell_chat_1_3
+    - chat_ask_1_1
+    - chat_ask_1_2
+    - chat_ask_1_3
     Value:
-    - listen_chat_1_1
-    - listen_chat_1_2
-    - listen_chat_1_3
+    - chat_tell_1_1
+    - chat_tell_1_2
+    - chat_tell_1_3
   - Key:
-    - tell_chat_2_1
-    - tell_chat_2_2
-    - tell_chat_2_3
+    - chat_ask_2_1
+    - chat_ask_2_2
+    - chat_ask_2_3
     Value:
-    - listen_chat_2_1
-    - listen_chat_2_2
-    - listen_chat_2_3
+    - chat_tell_2_1
+    - chat_tell_2_2
+    - chat_tell_2_3
   Previous: {fileID: 0}
   Next: {fileID: 11400000, guid: d88c89255068dd140a77d29989494ce9, type: 2}

@@ -4,20 +4,18 @@ using UnityEngine.UI;
 
 public class UITalkButton : UIEventSender
 {
-    string m_content;
-    public Text text_content;
-    UIMainWindow m_owner;
+	string m_content;
+	public Text text_content;
 
-    public void Show(UIMainWindow owner, string text)
-    {
-        m_content = text;
-        m_owner = owner;
-        text_content.text = m_content;
-        gameObject.SetActive(true);
-    }
+	public void Show(string text)
+	{
+		m_content = text;
+		text_content.text = m_content;
+		gameObject.SetActive(true);
+	}
 
-    void Start()
-    {
-        OnClick.AddListener(() => { m_owner.OnTalk(m_content); });
-    }
+	void Start()
+	{
+		OnClick.AddListener(() => { GameManager.StoryListener.Ask(m_content); });
+	}
 }

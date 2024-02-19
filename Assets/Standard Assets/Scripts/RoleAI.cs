@@ -2,50 +2,108 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
+using UnityEngine.AI;
 using CreatorKitCodeInternal;
 using MyBox;
 
 [RequireComponent(typeof(RoleControl))]
 public class RoleAI : MonoBehaviour
 {
+	[Header("Detector")]
+	public InteractOnTrigger SceneDetector;
+	public InteractOnTrigger InteractDetector;
+	public InteractOnTrigger EnemyDetector;
+	public InteractOnTrigger SkillDetector;
+	public string SceneBox { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, false); } }
+	public string SceneBoxName { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, true); } }
+	public NavMeshAgent Agent => m_Agent;
+	protected NavMeshAgent m_Agent;
 	protected RoleControl m_role;
-	public string SceneBox { get { return GameManager.SceneBoxInfo(m_role.SceneDetector.lastInner, false); } }
-	public string SceneBoxName { get { return GameManager.SceneBoxInfo(m_role.SceneDetector.lastInner, true); } }
+	protected Vector3 m_Destination = Vector3.zero;
+	NavMeshPath m_CalculatedPath;
+
 	public virtual void Init()
 	{
 		m_role = GetComponent<RoleControl>();
 		m_role.eventSender.events.AddListener(OnRoleEvent);
 
-		if (m_role.EnemyDetector)
+		m_Agent = GetComponent<NavMeshAgent>();
+		m_Agent.speed = m_role.Speed;
+		m_Agent.angularSpeed = 360.0f;
+		m_CalculatedPath = new NavMeshPath();
+
+		if (EnemyDetector)
 		{
-			m_role.EnemyDetector.OnEnter.AddListener(OnEnemyEnter);
-			m_role.EnemyDetector.OnExit.AddListener(OnEnemyExit);
-			m_role.EnemyDetector.OnEvent.AddListener(OnEnemyEvent);
+			EnemyDetector.OnEnter.AddListener(OnEnemyEnter);
+			EnemyDetector.OnExit.AddListener(OnEnemyExit);
+			EnemyDetector.OnEvent.AddListener(OnEnemyEvent);
 		}
-		if (m_role.SkillDetector)
+		if (SkillDetector)
 		{
-			m_role.SkillDetector.OnEnter.AddListener(OnSkillTargetEnter);
-			m_role.SkillDetector.OnExit.AddListener(OnSkillTargetExit);
-			m_role.SkillDetector.OnEvent.AddListener(OnSkillTargetEvent);
+			SkillDetector.OnEnter.AddListener(OnSkillTargetEnter);
+			SkillDetector.OnExit.AddListener(OnSkillTargetExit);
+			SkillDetector.OnEvent.AddListener(OnSkillTargetEvent);
 		}
-		if (m_role.InteractDetector)
+		if (InteractDetector)
 		{
-			m_role.InteractDetector.OnStay.AddListener(OnInteractStay);
+			InteractDetector.OnStay.AddListener(OnInteractStay);
 			// m_role.InteractDetector.OnExit.AddListener(OnInteracterExit);
 			// m_role.InteractDetector.OnEvent.AddListener(OnInteractorEvent);
 		}
 	}
 
+	void Start()
+	{
+		m_role.CurState = RoleControl.State.IDLE;
+	}
+
 	void Update()
 	{
-		if (m_role.isIdle && m_role.EnemyDetector.Inners.Count > 0)
-			m_role.CurrentEnemy = m_role.EnemyDetector.GetNearest().GetComponent<CharacterData>();
+		if (m_role.isIdle && EnemyDetector.Inners.Count > 0)
+			m_role.CurrentEnemy = EnemyDetector.GetNearest().GetComponent<CharacterData>();
 	}
+
+	public virtual void LookAt(Transform trans)
+	{
+		Vector3 forward = (trans.position - m_role.transform.position);
+		forward.y = 0;
+		forward.Normalize();
+		m_role.transform.forward = forward;
+	}
+
+	public virtual void Move(Vector3 direction)
+	{
+		if (direction.magnitude > 0)
+		{
+			Agent.CalculatePath(transform.position + direction, m_CalculatedPath);
+			if (m_CalculatedPath.status == NavMeshPathStatus.PathComplete)
+			{
+				Agent.SetPath(m_CalculatedPath);
+				m_CalculatedPath.ClearCorners();
+				m_role.CurState = RoleControl.State.MOVE;
+			}
+		}
+	}
+
+	public virtual void MoveTo(Vector3 pos)
+	{
+		m_Destination = pos;
+		m_role.CurState = RoleControl.State.MOVE;
+	}
+
 
 	protected virtual void OnRoleEvent(GameObject obj, string eventName)
 	{
-		// UIRoleHud hud = m_role.GetComponentInChildren<UIRoleHud>();
-		// if (hud != null) hud.Bubble(eventName);
+		//MOVE
+		if (eventName == "roleEvent_OnMoving")
+		{
+			if (m_Destination != Vector3.zero && Vector3.SqrMagnitude(m_Destination - transform.position) <= 1)
+			{
+				GetComponent<EventSender>()?.Send(gameObject, "roleAIEvent_OnMoveEnd");
+				m_role.CurState = RoleControl.State.IDLE;
+				return;
+			}
+		}
 	}
 
 	protected virtual void OnEnemyEnter(GameObject enter)
@@ -59,7 +117,7 @@ public class RoleAI : MonoBehaviour
 	{
 		if (m_role.CurrentEnemy && m_role.CurrentEnemy.gameObject == exiter)
 		{
-			m_role.CurrentEnemy = m_role.EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+			m_role.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
 			//m_eventSender.Send(exiter, "roleEvent_OnEnemyExit");
 		}
 	}
@@ -90,10 +148,9 @@ public class RoleAI : MonoBehaviour
 			Debug.Log("OnSkillTargetEvent: target= " + sender + "event= " + eventMessage);
 		}
 	}
-
 	protected virtual void OnInteractStay(GameObject interactor, float during)
 	{
-		if (interactor.tag != "item") m_role.LookAt(interactor.transform);
+		if (interactor.tag != "item") LookAt(interactor.transform);
 		//HighlightTarget(interactor.gameObject, true);
 		//Debug.Log("[RoleAI-" + m_role + "] OnInteracting with : " + interactor.gameObject);
 	}
@@ -107,30 +164,3 @@ public class RoleAI : MonoBehaviour
 		}
 	}
 }
-
-// #if UNITY_EDITOR
-// [CustomEditor(typeof(RoleAI))]
-// public class RoleAIInspector : Editor  
-// {
-// 	SerializedObject obj;  
-// 	RoleAI roleAi;  
-// 	SerializedProperty camp;  
-// 	SerializedProperty m_Offensive; 
-
-// 	void OnEnable()
-// 	{  
-//     	obj = new SerializedObject(target);  
-//     	m_Offensive = obj.FindProperty("m_Offensive");
-// 	}
-
-// 	public override void OnInspectorGUI()
-// 	{
-// 		base.OnInspectorGUI();
-// 		roleAi = (RoleAI)target;
-// 		if (roleAi.camp == RoleAI.Camp.ENEMY)
-// 		{
-// 			EditorGUILayout.PropertyField(m_Offensive);
-// 		}
-// 	}
-// } 
-// #endif

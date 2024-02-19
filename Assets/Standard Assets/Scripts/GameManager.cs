@@ -9,7 +9,7 @@ using CreatorKitCodeInternal;
 public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
-	public static CharacterControl Player;
+	public static RoleControl Player;
 	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
 	public static UIManager GameUI;
 	public static KeyValueData Data => Instance.DemoData;
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
-		Player = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterControl>();
+		Player = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<RoleControl>();
 		SFXManager.ListenerTarget = Player.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();
 		GameUI.transform.SetParent(ui_trans);
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (Input.GetKeyDown("space"))
 		{
-			StoryListener.CompletedNode(StoryListener.testNode);
+			//StoryListener.CompletedNode(StoryListener.testNode);
 		}
 
 		// if (Input.GetKeyDown(KeyCode.Return))

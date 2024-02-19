@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using CreatorKitCode;
+using System.Linq;
 
 public class StoryTeller : MonoBehaviour
 {
 	public List<StoryNode> storyNodes;
 	public UnityEvent<StoryTeller, string> tellerEvent;
-	public StoryNode CurrentNode { get { return m_currentNode; } set { m_currentNode = value; tellerEvent?.Invoke(this, "GetStoryNode"); } }
+	public StoryNode CurrentNode { get { return m_currentNode; } }
 	public string RoleName { get { return m_role.Data.CharacterName; } }
 	public List<Entrustment> entrustments;
 	StoryNode m_currentNode;
@@ -18,7 +19,7 @@ public class StoryTeller : MonoBehaviour
 
 	void Start()
 	{
-		GameManager.StoryListener.nodeEvents.AddListener(OnListenerEvent);
+		GameManager.StoryListener.storyListenerEvents.AddListener(OnListenEvent);
 		m_role = GetComponent<RoleControl>();
 		m_role?.eventSender.events.AddListener(OnRoleEvent);
 		m_interactHandle = GetComponent<InteractHandle>();
@@ -35,7 +36,8 @@ public class StoryTeller : MonoBehaviour
 			{
 				if (m_interactHandle) m_interactHandle.CurrentTarget = actor;
 				GameManager.StoryListener.StartListening(this);
-				TellStory();
+				if (m_currentNode == null) m_currentNode = storyNodes.Where(story => GameManager.StoryListener.CanListen(story)).FirstOrDefault();
+				TellStory(GameManager.StoryListener.LastStoryAsk(m_currentNode));
 			}
 		}
 		if (eventName == "Exit")
@@ -44,10 +46,12 @@ public class StoryTeller : MonoBehaviour
 		}
 	}
 
-	void OnListenerEvent(StoryNode node, string eventName)
+	void OnListenEvent(string eventName, string content)
 	{
-		if (m_currentNode == null && node == null || m_currentNode == node)
-			TellStory();
+		if (eventName == "listenerEvent_Ask")
+		{
+			TellStory(content);
+		}
 	}
 
 	void OnRoleEvent(GameObject role, string eventName)
@@ -56,17 +60,10 @@ public class StoryTeller : MonoBehaviour
 		// 	TellStory();
 	}
 
-	void TellStory()
+	void TellStory(string ask)
 	{
-		foreach (var node in storyNodes)
-		{
-			if (GameManager.StoryListener.IsListening(node))
-			{
-				CurrentNode = node;
-				return;
-			}
-		}
-		CurrentNode = null;
+		if (ask == "") tellerEvent?.Invoke(this, CurrentNode.Content[0].Key);
+		else tellerEvent?.Invoke(this, CurrentNode.GetNextContent(ask));
 	}
 
 	void AddEntrustment()

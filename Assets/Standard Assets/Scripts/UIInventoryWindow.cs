@@ -15,9 +15,6 @@ public class UIInventoryWindow : UIWindow
 	public GameObject EquipRoot;
 	public RectTransform ItemSlots;
 	public Text textStats;
-	public Item testItem;
-	public Item testItem1;
-
 	public ItemEntryUI ItemEntryPrefab;
 	public ItemTooltip Tooltip;
 
@@ -50,9 +47,6 @@ public class UIInventoryWindow : UIWindow
 			//m_ItemEntries[i].Owner = this;
 			m_ItemEntries[i].InventoryID = i;
 		}
-
-		if (testItem) GameManager.Player.Data.Inventory.AddItem(testItem);
-		if (testItem1) GameManager.Player.Data.Inventory.AddItem(testItem1);
 	}
 
 	protected override void OnOpen()

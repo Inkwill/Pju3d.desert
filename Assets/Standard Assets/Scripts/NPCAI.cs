@@ -9,6 +9,7 @@ public class NPCAI : RoleAI
 	public enum Camp
 	{
 		ENEMY,
+		PLAYER,
 		NEUTRAL
 	}
 	public Camp camp;
@@ -36,19 +37,25 @@ public class NPCAI : RoleAI
 		{
 			case NPCAI.Camp.ENEMY:
 				m_role.gameObject.layer = LayerMask.NameToLayer("Enemy");
-				m_role.EnemyDetector.layers = LayerMask.GetMask("Player");
-				m_role.InteractDetector.layers = LayerMask.GetMask("Interactable");
+				EnemyDetector.layers = LayerMask.GetMask("Player");
+				InteractDetector.layers = LayerMask.GetMask("Interactable");
+				break;
+			case NPCAI.Camp.PLAYER:
+				m_role.gameObject.layer = LayerMask.NameToLayer("Player");
+				EnemyDetector.layers = LayerMask.GetMask("Enemy");
+				InteractDetector.layers = LayerMask.GetMask("Player");
 				break;
 			case NPCAI.Camp.NEUTRAL:
 				m_role.gameObject.layer = LayerMask.NameToLayer("Neutral");
-				m_role.EnemyDetector.layers = LayerMask.GetMask("Noting");
-				m_role.InteractDetector.layers = LayerMask.GetMask("Interactable", "Player");
+				EnemyDetector.layers = LayerMask.GetMask("Noting");
+				InteractDetector.layers = LayerMask.GetMask("Player");
 				m_Offensive = false;
 				break;
 			default:
 				break;
 		}
 	}
+
 	protected override void OnRoleEvent(GameObject obj, string eventName)
 	{
 		if (eventName == "roleEvent_OnIdling")
@@ -64,8 +71,8 @@ public class NPCAI : RoleAI
 		if (eventName == "roleEvent_OnDamage")
 		{
 			if (!m_Offensive) m_Offensive = true;
-			if (!m_role.CurrentEnemy) m_role.CurrentEnemy = m_role.EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
-			if (m_role.EnemyDetector.Radius < 10) m_role.EnemyDetector.Radius = 10;
+			if (!m_role.CurrentEnemy) m_role.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+			if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
 		}
 		if (eventName == "roleEvent_OnPursuing" && m_Offensive)
 		{
@@ -76,13 +83,13 @@ public class NPCAI : RoleAI
 			bool corpse = (Random.Range(1, 101) <= CorpseChance);
 			if (corpse)
 			{
-				Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("Interactable"));
+				obj.layer = LayerMask.NameToLayer("Interactable");
 				StartCoroutine(DestroyCorpse(m_CorpseRetention));
 			}
 			else
 			{
 				if (dropEffect != null) dropEffect.Take(m_role.gameObject);
-				Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("EnemyCorpse"));
+				Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("EnemyCorpse"));
 				StartCoroutine(DestroyCorpse(1.0f));
 			}
 		}
@@ -99,7 +106,7 @@ public class NPCAI : RoleAI
 		float randomZ = Random.Range(0f, m_WanderRadius);
 
 		Vector3 randomPos = new Vector3(m_role.BirthPos.x + randomX, m_role.BirthPos.y, m_role.BirthPos.z + randomZ);
-		m_role.MoveTo(randomPos);
+		MoveTo(randomPos);
 		m_role.eventSender.Send(m_role.gameObject, "aiEvent_wandering");
 	}
 

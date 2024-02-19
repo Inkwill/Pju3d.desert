@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4917969569558580702}
+  - component: {fileID: 2813869115654108682}
   - component: {fileID: 912908916502510015}
   - component: {fileID: 1638265053010689574}
-  - component: {fileID: 7023437467918624395}
+  - component: {fileID: 386716010682573495}
   - component: {fileID: 6250713750184245062}
   - component: {fileID: 1219315396725883836}
-  - component: {fileID: 2813869115654108682}
   - component: {fileID: 9141399745136244042}
   - component: {fileID: 7936165839796859715}
   m_Layer: 7
@@ -42,6 +42,33 @@ Transform:
   - {fileID: 5729910551249706218}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &2813869115654108682
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253957173911874756}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!195 &912908916502510015
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -85,7 +112,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.51, z: 0}
---- !u!114 &7023437467918624395
+--- !u!114 &386716010682573495
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,16 +121,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1253957173911874756}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a6d32986edb697438a2746b08746dd7, type: 3}
+  m_Script: {fileID: 11500000, guid: 55cbeabee48703d44a67500bf7bd334c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 2
   DefaultWeapon: {fileID: 11400000, guid: 52b81e917921cad46997064d7acebe12, type: 2}
   WeaponLocator: {fileID: 3230608863334042140}
-  SceneDetector: {fileID: 3970009624236308903}
-  InteractDetector: {fileID: 1507304276479509446}
-  EnemyDetector: {fileID: 2637199733257052804}
-  SkillDetector: {fileID: 3890960223070805153}
   SpurSoundClips: []
   SpottedAudioClip: []
 --- !u!114 &6250713750184245062
@@ -163,33 +186,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2672e27cd06d1404eb0f211f0d838a5f, type: 3}
   - {fileID: 8300000, guid: 873d7f1ace050d347b3a7966bca26594, type: 3}
   UseType: 1
---- !u!54 &2813869115654108682
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1253957173911874756}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &9141399745136244042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +213,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SceneDetector: {fileID: 3970009624236308903}
+  InteractDetector: {fileID: 1507304276479509446}
+  EnemyDetector: {fileID: 2637199733257052804}
+  SkillDetector: {fileID: 3890960223070805153}
   camp: 0
   dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
   CorpseChance: 50

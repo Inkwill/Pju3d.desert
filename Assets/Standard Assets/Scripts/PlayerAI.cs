@@ -8,7 +8,26 @@ public class PlayerAI : RoleAI
 	{
 		base.Init();
 		m_role.gameObject.layer = LayerMask.NameToLayer("Player");
-		m_role.EnemyDetector.layers = LayerMask.GetMask("Enemy");
-		m_role.InteractDetector.layers = LayerMask.GetMask("Interactable", "Player", "Neutral");
+		EnemyDetector.layers = LayerMask.GetMask("Enemy");
+		InteractDetector.layers = LayerMask.GetMask("Interactable", "Player", "Neutral");
 	}
+
+	void FixedUpdate()
+	{
+		if (m_role.CurState == RoleControl.State.DEAD || m_role.CurState == RoleControl.State.SKILLING) return;
+
+		Vector3 direction = Vector3.forward * GameManager.GameUI.JoyStick.Vertical + Vector3.right * GameManager.GameUI.JoyStick.Horizontal;
+		if (direction.magnitude > 0)
+		{
+			m_role.CurrentEnemy = null;
+			// if (m_role.CurState == RoleControl.State.ATTACKING)
+			// 	m_Animator.StopPlayback();
+			//if (m_Destination != Vector3.zero) m_Destination = Vector3.zero;
+			Move(direction);
+		}
+		else if (direction.magnitude == 0 && m_role.CurState == RoleControl.State.MOVE && m_Destination == Vector3.zero)
+			m_role.CurState = RoleControl.State.IDLE;
+	}
+
+
 }

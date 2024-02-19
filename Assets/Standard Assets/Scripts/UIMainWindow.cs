@@ -28,12 +28,12 @@ public class UIMainWindow : UIWindow
 		m_buttons = GetComponentsInChildren<Button>();
 		m_skillButtons = GetComponentsInChildren<UISkillButton>();
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
-		GameManager.StoryListener.ListenerEvents.AddListener(OnStoryListenEvent);
+		GameManager.StoryListener.storyListenerEvents.AddListener(OnStoryListenerEvent);
 	}
 	protected override void OnOpen()
 	{
 		UpdateWeapon(GameManager.Player.Data.Equipment);
-		UpdateTalkButton(null);
+		CloseTalkButton();
 		tellContent.SetActive(false);
 	}
 
@@ -42,9 +42,9 @@ public class UIMainWindow : UIWindow
 		//btDig.interactable = (eventName == "roleEvent_OnState_IDLE");
 	}
 
-	void OnStoryListenEvent(string eventName)
+	void OnStoryListenerEvent(string eventName, string content)
 	{
-		if (eventName == "StartListening")
+		if (eventName == "listenerEvent_Start")
 		{
 			GameManager.Instance.CameraCtrl.CloseTo();
 			GameManager.StoryListener.CurrentTeller.tellerEvent.AddListener(OnStoryTellerEvent);
@@ -57,7 +57,7 @@ public class UIMainWindow : UIWindow
 				bt.gameObject.SetActive(false);
 			}
 		}
-		if (eventName == "StopListening")
+		if (eventName == "listenerEvent_Stop")
 		{
 			GameManager.Instance.CameraCtrl.Reset();
 			GameManager.StoryListener.CurrentTeller.tellerEvent.RemoveListener(OnStoryTellerEvent);
@@ -69,17 +69,22 @@ public class UIMainWindow : UIWindow
 			{
 				bt.gameObject.SetActive(true);
 			}
-			UpdateTalkButton(null);
+			CloseTalkButton();
 			tellContent.SetActive(false);
+		}
+		if (eventName == "listenerEvent_Ask")
+		{
+			CloseTalkButton();
+			Helpers.Log(this, eventName, "ask: " + content);
 		}
 	}
 
-	void OnStoryTellerEvent(StoryTeller teller, string eventName)
+	void OnStoryTellerEvent(StoryTeller teller, string content)
 	{
-		Helpers.Log(this, "StoryTellerEvent", "event= " + eventName);
-		textTellContent.text = teller.CurrentNode.Content[0].Key;
+		Helpers.Log(this, "StoryTellerEvent", "content= " + content);
+		textTellContent.text = content;
 		tellContent.SetActive(true);
-		UpdateTalkButton(teller);
+		UpdateTalkButton(teller.CurrentNode, content);
 	}
 
 	void UpdateWeapon(EquipmentSystem equipment)
@@ -94,20 +99,25 @@ public class UIMainWindow : UIWindow
 		}
 	}
 
-	void UpdateTalkButton(StoryTeller teller)
+	void UpdateTalkButton(StoryNode node, string content = "")
 	{
-		if (teller != null)
+		if (node != null)
 		{
-			string[] talkContents = teller.CurrentNode.GetListenerTalk();
-			btTalks[0].Show(this, talkContents[0]);
-			btTalks[1].Show(this, talkContents[1]);
+			string[] talkContents = node.GetListenerTalk(content, GameManager.StoryListener.LastStoryAsk(node));
+			btTalks[0].Show(talkContents[0]);
+			btTalks[1].Show(talkContents[1]);
 		}
 		else
 		{
-			btTalks[0].gameObject.SetActive(false);
-			btTalks[1].gameObject.SetActive(false);
+			CloseTalkButton();
 		}
 
+	}
+
+	void CloseTalkButton()
+	{
+		btTalks[0].gameObject.SetActive(false);
+		btTalks[1].gameObject.SetActive(false);
 	}
 	void FixedUpdate()
 	{
@@ -138,10 +148,5 @@ public class UIMainWindow : UIWindow
 			default:
 				break;
 		}
-	}
-
-	public void OnTalk(string content)
-	{
-		Helpers.Log(this, "OnTalk", "content= " + content);
 	}
 }
