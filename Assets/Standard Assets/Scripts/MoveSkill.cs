@@ -12,13 +12,15 @@ public class MoveSkill : Skill
 
 	public override void Implement(RoleControl user, List<GameObject> targets = null)
 	{
-		user.Speed = m_baseSpeed;
+		RoleAI ai = user.BaseAI as RoleAI;
+		ai.MoveSpeed = m_baseSpeed;
 		base.Implement(user, targets);
 	}
 
 	public override void Operating(RoleControl user, List<GameObject> targets = null)
 	{
-		if (m_baseSpeed == 0) m_baseSpeed = user.Speed;
+		RoleAI ai = user.BaseAI as RoleAI;
+		if (m_baseSpeed == 0) m_baseSpeed = ai.MoveSpeed;
 		user.transform.Translate(Vector3.forward * Speed * Time.deltaTime);
 		var Effectpos = user.transform.position;
 		VFXManager.PlayVFX(fxStep, Effectpos);

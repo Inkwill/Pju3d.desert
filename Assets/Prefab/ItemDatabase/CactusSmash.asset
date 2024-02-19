@@ -18,17 +18,26 @@ MonoBehaviour:
   WorldObjectPrefab: {fileID: 0}
   SpawnClip: {fileID: 0}
   Slot: 0
-  MinimumStrength: 0
-  MinimumAgility: 0
-  MinimumDefense: 0
-  EquippedEffects: []
-  HitSounds: []
-  SwingSounds: []
+  EquippedStat:
+    ModifierMode: 1
+    Stats:
+      health: 0
+      strength: 0
+      defense: 0
+      agility: 0
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   Stats:
     Speed: 1
     MinimumDamage: 1
     MaximumDamage: 1
-    MaxRange: 1
-    Dig: 0
-    Cut: 0
+    MaxRange: 2
+    AdditionalTargets: 0
+  damageType: 0
   AttackEffects: []
+  WeaponSkill: {fileID: 0}
+  bulletPb: {fileID: 0}
+  bulletTrans: {fileID: 0}
+  HitSounds: []
+  SwingSounds: []

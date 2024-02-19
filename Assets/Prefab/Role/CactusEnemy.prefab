@@ -124,7 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55cbeabee48703d44a67500bf7bd334c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 2
   DefaultWeapon: {fileID: 11400000, guid: 52b81e917921cad46997064d7acebe12, type: 2}
   WeaponLocator: {fileID: 3230608863334042140}
   SpurSoundClips: []
@@ -213,11 +212,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camp: 2
   SceneDetector: {fileID: 3970009624236308903}
   InteractDetector: {fileID: 1507304276479509446}
   EnemyDetector: {fileID: 2637199733257052804}
   SkillDetector: {fileID: 3890960223070805153}
-  camp: 0
+  MoveSpeed: 2
   dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
   CorpseChance: 50
   m_CorpseRetention: 60

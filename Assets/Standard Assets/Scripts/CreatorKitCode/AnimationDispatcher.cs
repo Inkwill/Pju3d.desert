@@ -11,6 +11,37 @@ public class AnimationDispatcher : MonoBehaviour
 	public UnityEvent AttackStep;
 	public UnityEvent FootStep;
 	public UnityEvent SkillStep;
+	RoleControl m_role;
+	Animator m_Animator;
+
+	[SerializeField]
+	string DeathTrigger = "Death";
+	[SerializeField]
+	string SpeedTrigger = "Speed";
+	[SerializeField]
+	string AttackTrigger = "Attack";
+	[SerializeField]
+	string HitTrigger = "Hit";
+	[SerializeField]
+	string RespawnTrigger = "Respawn";
+	[SerializeField]
+	string FaintTrigger = "Faint";
+	void Start()
+	{
+		m_role = GetComponentInParent<RoleControl>();
+		if (m_role) m_role.eventSender.events.AddListener(OnRoleEvent);
+		m_Animator = GetComponent<Animator>();
+	}
+
+	void OnRoleEvent(GameObject obj, string eventName)
+	{
+		if (eventName == "roleEvent_OnDamage") m_Animator.SetTrigger(HitTrigger);
+		if (eventName == "roleEvent_OnState_DEAD") m_Animator.SetTrigger(Animator.StringToHash(DeathTrigger));
+		if (eventName == "roleEvent_OnState_ATTACKING") m_Animator.SetTrigger(AttackTrigger);
+		if (eventName == "roleEvent_OnIdling" || eventName == "roleEvent_OnMoving" || eventName == "roleEvent_OnPursuing")
+			m_Animator.SetFloat(SpeedTrigger, m_role.BaseAI.SpeedScale);
+
+	}
 
 	void AttackEvent()
 	{

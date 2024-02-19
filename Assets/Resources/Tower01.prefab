@@ -176,14 +176,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5449824804535936188}
-  - component: {fileID: 685041729136926581}
   - component: {fileID: 9166968662923614704}
   - component: {fileID: 2538838206200909248}
   - component: {fileID: 7878108128436572505}
   - component: {fileID: 3192370873966963105}
-  - component: {fileID: 1606311179782145672}
   - component: {fileID: 2704702833778096724}
-  - component: {fileID: 7945320423293450898}
+  - component: {fileID: -7849595590341757962}
   m_Layer: 6
   m_Name: Tower01
   m_TagString: Untagged
@@ -209,28 +207,6 @@ Transform:
   - {fileID: 7408938779794988704}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!195 &685041729136926581
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5501696962911801471}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 360
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!65 &9166968662923614704
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -264,13 +240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6d32986edb697438a2746b08746dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 3
   DefaultWeapon: {fileID: 11400000, guid: 4f800c74fe8273746b9eee939dcff208, type: 2}
   WeaponLocator: {fileID: 4564791868726861031}
-  SceneDetector: {fileID: 6937632312591947369}
-  InteractDetector: {fileID: 4878559669814111240}
-  EnemyDetector: {fileID: 8342375441132588362}
-  SkillDetector: {fileID: 7106771308018627439}
   SpurSoundClips: []
   SpottedAudioClip: []
 --- !u!114 &7878108128436572505
@@ -330,33 +301,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2672e27cd06d1404eb0f211f0d838a5f, type: 3}
   - {fileID: 8300000, guid: 873d7f1ace050d347b3a7966bca26594, type: 3}
   UseType: 1
---- !u!54 &1606311179782145672
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5501696962911801471}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &2704702833778096724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,7 +316,7 @@ MonoBehaviour:
   events:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7945320423293450898
+--- !u!114 &-7849595590341757962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -381,16 +325,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 5501696962911801471}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
+  m_Script: {fileID: 11500000, guid: 0233cd438dd122549bcbeaf6aece5e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SceneDetector: {fileID: 6937632312591947369}
+  InteractDetector: {fileID: 4878559669814111240}
+  EnemyDetector: {fileID: 8342375441132588362}
+  SkillDetector: {fileID: 7106771308018627439}
+  MoveSpeed: 0
   camp: 1
   dropEffect: {fileID: 0}
   CorpseChance: 0
   m_CorpseRetention: 0
   m_Offensive: 1
-  m_WanderRadius: 1
-  m_WanderBeat: 5
+  m_WanderRadius: 0
+  m_WanderBeat: 0
 --- !u!1 &6677732647062127853
 GameObject:
   m_ObjectHideFlags: 0

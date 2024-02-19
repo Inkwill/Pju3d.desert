@@ -16,52 +16,47 @@ public class RoleControl : MonoBehaviour
 		DEAD
 	}
 	[Header("Base")]
-	public float Speed = 6.0f;
 	public Weapon DefaultWeapon;
 	public Transform WeaponLocator;
 	public CharacterData Data => m_CharacterData;
 	protected CharacterData m_CharacterData;
+	public State CurState { get { return m_State; } set { SetState(value); } }
+	protected State m_State;
 	public EventSender eventSender => m_eventSender;
 	protected EventSender m_eventSender;
 	protected Vector3 m_BirthPos;
 	public Vector3 BirthPos => m_BirthPos;
-
-	public bool isIdle { get { return (m_State == State.IDLE) && !m_Enemy; } }
+	public bool isIdle { get { return m_State == State.IDLE; } }
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
+	public float CurStateDuring => m_StateDuring;
+	float m_StateDuring;
 
 	//[Header("AI")]
-	public State CurState { get { return m_State; } set { SetState(value); } }
-	protected State m_State;
-	public RoleAI BaseAI => m_Ai;
-	protected RoleAI m_Ai;
+	public AIBase BaseAI => m_Ai;
+	protected AIBase m_Ai;
 	protected CharacterData m_Enemy;
 	public CharacterData CurrentEnemy
 	{
 		get { return m_Enemy; }
 		set
 		{
-			m_Enemy = value;
-			GameObject target = value ? m_Enemy.gameObject : null;
-			m_eventSender.Send(target, "roleEvent_OnSetCurrentEnemy");
+			if (value != null)
+			{
+				m_eventSender.Send(value.gameObject, "roleEvent_OnSetCurrentEnemy");
+				m_Enemy = value;
+			}
+			else if (m_Enemy != null && value == null)
+			{
+				m_eventSender.Send(gameObject, "roleEvent_OnRemoveCurrentEnemy");
+				m_Enemy = value;
+			}
 		}
 	}
 	public SkillUser SkillUser => m_SkillUser;
 	SkillUser m_SkillUser;
-	public float CurStateDuring => m_StateDuring;
-	float m_StateDuring;
-
-	//[Header("Animator")]
-	protected Animator m_Animator;
-	int m_DeathParamID;
-	int m_SpeedParamID;
-	int m_AttackParamID;
-	int m_HitParamID;
-	int m_RespawnParamID;
 
 	[Header("Audio")]
-	public AudioClip[] SpurSoundClips;
-	public AudioClip[] SpottedAudioClip;
-
+	public AudioClip[] HitClip;
 
 	void Awake()
 	{
@@ -71,16 +66,9 @@ public class RoleControl : MonoBehaviour
 		{
 			dispatcher.AttackStep.AddListener(AttackFrame);
 			dispatcher.FootStep.AddListener(FootstepFrame);
-			m_Animator = dispatcher.GetComponent<Animator>();
+			//m_Animator = dispatcher.GetComponent<Animator>();
 		}
-		else m_Animator = GetComponentInChildren<Animator>();
-
-		m_DeathParamID = Animator.StringToHash("Death");
-		m_SpeedParamID = Animator.StringToHash("Speed");
-		m_AttackParamID = Animator.StringToHash("Attack");
-		m_HitParamID = Animator.StringToHash("Hit");
-		//m_FaintParamID = Animator.StringToHash("Faint");
-		m_RespawnParamID = Animator.StringToHash("Respawn");
+		//else m_Animator = GetComponentInChildren<Animator>();
 
 		m_eventSender = GetComponent<EventSender>();
 
@@ -88,7 +76,7 @@ public class RoleControl : MonoBehaviour
 		m_CharacterData.Init();
 		m_CharacterData.Equipment.InitWeapon(DefaultWeapon);
 
-		m_Ai = GetComponent<RoleAI>();
+		m_Ai = GetComponent<AIBase>();
 		m_Ai.Init();
 
 
@@ -96,8 +84,6 @@ public class RoleControl : MonoBehaviour
 
 		m_CharacterData.OnDamage += (damage) =>
 		{
-			m_Animator.SetTrigger(m_HitParamID);
-			Data.AudioPlayer.Hit(transform.position);
 			m_eventSender?.Send(gameObject, "roleEvent_OnDamage");
 			DamageUI.Instance.NewDamage(damage.GetFullDamage(), transform.position);
 		};
@@ -129,39 +115,25 @@ public class RoleControl : MonoBehaviour
 	{
 		m_StateDuring += Time.deltaTime;
 		//Dead
+		if (m_State == State.DEAD) return;
 		if (m_CharacterData.Stats.CurrentHealth == 0 && m_State != State.DEAD)
 		{
+			m_CharacterData.Death();
 			SetState(State.DEAD);
-			return;
 		}
-		if (m_State == State.DEAD) return;
 		//Skill
-		if (m_SkillUser && m_State != State.SKILLING && m_SkillUser.CurSkill != null) { SetState(State.SKILLING); return; }
-		if (m_SkillUser && m_State == State.SKILLING && m_SkillUser.CurSkill == null) { SetState(State.IDLE); return; }
+		if (m_SkillUser && m_State != State.SKILLING && m_SkillUser.CurSkill != null) { SetState(State.SKILLING); }
+		if (m_SkillUser && m_State == State.SKILLING && m_SkillUser.CurSkill == null) { SetState(State.IDLE); }
 		//ATTACK
-		if (m_State == State.ATTACKING && Data.CanAttack)
+		if (m_State == State.ATTACKING)
 		{
-			if (m_Enemy) CheckAttack();
-			else { SetState(State.IDLE); return; }
+			if (!CheckAttack()) SetState(State.PURSUING);
 		}
 		//PURSUING
 		if (m_State == State.PURSUING)
 		{
-			if (SpottedAudioClip.Length != 0)
-			{
-				SFXManager.PlaySound(SFXManager.Use.Enemies, new SFXManager.PlayData()
-				{
-					Clip = SpottedAudioClip[Random.Range(0, SpottedAudioClip.Length)],
-					Position = transform.position
-				});
-			}
-			if (m_Enemy)
-			{
-				BaseAI.LookAt(m_Enemy.transform);
-				m_eventSender?.Send(gameObject, "roleEvent_OnPursuing");
-				if (Data.CanAttack) CheckAttack();
-			}
-			else { SetState(State.IDLE); return; }
+
+			m_eventSender?.Send(gameObject, "roleEvent_OnPursuing");
 		}
 		//MOVE
 		if (m_State == State.MOVE)
@@ -171,38 +143,43 @@ public class RoleControl : MonoBehaviour
 		//IDLE
 		if (m_State == State.IDLE)
 		{
-			if (m_Enemy) { SetState(State.PURSUING); return; }
 			m_eventSender?.Send(gameObject, "roleEvent_OnIdling");
 		}
-		//PlayMove
-		m_Animator.SetFloat(m_SpeedParamID, BaseAI.Agent.velocity.magnitude / Speed);
 	}
-	void CheckAttack()
+
+	void SetState(State nextState)
 	{
+		if (m_State == nextState) return;
+		m_State = nextState;
+		m_StateDuring = 0;
+		m_eventSender?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
+	}
+	public bool CheckAttack()
+	{
+		if (!m_Enemy) return false;
+		if (!Data.CanAttack) return false;
 		if (m_CharacterData.Equipment.Weapon == null)
 		{
 			if (DefaultWeapon) m_CharacterData.Equipment.EquipWeapon();
 			else
 			{
 				Debug.LogError("Miss a Weapon! role = " + gameObject);
-				return;
 			}
 		}
 
 		if (m_CharacterData.CanAttackReach(m_Enemy))
 		{
-			BaseAI.Agent.ResetPath();
-			BaseAI.Agent.velocity = Vector3.zero;
-			BaseAI.LookAt(m_Enemy.transform);
+			BaseAI.Stop();
 			if (m_CharacterData.CanAttackTarget(m_Enemy))
 			{
-				m_Animator.SetTrigger(m_AttackParamID);
-				m_CharacterData.AttackTriggered();
 				SetState(State.ATTACKING);
+				m_CharacterData.AttackTriggered();
+				return true;
 			}
 		}
-		else SetState(State.PURSUING);
+		return false;
 	}
+
 	void AttackFrame()
 	{
 		//if we can't reach the target anymore when it's time to damage, then that attack miss.
@@ -213,6 +190,14 @@ public class RoleControl : MonoBehaviour
 		//else Debug.Log("Miss Attack! " + Data.CharacterName);
 		//SetState(State.PURSUING);
 	}
+	void FootstepFrame()
+	{
+		Vector3 pos = transform.position;
+		m_eventSender?.Send(gameObject, "roleEvent_OnFootStep");
+		VFXManager.PlayVFX(VFXType.StepPuff, pos);
+	}
+
+
 	// if (m_Enemy && m_State == State.PURSUING)
 	// {
 	// 	BaseAI.Agent.SetDestination(m_Enemy.gameObject.transform.position);
@@ -244,71 +229,6 @@ public class RoleControl : MonoBehaviour
 	// 		}
 	// 	}
 	// }
-
-
-	protected void SetState(State nextState)
-	{
-		if (m_State == nextState) return;
-		m_State = nextState;
-		m_StateDuring = 0;
-		m_eventSender?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
-		switch (m_State)
-		{
-			case State.IDLE:
-				BaseAI.Agent.isStopped = true;
-				break;
-			case State.MOVE:
-				BaseAI.Agent.isStopped = false;
-				break;
-			case State.PURSUING:
-				BaseAI.Agent.isStopped = false;
-				break;
-			case State.ATTACKING:
-				BaseAI.Agent.isStopped = true;
-				break;
-			case State.SKILLING:
-				BaseAI.Agent.isStopped = true;
-				break;
-			case State.DEAD:
-				BaseAI.Agent.isStopped = true;
-				BaseAI.Agent.enabled = false;
-				m_Animator.SetTrigger(m_DeathParamID);
-				Data.AudioPlayer.Death(transform.position);
-				m_CharacterData.Death();
-				// if (m_LootSpawner != null)
-				// 	m_LootSpawner.SpawnLoot();
-				//Destroy(BaseAI.Agent);
-				//Destroy(GetComponent<Collider>());
-				//Destroy(this);
-				//m_Animator.SetTrigger(m_FaintParamID);
-				//BaseAI.Agent.ResetPath();
-				//m_KOTimer = 0.0f;
-				break;
-		}
-	}
-
-	void FootstepFrame()
-	{
-		Vector3 pos = transform.position;
-		Data.AudioPlayer.Step(pos);
-		VFXManager.PlayVFX(VFXType.StepPuff, pos);
-
-		if (SpurSoundClips.Length > 0)
-			SFXManager.PlaySound(SFXManager.Use.Player, new SFXManager.PlayData()
-			{
-				Clip = SpurSoundClips[Random.Range(0, SpurSoundClips.Length)],
-				Position = pos,
-				PitchMin = 0.8f,
-				PitchMax = 1.2f,
-				Volume = 0.3f
-			});
-	}
-
-	public void Pursuing()
-	{
-		BaseAI.Agent.SetDestination(m_Enemy.gameObject.transform.position);
-		SetState(State.PURSUING);
-	}
 }
 
 

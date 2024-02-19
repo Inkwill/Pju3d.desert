@@ -33,7 +33,7 @@ public class Damage
 			});
 		}
 		VFXManager.PlayVFX(VFXType.Hit, damagePos);
-		SFXManager.PlaySound(m_Source.AudioPlayer.UseType, new SFXManager.PlayData() { Clip = m_Source.Equipment.Weapon.GetHitSound(), PitchMin = 0.8f, PitchMax = 1.2f, Position = damagePos });
+		//SFXManager.PlaySound(m_Source.AudioPlayer.UseType, new SFXManager.PlayData() { Clip = m_Source.Equipment.Weapon.GetHitSound(), PitchMin = 0.8f, PitchMax = 1.2f, Position = damagePos });
 		target.OnDamage?.Invoke(this);
 	}
 

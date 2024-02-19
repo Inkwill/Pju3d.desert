@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 12103228274614688}
   - component: {fileID: 884080340618306499}
   - component: {fileID: 7527291309378903967}
-  - component: {fileID: 2564425063783546696}
+  - component: {fileID: 8596781400524747317}
   m_Layer: 7
   m_Name: Solider_Dog
   m_TagString: Untagged
@@ -97,13 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6d32986edb697438a2746b08746dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 2
   DefaultWeapon: {fileID: 11400000, guid: 52b81e917921cad46997064d7acebe12, type: 2}
   WeaponLocator: {fileID: 0}
-  SceneDetector: {fileID: 5924156880430211826}
-  InteractDetector: {fileID: 8198133189730572435}
-  EnemyDetector: {fileID: 4735443597758609873}
-  SkillDetector: {fileID: 5823695581369419764}
   SpurSoundClips: []
   SpottedAudioClip: []
 --- !u!114 &6343085220657613371
@@ -205,7 +200,7 @@ MonoBehaviour:
   events:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2564425063783546696
+--- !u!114 &8596781400524747317
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,9 +209,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 5075916608977558654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b97291c3ecc5a742b087a681ae68440, type: 3}
+  m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SceneDetector: {fileID: 5924156880430211826}
+  InteractDetector: {fileID: 8198133189730572435}
+  EnemyDetector: {fileID: 4735443597758609873}
+  SkillDetector: {fileID: 5823695581369419764}
+  MoveSpeed: 3
+  camp: 1
+  dropEffect: {fileID: 0}
+  CorpseChance: 0
+  m_CorpseRetention: 0
+  m_Offensive: 0
+  m_WanderRadius: 0
+  m_WanderBeat: 3
 --- !u!1001 &6381535442317681756
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingAI : NPCAI
+public class BuildingAI : AIBase
 {
 	public override void LookAt(Transform trans)
 	{

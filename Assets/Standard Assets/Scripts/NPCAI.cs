@@ -6,13 +6,6 @@ using Random = UnityEngine.Random;
 
 public class NPCAI : RoleAI
 {
-	public enum Camp
-	{
-		ENEMY,
-		PLAYER,
-		NEUTRAL
-	}
-	public Camp camp;
 	public EffectData dropEffect;
 	public int CorpseChance;
 	[SerializeField] float m_CorpseRetention;
@@ -30,70 +23,49 @@ public class NPCAI : RoleAI
 		}
 	}
 	bool m_itemPick;
-	public override void Init()
+
+	protected override void OnIdlingAI()
 	{
-		base.Init();
-		switch (camp)
+		m_IdleDuring += Time.deltaTime;
+		if (m_IdleDuring > m_WanderBeat && m_WanderRadius > 0)
 		{
-			case NPCAI.Camp.ENEMY:
-				m_role.gameObject.layer = LayerMask.NameToLayer("Enemy");
-				EnemyDetector.layers = LayerMask.GetMask("Player");
-				InteractDetector.layers = LayerMask.GetMask("Interactable");
-				break;
-			case NPCAI.Camp.PLAYER:
-				m_role.gameObject.layer = LayerMask.NameToLayer("Player");
-				EnemyDetector.layers = LayerMask.GetMask("Enemy");
-				InteractDetector.layers = LayerMask.GetMask("Player");
-				break;
-			case NPCAI.Camp.NEUTRAL:
-				m_role.gameObject.layer = LayerMask.NameToLayer("Neutral");
-				EnemyDetector.layers = LayerMask.GetMask("Noting");
-				InteractDetector.layers = LayerMask.GetMask("Player");
-				m_Offensive = false;
-				break;
-			default:
-				break;
+			Wandering();
+			m_IdleDuring = 0;
 		}
 	}
 
-	protected override void OnRoleEvent(GameObject obj, string eventName)
+	protected override void OnPursuingAI()
 	{
-		if (eventName == "roleEvent_OnIdling")
+		if (m_role.CurrentEnemy && m_Offensive && MoveSpeed > 0)
+			Agent.SetDestination(m_role.CurrentEnemy.gameObject.transform.position);
+		else
 		{
-			m_IdleDuring += Time.deltaTime;
-			if (m_IdleDuring > m_WanderBeat && m_WanderRadius > 0)
-			{
-				Wandering();
-				m_IdleDuring = 0;
-			}
-			if (!m_itemPick) PickItem = true;
-		}
-		if (eventName == "roleEvent_OnDamage")
-		{
-			if (!m_Offensive) m_Offensive = true;
-			if (!m_role.CurrentEnemy) m_role.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
-			if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
-		}
-		if (eventName == "roleEvent_OnPursuing" && m_Offensive)
-		{
-			m_role.Pursuing();
-		}
-		if (eventName == "roleEvent_OnState_DEAD")
-		{
-			bool corpse = (Random.Range(1, 101) <= CorpseChance);
-			if (corpse)
-			{
-				obj.layer = LayerMask.NameToLayer("Interactable");
-				StartCoroutine(DestroyCorpse(m_CorpseRetention));
-			}
-			else
-			{
-				if (dropEffect != null) dropEffect.Take(m_role.gameObject);
-				Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("EnemyCorpse"));
-				StartCoroutine(DestroyCorpse(1.0f));
-			}
+			Helpers.Log(this, "OnPursuingAI", "enemy= " + m_role.CurrentEnemy);
 		}
 	}
+	protected override void OnDamageAI()
+	{
+		if (!m_Offensive) m_Offensive = true;
+		if (!m_role.CurrentEnemy) m_role.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+		if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
+	}
+	protected override void OnDeadAI()
+	{
+		base.OnDeadAI();
+		bool corpse = (Random.Range(1, 101) <= CorpseChance);
+		if (corpse)
+		{
+			m_role.gameObject.layer = LayerMask.NameToLayer("Interactable");
+			StartCoroutine(DestroyCorpse(m_CorpseRetention));
+		}
+		else
+		{
+			if (dropEffect != null) dropEffect.Take(m_role.gameObject);
+			Helpers.RecursiveLayerChange(m_role.transform, LayerMask.NameToLayer("EnemyCorpse"));
+			StartCoroutine(DestroyCorpse(1.0f));
+		}
+	}
+
 	IEnumerator DestroyCorpse(float waitTime)
 	{
 		yield return new WaitForSeconds(waitTime);

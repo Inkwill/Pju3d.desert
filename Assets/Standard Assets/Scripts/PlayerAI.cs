@@ -4,14 +4,6 @@ using UnityEngine;
 
 public class PlayerAI : RoleAI
 {
-	public override void Init()
-	{
-		base.Init();
-		m_role.gameObject.layer = LayerMask.NameToLayer("Player");
-		EnemyDetector.layers = LayerMask.GetMask("Enemy");
-		InteractDetector.layers = LayerMask.GetMask("Interactable", "Player", "Neutral");
-	}
-
 	void FixedUpdate()
 	{
 		if (m_role.CurState == RoleControl.State.DEAD || m_role.CurState == RoleControl.State.SKILLING) return;

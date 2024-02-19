@@ -23,8 +23,8 @@ namespace CreatorKitCode
 		public EquipmentSystem Equipment = new EquipmentSystem();
 
 		public AudioClip[] HitClip;
-		public CharacterAudio AudioPlayer => m_CharacterAudio;
-		protected CharacterAudio m_CharacterAudio;
+		// public CharacterAudio AudioPlayer => m_CharacterAudio;
+		// protected CharacterAudio m_CharacterAudio;
 
 		/// <summary>
 		/// Callback for when that CharacterData receive damage. E.g. used by the player character to trigger the right
@@ -51,10 +51,10 @@ namespace CreatorKitCode
 
 		void Awake()
 		{
-			Animator anim = GetComponentInChildren<Animator>();
-			if (anim != null)
-				SceneLinkedSMB<CharacterData>.Initialise(anim, this);
-			m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
+			// Animator anim = GetComponentInChildren<Animator>();
+			// if (anim != null)
+			// 	SceneLinkedSMB<CharacterData>.Initialise(anim, this);
+			//m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
 		}
 
 		// Update is called once per frame

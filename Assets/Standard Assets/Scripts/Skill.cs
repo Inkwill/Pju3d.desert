@@ -67,7 +67,6 @@ public class Skill : ScriptableObject
 	{
 		if (stepEffects.Count > 0) TakeEffects(stepEffects, user, targets);
 		var Effectpos = (targets != null && targets.Count > 0) ? targets[0].transform.position : user.transform.position;
-		user.Data.AudioPlayer.Attack(Effectpos);
 		VFXManager.PlayVFX(fxStep, Effectpos);
 		//Debug.Log("StepEffect Skill:" + SkillName);
 	}

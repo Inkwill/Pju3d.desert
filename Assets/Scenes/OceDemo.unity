@@ -17561,7 +17561,7 @@ MonoBehaviour:
   destroyOnEnd: 0
   ObjectToSpawn: {fileID: 4942053394312810848, guid: fe3f8fd1409e5fc4dae54b8b3cf225b3,
     type: 3}
-  pathRoot: {fileID: 2056123598}
+  pathRoot: {fileID: 0}
   radius: 5
   angleStep: 15
   spawnNum: 1

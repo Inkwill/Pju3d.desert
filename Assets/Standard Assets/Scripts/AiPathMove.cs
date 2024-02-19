@@ -23,7 +23,8 @@ public class AiPathMove : MonoBehaviour
 		}
 		if (eventName == "roleEvent_OnIdling" && m_paths.Length > m_curPathIndex)
 		{
-			m_role.BaseAI.MoveTo(m_paths[m_curPathIndex].position);
+			RoleAI ai = m_role.BaseAI as RoleAI;
+			ai?.MoveTo(m_paths[m_curPathIndex].position);
 		}
 		if (eventName == "roleEvent_OnMoving" && m_Offensive)
 		{

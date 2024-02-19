@@ -97,13 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6d32986edb697438a2746b08746dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 2
   DefaultWeapon: {fileID: 11400000, guid: 52b81e917921cad46997064d7acebe12, type: 2}
   WeaponLocator: {fileID: 0}
-  SceneDetector: {fileID: 8686177504629337041}
-  InteractDetector: {fileID: 6591241889224724912}
-  EnemyDetector: {fileID: 7713252172596359410}
-  SkillDetector: {fileID: 8821629619986255575}
   SpurSoundClips: []
   SpottedAudioClip: []
 --- !u!114 &3349377060174317668
@@ -217,7 +212,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camp: 0
+  camp: 2
+  SceneDetector: {fileID: 8686177504629337041}
+  InteractDetector: {fileID: 6591241889224724912}
+  EnemyDetector: {fileID: 7713252172596359410}
+  SkillDetector: {fileID: 8821629619986255575}
+  MoveSpeed: 3
   dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
   CorpseChance: 50
   m_CorpseRetention: 10

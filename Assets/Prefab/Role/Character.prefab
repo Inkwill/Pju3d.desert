@@ -161,7 +161,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55cbeabee48703d44a67500bf7bd334c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
   DefaultWeapon: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
   WeaponLocator: {fileID: 226675115136632130}
   SpurSoundClips:
@@ -210,6 +209,7 @@ MonoBehaviour:
   InteractDetector: {fileID: 4597439104978932822}
   EnemyDetector: {fileID: 1134714616160843028}
   SkillDetector: {fileID: 2222825981694970673}
+  MoveSpeed: 4
 --- !u!114 &8038204361242864812
 MonoBehaviour:
   m_ObjectHideFlags: 0
