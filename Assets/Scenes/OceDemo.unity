@@ -17555,7 +17555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  during: 10
+  during: 5
   times: 1
   progressSlider: {fileID: 0}
   destroyOnEnd: 0
@@ -20864,6 +20864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterName: Mr Box McBoxface
+  DefaultWeapon: {fileID: 0}
   Stats:
     baseStats:
       health: 1

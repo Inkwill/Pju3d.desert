@@ -101,15 +101,16 @@ public class UIRoleHud : MonoBehaviour
 
 	public void Bubble(string content, float duration = 1.0f)
 	{
-		if (bubble_anim.GetCurrentAnimatorStateInfo(0).IsName("hide"))
-		{
-			bubble_text.text = content;
-			bubble_anim.SetTrigger("show");
-			StartCoroutine(GameManager.Instance.WaitAction(duration, () => bubble_anim.SetTrigger("hide")));
-		}
-		else
-		{
-			StartCoroutine(GameManager.Instance.WaitAction(1.0f, () => Bubble(content, duration)));
-		}
+		// if (bubble_anim.GetCurrentAnimatorStateInfo(0).IsName("hide"))
+		// {
+
+		// }
+		// else
+		// {
+		// 	bubble_text.text = content;
+		// }
+		bubble_text.text = content;
+		bubble_anim.SetTrigger("show");
+		StartCoroutine(GameManager.Instance.WaitAction(duration, () => bubble_anim.SetTrigger("hide")));
 	}
 }

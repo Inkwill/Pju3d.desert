@@ -6,6 +6,7 @@ using UnityEngine;
 using Cinemachine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
+using System.Diagnostics;
 
 public class GameManager : MonoBehaviour
 {
@@ -55,6 +56,19 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		GameUI.OpenWindow("winMain");
+		UIRoleHud playerHud = Player.GetComponentInChildren<UIRoleHud>();
+		StartCoroutine(StartPaly(playerHud));
+	}
+
+	IEnumerator StartPaly(UIRoleHud hud)
+	{
+		hud.Bubble("麋鹿麋鹿迷了路,");
+		yield return new WaitForSeconds(2.0f);
+		hud.Bubble("前方有个小怪物,");
+		yield return new WaitForSeconds(2.0f);
+		hud.Bubble("待我上前问问路!");
+		yield return new WaitForSeconds(2.0f);
+		CameraCtrl.SwitchModel();
 	}
 
 	void OnApplicationQuit()
