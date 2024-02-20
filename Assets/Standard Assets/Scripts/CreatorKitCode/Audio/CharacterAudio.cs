@@ -17,6 +17,11 @@ public class CharacterAudio : MonoBehaviour
 	{
 		m_role = GetComponent<RoleControl>();
 		if (m_role) m_role.eventSender.events.AddListener(OnRoleEvent);
+		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
+		if (dispatcher)
+		{
+			dispatcher.FootStep.AddListener(() => { Step(transform.position); VFXManager.PlayVFX(VFXType.StepPuff, transform.position); });
+		}
 	}
 
 	void OnRoleEvent(GameObject obj, string eventName)
@@ -24,8 +29,7 @@ public class CharacterAudio : MonoBehaviour
 		Vector3 position = obj.transform.position;
 		if (eventName == "roleEvent_OnDamage") Hit(position);
 		if (eventName == "roleEvent_OnState_DEAD") Death(position);
-		if (eventName == "roleEvent_OnFootStep") Step(position);
-		if (eventName == "roleEvent_OnState_ATTACKING")
+		if (eventName == "roleEvent_OnAttack")
 		{
 			Attack(position);
 			SFXManager.PlaySound(UseType, new SFXManager.PlayData()

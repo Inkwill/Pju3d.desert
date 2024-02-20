@@ -23577,7 +23577,7 @@ MonoBehaviour:
   ui_demand: {fileID: 8830987943992215901}
   DemandData:
   - Key: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
-    Value: 5
+    Value: 3
   EndEffect:
   - Key: {fileID: 11400000, guid: 5a5deaa6e62beb846b029334991f1576, type: 2}
     Value:

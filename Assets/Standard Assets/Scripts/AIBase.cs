@@ -102,7 +102,7 @@ public class AIBase : MonoBehaviour
 				m_role.CurState = RoleControl.State.PURSUING;
 				return;
 			}
-			OnIdlingAI();
+			if (m_role.CurState == RoleControl.State.IDLE) OnIdlingAI();
 
 		}
 		if (eventName == "roleEvent_OnMoving")
@@ -114,10 +114,9 @@ public class AIBase : MonoBehaviour
 			if (m_role.CurrentEnemy)
 			{
 				LookAt(m_role.CurrentEnemy.transform);
-				if (m_role.CheckAttack()) return;
 			}
 			else { m_role.CurState = RoleControl.State.IDLE; return; }
-			OnPursuingAI();
+			if (m_role.CurState == RoleControl.State.PURSUING) OnPursuingAI();
 		}
 		if (eventName == "roleEvent_OnDamage")
 			OnDamageAI();

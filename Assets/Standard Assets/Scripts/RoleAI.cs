@@ -33,6 +33,7 @@ public class RoleAI : AIBase
 			{
 				Agent.SetPath(m_CalculatedPath);
 				m_CalculatedPath.ClearCorners();
+				Agent.isStopped = false;
 				m_role.CurState = RoleControl.State.MOVE;
 			}
 		}
@@ -42,12 +43,14 @@ public class RoleAI : AIBase
 	{
 		m_Destination = pos;
 		m_Agent.SetDestination(pos);
+		Agent.isStopped = false;
 		m_role.CurState = RoleControl.State.MOVE;
 	}
 	public override void Stop()
 	{
-		Agent.ResetPath();
 		Agent.velocity = Vector3.zero;
+		Agent.isStopped = true;
+		Agent.ResetPath();
 	}
 	protected override void OnMovingAI()
 	{

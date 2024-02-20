@@ -29,6 +29,7 @@ public class NPCAI : RoleAI
 		m_IdleDuring += Time.deltaTime;
 		if (m_IdleDuring > m_WanderBeat && m_WanderRadius > 0)
 		{
+			Agent.isStopped = false;
 			Wandering();
 			m_IdleDuring = 0;
 		}
@@ -37,7 +38,10 @@ public class NPCAI : RoleAI
 	protected override void OnPursuingAI()
 	{
 		if (m_role.CurrentEnemy && m_Offensive && MoveSpeed > 0)
+		{
+			Agent.isStopped = false;
 			Agent.SetDestination(m_role.CurrentEnemy.gameObject.transform.position);
+		}
 		else
 		{
 			Helpers.Log(this, "OnPursuingAI", "enemy= " + m_role.CurrentEnemy);

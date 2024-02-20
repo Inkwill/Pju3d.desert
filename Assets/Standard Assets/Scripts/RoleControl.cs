@@ -65,7 +65,6 @@ public class RoleControl : MonoBehaviour
 		if (dispatcher)
 		{
 			dispatcher.AttackStep.AddListener(AttackFrame);
-			dispatcher.FootStep.AddListener(FootstepFrame);
 			//m_Animator = dispatcher.GetComponent<Animator>();
 		}
 		//else m_Animator = GetComponentInChildren<Animator>();
@@ -127,13 +126,22 @@ public class RoleControl : MonoBehaviour
 		//ATTACK
 		if (m_State == State.ATTACKING)
 		{
-			if (!CheckAttack()) SetState(State.PURSUING);
+			if (m_Enemy && m_CharacterData.CanAttackReach(m_Enemy)) CheckAttack();
+			else SetState(State.PURSUING);
 		}
 		//PURSUING
 		if (m_State == State.PURSUING)
 		{
-
-			m_eventSender?.Send(gameObject, "roleEvent_OnPursuing");
+			if (m_CharacterData.Equipment.Weapon == null)
+			{
+				if (DefaultWeapon) m_CharacterData.Equipment.EquipWeapon();
+				else
+				{
+					Debug.LogError("Miss a Weapon! role = " + gameObject);
+				}
+			}
+			if (m_Enemy && m_CharacterData.CanAttackReach(m_Enemy)) { SetState(State.ATTACKING); }
+			else m_eventSender?.Send(gameObject, "roleEvent_OnPursuing");
 		}
 		//MOVE
 		if (m_State == State.MOVE)
@@ -154,30 +162,15 @@ public class RoleControl : MonoBehaviour
 		m_StateDuring = 0;
 		m_eventSender?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
 	}
-	public bool CheckAttack()
+	public void CheckAttack()
 	{
-		if (!m_Enemy) return false;
-		if (!Data.CanAttack) return false;
-		if (m_CharacterData.Equipment.Weapon == null)
-		{
-			if (DefaultWeapon) m_CharacterData.Equipment.EquipWeapon();
-			else
-			{
-				Debug.LogError("Miss a Weapon! role = " + gameObject);
-			}
-		}
-
-		if (m_CharacterData.CanAttackReach(m_Enemy))
+		if (m_CharacterData.CanAttackTarget(m_Enemy))
 		{
 			BaseAI.Stop();
-			if (m_CharacterData.CanAttackTarget(m_Enemy))
-			{
-				SetState(State.ATTACKING);
-				m_CharacterData.AttackTriggered();
-				return true;
-			}
+			BaseAI.LookAt(m_Enemy.transform);
+			m_CharacterData.AttackTriggered();
+			m_eventSender?.Send(gameObject, "roleEvent_OnAttack");
 		}
-		return false;
 	}
 
 	void AttackFrame()
@@ -187,16 +180,8 @@ public class RoleControl : MonoBehaviour
 		{
 			m_CharacterData.Attack(m_Enemy);
 		}
-		//else Debug.Log("Miss Attack! " + Data.CharacterName);
-		//SetState(State.PURSUING);
+		else Debug.Log("Miss Attack! " + Data.CharacterName);
 	}
-	void FootstepFrame()
-	{
-		Vector3 pos = transform.position;
-		m_eventSender?.Send(gameObject, "roleEvent_OnFootStep");
-		VFXManager.PlayVFX(VFXType.StepPuff, pos);
-	}
-
 
 	// if (m_Enemy && m_State == State.PURSUING)
 	// {
