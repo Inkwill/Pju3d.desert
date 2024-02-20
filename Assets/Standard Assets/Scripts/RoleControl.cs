@@ -16,7 +16,6 @@ public class RoleControl : MonoBehaviour
 		DEAD
 	}
 	[Header("Base")]
-	public Weapon DefaultWeapon;
 	public Transform WeaponLocator;
 	public CharacterData Data => m_CharacterData;
 	protected CharacterData m_CharacterData;
@@ -73,7 +72,6 @@ public class RoleControl : MonoBehaviour
 
 		m_CharacterData = GetComponent<CharacterData>();
 		m_CharacterData.Init();
-		m_CharacterData.Equipment.InitWeapon(DefaultWeapon);
 
 		m_Ai = GetComponent<AIBase>();
 		m_Ai.Init();
@@ -134,7 +132,7 @@ public class RoleControl : MonoBehaviour
 		{
 			if (m_CharacterData.Equipment.Weapon == null)
 			{
-				if (DefaultWeapon) m_CharacterData.Equipment.EquipWeapon();
+				if (Data.DefaultWeapon) m_CharacterData.Equipment.EquipWeapon(Data.DefaultWeapon);
 				else
 				{
 					Debug.LogError("Miss a Weapon! role = " + gameObject);

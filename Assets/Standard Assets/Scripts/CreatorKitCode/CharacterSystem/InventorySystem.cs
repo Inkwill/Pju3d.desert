@@ -207,8 +207,7 @@ namespace CreatorKitCode
 			if (wp) m_Owner.Equipment.EquipWeapon(wp);
 			else m_Owner.Equipment.Equip(equip);
 			RemoveItem(EntryID(equip.ItemName));
-			SFXManager.PlayClip("equiped");
-			ItemEvent?.Invoke(equip, "Equip", 1);
+			//SFXManager.PlayClip("equiped");
 		}
 
 		public void UnEquipItem(EquipmentItem equip)
@@ -216,7 +215,7 @@ namespace CreatorKitCode
 			Weapon wp = equip as Weapon;
 			if (wp) m_Owner.Equipment.UnWeapon(wp);
 			else m_Owner.Equipment.Unequip(equip.Slot);
-			ItemEvent?.Invoke(equip, "UnEquip", 1);
+			if (wp != m_Owner.DefaultWeapon) m_Owner.Inventory.AddItem(wp);
 			// RemoveItem(EntryID(equip.ItemName));
 			// SFXManager.PlayClip("equiped");
 		}

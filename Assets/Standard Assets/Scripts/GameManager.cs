@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using Cinemachine;
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
 	public static RoleControl Player;
 	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
 	public static UIManager GameUI;
-	public static KeyValueData Data => Instance.DemoData;
+	public static KeyValueData Config => Instance.DemoData;
 	public LightManager DayNight;
 	public CinemachineVirtualCamera VCamera;
 	public CameraController CameraCtrl;
@@ -121,12 +122,4 @@ public class GameManager : MonoBehaviour
 		}
 		return display ? "空地" : "blank";
 	}
-	// public static void EffectAction(string effectName, object[] param)
-	// {
-	// 	MethodInfo effectF = typeof(EffectData).GetMethod(effectName);
-	// 	if (effectF != null)
-	// 	{
-	// 		effectF.Invoke(Effect, param);
-	// 	}
-	// }
 }

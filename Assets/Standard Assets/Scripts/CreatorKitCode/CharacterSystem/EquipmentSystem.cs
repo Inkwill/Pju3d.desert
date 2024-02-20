@@ -14,6 +14,7 @@ namespace CreatorKitCode
 		public Weapon Weapon { get; private set; }
 		public Weapon ViceWeapon { get; private set; }
 		public Action<EquipmentItem> OnEquiped { get; set; }
+		public Action<EquipmentItem> OnEquipViceWeapon { get; set; }
 		public Action<EquipmentItem> OnUnequip { get; set; }
 
 		CharacterData m_Owner;
@@ -113,18 +114,13 @@ namespace CreatorKitCode
 			{
 				Weapon = wp;
 				Weapon.EquippedBy(m_Owner);
-				OnEquiped?.Invoke(wp);
+				if (wp != m_DefaultWeapon) OnEquiped?.Invoke(wp);
 			}
 			else
 			{
 				ViceWeapon = wp;
-				//m_Owner.Inventory.AddItem(ViceWeapon);
+				OnEquipViceWeapon?.Invoke(wp);
 			}
-		}
-		public void EquipWeapon()
-		{
-			if (ViceWeapon != null) SwitchWeapon();
-			else if (m_DefaultWeapon != null) EquipWeapon(m_DefaultWeapon);
 		}
 
 		public void SwitchWeapon()
@@ -144,7 +140,6 @@ namespace CreatorKitCode
 			else if (ViceWeapon == wp) ViceWeapon = null;
 			wp.UnequippedBy(m_Owner);
 			OnUnequip?.Invoke(wp);
-			if (wp != m_DefaultWeapon) m_Owner.Inventory.AddItem(wp);
 			// if (wp == Weapon)
 			// {
 			// 	Weapon.UnequippedBy(m_Owner);

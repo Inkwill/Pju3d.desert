@@ -28,7 +28,9 @@ public class UIMainWindow : UIWindow
 		m_buttons = GetComponentsInChildren<Button>();
 		m_skillButtons = GetComponentsInChildren<UISkillButton>();
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
-		GameManager.Player.Data.Inventory.ItemEvent += OnItemEvent;
+		GameManager.Player.Data.Equipment.OnEquiped += (equip) => { UpdateWeapon(GameManager.Player.Data.Equipment); };
+		GameManager.Player.Data.Equipment.OnUnequip += (equip) => { UpdateWeapon(GameManager.Player.Data.Equipment); };
+		GameManager.Player.Data.Equipment.OnEquipViceWeapon += (equip) => { UpdateWeapon(GameManager.Player.Data.Equipment); };
 		GameManager.StoryListener.storyListenerEvents.AddListener(OnStoryListenerEvent);
 	}
 	protected override void OnOpen()
@@ -41,11 +43,6 @@ public class UIMainWindow : UIWindow
 	void OnPlayerEvent(GameObject obj, string eventName)
 	{
 		//btDig.interactable = (eventName == "roleEvent_OnState_IDLE");
-	}
-
-	void OnItemEvent(Item item, string eventName, int count)
-	{
-		if (eventName == "Equip" || eventName == "UnEquip") UpdateWeapon(GameManager.Player.Data.Equipment);
 	}
 
 	void OnStoryListenerEvent(string eventName, string content)
@@ -95,7 +92,7 @@ public class UIMainWindow : UIWindow
 
 	void UpdateWeapon(EquipmentSystem equipment)
 	{
-		btWeapon.gameObject.SetActive(equipment.Weapon && equipment.Weapon != GameManager.Player.DefaultWeapon);
+		btWeapon.gameObject.SetActive(equipment.Weapon && equipment.Weapon != GameManager.Player.Data.DefaultWeapon);
 		btSwitchWeapon.gameObject.SetActive(equipment.ViceWeapon != null);
 		iconWeapon.enabled = (btWeapon.gameObject.activeSelf);
 		if (btWeapon.gameObject.activeSelf)
@@ -139,8 +136,7 @@ public class UIMainWindow : UIWindow
 		{
 			case "SwitchWeapon":
 				GameManager.Player.Data.Equipment.SwitchWeapon();
-				UpdateWeapon(GameManager.Player.Data.Equipment);
-				SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SFXManager.ItemEquippedSound });
+				//UpdateWeapon(GameManager.Player.Data.Equipment);
 				break;
 			case "camCtrl":
 				GameManager.Instance.CameraCtrl.SwitchModel();

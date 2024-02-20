@@ -14,6 +14,7 @@ namespace CreatorKitCode
 	public class CharacterData : HighlightableObject
 	{
 		public string CharacterName;
+		public Weapon DefaultWeapon;
 
 		public StatSystem Stats;
 		/// <summary>
@@ -47,6 +48,8 @@ namespace CreatorKitCode
 			Stats.Init(this);
 			Inventory.Init(this);
 			Equipment.Init(this);
+			if (DefaultWeapon == null) DefaultWeapon = KeyValueData.GetValue<Item>(GameManager.Config.Item, "wp_unarmed") as Weapon;
+			Equipment.InitWeapon(DefaultWeapon);
 		}
 
 		void Awake()
@@ -144,25 +147,5 @@ namespace CreatorKitCode
 			//Agility reduce by 0.5% the cooldown to attack (e.g. if agility = 50, 25% faster to attack)
 			m_AttackCoolDown = Math.Max(0.1f, Equipment.Weapon.Stats.Speed - (Stats.stats.agility * 0.5f * 0.001f * Equipment.Weapon.Stats.Speed));
 		}
-		// /// <summary>
-		// /// Damage the Character by the AttackData given as parameter. See the documentation for that class for how to
-		// /// add damage to that attackData. (this will be done automatically by weapons, but you may need to fill it
-		// /// manually when writing special elemental effect)
-		// /// </summary>
-		// /// <param name="attackData"></param>
-		// public void OnTakeEffect(Effect attackEffect)
-		// {
-		// 	if (HitClip.Length != 0)
-		// 	{
-		// 		SFXManager.PlaySound(SFXManager.Use.Player, new SFXManager.PlayData()
-		// 		{
-		// 			Clip = HitClip[Random.Range(0, HitClip.Length)],
-		// 			PitchMax = 1.1f,
-		// 			PitchMin = 0.8f,
-		// 			Position = transform.position
-		// 		});
-		// 	}
-		// 	OnEffectTake?.Invoke();
-		// }
 	}
 }

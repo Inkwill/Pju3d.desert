@@ -240,10 +240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6d32986edb697438a2746b08746dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultWeapon: {fileID: 11400000, guid: 4f800c74fe8273746b9eee939dcff208, type: 2}
   WeaponLocator: {fileID: 4564791868726861031}
-  SpurSoundClips: []
-  SpottedAudioClip: []
+  HitClip: []
 --- !u!114 &7878108128436572505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterName: NpcBull
+  DefaultWeapon: {fileID: 11400000, guid: 4f800c74fe8273746b9eee939dcff208, type: 2}
   Stats:
     baseStats:
       health: 100
@@ -285,6 +284,8 @@ MonoBehaviour:
   FootstepClips:
   - {fileID: 8300000, guid: eda34214310f8c547b7d9186ef017073, type: 3}
   - {fileID: 8300000, guid: ab7b40ecbeb85364880fd45b6faabf58, type: 3}
+  SpurSoundClips: []
+  SpottedAudioClip: []
   VocalAttack:
   - {fileID: 8300000, guid: 145d7148a25bd404a8cdac3ecea1bb2a, type: 3}
   - {fileID: 8300000, guid: 9853e91ce0767cf4abb04ff4032ddebc, type: 3}
@@ -328,18 +329,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0233cd438dd122549bcbeaf6aece5e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camp: 1
+  MoveSpeed: 0
   SceneDetector: {fileID: 6937632312591947369}
   InteractDetector: {fileID: 4878559669814111240}
   EnemyDetector: {fileID: 8342375441132588362}
   SkillDetector: {fileID: 7106771308018627439}
-  MoveSpeed: 0
-  camp: 1
-  dropEffect: {fileID: 0}
-  CorpseChance: 0
-  m_CorpseRetention: 0
-  m_Offensive: 1
-  m_WanderRadius: 0
-  m_WanderBeat: 0
 --- !u!1 &6677732647062127853
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,6 +463,12 @@ MonoBehaviour:
   SkillStep:
     m_PersistentCalls:
       m_Calls: []
+  DeathTrigger: Death
+  SpeedTrigger: Speed
+  AttackTrigger: Attack
+  HitTrigger: Hit
+  RespawnTrigger: Respawn
+  FaintTrigger: Faint
 --- !u!1001 &7709733975274754247
 PrefabInstance:
   m_ObjectHideFlags: 0

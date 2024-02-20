@@ -13,7 +13,7 @@ public class UIItemListBox : MonoBehaviour
 
 	public void UpdateInfo(KeyValuePair<string, int> itemInfo, int leftNum)
 	{
-		Item item = KeyValueData.GetValue<Item>(GameManager.Data.Item, itemInfo.Key);
+		Item item = KeyValueData.GetValue<Item>(GameManager.Config.Item, itemInfo.Key);
 		if (item) _image.sprite = item.ItemSprite;
 		_num.text = $"{itemInfo.Value - leftNum}/ {itemInfo.Value}";
 		_num.color = leftNum < 1 ? Color.green : Color.black;

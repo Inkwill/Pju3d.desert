@@ -22,6 +22,8 @@ public class CharacterAudio : MonoBehaviour
 		{
 			dispatcher.FootStep.AddListener(() => { Step(transform.position); VFXManager.PlayVFX(VFXType.StepPuff, transform.position); });
 		}
+		m_role.Data.Inventory.ItemEvent += OnItemEvent;
+		m_role.Data.Equipment.OnEquiped += OnEquiped;
 	}
 
 	void OnRoleEvent(GameObject obj, string eventName)
@@ -49,6 +51,18 @@ public class CharacterAudio : MonoBehaviour
 				});
 			}
 		}
+	}
+
+	void OnItemEvent(Item item, string eventName, int num)
+	{
+		// if (eventName == "Equip")
+		// 	
+
+	}
+
+	void OnEquiped(EquipmentItem equip)
+	{
+		SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = SFXManager.ItemEquippedSound });
 	}
 	public void Attack(Vector3 position)
 	{

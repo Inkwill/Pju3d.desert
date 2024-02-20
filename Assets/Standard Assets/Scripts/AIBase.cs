@@ -172,7 +172,7 @@ public class AIBase : MonoBehaviour
 	}
 	protected virtual void OnInteractStay(GameObject interactor, float during)
 	{
-		if (interactor.tag != "item") LookAt(interactor.transform);
+		if (interactor.tag != "item" && m_role.CurrentEnemy == null) LookAt(interactor.transform);
 		//HighlightTarget(interactor.gameObject, true);
 		//Debug.Log("[RoleAI-" + m_role + "] OnInteracting with : " + interactor.gameObject);
 	}
