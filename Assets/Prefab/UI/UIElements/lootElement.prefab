@@ -125,7 +125,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6290284622860124081}
         m_TargetAssemblyTypeName: UILootElement, Assembly-CSharp-firstpass
-        m_MethodName: GetLoot
+        m_MethodName: Pick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

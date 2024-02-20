@@ -55,7 +55,7 @@ public class Skill : ScriptableObject
 	public virtual void Implement(RoleControl user, List<GameObject> targets = null)
 	{
 		if (implementEffects.Count > 0) TakeEffects(implementEffects, user, targets);
-		Debug.Log("Implement Skill:" + SkillName);
+		Helpers.Log(this, "SkillImplement", $"{user.Data.CharacterName}->{SkillName}-Targets={targets.Count}");
 	}
 
 	public virtual void Operating(RoleControl user, List<GameObject> targets = null)

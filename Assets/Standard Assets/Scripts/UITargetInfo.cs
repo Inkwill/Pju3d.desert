@@ -90,6 +90,7 @@ public class UITargetInfo : MonoBehaviour
 			{
 				uiloot.Init(loot);
 				loot.Highlight();
+				StartCoroutine(AutoPick(uiloot));
 			}
 			// for (int i = 0; i < maxUILoot; i++)
 			// {
@@ -107,6 +108,12 @@ public class UITargetInfo : MonoBehaviour
 			// 	if (lootList.Count <= uilootList.Length) uilootList[lootList.Count - 1].Init(this, loot);
 			// }
 		}
+	}
+
+	IEnumerator AutoPick(UILootElement uiloot)
+	{
+		yield return new WaitForSeconds(0.5f);
+		uiloot.Pick();
 	}
 
 	void OnInteractExit(GameObject exiter)

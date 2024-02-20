@@ -113,7 +113,7 @@ public class SkillUser : MonoBehaviour
 				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_role.BaseAI.SceneBox);
 				return false;
 			}
-			Debug.Log("UseSkill: " + skill.SkillName + "cd =" + entry.cd);
+			Helpers.Log(this, "UseSkill", $"{skill.SkillName}-CD:{entry.cd})");
 			m_role.BaseAI.SkillDetector.layers = entry.skill.layers;
 			m_role.BaseAI.SkillDetector.Radius = entry.skill.radius;
 			entry.targets = new List<GameObject>();

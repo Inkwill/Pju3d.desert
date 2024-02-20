@@ -18,8 +18,7 @@ public class UILootElement : MonoBehaviour
 		iconItem.sprite = loot.Item.ItemSprite;
 		gameObject.SetActive(true);
 	}
-
-	public void GetLoot()
+	public void Pick()
 	{
 		if (loot)
 		{
