@@ -48,7 +48,7 @@ public class Helpers
 
 	public static void Log(object logger, string key = "", string log = "")
 	{
-		Debug.Log($"<{key}>{log}---[{logger.ToString()}]");
+		Debug.Log($"<color=green><{key}></color>-<color=gray>{log}</color>---[{logger.ToString()}]");
 	}
 
 	public static void ShowUIElement(GameObject element, bool value)

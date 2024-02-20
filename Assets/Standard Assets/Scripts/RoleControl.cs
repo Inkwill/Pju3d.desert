@@ -180,7 +180,7 @@ public class RoleControl : MonoBehaviour
 		{
 			m_CharacterData.Attack(m_Enemy);
 		}
-		else Debug.Log("Miss Attack! " + Data.CharacterName);
+		else Helpers.Log(this, "AttackMiss: ", $"{Data.CharacterName}->{m_Enemy.CharacterName}");
 	}
 
 	// if (m_Enemy && m_State == State.PURSUING)

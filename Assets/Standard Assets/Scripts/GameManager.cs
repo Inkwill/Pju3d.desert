@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
 
 	void OnApplicationQuit()
 	{
-		Debug.Log("OnApplicationQuit!,terrian= " + Terrain.activeTerrain);
+		Helpers.Log(this, "ApplicationQuit");
 		TerrainTool.ResetTerrainData();
 	}
 

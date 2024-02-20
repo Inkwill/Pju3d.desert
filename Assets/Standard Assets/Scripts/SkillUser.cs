@@ -72,7 +72,7 @@ public class SkillUser : MonoBehaviour
 		entry.skill = skill;
 		entry.cd = entry.skill.CD;
 		m_SkillEntries.Add(entry);
-		Debug.Log("AddSkill:" + skill.SkillName);
+		Helpers.Log(this, "AddSkill", ":" + skill.SkillName);
 	}
 
 

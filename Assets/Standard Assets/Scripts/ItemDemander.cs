@@ -97,13 +97,13 @@ public class ItemDemander : TimerBehaviour
 		// }
 	}
 
-	void OnInventoryAction(string itemName, string actionName)
+	void OnInventoryAction(string itemName, string actionName, int itemCount)
 	{
 		if (actionName == "Fulfill")
 		{
 			ui_demand.Show(m_Demand);
 			if (m_Demand.Completed) isStarted = true;
-			Helpers.Log(this, "Fulfill", "item= " + itemName);
+			Helpers.Log(this, "Fulfill", $"{itemName}x{itemCount}");
 		}
 	}
 }

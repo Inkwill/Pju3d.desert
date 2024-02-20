@@ -20,24 +20,29 @@ public class ResCollector : MonoBehaviour
 		m_Count = 0;
 	}
 
-	void OnItemEvent(string itemName, string eventName)
+	void OnItemEvent(string itemName, string eventName, int itemCount)
 	{
 		ResItem r_item = KeyValueData.GetValue<Item>(GameManager.Data.Item, itemName) as ResItem;
 		if (r_item && r_item.Type == ResType)
 		{
 			if (eventName == "Add")
 			{
-				GameObject resObj = Instantiate(r_item.WorldObjectPrefab, root, false);
-				resObj.transform.position += new Vector3(0, m_Count * 0.2f, 0);
-				m_Count++;
+				for (int i = 0; i < itemCount; i++)
+				{
+					GameObject resObj = Instantiate(r_item.WorldObjectPrefab, root, false);
+					resObj.transform.position += new Vector3(0, m_Count * 0.2f, 0);
+					m_Count++;
+				}
 			}
 			else if (eventName == "Minus")
 			{
 				Transform[] trans = root.GetComponentsInChildren<Transform>();
-				Destroy(trans[m_Count].gameObject);
-				m_Count--;
+				for (int i = 0; i < itemCount; i++)
+				{
+					Destroy(trans[m_Count].gameObject);
+					m_Count--;
+				}
 			}
-			Debug.Log("OnItemEvent: item = " + itemName + "event = " + eventName);
 		}
 	}
 

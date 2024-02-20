@@ -81,9 +81,9 @@ public class UIRoleHud : MonoBehaviour
 		}
 	}
 
-	void OnInventoryAction(string itemName, string actionName)
+	void OnInventoryAction(string itemName, string actionName, int itemCount)
 	{
-		Bubble(actionName + "item = " + itemName);
+		Bubble(actionName + "item = " + itemName + "count=" + itemCount);
 	}
 
 	void OnTellerEvent(StoryTeller teller, string eventName)

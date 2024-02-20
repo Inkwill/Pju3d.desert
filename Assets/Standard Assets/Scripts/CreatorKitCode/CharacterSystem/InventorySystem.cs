@@ -45,12 +45,14 @@ namespace CreatorKitCode
 					int id = inventory.EntryID(demand.Key);
 					if (id != -1)
 					{
-						for (int i = 0; i < DemandLeft[demand.Key]; i++)
+						int leftNum = DemandLeft[demand.Key];
+						int fulfillNum = 0;
+						for (int i = 0; i < leftNum; i++)
 						{
-							if (inventory.MinusItem(id) > 0) DemandLeft[demand.Key]--;
+							if (inventory.MinusItem(id, 1) > 0) { fulfillNum++; DemandLeft[demand.Key]--; }
 							else break;
 						}
-						inventory.Actions?.Invoke(demand.Key, "Fulfill");
+						inventory.Actions?.Invoke(demand.Key, "Fulfill", fulfillNum);
 					}
 				}
 			}
@@ -58,7 +60,7 @@ namespace CreatorKitCode
 
 		//Only 32 slots in inventory
 		public InventoryEntry[] Entries = new InventoryEntry[32];
-		public Action<string, string> Actions;
+		public Action<string, string, int> Actions;
 		CharacterData m_Owner;
 
 		public void Init(CharacterData owner)
@@ -94,7 +96,7 @@ namespace CreatorKitCode
 		/// stack counter there instead of using another slot.
 		/// </summary>
 		/// <param name="item">The item to add to the inventory</param>
-		public void AddItem(Item item)
+		public void AddItem(Item item, int num = 1)
 		{
 			bool found = false;
 			int firstEmpty = -1;
@@ -107,9 +109,9 @@ namespace CreatorKitCode
 				}
 				else if (Entries[i].Item == item)
 				{
-					Entries[i].Count += 1;
+					Entries[i].Count += num;
 					found = true;
-					Actions?.Invoke(item.ItemName, "Add");
+					Actions?.Invoke(item.ItemName, "Add", num);
 				}
 			}
 
@@ -117,10 +119,10 @@ namespace CreatorKitCode
 			{
 				InventoryEntry entry = new InventoryEntry();
 				entry.Item = item;
-				entry.Count = 1;
+				entry.Count = num;
 
 				Entries[firstEmpty] = entry;
-				Actions?.Invoke(item.ItemName, "Add");
+				Actions?.Invoke(item.ItemName, "Add", num);
 			}
 		}
 
@@ -130,28 +132,28 @@ namespace CreatorKitCode
 			{
 				if (i == InventoryID)
 				{
-					Actions?.Invoke(Entries[i].Item.ItemName, "Remove");
+					Actions?.Invoke(Entries[i].Item.ItemName, "Remove", Entries[i].Count);
 					Entries[i] = null;
 					break;
 				}
 			}
 		}
 
-		public int MinusItem(int InventoryID)
+		public int MinusItem(int InventoryID, int num = 1)
 		{
-			return MinusItem(Entries[InventoryID]);
+			return MinusItem(Entries[InventoryID], num);
 		}
-		public int MinusItem(InventoryEntry minusEntry)
+		public int MinusItem(InventoryEntry minusEntry, int num = 1)
 		{
 			int minusNum = 0;
 			if (minusEntry == null) return minusNum;
 			for (int i = 0; i < 32; ++i)
 			{
-				if (minusEntry != null && Entries[i] == minusEntry)
+				if (Entries[i] == minusEntry)
 				{
-					minusNum = Math.Min(1, Entries[i].Count);
+					minusNum = Math.Min(num, Entries[i].Count);
 					Entries[i].Count -= minusNum;
-					if (minusNum > 0) Actions?.Invoke(Entries[i].Item.ItemName, "Minus");
+					if (minusNum > 0) Actions?.Invoke(Entries[i].Item.ItemName, "Minus", minusNum);
 					if (Entries[i].Count < 1)
 					{
 						RemoveItem(i);
@@ -190,7 +192,7 @@ namespace CreatorKitCode
 						}
 					}
 				}
-				Actions?.Invoke(item.Item.ItemName, "Use");
+				Actions?.Invoke(item.Item.ItemName, "Use", 1);
 				return true;
 			}
 

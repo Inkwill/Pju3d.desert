@@ -74,8 +74,8 @@ public class EffectData : ScriptableObject
 				foreach (var drop in dropBox.GetDropItem())
 				{
 					DropItem(user.transform.position, drop.item, drop.itemNum);
-					Debug.Log("drop item : " + drop.item + " num= " + drop.itemNum);
 					success = true;
+					Helpers.Log(this, "Drop", $"{drop.item.ItemName}x{drop.itemNum}");
 				}
 				break;
 			default:

@@ -113,7 +113,7 @@ public class UIInventoryWindow : UIWindow
 				GameObject lootObj = Resources.Load("Loot") as GameObject;
 				if (lootObj)
 				{
-					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID);
+					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
 					Loot loot = Instantiate(lootObj, GameManager.Player.transform.position, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
 					loot.Item = m_SelectedSlot.item;
 					m_SelectedSlot.tog.isOn = false;
@@ -125,7 +125,7 @@ public class UIInventoryWindow : UIWindow
 				UsableItem item = m_SelectedSlot.item as UsableItem;
 				if (item.UsedBy(GameManager.Player.Data))
 				{
-					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID);
+					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
 					m_SelectedSlot.tog.isOn = GameManager.Player.Data.Inventory.ItemCount(item.ItemName) > 1;
 					Load();
 				}
@@ -135,7 +135,7 @@ public class UIInventoryWindow : UIWindow
 				break;
 			case "Give":
 				if (GameManager.StoryListener.CurrentTeller.GiveItem(m_SelectedSlot.item))
-					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID);
+					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
 				m_SelectedSlot.tog.isOn = false;
 				Load();
 				break;
