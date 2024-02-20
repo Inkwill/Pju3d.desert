@@ -16,13 +16,13 @@ public class ResCollector : MonoBehaviour
 	{
 		m_Inventory = GetComponent<CharacterData>().Inventory;
 		//Debug.Log("m_Inventory = " + m_Inventory);
-		m_Inventory.Actions += OnItemEvent;
+		m_Inventory.ItemEvent += OnItemEvent;
 		m_Count = 0;
 	}
 
-	void OnItemEvent(string itemName, string eventName, int itemCount)
+	void OnItemEvent(Item item, string eventName, int itemCount)
 	{
-		ResItem r_item = KeyValueData.GetValue<Item>(GameManager.Data.Item, itemName) as ResItem;
+		ResItem r_item = item as ResItem;
 		if (r_item && r_item.Type == ResType)
 		{
 			if (eventName == "Add")

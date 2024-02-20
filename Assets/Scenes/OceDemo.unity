@@ -5280,7 +5280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   during: 10
-  times: -1
+  times: 10
   progressSlider: {fileID: 482859085}
   destroyOnEnd: 0
   ObjectToSpawn: {fileID: 7778956338015736396, guid: 1d699b0cddb8e0a4da27f89f3d61c013,
@@ -21171,7 +21171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   during: 10
-  times: -1
+  times: 10
   progressSlider: {fileID: 375547312}
   destroyOnEnd: 0
   ObjectToSpawn: {fileID: 1253957173911874756, guid: 7dc50689892245c49b48a9272b3e8e09,
@@ -24727,7 +24727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   during: 10
-  times: -1
+  times: 10
   progressSlider: {fileID: 1074896227}
   destroyOnEnd: 0
   ObjectToSpawn: {fileID: 7187396258787047546, guid: 0b328dea7f249e34aa5555cfcbd94924,

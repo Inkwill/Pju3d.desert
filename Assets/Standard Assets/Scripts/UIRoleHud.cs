@@ -1,8 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-using CreatorKitCodeInternal;
+using CreatorKitCode;
 using TMPro;
 using UnityEngine.InputSystem.Controls;
 
@@ -30,7 +29,7 @@ public class UIRoleHud : MonoBehaviour
 		if (m_role)
 		{
 			m_role.eventSender.events.AddListener(OnRoleEvent);
-			m_role.Data.Inventory.Actions += OnInventoryAction;
+			m_role.Data.Inventory.ItemEvent += OnItemEvent;
 		}
 
 		if (sliderHp)
@@ -81,9 +80,9 @@ public class UIRoleHud : MonoBehaviour
 		}
 	}
 
-	void OnInventoryAction(string itemName, string actionName, int itemCount)
+	void OnItemEvent(Item item, string actionName, int itemCount)
 	{
-		Bubble(actionName + "item = " + itemName + "count=" + itemCount);
+		Bubble(actionName + "item = " + item.ItemName + "count=" + itemCount);
 	}
 
 	void OnTellerEvent(StoryTeller teller, string eventName)

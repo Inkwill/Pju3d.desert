@@ -85,26 +85,21 @@ public class UIInventoryWindow : UIWindow
 	public override void OnButtonClick(string eventName)
 	{
 		EquipmentItem equip = m_SelectedSlot?.item as EquipmentItem;
-		Weapon wp = equip as Weapon;
 		switch (eventName)
 		{
 			case "Equip":
 				if (equip)
 				{
-					if (wp) GameManager.Player.Data.Equipment.EquipWeapon(wp);
-					else GameManager.Player.Data.Equipment.Equip(equip);
-					GameManager.Player.Data.Inventory.RemoveItem(m_SelectedSlot.InventoryID);
+					GameManager.Player.Data.Inventory.EquipItem(equip);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
-					SFXManager.PlayClip("equiped");
+
 				}
 				break;
 			case "UnEquip":
 				if (equip)
 				{
-					if (wp) GameManager.Player.Data.Equipment.UnWeapon(wp);
-					else GameManager.Player.Data.Equipment.Unequip(equip.Slot);
-					//GameManager.Player.Data.Inventory.AddItem(m_SelectedSlot.item);
+					GameManager.Player.Data.Inventory.UnEquipItem(equip);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
 				}

@@ -1,9 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CreatorKitCode;
 
 public class PlayerAI : RoleAI
 {
+	public override void Init()
+	{
+		base.Init();
+		m_role.Data.Inventory.ItemEvent += (OnItemEvent);
+	}
 	void FixedUpdate()
 	{
 		if (m_role.CurState == RoleControl.State.DEAD || m_role.CurState == RoleControl.State.SKILLING) return;
@@ -21,5 +27,15 @@ public class PlayerAI : RoleAI
 			m_role.CurState = RoleControl.State.IDLE;
 	}
 
-
+	void OnItemEvent(Item item, string eventName, int itemCount)
+	{
+		if (eventName == "Add")
+		{
+			if (m_role.Data.Equipment.Weapon == null || m_role.Data.Equipment.ViceWeapon == null)
+			{
+				Weapon wp = item as Weapon;
+				if (wp) m_role.Data.Inventory.EquipItem(wp);
+			}
+		}
+	}
 }

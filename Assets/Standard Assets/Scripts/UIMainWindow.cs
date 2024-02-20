@@ -28,6 +28,7 @@ public class UIMainWindow : UIWindow
 		m_buttons = GetComponentsInChildren<Button>();
 		m_skillButtons = GetComponentsInChildren<UISkillButton>();
 		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
+		GameManager.Player.Data.Inventory.ItemEvent += OnItemEvent;
 		GameManager.StoryListener.storyListenerEvents.AddListener(OnStoryListenerEvent);
 	}
 	protected override void OnOpen()
@@ -40,6 +41,11 @@ public class UIMainWindow : UIWindow
 	void OnPlayerEvent(GameObject obj, string eventName)
 	{
 		//btDig.interactable = (eventName == "roleEvent_OnState_IDLE");
+	}
+
+	void OnItemEvent(Item item, string eventName, int count)
+	{
+		if (eventName == "Equip" || eventName == "UnEquip") UpdateWeapon(GameManager.Player.Data.Equipment);
 	}
 
 	void OnStoryListenerEvent(string eventName, string content)

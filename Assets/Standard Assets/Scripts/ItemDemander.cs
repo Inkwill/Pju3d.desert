@@ -31,8 +31,8 @@ public class ItemDemander : TimerBehaviour
 		{
 			if (actor.isIdle)
 			{
-				if (m_Demand.Completed) { isStarted = true; actor.Data.Inventory.Actions -= OnInventoryAction; }
-				else { actor.Data.Inventory.Actions += OnInventoryAction; m_Demand.Fulfill(actor.Data.Inventory); }
+				if (m_Demand.Completed) { isStarted = true; actor.Data.Inventory.ItemEvent -= OnItemEvent; }
+				else { actor.Data.Inventory.ItemEvent += OnItemEvent; m_Demand.Fulfill(actor.Data.Inventory); }
 			}
 		}
 	}
@@ -97,13 +97,13 @@ public class ItemDemander : TimerBehaviour
 		// }
 	}
 
-	void OnInventoryAction(string itemName, string actionName, int itemCount)
+	void OnItemEvent(Item item, string actionName, int itemCount)
 	{
 		if (actionName == "Fulfill")
 		{
 			ui_demand.Show(m_Demand);
 			if (m_Demand.Completed) isStarted = true;
-			Helpers.Log(this, "Fulfill", $"{itemName}x{itemCount}");
+			Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
 		}
 	}
 }

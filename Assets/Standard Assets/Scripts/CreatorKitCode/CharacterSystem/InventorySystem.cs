@@ -43,16 +43,18 @@ namespace CreatorKitCode
 				foreach (var demand in Demand)
 				{
 					int id = inventory.EntryID(demand.Key);
+					Item item = inventory.Entries[id].Item;
 					if (id != -1)
 					{
+						InventoryEntry entry = inventory.Entries[id];
 						int leftNum = DemandLeft[demand.Key];
 						int fulfillNum = 0;
 						for (int i = 0; i < leftNum; i++)
 						{
-							if (inventory.MinusItem(id, 1) > 0) { fulfillNum++; DemandLeft[demand.Key]--; }
+							if (inventory.MinusItem(entry, 1) > 0) { fulfillNum++; DemandLeft[demand.Key]--; }
 							else break;
 						}
-						inventory.Actions?.Invoke(demand.Key, "Fulfill", fulfillNum);
+						inventory.ItemEvent?.Invoke(entry.Item, "Fulfill", fulfillNum);
 					}
 				}
 			}
@@ -60,7 +62,7 @@ namespace CreatorKitCode
 
 		//Only 32 slots in inventory
 		public InventoryEntry[] Entries = new InventoryEntry[32];
-		public Action<string, string, int> Actions;
+		public Action<Item, string, int> ItemEvent;
 		CharacterData m_Owner;
 
 		public void Init(CharacterData owner)
@@ -111,7 +113,7 @@ namespace CreatorKitCode
 				{
 					Entries[i].Count += num;
 					found = true;
-					Actions?.Invoke(item.ItemName, "Add", num);
+					ItemEvent?.Invoke(item, "Add", num);
 				}
 			}
 
@@ -122,7 +124,7 @@ namespace CreatorKitCode
 				entry.Count = num;
 
 				Entries[firstEmpty] = entry;
-				Actions?.Invoke(item.ItemName, "Add", num);
+				ItemEvent?.Invoke(item, "Add", num);
 			}
 		}
 
@@ -132,7 +134,7 @@ namespace CreatorKitCode
 			{
 				if (i == InventoryID)
 				{
-					Actions?.Invoke(Entries[i].Item.ItemName, "Remove", Entries[i].Count);
+					ItemEvent?.Invoke(Entries[i].Item, "Remove", Entries[i].Count);
 					Entries[i] = null;
 					break;
 				}
@@ -153,7 +155,7 @@ namespace CreatorKitCode
 				{
 					minusNum = Math.Min(num, Entries[i].Count);
 					Entries[i].Count -= minusNum;
-					if (minusNum > 0) Actions?.Invoke(Entries[i].Item.ItemName, "Minus", minusNum);
+					if (minusNum > 0) ItemEvent?.Invoke(Entries[i].Item, "Minus", minusNum);
 					if (Entries[i].Count < 1)
 					{
 						RemoveItem(i);
@@ -192,11 +194,31 @@ namespace CreatorKitCode
 						}
 					}
 				}
-				Actions?.Invoke(item.Item.ItemName, "Use", 1);
+				ItemEvent?.Invoke(item.Item, "Use", 1);
 				return true;
 			}
 
 			return false;
+		}
+
+		public void EquipItem(EquipmentItem equip)
+		{
+			Weapon wp = equip as Weapon;
+			if (wp) m_Owner.Equipment.EquipWeapon(wp);
+			else m_Owner.Equipment.Equip(equip);
+			RemoveItem(EntryID(equip.ItemName));
+			SFXManager.PlayClip("equiped");
+			ItemEvent?.Invoke(equip, "Equip", 1);
+		}
+
+		public void UnEquipItem(EquipmentItem equip)
+		{
+			Weapon wp = equip as Weapon;
+			if (wp) m_Owner.Equipment.UnWeapon(wp);
+			else m_Owner.Equipment.Unequip(equip.Slot);
+			ItemEvent?.Invoke(equip, "UnEquip", 1);
+			// RemoveItem(EntryID(equip.ItemName));
+			// SFXManager.PlayClip("equiped");
 		}
 	}
 }
