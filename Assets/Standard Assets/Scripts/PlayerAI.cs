@@ -12,6 +12,7 @@ public class PlayerAI : RoleAI
 	}
 	void FixedUpdate()
 	{
+		if (GameManager.BuildMode) return;
 		if (m_role.CurState == RoleControl.State.DEAD || m_role.CurState == RoleControl.State.SKILLING) return;
 
 		Vector3 direction = Vector3.forward * GameManager.GameUI.JoyStick.Vertical + Vector3.right * GameManager.GameUI.JoyStick.Horizontal;

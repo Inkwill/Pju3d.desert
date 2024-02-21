@@ -11,7 +11,7 @@ namespace CreatorKitCode
 	/// This defines a character in the game. The name Character is used in a loose sense, it just means something that
 	/// can be attacked and have some stats including health. It could also be an inanimate object like a breakable box.
 	/// </summary>
-	public class CharacterData : HighlightableObject
+	public class CharacterData : MonoBehaviour
 	{
 		public string CharacterName;
 		public Weapon DefaultWeapon;
@@ -50,14 +50,6 @@ namespace CreatorKitCode
 			Equipment.Init(this);
 			if (DefaultWeapon == null) DefaultWeapon = KeyValueData.GetValue<Item>(GameManager.Config.Item, "wp_unarmed") as Weapon;
 			Equipment.InitWeapon(DefaultWeapon);
-		}
-
-		void Awake()
-		{
-			// Animator anim = GetComponentInChildren<Animator>();
-			// if (anim != null)
-			// 	SceneLinkedSMB<CharacterData>.Initialise(anim, this);
-			//m_CharacterAudio = GetComponentInChildren<CharacterAudio>();
 		}
 
 		// Update is called once per frame

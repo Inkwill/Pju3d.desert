@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
 
-public class RoleControl : MonoBehaviour
+public class RoleControl : HighlightableObject
 {
 	public enum State
 	{
@@ -59,6 +59,7 @@ public class RoleControl : MonoBehaviour
 
 	void Awake()
 	{
+		InitHighlight();
 		m_BirthPos = transform.position;
 		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
 		if (dispatcher)

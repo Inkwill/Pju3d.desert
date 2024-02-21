@@ -188,7 +188,7 @@ MonoBehaviour:
     BarrelClipping: 0.25
     Anamorphism: 0
   m_Transitions:
-    m_BlendHint: 0
+    m_BlendHint: 1
     m_InheritPosition: 0
     m_OnCameraLive:
       m_PersistentCalls:
@@ -225,9 +225,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameplayCamera: {fileID: 963194227}
   MinAngle: 10
-  MaxAngle: 35
+  MaxAngle: 55
   MinDistance: 10
-  MaxDistance: 20
+  MaxDistance: 30
 --- !u!114 &3218443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1407,9 +1407,9 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 10
   m_LookaheadIgnoreY: 0
-  m_XDamping: 0
-  m_YDamping: 0
-  m_ZDamping: 0
+  m_XDamping: 1
+  m_YDamping: 1
+  m_ZDamping: 1
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
@@ -29719,6 +29719,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1947446790}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2072677015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2072677016}
+  m_Layer: 0
+  m_Name: buildcamFollow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2072677016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2072677015}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5564097808657904715}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2080094608
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32628,6 +32659,7 @@ Transform:
   - {fileID: 5564097809747157155}
   - {fileID: 5564097808507583084}
   - {fileID: 849659823021597046}
+  - {fileID: 2072677016}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5564097808657904716
@@ -32647,6 +32679,7 @@ MonoBehaviour:
   CameraCtrl: {fileID: 3218442}
   SFXManager: {fileID: 5564097810133815885}
   TerrainTool: {fileID: 1996416778}
+  buildModeFollow: {fileID: 2072677016}
   ui_trans: {fileID: 5564097808944322120}
   position_born: {x: 83, y: 10, z: 14}
   prefab_character: {fileID: 8112423057566066908, guid: 13412434e049bcc419706b33d84a668e,

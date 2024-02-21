@@ -544,7 +544,6 @@ MonoBehaviour:
   OnLonePress:
     m_PersistentCalls:
       m_Calls: []
-  content: 
   text_content: {fileID: 5845891680081078124}
 --- !u!1 &1576922472656908663
 GameObject:
@@ -2367,7 +2366,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: camCtrl
+          m_StringArgument: camMode
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &5737502643283218112
@@ -2809,7 +2808,6 @@ MonoBehaviour:
   OnLonePress:
     m_PersistentCalls:
       m_Calls: []
-  content: 
   text_content: {fileID: 217284612910025297}
 --- !u!1 &6092438946927246114
 GameObject:

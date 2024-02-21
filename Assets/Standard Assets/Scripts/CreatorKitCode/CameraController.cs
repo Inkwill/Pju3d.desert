@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CreatorKitCodeInternal
@@ -12,6 +13,12 @@ namespace CreatorKitCodeInternal
 	public class CameraController : MonoBehaviour
 	{
 		public static CameraController Instance { get; set; }
+		public enum Mode
+		{
+			RPG,
+			BUILD,
+			STORY
+		}
 
 		public Camera GameplayCamera;
 
@@ -36,10 +43,10 @@ namespace CreatorKitCodeInternal
 
 		protected float m_CurrentDistance = 0;
 		protected CinemachineFramingTransposer m_FramingTransposer;
-
+		Mode m_lastMode;
+		Mode m_curMode;
 		float m_setDistance;
-		float m_currentSet;
-		bool m_setTrigger = false;
+		bool m_setTrigger;
 
 		void Awake()
 		{
@@ -60,7 +67,7 @@ namespace CreatorKitCodeInternal
 			}
 			else
 			{
-				m_setTrigger = false;
+				OnSetOver();
 			}
 		}
 		void Start()
@@ -84,34 +91,62 @@ namespace CreatorKitCodeInternal
 
 			AmbiencePlayer.UpdateVolume(m_CurrentDistance);
 		}
-		public void CloseTo()
-		{
-			m_setDistance = 0;
-			m_setTrigger = true;
-		}
 
-		public void Reset()
+		public void ResetMode()
 		{
-			m_setDistance = m_currentSet;
-			m_setTrigger = true;
+			SetMode(m_lastMode);
+
 		}
-		public void SwitchModel()
+		public void SetMode(Mode mode)
 		{
-			switch (m_currentSet)
+			if (m_setTrigger) return;
+			m_lastMode = m_curMode;
+			m_curMode = mode;
+			switch (mode)
 			{
-				case 0:
-					m_currentSet = 0.5f;
+				case Mode.RPG:
+					m_setDistance = 0.4f;
 					break;
-				case 0.5f:
-					m_currentSet = 1.0f;
+				case Mode.BUILD:
+					m_setDistance = 1.0f;
 					break;
-				case 1.0f:
-					m_currentSet = 0.5f;
+				case Mode.STORY:
+					m_setDistance = 0f;
 					break;
 				default:
 					break;
 			}
-			Reset();
+			m_setTrigger = true;
+		}
+
+		void OnSetOver()
+		{
+			var cine = GameManager.Instance.VCamera.GetCinemachineComponent(CinemachineCore.Stage.Body) as CinemachineFramingTransposer;
+			switch (m_curMode)
+			{
+				case Mode.RPG:
+					GameManager.Instance.VCamera.Follow = GameManager.Instance.VCamera.LookAt = GameManager.Player.transform;
+					if (cine)
+					{
+						cine.m_XDamping = 0f;
+						cine.m_YDamping = 0f;
+						cine.m_ZDamping = 0.5f;
+					}
+
+					break;
+				case Mode.BUILD:
+					GameManager.Instance.VCamera.Follow = GameManager.Instance.VCamera.LookAt = GameManager.Instance.buildModeFollow;
+					if (cine)
+					{
+						cine.m_XDamping = cine.m_YDamping = cine.m_ZDamping = 0.5f;
+					}
+					break;
+				case Mode.STORY:
+					break;
+				default:
+					break;
+			}
+			m_setTrigger = false;
 		}
 	}
 }

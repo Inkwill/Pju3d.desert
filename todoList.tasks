@@ -16,13 +16,15 @@
 	--- ✄ ---------------------@today(24-02-20 11:00)
 
 	☐	Hit音效代码优化
+	☐	基地建造模式 @critical
 	☐	基础资源的设计与实现 @critical
-	☐	攻击状态移动的bug @critical
+	✔	攻击状态移动的bug @critical @done (24-02-20 12:17)
+	✔	itemdemand提交bug @done (24-02-20 14:15)
 	☐	建筑交资源表现优化(交互区域、资源动画、音效)
 	☐	技能施放bug
-	☐ storylistener 与 teller的底层通用性
-	☐	自动拾取道具 @critical
-	☐	自动装备@critical
+	✘ storylistener 与 teller的底层通用性 @cancelled (24-02-20 18:19)
+	✔	自动拾取道具 @critical @done (24-02-20 14:36)
+	✔	自动装备 @critical @done (24-02-20 18:14)
 	☐	道具快捷使用栏位
 	☐	道具获取动画表现
 	☐	角色个性化标签：性格、星座、喜好道具

@@ -23,7 +23,7 @@ namespace CreatorKitCode
 
 		MaterialPropertyBlock m_PropertyBlock;
 
-		void Awake()
+		protected virtual void InitHighlight()
 		{
 			m_Renderers = GetComponentsInChildren<Renderer>();
 			// //Debug.Log(gameObject + "Renders = " + m_Renderers.Length);

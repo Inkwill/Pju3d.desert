@@ -49,7 +49,7 @@ public class UIMainWindow : UIWindow
 	{
 		if (eventName == "listenerEvent_Start")
 		{
-			GameManager.Instance.CameraCtrl.CloseTo();
+			GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.STORY);
 			GameManager.StoryListener.CurrentTeller.tellerEvent.AddListener(OnStoryTellerEvent);
 			foreach (var bt in m_buttons)
 			{
@@ -62,7 +62,7 @@ public class UIMainWindow : UIWindow
 		}
 		if (eventName == "listenerEvent_Stop")
 		{
-			GameManager.Instance.CameraCtrl.Reset();
+			GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
 			GameManager.StoryListener.CurrentTeller.tellerEvent.RemoveListener(OnStoryTellerEvent);
 			foreach (var bt in m_buttons)
 			{
@@ -138,14 +138,14 @@ public class UIMainWindow : UIWindow
 				GameManager.Player.Data.Equipment.SwitchWeapon();
 				//UpdateWeapon(GameManager.Player.Data.Equipment);
 				break;
-			case "camCtrl":
-				GameManager.Instance.CameraCtrl.SwitchModel();
-				break;
 			case "package":
 				GameManager.GameUI.SwitchWindow("winInventory");
 				break;
 			case "talk":
 				GameManager.GameUI.SwitchWindow("winTalk");
+				break;
+			case "camMode":
+				GameManager.BuildMode = !GameManager.BuildMode;
 				break;
 			default:
 				break;

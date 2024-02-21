@@ -7,6 +7,7 @@ using Cinemachine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
 using System.Diagnostics;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +21,39 @@ public class GameManager : MonoBehaviour
 	public CameraController CameraCtrl;
 	public SFXManager SFXManager;
 	public TerrainTool TerrainTool;
+	public Transform buildModeFollow;
+	public static GameObject CurrentSlected
+	{
+		get { return m_CurrentSelected; }
+		set
+		{
+			m_CurrentSelected?.GetComponent<HighlightableObject>()?.Dehighlight();
+			m_CurrentSelected = value;
+			m_CurrentSelected?.GetComponent<HighlightableObject>()?.Highlight();
+			Helpers.Log(Instance, "PickObject", "target= " + m_CurrentSelected.name);
+		}
+	}
+	static GameObject m_CurrentSelected;
+
+	public static bool BuildMode
+	{
+		get { return m_buildMode; }
+		set
+		{
+			m_buildMode = value;
+			GameManager.GameUI.JoyStick.enabled = !value;
+			Instance.buildModeFollow.position = Player.transform.position;
+			if (value)
+			{
+				Instance.CameraCtrl.SetMode(CameraController.Mode.BUILD);
+			}
+			else
+			{
+				Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
+			}
+		}
+	}
+	public static bool m_buildMode;
 
 	[SerializeField]
 	Transform ui_trans;
@@ -32,10 +66,8 @@ public class GameManager : MonoBehaviour
 
 	[SerializeField]
 	KeyValueData DemoData;
-
 	InventorySystem.ItemDemand testDemand;
-
-	public DropBox testDropBox;
+	Vector3 m_dragMousePos = Vector3.zero;
 	private void Awake()
 	{
 		Instance = this;
@@ -63,12 +95,12 @@ public class GameManager : MonoBehaviour
 	IEnumerator StartPaly(UIRoleHud hud)
 	{
 		hud.Bubble("麋鹿麋鹿迷了路,");
-		yield return new WaitForSeconds(2.0f);
-		hud.Bubble("前方有个小怪物,");
-		yield return new WaitForSeconds(2.0f);
-		hud.Bubble("待我上前问问路!");
-		yield return new WaitForSeconds(2.0f);
-		CameraCtrl.SwitchModel();
+		// yield return new WaitForSeconds(2.0f);
+		// hud.Bubble("前方有个小怪物,");
+		// yield return new WaitForSeconds(2.0f);
+		// hud.Bubble("待我上前问问路!");
+		yield return new WaitForSeconds(1.0f);
+		CameraCtrl.SetMode(CameraController.Mode.RPG);
 	}
 
 	void OnApplicationQuit()
@@ -79,9 +111,40 @@ public class GameManager : MonoBehaviour
 
 	private void Update()
 	{
+		if (m_buildMode)
+		{
+			if (Input.GetMouseButtonDown(0))
+			{
+				m_dragMousePos = Input.mousePosition;
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit;
+
+				// 如果射线与物体碰撞
+				if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask(new string[] { "Player", "Enemy", "Neutral", "Interactable" })))
+				{
+					CurrentSlected = hit.collider.gameObject;
+				}
+			}
+			else if (Input.GetMouseButtonUp(0))
+			{
+				m_dragMousePos = Vector3.zero;
+			}
+			else if (Input.GetMouseButton(0))
+			{
+				Vector3 direction = Input.mousePosition - m_dragMousePos;
+				if (direction.magnitude > 0)
+				{
+					buildModeFollow.transform.position -= new Vector3(direction.x, 0, direction.y) * 1.0f * Time.deltaTime;
+					m_dragMousePos = Input.mousePosition;
+					//Helpers.Log(this, "MouseDrag", $"from{m_dragMousePos}To{Input.mousePosition}->{direction.magnitude}");
+				}
+			}
+
+		}
+
 		if (Input.GetKeyDown("space"))
 		{
-			//StoryListener.CompletedNode(StoryListener.testNode);
+			BuildMode = !m_buildMode;
 		}
 
 		// if (Input.GetKeyDown(KeyCode.Return))
