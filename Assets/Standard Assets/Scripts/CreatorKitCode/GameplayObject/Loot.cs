@@ -35,6 +35,7 @@ namespace CreatorKitCode
 			m_TargetPoint = transform.position;
 			m_AnimationTimer = AnimationTime - 0.1f;
 			CreateWorldRepresentation();
+			InitHighlight();
 		}
 
 		void Update()

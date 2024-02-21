@@ -105,7 +105,7 @@ namespace CreatorKitCodeInternal
 			switch (mode)
 			{
 				case Mode.RPG:
-					m_setDistance = 0.4f;
+					m_setDistance = 0.3f;
 					break;
 				case Mode.BUILD:
 					m_setDistance = 1.0f;

@@ -17,6 +17,7 @@
     "com.unity.live-capture": "3.0.0",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.unity.postprocessing": "3.2.2",
+    "com.unity.recorder": "4.0.1",
     "com.unity.render-pipelines.high-definition": "14.0.9",
     "com.unity.render-pipelines.universal": "14.0.9",
     "com.unity.terrain-tools": "5.0.1",
