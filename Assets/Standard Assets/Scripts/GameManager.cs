@@ -54,11 +54,33 @@ public class GameManager : MonoBehaviour
 		}
 	}
 	public static bool m_buildMode;
+	public static bool StoryMode
+	{
+		get { return m_storyMode; }
+		set
+		{
+			m_storyMode = value;
+			GameManager.GameUI.JoyStick.enabled = !value;
+			if (value)
+			{
+				Instance.CameraCtrl.SetMode(CameraController.Mode.STORY);
+			}
+			else
+			{
+				Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
+			}
+		}
+	}
+	public static bool m_storyMode;
 
 	[SerializeField]
 	Transform ui_trans;
 	[SerializeField]
 	Vector3 position_born;
+	[SerializeField]
+	Vector2 baseBoundary_LB;
+	[SerializeField]
+	Vector2 baseBoundary_RT;
 	[SerializeField]
 	GameObject prefab_character;
 	[SerializeField]
@@ -68,6 +90,7 @@ public class GameManager : MonoBehaviour
 	KeyValueData DemoData;
 	InventorySystem.ItemDemand testDemand;
 	Vector3 m_dragMousePos = Vector3.zero;
+	Vector3 m_revisCampos = Vector3.zero;
 	private void Awake()
 	{
 		Instance = this;
@@ -90,17 +113,18 @@ public class GameManager : MonoBehaviour
 		GameUI.OpenWindow("winMain");
 		UIRoleHud playerHud = Player.GetComponentInChildren<UIRoleHud>();
 		StartCoroutine(StartPaly(playerHud));
+		StoryMode = true;
 	}
 
 	IEnumerator StartPaly(UIRoleHud hud)
 	{
 		hud.Bubble("麋鹿麋鹿迷了路,");
-		// yield return new WaitForSeconds(2.0f);
-		// hud.Bubble("前方有个小怪物,");
-		// yield return new WaitForSeconds(2.0f);
-		// hud.Bubble("待我上前问问路!");
-		yield return new WaitForSeconds(1.0f);
-		CameraCtrl.SetMode(CameraController.Mode.RPG);
+		yield return new WaitForSeconds(2.0f);
+		hud.Bubble("地上一堆小杂物,");
+		yield return new WaitForSeconds(2.0f);
+		hud.Bubble("捡起杂物做任务！");
+		yield return new WaitForSeconds(2.0f);
+		StoryMode = false;
 	}
 
 	void OnApplicationQuit()
@@ -134,10 +158,17 @@ public class GameManager : MonoBehaviour
 				Vector3 direction = Input.mousePosition - m_dragMousePos;
 				if (direction.magnitude > 0)
 				{
-					buildModeFollow.transform.position -= new Vector3(direction.x, 0, direction.y) * 1.0f * Time.deltaTime;
+					Vector3 transPos = buildModeFollow.transform.position - new Vector3(direction.x, 0, direction.y) * 1.0f * Time.deltaTime;
+					if (!InBaseBoundary(transPos)) transPos = buildModeFollow.transform.position - new Vector3(direction.x, 0, direction.y) * 0.1f * Time.deltaTime;
+					buildModeFollow.transform.position = transPos;
 					m_dragMousePos = Input.mousePosition;
 					//Helpers.Log(this, "MouseDrag", $"from{m_dragMousePos}To{Input.mousePosition}->{direction.magnitude}");
 				}
+			}
+			else if (!InBaseBoundary(buildModeFollow.transform.position))
+			{
+				buildModeFollow.transform.position = Vector3.Lerp(buildModeFollow.transform.position, ConstraintPos(buildModeFollow.transform.position), 3.0f);
+				if (InBaseBoundary(buildModeFollow.transform.position)) m_revisCampos = Vector3.zero;
 			}
 
 		}
@@ -176,6 +207,21 @@ public class GameManager : MonoBehaviour
 		action?.Invoke();
 	}
 
+	bool InBaseBoundary(Vector3 pos)
+	{
+		return pos.x > baseBoundary_LB.x && pos.x < baseBoundary_RT.x
+				&& pos.z > baseBoundary_LB.y && pos.z < baseBoundary_RT.y;
+	}
+
+	Vector3 ConstraintPos(Vector3 sourcePos)
+	{
+		Vector3 pos = sourcePos;
+		if (pos.x < baseBoundary_LB.x) pos.x = baseBoundary_LB.x;
+		if (pos.x > baseBoundary_RT.x) pos.x = baseBoundary_RT.x;
+		if (pos.z < baseBoundary_LB.y) pos.z = baseBoundary_LB.y;
+		if (pos.z > baseBoundary_RT.y) pos.z = baseBoundary_RT.y;
+		return pos;
+	}
 	public static string SceneBoxInfo(GameObject sceneBox, bool display)
 	{
 		if (!sceneBox) return display ? "空地" : "blank";

@@ -55,6 +55,11 @@ namespace CreatorKitCodeInternal
 			m_FramingTransposer = Camera.GetCinemachineComponent<CinemachineFramingTransposer>();
 		}
 
+		void Start()
+		{
+			Zoom(0f);
+		}
+
 		private void FixedUpdate()
 		{
 			if (Mathf.Abs(m_setDistance - m_CurrentDistance) > 0.01f && m_setTrigger)
@@ -70,11 +75,6 @@ namespace CreatorKitCodeInternal
 				OnSetOver();
 			}
 		}
-		void Start()
-		{
-			Zoom(0);
-		}
-
 		/// <summary>
 		/// Zoom of the given distance. Note that distance need to be a param between 0...1,a d the distance is a ratio
 		/// </summary>

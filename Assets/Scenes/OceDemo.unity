@@ -225,7 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameplayCamera: {fileID: 963194227}
   MinAngle: 10
-  MaxAngle: 50
+  MaxAngle: 55
   MinDistance: 10
   MaxDistance: 25
 --- !u!114 &3218443
@@ -5964,7 +5964,7 @@ PrefabInstance:
     - target: {fileID: 4961351870411836090, guid: 413d04a8e1a54774390ab44654b70554,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 40.739998
+      value: 39.52
       objectReference: {fileID: 0}
     - target: {fileID: 4961351870411836090, guid: 413d04a8e1a54774390ab44654b70554,
         type: 3}
@@ -5974,7 +5974,7 @@ PrefabInstance:
     - target: {fileID: 4961351870411836090, guid: 413d04a8e1a54774390ab44654b70554,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -12.220001
+      value: -12.73
       objectReference: {fileID: 0}
     - target: {fileID: 4961351870411836090, guid: 413d04a8e1a54774390ab44654b70554,
         type: 3}
@@ -25771,7 +25771,7 @@ Transform:
   m_GameObject: {fileID: 1742334674}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.6, y: 0, z: -65.4}
+  m_LocalPosition: {x: 0.6, y: 0, z: -64.1}
   m_LocalScale: {x: 5, y: 10, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -32681,7 +32681,9 @@ MonoBehaviour:
   TerrainTool: {fileID: 1996416778}
   buildModeFollow: {fileID: 2072677016}
   ui_trans: {fileID: 5564097808944322120}
-  position_born: {x: 83, y: 10, z: 14}
+  position_born: {x: 90, y: 10, z: -5}
+  baseBoundary_LB: {x: 80, y: 30, z: -15}
+  baseBoundary_RT: {x: 85, y: 30, z: -5}
   prefab_character: {fileID: 8112423057566066908, guid: 13412434e049bcc419706b33d84a668e,
     type: 3}
   prefab_gameui: {fileID: 3615227413832385651, guid: 14fb6a8134ee17941a103a80c429a6b3,
