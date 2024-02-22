@@ -21,6 +21,7 @@ public class UITargetInfo : MonoBehaviour
 	GameObject lootElement;
 	[SerializeField]
 	Animator btTalk;
+	CharacterData m_curEnemy;
 
 	UILootElement[] uilootList = new UILootElement[maxUILoot];
 	public void Init()
@@ -29,7 +30,7 @@ public class UITargetInfo : MonoBehaviour
 		GameManager.Player.BaseAI.InteractDetector.OnEnter.AddListener(OnInteractEnter);
 		GameManager.Player.BaseAI.InteractDetector.OnExit.AddListener(OnInteractExit);
 		//GameManager.Player.InteractDetector.OnStay.AddListener(OnInteractStay);
-		SetEnemy();
+		UpdateEnemyInfo();
 		for (int i = 0; i < maxUILoot; i++)
 		{
 			uilootList[i] = Instantiate(lootElement).GetComponent<UILootElement>();
@@ -38,15 +39,13 @@ public class UITargetInfo : MonoBehaviour
 		}
 	}
 
-	void SetEnemy()
+	void UpdateEnemyInfo()
 	{
-		if (GameManager.Player.CurrentEnemy)
+		if (m_curEnemy)
 		{
-			RoleControl enemy = GameManager.Player.CurrentEnemy.GetComponent<RoleControl>();
-			enemy.eventSender.events.AddListener(OnEnemyEvent);
-			enemyName.text = GameManager.Player.CurrentEnemy.CharacterName;
-			enemyHp.maxValue = GameManager.Player.CurrentEnemy.Stats.stats.health;
-			enemyHp.value = GameManager.Player.CurrentEnemy.Stats.CurrentHealth;
+			enemyName.text = m_curEnemy.CharacterName;
+			enemyHp.maxValue = m_curEnemy.Stats.stats.health;
+			enemyHp.value = m_curEnemy.Stats.CurrentHealth;
 			enemyHp.gameObject.SetActive(true);
 		}
 		else
@@ -61,7 +60,17 @@ public class UITargetInfo : MonoBehaviour
 		switch (eventName)
 		{
 			case "roleEvent_OnSetCurrentEnemy":
-				SetEnemy();
+				m_curEnemy = obj.GetComponent<CharacterData>();
+				m_curEnemy?.GetComponent<EventSender>()?.events.AddListener(OnEnemyEvent);
+				UpdateEnemyInfo();
+				break;
+			case "roleEvent_OnRemoveCurrentEnemy":
+				if (m_curEnemy == obj.GetComponent<CharacterData>())
+				{
+					m_curEnemy?.GetComponent<EventSender>()?.events.RemoveListener(OnEnemyEvent);
+					m_curEnemy = null;
+					UpdateEnemyInfo();
+				}
 				break;
 			default:
 				break;

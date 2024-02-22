@@ -46,8 +46,8 @@ public class RoleControl : HighlightableObject
 			}
 			else if (m_Enemy != null && value == null)
 			{
-				m_eventSender.Send(gameObject, "roleEvent_OnRemoveCurrentEnemy");
-				m_Enemy = value;
+				m_eventSender.Send(m_Enemy.gameObject, "roleEvent_OnRemoveCurrentEnemy");
+				m_Enemy = null;
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 /// <summary>
 /// Helper class containing diverse functions that avoid redoing common things.
@@ -48,7 +49,8 @@ public class Helpers
 
 	public static void Log(object logger, string key = "", string log = "")
 	{
-		Debug.Log($"<color=green><{key}></color>-<color=gray>{log}</color>---[{logger.ToString()}]");
+		if (KeyValueData.GetValue<bool>(GameManager.Config.LogConfig, key))
+			Debug.Log($"<color=green><{key}></color>-<color=gray>{log}</color>---[{logger.ToString()}]");
 	}
 
 	public static void ShowUIElement(GameObject element, bool value)

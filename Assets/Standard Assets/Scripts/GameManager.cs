@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance;
 	public static RoleControl Player;
 	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
+	public static GameGoalSystem GameGoal => Instance.GetComponent<GameGoalSystem>();
 	public static UIManager GameUI;
 	public static KeyValueData Config => Instance.DemoData;
 	public LightManager DayNight;
@@ -125,6 +126,8 @@ public class GameManager : MonoBehaviour
 		hud.Bubble("捡起杂物做任务！");
 		yield return new WaitForSeconds(2.0f);
 		StoryMode = false;
+		GameGoal.Init();
+
 	}
 
 	void OnApplicationQuit()

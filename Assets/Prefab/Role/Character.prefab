@@ -52,6 +52,7 @@ GameObject:
   - component: {fileID: 8207529441758577494}
   - component: {fileID: 844399017392488554}
   - component: {fileID: 8083394617915932574}
+  - component: {fileID: 5207904639715509024}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -161,14 +162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55cbeabee48703d44a67500bf7bd334c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultWeapon: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
   WeaponLocator: {fileID: 226675115136632130}
-  SpurSoundClips:
-  - {fileID: 8300000, guid: daa761ef6c428a344b4858008944ac86, type: 3}
-  - {fileID: 8300000, guid: 7b0cf46482c46934e9a0b9dd41b0440a, type: 3}
-  - {fileID: 8300000, guid: 11f81a1d4cbde2f4e943503e5e123e5e, type: 3}
-  - {fileID: 8300000, guid: 10f3af480312d4f408f699205054cf74, type: 3}
-  SpottedAudioClip: []
+  HitClip: []
 --- !u!114 &2429351864463128572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,6 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterName: Jack
+  DefaultWeapon: {fileID: 0}
   Stats:
     baseStats:
       health: 20
@@ -205,11 +201,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1c58a18c6857d41bac517b20c0efc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camp: 0
+  MoveSpeed: 4
   SceneDetector: {fileID: 2035109682229800503}
   InteractDetector: {fileID: 4597439104978932822}
   EnemyDetector: {fileID: 1134714616160843028}
   SkillDetector: {fileID: 2222825981694970673}
-  MoveSpeed: 4
 --- !u!114 &8038204361242864812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +224,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0e4cc57ce29e9ab44a171cf05257511c, type: 3}
   - {fileID: 8300000, guid: 55aa71f6661a105409a3c2b88a8696b4, type: 3}
   - {fileID: 8300000, guid: 8afbb726d46163f4392647f6e953f539, type: 3}
+  SpurSoundClips: []
+  SpottedAudioClip: []
   VocalAttack:
   - {fileID: 8300000, guid: 8106396419248144e98bf39bd251772e, type: 3}
   - {fileID: 8300000, guid: eddc933c04a8a964d80533832f3ba1d0, type: 3}
@@ -297,6 +296,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14aca5e7c8020c34f961bda6c9916e03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5207904639715509024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8112423057566066908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc7666b5ea825cc48ad39c9e271cec78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &9066320245022399288
@@ -3110,6 +3121,12 @@ MonoBehaviour:
   SkillStep:
     m_PersistentCalls:
       m_Calls: []
+  DeathTrigger: Death
+  SpeedTrigger: Speed
+  AttackTrigger: Attack
+  HitTrigger: Hit
+  RespawnTrigger: Respawn
+  FaintTrigger: Faint
 --- !u!4 &8914532985230110127 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 02af3baa7b9b95743b17093e5aef9dd1,

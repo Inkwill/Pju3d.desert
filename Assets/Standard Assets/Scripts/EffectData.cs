@@ -13,7 +13,8 @@ public class EffectData : ScriptableObject
 		SPEEDUP,
 		DIG,
 		SUMMON,
-		DROPBOX
+		DROPBOX,
+		ADDGOAL
 	}
 	public EffectType Type;
 	public VFXType TakeVFX = VFXType.NONE;
@@ -77,6 +78,10 @@ public class EffectData : ScriptableObject
 					success = true;
 					Helpers.Log(this, "Drop", $"{drop.item.ItemName}x{drop.itemNum}");
 				}
+				break;
+			case EffectType.ADDGOAL:
+				if (param != null && param.Length > 0)
+					GameManager.GameGoal.AddGoal(user.GetComponent<StatisticsHandle>(), GoalData.GetDataByKey(param[0]));
 				break;
 			default:
 				Debug.LogError("Take a illegal Effect:" + this);

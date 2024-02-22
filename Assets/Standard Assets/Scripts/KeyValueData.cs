@@ -15,10 +15,13 @@ public class KeyValueData : ScriptableObject
 		public TKey Key;
 		public TValue Value;
 	}
-
+	public List<KeyValue<string, string[]>> StringConfig;
+	public List<KeyValue<string, bool>> LogConfig;
 	public List<KeyValue<string, AudioClip>> AudioDic;
 	public List<KeyValue<string, Item>> Item;
 	public List<KeyValue<string, EffectData>> Effect;
+	public List<KeyValue<string, GoalData>> GameGoal;
+
 	public static T GetValue<T>(List<KeyValue<string, T>> dic, string key)
 	{
 		foreach (KeyValue<string, T> data in dic)

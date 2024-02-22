@@ -43,9 +43,9 @@ namespace CreatorKitCode
 				foreach (var demand in Demand)
 				{
 					int id = inventory.EntryID(demand.Key);
-					Item item = inventory.Entries[id].Item;
 					if (id != -1)
 					{
+						Item item = inventory.Entries[id].Item;
 						InventoryEntry entry = inventory.Entries[id];
 						int leftNum = DemandLeft[demand.Key];
 						int fulfillNum = 0;
