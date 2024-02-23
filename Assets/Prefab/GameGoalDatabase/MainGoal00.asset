@@ -12,18 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d0c837d0e930a4ab7e25738d516182, type: 3}
   m_Name: MainGoal00
   m_EditorClassIdentifier: 
-  goalName: main00
+  goalId: main00
+  describe: "\u79FB\u52A8\u5230\u9053\u5177\u9644\u8FD1\u53EF\u81EA\u52A8\u62FE\u53D6"
+  summary: "\u6361\u8D77\u6563\u843D\u7684\u7269\u8D44:"
+  PlayerExp: 1
   type: 0
   param:
   - Key: Wood
     Value:
     - 3
-  - Key: Money
-    Value:
-    - 2
-  - Key: any
-    Value:
-    - 5
   rewardEffects:
   - Key: {fileID: 11400000, guid: 914632a637ca46447acc281c33ff3c12, type: 2}
     Value:

@@ -14,8 +14,8 @@ public class UIEventSender : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 	float pressTime;
 	bool m_longpress;
 
-	public UnityEvent OnClick;
-	public UnityEvent OnLonePress;
+	public UnityEvent OnClickEvent;
+	public UnityEvent OnLonePressEvent;
 	private void Update()
 	{
 		if (pressTime > 0)
@@ -25,7 +25,7 @@ public class UIEventSender : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 			if (pressTime <= 0)
 			{
 				// 执行长按操作
-				OnLonePress?.Invoke();
+				OnLonePressEvent?.Invoke();
 				m_longpress = true;
 				pressTime = 0; // 重置长按持续时间
 				return;
@@ -37,7 +37,7 @@ public class UIEventSender : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 	protected virtual void OnUpdate() { }
 	public void OnPointerClick(PointerEventData eventData)
 	{
-		if (!m_longpress && m_canClick) OnClick?.Invoke();
+		if (!m_longpress && m_canClick) OnClickEvent?.Invoke();
 	}
 
 	public void OnPointerDown(PointerEventData eventData)

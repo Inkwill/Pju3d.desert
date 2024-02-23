@@ -19,6 +19,7 @@ public class UIMainWindow : UIWindow
 	public GameObject tellContent;
 	public UITargetInfo targetUI;
 	public Skill sprintSkill;
+	public UIGoalInfo uiGoalInfo;
 	Button[] m_buttons;
 	UISkillButton[] m_skillButtons;
 
@@ -32,12 +33,14 @@ public class UIMainWindow : UIWindow
 		GameManager.Player.Data.Equipment.OnUnequip += (equip) => { UpdateWeapon(GameManager.Player.Data.Equipment); };
 		GameManager.Player.Data.Equipment.OnEquipViceWeapon += (equip) => { UpdateWeapon(GameManager.Player.Data.Equipment); };
 		GameManager.StoryListener.storyListenerEvents.AddListener(OnStoryListenerEvent);
+		GameManager.GameGoal.GameGoalAction += UpdateGoalInfo;
 	}
 	protected override void OnOpen()
 	{
 		UpdateWeapon(GameManager.Player.Data.Equipment);
 		CloseTalkButton();
 		tellContent.SetActive(false);
+		uiGoalInfo.SetGoal(GameManager.GameGoal.CurrentGoal);
 	}
 
 	void OnPlayerEvent(GameObject obj, string eventName)
@@ -99,6 +102,22 @@ public class UIMainWindow : UIWindow
 		{
 			btWeapon.Init(equipment.Weapon.WeaponSkill);
 			iconWeapon.sprite = equipment.Weapon.ItemSprite;
+		}
+	}
+
+	void UpdateGoalInfo(GameGoalSystem.GameGoal goal, string eventName)
+	{
+		if (eventName == "AddGoal")
+		{
+			uiGoalInfo.SetGoal(goal);
+		}
+		if (eventName == "UpdateGoal")
+		{
+			uiGoalInfo.UpdateGoal();
+		}
+		if (eventName == "AchieveGoal")
+		{
+			uiGoalInfo.SetGoal(null);
 		}
 	}
 

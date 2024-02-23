@@ -5,7 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameGoalData", menuName = "Data/GoalData", order = 15)]
 public class GoalData : ScriptableObject
 {
-	public string goalName;
+	public string goalId;
+	public string describe;
+	public string summary;
+	public int PlayerExp;
 	public GameGoalSystem.GoalType type;
 	public List<KeyValueData.KeyValue<string, string[]>> param;
 	public List<KeyValueData.KeyValue<EffectData, string[]>> rewardEffects;

@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSeconds(2.0f);
 		hud.Bubble("地上一堆小杂物,");
 		yield return new WaitForSeconds(2.0f);
-		hud.Bubble("捡起杂物做任务！");
+		hud.Bubble("捡起杂物找出路！");
 		yield return new WaitForSeconds(2.0f);
 		StoryMode = false;
 		GameGoal.Init();

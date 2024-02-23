@@ -15,7 +15,6 @@ public class GameGoalSystem : MonoBehaviour
 	public class GameGoal
 	{
 		public GoalData data { get { return m_data; } }
-		public Action<GoalData> AchievedEvent;
 		public bool Completed
 		{
 			get
@@ -30,12 +29,12 @@ public class GameGoalSystem : MonoBehaviour
 		}
 		Dictionary<string, int> m_completeData;
 		GoalData m_data;
-		StatisticsHandle m_record;
-		public GameGoal(StatisticsHandle record, GoalData data)
+		GameGoalSystem m_owner;
+		public GameGoal(GameGoalSystem owner, GoalData data)
 		{
 			m_data = data;
-			m_record = record;
-			m_record.UpdateAction += UpdateGoalInfo;
+			m_owner = owner;
+			owner.Recorder.UpdateAction += UpdateGoalInfo;
 			m_completeData = new Dictionary<string, int>();
 			foreach (var cond in m_data.Conditions)
 			{
@@ -53,67 +52,89 @@ public class GameGoalSystem : MonoBehaviour
 						bool update = false;
 						if (m_completeData.ContainsKey(data.Key)) { m_completeData[data.Key] += data.Value; update = true; }
 						if (m_completeData.ContainsKey("any")) { m_completeData["any"] += data.Value; update = true; }
-						if (update) Helpers.Log(this, "UpdateGoal", $"{m_data.goalName},progress={ProgressInfo}");
+						if (update)
+						{
+							m_owner.GameGoalAction?.Invoke(this, "UpdateGoal");
+							Helpers.Log(this, "UpdateGoal", $"{m_data.goalId},progress={string.Join(",", ProgressInfo)}");
+						}
+
 					}
 					break;
 				default:
 					break;
 			}
-			if (Completed) Achieve();
+			if (Completed) { m_owner.Recorder.UpdateAction -= UpdateGoalInfo; }
 		}
-		public string ProgressInfo
+		public List<string> ProgressInfo
 		{
 			get
 			{
 				List<string> result = new List<string>();
 				foreach (var item in m_completeData)
 				{
-					result.Add($"{item.Key}:{item.Value}/{m_data.Conditions[item.Key]}");
+					result.Add($"{item.Value}/{m_data.Conditions[item.Key]}");
 				}
-				return string.Join(",", result);
+				return result;
 			}
 		}
 
-		void Achieve()
+		public string Summary
 		{
-			AchievedEvent?.Invoke(m_data);
-			m_record.UpdateAction -= UpdateGoalInfo;
-			if (m_record.Owner != null)
+			get
 			{
-				foreach (var effect in m_data.rewardEffects)
+				string result = m_data.summary + " ";
+				switch (m_data.type)
 				{
-					effect.Key.Take(m_record.Owner.gameObject, effect.Value);
+					case GoalType.AddItem:
+						result += ProgressInfo[0];
+						break;
+					default:
+						break;
 				}
+				return result;
 			}
+		}
+
+		public void Acheve()
+		{
+			m_owner.AchieveGoal(this);
 		}
 	}
 
 	public GoalData TestGoal;
-	List<GoalData> m_AchievedGoals;
+	public Action<GameGoal, string> GameGoalAction;
+	public StatisticsHandle Recorder => m_recorder;
+	public GameGoal CurrentGoal => m_curGoal;
+	List<string> m_AchievedGoals;
 	GameGoal m_curGoal;
+	StatisticsHandle m_recorder;
 
 	public void Init()
 	{
-		m_AchievedGoals = new List<GoalData>();
-		var record = GameManager.Player.GetComponent<StatisticsHandle>();
-		if (record) m_curGoal = AddGoal(record, TestGoal);
+		m_AchievedGoals = new List<string>();
+		m_recorder = GameManager.Player.GetComponent<StatisticsHandle>();
+		m_curGoal = AddGoal(TestGoal);
 	}
-	public GameGoal AddGoal(StatisticsHandle recorder, GoalData data)
+	public GameGoal AddGoal(GoalData data)
 	{
-		var goal = new GameGoal(recorder, data);
-		goal.AchievedEvent += OnGameGoalAchieved;
-		Helpers.Log(this, "AddGoal", $"{goal.data.goalName},completed={goal.ProgressInfo}");
+		var goal = new GameGoal(this, data);
+		GameGoalAction?.Invoke(goal, "AddGoal");
+		Helpers.Log(this, "AddGoal", $"{goal.data.goalId},completed={goal.ProgressInfo}");
 		return goal;
 	}
 
-	void OnGameGoalAchieved(GoalData data)
+	void AchieveGoal(GameGoal goal)
 	{
-		if (data == m_curGoal.data)
+		GameGoalAction?.Invoke(goal, "AchieveGoal");
+		Helpers.Log(this, "AchieveGoal", $"{goal.data.goalId},reward={goal.data.rewardEffects}");
+		m_AchievedGoals.Add(m_curGoal.data.goalId);
+		if (goal == m_curGoal) m_curGoal = null;
+		if (m_recorder.Owner != null)
 		{
-			m_AchievedGoals.Add(data);
-			m_curGoal.AchievedEvent -= OnGameGoalAchieved;
-			m_curGoal = null;
-			Helpers.Log(this, "AchieveGoal", $"{data.goalName},reward={data.rewardEffects}");
+			foreach (var effect in goal.data.rewardEffects)
+			{
+				effect.Key.Take(m_recorder.Owner.gameObject, effect.Value);
+			}
 		}
 	}
 }

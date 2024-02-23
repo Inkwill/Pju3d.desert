@@ -33,6 +33,8 @@ MonoBehaviour:
     Value: 1
   - Key: Drop
     Value: 0
+  - Key: AcheveGoal
+    Value: 1
   AudioDic:
   - Key: cancle
     Value: {fileID: 8300000, guid: 2cfe31bd25480fa4184ff3a6f4856b0d, type: 3}

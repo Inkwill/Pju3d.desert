@@ -16,6 +16,6 @@ public class UITalkButton : UIEventSender
 
 	void Start()
 	{
-		OnClick.AddListener(() => { GameManager.StoryListener.Ask(m_content); });
+		OnClickEvent.AddListener(() => { GameManager.StoryListener.Ask(m_content); });
 	}
 }

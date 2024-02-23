@@ -81,7 +81,7 @@ public class EffectData : ScriptableObject
 				break;
 			case EffectType.ADDGOAL:
 				if (param != null && param.Length > 0)
-					GameManager.GameGoal.AddGoal(user.GetComponent<StatisticsHandle>(), GoalData.GetDataByKey(param[0]));
+					GameManager.GameGoal.AddGoal(GoalData.GetDataByKey(param[0]));
 				break;
 			default:
 				Debug.LogError("Take a illegal Effect:" + this);
