@@ -12,7 +12,7 @@ using Unity.VisualScripting;
 public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
-	public static RoleControl Player;
+	public static CharacterData Player;
 	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
 	public static GameGoalSystem GameGoal => Instance.GetComponent<GameGoalSystem>();
 	public static UIManager GameUI;
@@ -95,7 +95,8 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
-		Player = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<RoleControl>();
+		Player = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterData>();
+		Player.Active();
 		SFXManager.ListenerTarget = Player.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();
 		GameUI.transform.SetParent(ui_trans);

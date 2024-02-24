@@ -44,7 +44,6 @@ GameObject:
   - component: {fileID: 6930289334081081547}
   - component: {fileID: 2415793297889115344}
   - component: {fileID: 2888058658596724453}
-  - component: {fileID: 6100377345768281577}
   - component: {fileID: 2429351864463128572}
   - component: {fileID: 4272129805801271086}
   - component: {fileID: 8038204361242864812}
@@ -150,19 +149,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
---- !u!114 &6100377345768281577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8112423057566066908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55cbeabee48703d44a67500bf7bd334c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WeaponLocator: {fileID: 226675115136632130}
 --- !u!114 &2429351864463128572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: Jack
   DefaultWeapon: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
+  WeaponLocator: {fileID: 226675115136632130}
   MoveSpeed: 4
   Stats:
     baseStats:

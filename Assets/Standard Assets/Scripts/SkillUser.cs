@@ -85,7 +85,7 @@ public class SkillUser : MonoBehaviour
 			case Skill.TargetType.SCENEBOX:
 				return UseSkill(skill, m_character.BaseAI.SceneDetector?.gameObject);
 			case Skill.TargetType.CURRENT:
-				return UseSkill(skill, m_character.CurrentEnemy?.gameObject);
+				return UseSkill(skill, m_character.BaseAI.CurrentEnemy?.gameObject);
 			default:
 				return UseSkill(skill, null);
 		}
@@ -104,7 +104,7 @@ public class SkillUser : MonoBehaviour
 			}
 			if (entry.skill.TType == Skill.TargetType.CURRENT && target == null)
 			{
-				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_character.CurrentEnemy);
+				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_character.BaseAI.CurrentEnemy);
 				return false;
 				// if (m_role.CurrentEnemy == null || (entry.skill.layers & (1 << m_role.CurrentEnemy.gameObject.layer)) == 0)
 			}

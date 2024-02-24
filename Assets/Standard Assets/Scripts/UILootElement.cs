@@ -22,7 +22,7 @@ public class UILootElement : MonoBehaviour
 	{
 		if (loot)
 		{
-			loot.InteractWith(GameManager.Player.Data);
+			loot.InteractWith(GameManager.Player);
 			loot = null;
 		}
 		gameObject.SetActive(false);

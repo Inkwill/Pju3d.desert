@@ -25,14 +25,15 @@ public class ItemDemander : TimerBehaviour
 		//detector?.OnStay.AddListener(OnInterStay);
 	}
 
-	public void OnInteractEvent(RoleControl actor, string eventName)
+	public void OnInteractEvent(GameObject actor, string eventName)
 	{
-		if (eventName == "Completed")
+		var character = actor.GetComponent<CharacterData>();
+		if (eventName == "Completed" && character != null)
 		{
-			if (actor.isIdle)
+			if (character.BaseAI.isIdle)
 			{
-				if (m_Demand.Completed) { isStarted = true; actor.Data.Inventory.ItemEvent -= OnItemEvent; }
-				else { actor.Data.Inventory.ItemEvent += OnItemEvent; m_Demand.Fulfill(actor.Data.Inventory); }
+				if (m_Demand.Completed) { isStarted = true; character.Inventory.ItemEvent -= OnItemEvent; }
+				else { character.Inventory.ItemEvent += OnItemEvent; m_Demand.Fulfill(character.Inventory); }
 			}
 		}
 	}

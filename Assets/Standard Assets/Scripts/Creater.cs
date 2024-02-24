@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CreatorKitCodeInternal;
+using CreatorKitCode;
 
 public class Creater : TimerBehaviour
 {
@@ -9,11 +9,11 @@ public class Creater : TimerBehaviour
 	protected float m_initialDeep;
 	[SerializeField]
 	protected string creatPrefab;
-	protected RoleControl m_character;
+	protected CharacterData m_character;
 
 	public bool Auto = false;
 
-	public void DoCreate(RoleControl character, string pbName)
+	public void DoCreate(CharacterData character, string pbName)
 	{
 		creatPrefab = pbName;
 		m_character = character;

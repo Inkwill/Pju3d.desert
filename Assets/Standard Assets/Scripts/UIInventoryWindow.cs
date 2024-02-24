@@ -65,13 +65,13 @@ public class UIInventoryWindow : UIWindow
 	}
 	public void Load()
 	{
-		UpdateEquipment(GameManager.Player.Data.Equipment, GameManager.Player.Data.Stats);
-		UpdateWeapon(GameManager.Player.Data.Equipment);
+		UpdateEquipment(GameManager.Player.Equipment, GameManager.Player.Stats);
+		UpdateWeapon(GameManager.Player.Equipment);
 		for (int i = 0; i < m_ItemEntries.Length; ++i)
 		{
-			m_ItemEntries[i].UpdateEntry(GameManager.Player.Data);
+			m_ItemEntries[i].UpdateEntry(GameManager.Player);
 		}
-		StatSystem.Stats stats = GameManager.Player.Data.Stats.stats;
+		StatSystem.Stats stats = GameManager.Player.Stats.stats;
 		textStats.text = $"Str : {stats.strength} Def : {stats.defense} Agi : {stats.agility}  Spr : {stats.spirit}";
 	}
 
@@ -90,7 +90,7 @@ public class UIInventoryWindow : UIWindow
 			case "Equip":
 				if (equip)
 				{
-					GameManager.Player.Data.Inventory.EquipItem(equip);
+					GameManager.Player.Inventory.EquipItem(equip);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
 
@@ -99,7 +99,7 @@ public class UIInventoryWindow : UIWindow
 			case "UnEquip":
 				if (equip)
 				{
-					GameManager.Player.Data.Inventory.UnEquipItem(equip);
+					GameManager.Player.Inventory.UnEquipItem(equip);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
 				}
@@ -108,7 +108,7 @@ public class UIInventoryWindow : UIWindow
 				GameObject lootObj = Resources.Load("Loot") as GameObject;
 				if (lootObj)
 				{
-					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
+					GameManager.Player.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
 					Loot loot = Instantiate(lootObj, GameManager.Player.transform.position, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
 					loot.Item = m_SelectedSlot.item;
 					m_SelectedSlot.tog.isOn = false;
@@ -118,10 +118,10 @@ public class UIInventoryWindow : UIWindow
 				break;
 			case "Use":
 				UsableItem item = m_SelectedSlot.item as UsableItem;
-				if (item.UsedBy(GameManager.Player.Data))
+				if (item.UsedBy(GameManager.Player))
 				{
-					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
-					m_SelectedSlot.tog.isOn = GameManager.Player.Data.Inventory.ItemCount(item.ItemName) > 1;
+					GameManager.Player.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
+					m_SelectedSlot.tog.isOn = GameManager.Player.Inventory.ItemCount(item.ItemName) > 1;
 					Load();
 				}
 				break;
@@ -130,7 +130,7 @@ public class UIInventoryWindow : UIWindow
 				break;
 			case "Give":
 				if (GameManager.StoryListener.CurrentTeller.GiveItem(m_SelectedSlot.item))
-					GameManager.Player.Data.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
+					GameManager.Player.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
 				m_SelectedSlot.tog.isOn = false;
 				Load();
 				break;

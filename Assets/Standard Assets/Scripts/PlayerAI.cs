@@ -5,27 +5,27 @@ using CreatorKitCode;
 
 public class PlayerAI : RoleAI
 {
-	public override void Init()
+	public override void Init(CharacterData data)
 	{
-		base.Init();
+		base.Init(data);
 		m_character.Inventory.ItemEvent += (OnItemEvent);
 	}
 	void FixedUpdate()
 	{
 		if (GameManager.BuildMode) return;
-		if (m_role.CurState == RoleControl.State.DEAD || m_role.CurState == RoleControl.State.SKILLING) return;
+		if (CurState == State.DEAD || CurState == State.SKILLING) return;
 
 		Vector3 direction = Vector3.forward * GameManager.GameUI.JoyStick.Vertical + Vector3.right * GameManager.GameUI.JoyStick.Horizontal;
 		if (direction.magnitude > 0)
 		{
-			m_character.CurrentEnemy = null;
+			CurrentEnemy = null;
 			// if (m_role.CurState == RoleControl.State.ATTACKING)
 			// 	m_Animator.StopPlayback();
 			//if (m_Destination != Vector3.zero) m_Destination = Vector3.zero;
 			Move(direction);
 		}
-		else if (direction.magnitude == 0 && m_role.CurState == RoleControl.State.MOVE && m_Destination == Vector3.zero)
-			m_role.SetState(RoleControl.State.IDLE);
+		else if (direction.magnitude == 0 && CurState == State.MOVE && m_Destination == Vector3.zero)
+			SetState(State.IDLE);
 	}
 
 	void OnItemEvent(Item item, string eventName, int itemCount)

@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class InteractHandle : MonoBehaviour
 {
-	public UnityEvent<RoleControl, string> InteractEvent;
+	public UnityEvent<GameObject, string> InteractEvent;
 	[SerializeField]
 	InteractOnTrigger Detector;
 	[SerializeField]
@@ -15,8 +15,8 @@ public class InteractHandle : MonoBehaviour
 	Slider slider;
 	public float During { get { return m_during; } set { m_during = value; if (slider) slider.value = value; } }
 	float m_during;
-	public RoleControl CurrentTarget { get { return m_target; } set { m_target = value; } }
-	RoleControl m_target;
+	public GameObject CurrentTarget { get { return m_target; } set { m_target = value; } }
+	GameObject m_target;
 
 	void Start()
 	{
@@ -29,22 +29,19 @@ public class InteractHandle : MonoBehaviour
 
 	void OnInterEnter(GameObject enter)
 	{
-		if (m_target != null) return;
-		RoleControl role = enter.GetComponent<RoleControl>();
-		if (role)
-		{
-			InteractEvent?.Invoke(role, "Enter");
-			During = 0;
-			slider?.gameObject.SetActive(true);
-		}
+		if (m_target != null || m_target == enter) return;
+		InteractEvent?.Invoke(enter, "Enter");
+		During = 0;
+		slider?.gameObject.SetActive(true);
 		//Helpers.Log(this, "OninterEnter", "enter= " + enter);
 	}
 
 	void OnInterExit(GameObject exiter)
 	{
-		if (m_target && m_target.gameObject == exiter) { m_target = null; }
-		RoleControl role = exiter.GetComponent<RoleControl>();
-		if (role) { InteractEvent?.Invoke(role, "Exit"); During = 0; slider?.gameObject.SetActive(false); }
+		if (m_target != null && m_target == exiter) { m_target = null; }
+		InteractEvent?.Invoke(exiter, "Exit");
+		During = 0;
+		slider?.gameObject.SetActive(false);
 		//Helpers.ShowUIElement(slider.gameObject, false);
 		//Helpers.Log(this, "OninterExit", "exiter= " + exiter);
 	}
@@ -52,18 +49,18 @@ public class InteractHandle : MonoBehaviour
 	void OnInterStay(GameObject stayer, float duration)
 	{
 		if (m_target != null) return;
-		RoleControl role = stayer.GetComponent<RoleControl>();
-		if (role && role.isIdle)
+		RoleAI roleAi = stayer.GetComponent<RoleAI>();
+		if (roleAi && roleAi.isIdle)
 		{
 			m_during += Time.deltaTime;
 			During = m_during;
 			if (m_during >= handleTime)
 			{
 				During = 0;
-				InteractEvent?.Invoke(role, "Completed");
+				InteractEvent?.Invoke(stayer, "Completed");
 				slider?.gameObject.SetActive(false);
 			}
-			InteractEvent?.Invoke(role, "Stay");
+			InteractEvent?.Invoke(stayer, "Stay");
 			//Helpers.Log(this, "OninterStay", "stayer= " + stayer);
 		}
 	}

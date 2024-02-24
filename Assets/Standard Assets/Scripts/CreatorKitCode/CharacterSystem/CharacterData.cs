@@ -11,10 +11,11 @@ namespace CreatorKitCode
 	/// This defines a character in the game. The name Character is used in a loose sense, it just means something that
 	/// can be attacked and have some stats including health. It could also be an inanimate object like a breakable box.
 	/// </summary>
-	public class CharacterData : MonoBehaviour
+	public class CharacterData : HighlightableObject
 	{
 		public string CharacterName;
 		public Weapon DefaultWeapon;
+		public Transform WeaponLocator;
 		public float MoveSpeed = 3.0f;
 		public int Lv => m_level;
 		public StatSystem Stats;
@@ -24,24 +25,6 @@ namespace CreatorKitCode
 		public InventorySystem Inventory = new InventorySystem();
 		public EquipmentSystem Equipment = new EquipmentSystem();
 
-		protected CharacterData m_Enemy;
-		public CharacterData CurrentEnemy
-		{
-			get { return m_Enemy; }
-			set
-			{
-				if (value != null)
-				{
-					GetComponent<EventSender>()?.Send(value.gameObject, "characterEvent_OnSetCurrentEnemy");
-					m_Enemy = value;
-				}
-				else if (m_Enemy != null && value == null)
-				{
-					GetComponent<EventSender>()?.Send(m_Enemy.gameObject, "characterEvent_OnRemoveCurrentEnemy");
-					m_Enemy = null;
-				}
-			}
-		}
 		/// <summary>
 		/// Callback for when that CharacterData receive damage. E.g. used by the player character to trigger the right
 		/// animation
@@ -58,8 +41,15 @@ namespace CreatorKitCode
 		SkillUser m_SkillUser;
 		int m_level;
 		float m_AttackCoolDown;
+		protected Vector3 m_BirthPos;
+		public Vector3 BirthPos => m_BirthPos;
 
-		public void Init()
+		void Awake()
+		{
+			InitHighlight();
+			m_BirthPos = transform.position;
+		}
+		public void Active()
 		{
 			Stats.Init(this);
 			Inventory.Init(this);
@@ -68,20 +58,44 @@ namespace CreatorKitCode
 			if (DefaultWeapon == null) DefaultWeapon = KeyValueData.GetValue<Item>(GameManager.Config.Item, "wp_unarmed") as Weapon;
 			Equipment.InitWeapon(DefaultWeapon);
 
-			m_Ai = GetComponent<AIBase>();
-			m_Ai.Init();
 			m_SkillUser = GetComponent<SkillUser>();
+			m_Ai = GetComponent<AIBase>();
+			m_Ai.Init(this);
 
 			OnDamage += (damage) =>
 			{
 				GetComponent<EventSender>()?.Send(gameObject, "characterEvent_OnDamage");
 				DamageUI.Instance.NewDamage(damage.GetFullDamage(), transform.position);
 			};
+
+			Equipment.OnEquiped += item =>
+			{
+				if (item.Slot == EquipmentItem.EquipmentSlot.Weapon)
+				{
+					Weapon wp = item as Weapon;
+					BaseAI.EnemyDetector.Radius = System.Math.Max(wp.Stats.MaxRange, BaseAI.EnemyDetector.Radius);
+					wp.bulletTrans = WeaponLocator;
+					if (WeaponLocator && item.WorldObjectPrefab)
+						Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
+
+					//Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
+				}
+			};
+
+			Equipment.OnUnequip += item =>
+			{
+				if (item.Slot == EquipmentItem.EquipmentSlot.Weapon)
+				{
+					foreach (Transform t in WeaponLocator)
+						Destroy(t.gameObject);
+				}
+			};
 		}
 
 		// Update is called once per frame
 		void Update()
 		{
+			if (!m_Ai.isActive) return;
 			Stats.Tick();
 
 			if (m_AttackCoolDown > 0.0f)

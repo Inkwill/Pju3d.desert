@@ -28,11 +28,12 @@ public class StoryTeller : MonoBehaviour
 		AddEntrustment();
 	}
 
-	public void OnInteractEvent(RoleControl actor, string eventName)
+	public void OnInteractEvent(GameObject actor, string eventName)
 	{
-		if (eventName == "Completed")
+		var character = actor.GetComponent<CharacterData>();
+		if (eventName == "Completed" && character != null)
 		{
-			if (actor.isIdle)
+			if (character.BaseAI.isIdle)
 			{
 				if (m_interactHandle) m_interactHandle.CurrentTarget = actor;
 				GameManager.StoryListener.StartListening(this);

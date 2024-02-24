@@ -7,6 +7,23 @@ using CreatorKitCode;
 [RequireComponent(typeof(CharacterData))]
 public class AIBase : MonoBehaviour
 {
+	public enum State
+	{
+		IDLE,
+		MOVE,
+		PURSUING,
+		ATTACKING,
+		SKILLING,
+		DEAD,
+		INACTIVE
+	}
+	public State CurState { get { return m_State; } }
+	protected State m_State = State.INACTIVE;
+	public float CurStateDuring => m_StateDuring;
+	float m_StateDuring;
+	public bool isIdle { get { return m_State == State.IDLE; } }
+	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
+	public bool isActive { get { return m_State != State.INACTIVE && m_State != State.DEAD; } }
 	public enum Camp
 	{
 		PLAYER,
@@ -15,7 +32,6 @@ public class AIBase : MonoBehaviour
 		NEUTRAL
 	}
 	public Camp camp;
-	public virtual float SpeedScale { get { return 1; } }
 	[Header("Detector")]
 	public InteractOnTrigger SceneDetector;
 	public InteractOnTrigger InteractDetector;
@@ -23,13 +39,34 @@ public class AIBase : MonoBehaviour
 	public InteractOnTrigger SkillDetector;
 	public string SceneBox { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, false); } }
 	public string SceneBoxName { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, true); } }
+	protected CharacterData m_Enemy;
+	public CharacterData CurrentEnemy
+	{
+		get { return m_Enemy; }
+		set
+		{
+			if (value != null)
+			{
+				GetComponent<EventSender>()?.Send(value.gameObject, "characterEvent_OnSetCurrentEnemy");
+				m_Enemy = value;
+			}
+			else if (m_Enemy != null && value == null)
+			{
+				GetComponent<EventSender>()?.Send(m_Enemy.gameObject, "characterEvent_OnRemoveCurrentEnemy");
+				m_Enemy = null;
+			}
+		}
+	}
+	public virtual float SpeedScale { get { return 1; } }
 	protected CharacterData m_character;
 
-
-	public virtual void Init()
+	public virtual void Init(CharacterData data)
 	{
-		m_character = GetComponent<CharacterData>();
+		m_character = data;
 		GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
+
+		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
+		if (dispatcher) dispatcher.AttackStep.AddListener(AttackFrame);
 
 		if (EnemyDetector)
 		{
@@ -74,8 +111,79 @@ public class AIBase : MonoBehaviour
 			default:
 				break;
 		}
+		m_State = State.IDLE;
 	}
 
+	void Update()
+	{
+		if (m_State == State.INACTIVE) return;
+
+		m_StateDuring += Time.deltaTime;
+		//Dead
+		if (m_State == State.DEAD) return;
+		//Skill
+		if (m_character.SkillUser && m_State != State.SKILLING && m_character.SkillUser.CurSkill != null) { SetState(State.SKILLING); }
+		if (m_character.SkillUser && m_State == State.SKILLING && m_character.SkillUser.CurSkill == null) { SetState(State.IDLE); }
+		//ATTACK
+		if (m_State == State.ATTACKING)
+		{
+			if (CurrentEnemy && m_character.CanAttackReach(CurrentEnemy)) CheckAttack();
+			else SetState(State.PURSUING);
+		}
+		//PURSUING
+		if (m_State == State.PURSUING)
+		{
+			if (m_character.Equipment.Weapon == null)
+			{
+				if (m_character.DefaultWeapon) m_character.Equipment.EquipWeapon(m_character.DefaultWeapon);
+				else
+				{
+					Debug.LogError("Miss a Weapon! role = " + gameObject);
+				}
+			}
+			if (CurrentEnemy && m_character.CanAttackReach(CurrentEnemy)) { SetState(State.ATTACKING); }
+			else GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnPursuing");
+		}
+		//MOVE
+		if (m_State == State.MOVE)
+		{
+			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnMoving");
+		}
+		//IDLE
+		if (m_State == State.IDLE)
+		{
+			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnIdling");
+		}
+	}
+	public void SetState(State nextState)
+	{
+		if (m_State == nextState) return;
+		m_State = nextState;
+		m_StateDuring = 0;
+		GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
+	}
+
+	public void CheckAttack()
+	{
+		if (m_character.CanAttackTarget(CurrentEnemy))
+		{
+			m_character.BaseAI.Stop();
+			m_character.BaseAI.LookAt(CurrentEnemy.transform);
+			m_character.AttackTriggered();
+			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnAttack");
+		}
+	}
+
+	void AttackFrame()
+	{
+		//if we can't reach the target anymore when it's time to damage, then that attack miss.
+		if (CurrentEnemy && m_character.CanAttackReach(CurrentEnemy))
+		{
+			m_character.Attack(CurrentEnemy);
+		}
+		else if (CurrentEnemy) Helpers.Log(this, "AttackMiss: ", $"{m_character.CharacterName}->{CurrentEnemy.CharacterName}");
+		else Helpers.Log(this, "AttackMiss: ", $"{m_character.CharacterName}->(Enemy Missed)");
+	}
 	public virtual void LookAt(Transform trans)
 	{
 		Vector3 forward = (trans.position - m_character.transform.position);
@@ -103,13 +211,13 @@ public class AIBase : MonoBehaviour
 
 	protected virtual void OnEnemyEnter(GameObject enter)
 	{
-		if (m_character.CurrentEnemy == null) m_character.CurrentEnemy = enter.GetComponent<CharacterData>();
+		if (CurrentEnemy == null) CurrentEnemy = enter.GetComponent<CharacterData>();
 	}
 	protected virtual void OnEnemyExit(GameObject exiter)
 	{
-		if (m_character.CurrentEnemy && m_character.CurrentEnemy.gameObject == exiter)
+		if (CurrentEnemy && CurrentEnemy.gameObject == exiter)
 		{
-			m_character.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+			CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
 			//m_eventSender.Send(exiter, "roleEvent_OnEnemyExit");
 		}
 	}
@@ -142,7 +250,7 @@ public class AIBase : MonoBehaviour
 	}
 	protected virtual void OnInteractStay(GameObject interactor, float during)
 	{
-		if (interactor.tag != "item" && m_character.CurrentEnemy == null) LookAt(interactor.transform);
+		if (interactor.tag != "item" && CurrentEnemy == null) LookAt(interactor.transform);
 		//HighlightTarget(interactor.gameObject, true);
 		//Debug.Log("[RoleAI-" + m_role + "] OnInteracting with : " + interactor.gameObject);
 	}

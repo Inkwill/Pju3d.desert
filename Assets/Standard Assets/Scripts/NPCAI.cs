@@ -37,20 +37,20 @@ public class NPCAI : RoleAI
 
 	protected override void OnPursuingAI()
 	{
-		if (m_character.CurrentEnemy && m_Offensive && m_character.MoveSpeed > 0)
+		if (CurrentEnemy && m_Offensive && m_character.MoveSpeed > 0)
 		{
 			Agent.isStopped = false;
-			Agent.SetDestination(m_character.CurrentEnemy.gameObject.transform.position);
+			Agent.SetDestination(CurrentEnemy.gameObject.transform.position);
 		}
 		else
 		{
-			Helpers.Log(this, "OnPursuingAI", "enemy= " + m_character.CurrentEnemy);
+			Helpers.Log(this, "OnPursuingAI", "enemy= " + CurrentEnemy);
 		}
 	}
 	protected override void OnDamageAI()
 	{
 		if (!m_Offensive) m_Offensive = true;
-		if (!m_character.CurrentEnemy) m_character.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+		if (!CurrentEnemy) CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
 		if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
 	}
 	protected override void OnDeadAI()
@@ -59,13 +59,13 @@ public class NPCAI : RoleAI
 		bool corpse = (Random.Range(1, 101) <= CorpseChance);
 		if (corpse)
 		{
-			m_role.gameObject.layer = LayerMask.NameToLayer("Interactable");
+			m_character.gameObject.layer = LayerMask.NameToLayer("Interactable");
 			StartCoroutine(DestroyCorpse(m_CorpseRetention));
 		}
 		else
 		{
-			if (dropEffect != null) dropEffect.Take(m_role.gameObject);
-			Helpers.RecursiveLayerChange(m_role.transform, LayerMask.NameToLayer("EnemyCorpse"));
+			if (dropEffect != null) dropEffect.Take(m_character.gameObject);
+			Helpers.RecursiveLayerChange(m_character.transform, LayerMask.NameToLayer("EnemyCorpse"));
 			StartCoroutine(DestroyCorpse(1.0f));
 		}
 	}
@@ -81,14 +81,14 @@ public class NPCAI : RoleAI
 		float randomX = Random.Range(0f, m_WanderRadius);
 		float randomZ = Random.Range(0f, m_WanderRadius);
 
-		Vector3 randomPos = new Vector3(m_role.BirthPos.x + randomX, m_role.BirthPos.y, m_role.BirthPos.z + randomZ);
+		Vector3 randomPos = new Vector3(m_character.BirthPos.x + randomX, m_character.BirthPos.y, m_character.BirthPos.z + randomZ);
 		MoveTo(randomPos);
-		m_role.GetComponent<EventSender>()?.Send(m_role.gameObject, "aiEvent_wandering");
+		m_character.GetComponent<EventSender>()?.Send(m_character.gameObject, "aiEvent_wandering");
 	}
 
 	void OnItemEnter(Loot loot)
 	{
-		if (m_itemPick) loot.InteractWith(m_role.Data);
+		if (m_itemPick) loot.InteractWith(m_character);
 	}
 
 }

@@ -14,7 +14,7 @@ namespace CreatorKitCodeInternal
 		public static UISystem Instance { get; private set; }
 
 		[Header("Player")]
-		public RoleControl PlayerCharacter;
+		public CharacterData PlayerCharacter;
 		public Slider PlayerHealthSlider;
 		public Text MaxHealth;
 		public Text CurrentHealth;
@@ -66,15 +66,15 @@ namespace CreatorKitCodeInternal
 
 		void UpdatePlayerUI()
 		{
-			CharacterData data = PlayerCharacter.Data;
+			CharacterData data = PlayerCharacter;
 
-			PlayerHealthSlider.value = PlayerCharacter.Data.Stats.CurrentHealth / (float)PlayerCharacter.Data.Stats.stats.health;
-			MaxHealth.text = PlayerCharacter.Data.Stats.stats.health.ToString();
-			CurrentHealth.text = PlayerCharacter.Data.Stats.CurrentHealth.ToString();
+			PlayerHealthSlider.value = PlayerCharacter.Stats.CurrentHealth / (float)PlayerCharacter.Stats.stats.health;
+			MaxHealth.text = PlayerCharacter.Stats.stats.health.ToString();
+			CurrentHealth.text = PlayerCharacter.Stats.CurrentHealth.ToString();
 
-			if (PlayerCharacter.Data.CurrentEnemy != null)
+			if (PlayerCharacter.BaseAI.CurrentEnemy != null)
 			{
-				UpdateEnemyUI(PlayerCharacter.Data.CurrentEnemy);
+				UpdateEnemyUI(PlayerCharacter.BaseAI.CurrentEnemy);
 			}
 			else
 			{

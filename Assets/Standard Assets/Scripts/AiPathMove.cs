@@ -8,12 +8,12 @@ public class AiPathMove : MonoBehaviour
 	Transform[] m_paths;
 	int m_curPathIndex;
 	bool m_Offensive;
-	RoleControl m_role;
+	RoleAI m_roleAi;
 
 	void Start()
 	{
-		m_role = GetComponent<RoleControl>();
-		m_role.GetComponent<EventSender>().events.AddListener(OnRoleEvent);
+		m_roleAi = GetComponent<RoleAI>();
+		m_roleAi.GetComponent<EventSender>().events.AddListener(OnRoleEvent);
 	}
 	void OnRoleEvent(GameObject obj, string eventName)
 	{
@@ -23,12 +23,11 @@ public class AiPathMove : MonoBehaviour
 		}
 		if (eventName == "roleEvent_OnIdling" && m_paths.Length > m_curPathIndex)
 		{
-			RoleAI ai = m_role.Data.BaseAI as RoleAI;
-			ai?.MoveTo(m_paths[m_curPathIndex].position);
+			m_roleAi.MoveTo(m_paths[m_curPathIndex].position);
 		}
 		if (eventName == "roleEvent_OnMoving" && m_Offensive)
 		{
-			if (m_role.Data.CurrentEnemy) m_role.SetState(RoleControl.State.PURSUING);
+			if (m_roleAi.CurrentEnemy) m_roleAi.SetState(AIBase.State.PURSUING);
 		}
 	}
 	public void SetPath(Transform pathRoot, bool offensive = true)

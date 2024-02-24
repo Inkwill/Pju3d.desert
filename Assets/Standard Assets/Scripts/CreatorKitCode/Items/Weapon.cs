@@ -45,7 +45,7 @@ namespace CreatorKitCode
 			damage.AddDamage(damageType, damageNum);
 			if (bulletPb != null)
 			{
-				Vector3 bulletPos = attacker.GetComponent<RoleControl>().WeaponLocator.position;
+				Vector3 bulletPos = attacker.WeaponLocator.position;
 				Bullet bullet = Instantiate(bulletPb, bulletPos, Quaternion.Euler(0, 180, 0));
 				bullet.damage = damage;
 				bullet.target = target;

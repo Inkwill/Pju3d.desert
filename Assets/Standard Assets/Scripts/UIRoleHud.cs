@@ -67,7 +67,7 @@ public class UIRoleHud : MonoBehaviour
 				break;
 			case "skillEvent_OnOperat":
 				if (!sliderPg.gameObject.activeSelf) sliderPg.gameObject.SetActive(true);
-				sliderPg.value = m_character.GetComponent<RoleControl>().CurStateDuring;
+				sliderPg.value = m_character.GetComponent<AIBase>().CurStateDuring;
 				break;
 			case "skillEvent_OnImplement":
 				sliderPg?.gameObject.SetActive(false);

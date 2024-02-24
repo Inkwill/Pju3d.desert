@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8070026248948233879}
   - component: {fileID: 1198831542533409605}
   - component: {fileID: 3651933356397484357}
-  - component: {fileID: 8864440484767615841}
   - component: {fileID: 8355528624777171145}
   - component: {fileID: 1956787967552379151}
   - component: {fileID: 3422330615315412849}
@@ -85,22 +84,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.51, z: 0}
---- !u!114 &8864440484767615841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7778956338015736396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a6d32986edb697438a2746b08746dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultWeapon: {fileID: 11400000, guid: 52b81e917921cad46997064d7acebe12, type: 2}
-  WeaponLocator: {fileID: 0}
-  SpurSoundClips: []
-  SpottedAudioClip: []
 --- !u!114 &8355528624777171145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +97,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterName: Cactus Nails
+  DefaultWeapon: {fileID: 0}
+  WeaponLocator: {fileID: 0}
+  MoveSpeed: 3
   Stats:
     baseStats:
       health: 5
@@ -123,10 +109,6 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  HitClip:
-  - {fileID: 8300000, guid: 52bbf808b3d93fb4f861009f0d06498b, type: 3}
-  - {fileID: 8300000, guid: a2b0c466fe3cda84da5a4a1f58ae2f07, type: 3}
-  - {fileID: 8300000, guid: a8594e4675d2b1049a71204ba41705d8, type: 3}
 --- !u!114 &1956787967552379151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,6 +124,8 @@ MonoBehaviour:
   FootstepClips:
   - {fileID: 8300000, guid: eda34214310f8c547b7d9186ef017073, type: 3}
   - {fileID: 8300000, guid: ab7b40ecbeb85364880fd45b6faabf58, type: 3}
+  SpurSoundClips: []
+  SpottedAudioClip: []
   VocalAttack:
   - {fileID: 8300000, guid: 145d7148a25bd404a8cdac3ecea1bb2a, type: 3}
   - {fileID: 8300000, guid: 9853e91ce0767cf4abb04ff4032ddebc, type: 3}
@@ -153,6 +137,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 04578b36fc75b994599cce92aa1f1451, type: 3}
   - {fileID: 8300000, guid: b00b880b6155ee541af054cc0982eb69, type: 3}
   - {fileID: 8300000, guid: 12afbbe73625e904a818ef07aca76cc9, type: 3}
+  HitClip: []
   DeathClips:
   - {fileID: 8300000, guid: 960cafd8dbde8ca40b16cbc50e187822, type: 3}
   - {fileID: 8300000, guid: 2672e27cd06d1404eb0f211f0d838a5f, type: 3}
@@ -217,7 +202,6 @@ MonoBehaviour:
   InteractDetector: {fileID: 3517083912815299978}
   EnemyDetector: {fileID: 53202347197689032}
   SkillDetector: {fileID: 1286696725350355693}
-  MoveSpeed: 3
   dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
   CorpseChance: 0
   m_CorpseRetention: 0
