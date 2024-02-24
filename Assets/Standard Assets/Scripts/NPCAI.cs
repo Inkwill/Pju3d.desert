@@ -37,20 +37,20 @@ public class NPCAI : RoleAI
 
 	protected override void OnPursuingAI()
 	{
-		if (m_role.CurrentEnemy && m_Offensive && MoveSpeed > 0)
+		if (m_character.CurrentEnemy && m_Offensive && m_character.MoveSpeed > 0)
 		{
 			Agent.isStopped = false;
-			Agent.SetDestination(m_role.CurrentEnemy.gameObject.transform.position);
+			Agent.SetDestination(m_character.CurrentEnemy.gameObject.transform.position);
 		}
 		else
 		{
-			Helpers.Log(this, "OnPursuingAI", "enemy= " + m_role.CurrentEnemy);
+			Helpers.Log(this, "OnPursuingAI", "enemy= " + m_character.CurrentEnemy);
 		}
 	}
 	protected override void OnDamageAI()
 	{
 		if (!m_Offensive) m_Offensive = true;
-		if (!m_role.CurrentEnemy) m_role.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+		if (!m_character.CurrentEnemy) m_character.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
 		if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
 	}
 	protected override void OnDeadAI()
@@ -83,7 +83,7 @@ public class NPCAI : RoleAI
 
 		Vector3 randomPos = new Vector3(m_role.BirthPos.x + randomX, m_role.BirthPos.y, m_role.BirthPos.z + randomZ);
 		MoveTo(randomPos);
-		m_role.eventSender.Send(m_role.gameObject, "aiEvent_wandering");
+		m_role.GetComponent<EventSender>()?.Send(m_role.gameObject, "aiEvent_wandering");
 	}
 
 	void OnItemEnter(Loot loot)

@@ -23,7 +23,7 @@ public class UIDigButton : UISkillButton
 
 	void FixedUpdate()
 	{
-		switch (GameManager.Player.BaseAI.SceneBox)
+		switch (GameManager.Player.Data.BaseAI.SceneBox)
 		{
 			case "blank":
 				bg.color = Color.white;

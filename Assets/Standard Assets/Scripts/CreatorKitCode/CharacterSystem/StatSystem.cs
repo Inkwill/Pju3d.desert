@@ -302,7 +302,12 @@ namespace CreatorKitCode
 		public void ChangeHealth(int amount)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.health);
-			m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject, "statEvent_OnHpChange");
+			m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject, "characterEvent_OnHpChange");
+			if (CurrentHealth <= 0)
+			{
+				Death();
+				m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject, "characterEvent_OnDeath");
+			}
 		}
 
 		void UpdateFinalStats()
@@ -343,70 +348,70 @@ namespace CreatorKitCode
 [CustomPropertyDrawer(typeof(StatSystem.Stats))]
 public class StatsDrawer : PropertyDrawer
 {
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        int enumTypesCount = Enum.GetValues(typeof(StatSystem.DamageType)).Length;
-        int lineCount = enumTypesCount + 7;
-        float extraHeight = 6f;
-        float propertyHeight = lineCount * EditorGUIUtility.singleLineHeight + extraHeight;
+	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+	{
+		int enumTypesCount = Enum.GetValues(typeof(StatSystem.DamageType)).Length;
+		int lineCount = enumTypesCount + 7;
+		float extraHeight = 6f;
+		float propertyHeight = lineCount * EditorGUIUtility.singleLineHeight + extraHeight;
 
-        return propertyHeight;
-    }
-    
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-    {
-        EditorGUI.BeginProperty(position, label, property);
+		return propertyHeight;
+	}
 
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.alignment = TextAnchor.MiddleCenter;
+	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+	{
+		EditorGUI.BeginProperty(position, label, property);
 
-        var currentRect = position;
-        currentRect.height = EditorGUIUtility.singleLineHeight;
-        
-        EditorGUI.DropShadowLabel(currentRect, property.displayName);
-        
-        currentRect.y += EditorGUIUtility.singleLineHeight + 6f;
-        EditorGUI.PropertyField(currentRect, property.FindPropertyRelative(nameof(StatSystem.Stats.health)));
-        
-        currentRect.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(currentRect, property.FindPropertyRelative(nameof(StatSystem.Stats.strength)));
-        
-        currentRect.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(currentRect, property.FindPropertyRelative(nameof(StatSystem.Stats.defense)));
-        
-        currentRect.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(currentRect, property.FindPropertyRelative(nameof(StatSystem.Stats.agility)));
+		GUIStyle style = new GUIStyle(GUI.skin.label);
+		style.alignment = TextAnchor.MiddleCenter;
 
-        currentRect.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.LabelField(currentRect, "Elemental Protection/Boost", style);
-        
-        currentRect.y += EditorGUIUtility.singleLineHeight;
-        currentRect.width *= 0.3f;
+		var currentRect = position;
+		currentRect.height = EditorGUIUtility.singleLineHeight;
 
-        currentRect.x += currentRect.width;
-        EditorGUI.LabelField(currentRect, "Protection (%)", style);
-        currentRect.x += currentRect.width;
-        EditorGUI.LabelField(currentRect, "Boost (%)", style);
+		EditorGUI.DropShadowLabel(currentRect, property.displayName);
 
-        var names = Enum.GetNames(typeof(StatSystem.DamageType));
+		currentRect.y += EditorGUIUtility.singleLineHeight + 6f;
+		EditorGUI.PropertyField(currentRect, property.FindPropertyRelative(nameof(StatSystem.Stats.health)));
 
-        var damProtectionProp = property.FindPropertyRelative(nameof(StatSystem.Stats.damProtection));
-        var elementalBoostProp = property.FindPropertyRelative(nameof(StatSystem.Stats.damBoosts));
-        
-        for (int i = 0; i < names.Length; ++i)
-        {
-            currentRect.x -= currentRect.width * 2;
-            currentRect.y += EditorGUIUtility.singleLineHeight;
-            EditorGUI.LabelField(currentRect, names[i]);
-            
-            currentRect.x += currentRect.width;
-            EditorGUI.PropertyField(currentRect, damProtectionProp.GetArrayElementAtIndex(i), GUIContent.none);
-            
-            currentRect.x += currentRect.width;
-            EditorGUI.PropertyField(currentRect, elementalBoostProp.GetArrayElementAtIndex(i), GUIContent.none);
-        }
-        
-        EditorGUI.EndProperty();
-    }
+		currentRect.y += EditorGUIUtility.singleLineHeight;
+		EditorGUI.PropertyField(currentRect, property.FindPropertyRelative(nameof(StatSystem.Stats.strength)));
+
+		currentRect.y += EditorGUIUtility.singleLineHeight;
+		EditorGUI.PropertyField(currentRect, property.FindPropertyRelative(nameof(StatSystem.Stats.defense)));
+
+		currentRect.y += EditorGUIUtility.singleLineHeight;
+		EditorGUI.PropertyField(currentRect, property.FindPropertyRelative(nameof(StatSystem.Stats.agility)));
+
+		currentRect.y += EditorGUIUtility.singleLineHeight;
+		EditorGUI.LabelField(currentRect, "Elemental Protection/Boost", style);
+
+		currentRect.y += EditorGUIUtility.singleLineHeight;
+		currentRect.width *= 0.3f;
+
+		currentRect.x += currentRect.width;
+		EditorGUI.LabelField(currentRect, "Protection (%)", style);
+		currentRect.x += currentRect.width;
+		EditorGUI.LabelField(currentRect, "Boost (%)", style);
+
+		var names = Enum.GetNames(typeof(StatSystem.DamageType));
+
+		var damProtectionProp = property.FindPropertyRelative(nameof(StatSystem.Stats.damProtection));
+		var elementalBoostProp = property.FindPropertyRelative(nameof(StatSystem.Stats.damBoosts));
+
+		for (int i = 0; i < names.Length; ++i)
+		{
+			currentRect.x -= currentRect.width * 2;
+			currentRect.y += EditorGUIUtility.singleLineHeight;
+			EditorGUI.LabelField(currentRect, names[i]);
+
+			currentRect.x += currentRect.width;
+			EditorGUI.PropertyField(currentRect, damProtectionProp.GetArrayElementAtIndex(i), GUIContent.none);
+
+			currentRect.x += currentRect.width;
+			EditorGUI.PropertyField(currentRect, elementalBoostProp.GetArrayElementAtIndex(i), GUIContent.none);
+		}
+
+		EditorGUI.EndProperty();
+	}
 }
 #endif

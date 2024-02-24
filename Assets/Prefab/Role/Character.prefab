@@ -163,7 +163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponLocator: {fileID: 226675115136632130}
-  HitClip: []
 --- !u!114 &2429351864463128572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,7 +176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterName: Jack
-  DefaultWeapon: {fileID: 0}
+  DefaultWeapon: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
+  MoveSpeed: 4
   Stats:
     baseStats:
       health: 20
@@ -200,7 +200,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camp: 0
-  MoveSpeed: 4
   SceneDetector: {fileID: 2035109682229800503}
   InteractDetector: {fileID: 4597439104978932822}
   EnemyDetector: {fileID: 1134714616160843028}

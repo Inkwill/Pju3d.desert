@@ -21,21 +21,18 @@ public class UIRoleHud : MonoBehaviour
 	Animator story_anim;
 	[SerializeField]
 	Slider sliderInteract;
-	RoleControl m_role;
+	CharacterData m_character;
 
 	void Start()
 	{
-		m_role = GetComponentInParent<RoleControl>();
-		if (m_role)
-		{
-			m_role.eventSender.events.AddListener(OnRoleEvent);
-			m_role.Data.Inventory.ItemEvent += OnItemEvent;
-		}
+		m_character = GetComponentInParent<CharacterData>();
+		if (m_character) m_character.Inventory.ItemEvent += OnItemEvent;
+		m_character.GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
 
 		if (sliderHp)
 		{
-			sliderHp.maxValue = m_role.Data.Stats.stats.health;
-			sliderHp.value = m_role.Data.Stats.CurrentHealth;
+			sliderHp.maxValue = m_character.Stats.stats.health;
+			sliderHp.value = m_character.Stats.CurrentHealth;
 			sliderHp.gameObject.SetActive(false);
 		}
 		sliderPg?.gameObject.SetActive(false);
@@ -44,7 +41,7 @@ public class UIRoleHud : MonoBehaviour
 		//iconStory?.gameObject.SetActive(false);
 	}
 
-	void OnRoleEvent(GameObject role, string eventName)
+	void OnCharacterEvent(GameObject role, string eventName)
 	{
 		switch (eventName)
 		{
@@ -57,20 +54,20 @@ public class UIRoleHud : MonoBehaviour
 				break;
 			case "roleEvent_OnState_SKILLING":
 				sliderPg?.gameObject.SetActive(true);
-				sliderPg.maxValue = m_role.SkillUser.CurSkill.skill.Duration;
+				sliderPg.maxValue = m_character.SkillUser.CurSkill.skill.Duration;
 				break;
-			case "roleEvent_OnState_DEAD":
+			case "characterEvent_OnDeath":
 				sliderHp?.gameObject.SetActive(false);
 				sliderPg?.gameObject.SetActive(false);
-				m_role.eventSender.events.RemoveListener(OnRoleEvent);
+				GetComponentInParent<EventSender>()?.events.RemoveListener(OnCharacterEvent);
 				break;
-			case "statEvent_OnHpChange":
+			case "characterEvent_OnHpChange":
 				if (!sliderHp.gameObject.activeSelf) sliderHp.gameObject.SetActive(true);
-				sliderHp.value = m_role.Data.Stats.CurrentHealth;
+				sliderHp.value = m_character.Stats.CurrentHealth;
 				break;
 			case "skillEvent_OnOperat":
 				if (!sliderPg.gameObject.activeSelf) sliderPg.gameObject.SetActive(true);
-				sliderPg.value = m_role.CurStateDuring;
+				sliderPg.value = m_character.GetComponent<RoleControl>().CurStateDuring;
 				break;
 			case "skillEvent_OnImplement":
 				sliderPg?.gameObject.SetActive(false);

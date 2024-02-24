@@ -28,7 +28,7 @@ public class UIMainWindow : UIWindow
 		targetUI.Init();
 		m_buttons = GetComponentsInChildren<Button>();
 		m_skillButtons = GetComponentsInChildren<UISkillButton>();
-		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
+		GameManager.Player.GetComponent<EventSender>()?.events.AddListener(OnPlayerEvent);
 		GameManager.Player.Data.Equipment.OnEquiped += (equip) => { UpdateWeapon(GameManager.Player.Data.Equipment); };
 		GameManager.Player.Data.Equipment.OnUnequip += (equip) => { UpdateWeapon(GameManager.Player.Data.Equipment); };
 		GameManager.Player.Data.Equipment.OnEquipViceWeapon += (equip) => { UpdateWeapon(GameManager.Player.Data.Equipment); };
@@ -144,7 +144,7 @@ public class UIMainWindow : UIWindow
 	void FixedUpdate()
 	{
 		infoPos.text = GameManager.Player.gameObject.transform.position.ToString();
-		infoTerrian.text = GameManager.Player.BaseAI.SceneBoxName;
+		infoTerrian.text = GameManager.Player.Data.BaseAI.SceneBoxName;
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
 		btSwitchWeapon.interactable = GameManager.Player.isStandBy;
 	}

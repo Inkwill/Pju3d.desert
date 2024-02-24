@@ -17,7 +17,7 @@ public class SkillUser : MonoBehaviour
 	public SkillEntry CurSkill => m_UseEntry;
 	SkillEntry m_UseEntry;
 	List<SkillEntry> m_SkillEntries;
-	RoleControl m_role;
+	CharacterData m_character;
 	Animator m_Animator;
 	EventSender m_eventSender;
 	float m_During;
@@ -25,7 +25,7 @@ public class SkillUser : MonoBehaviour
 	void Start()
 	{
 		m_SkillEntries = new List<SkillEntry>();
-		m_role = GetComponent<RoleControl>();
+		m_character = GetComponent<CharacterData>();
 		m_eventSender = GetComponent<EventSender>();
 		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
 		if (dispatcher) { dispatcher.SkillStep.AddListener(SkillStep); m_Animator = dispatcher.GetComponent<Animator>(); }
@@ -43,17 +43,17 @@ public class SkillUser : MonoBehaviour
 			if (m_During < m_UseEntry.skill.Duration)
 			{
 				if (m_Animator) m_Animator.SetTrigger(m_UseEntry.skill.SkillAnim);
-				m_UseEntry.skill.Operating(m_role, m_UseEntry.targets);
+				m_UseEntry.skill.Operating(m_character, m_UseEntry.targets);
 				m_eventSender?.Send(gameObject, "skillEvent_OnOperat");
 				m_During += Time.deltaTime;
 			}
 			else
 			{
-				m_UseEntry.skill.Implement(m_role, m_UseEntry.targets);
+				m_UseEntry.skill.Implement(m_character, m_UseEntry.targets);
 				m_eventSender?.Send(gameObject, "skillEvent_OnImplement");
 				m_UseEntry = null;
 				m_During = 0;
-				m_role.BaseAI.SkillDetector.layers = LayerMask.GetMask("Nothing");
+				m_character.BaseAI.SkillDetector.layers = LayerMask.GetMask("Nothing");
 			}
 		}
 	}
@@ -81,11 +81,11 @@ public class SkillUser : MonoBehaviour
 		switch (skill.TType)
 		{
 			case Skill.TargetType.SELF:
-				return UseSkill(skill, m_role.gameObject);
+				return UseSkill(skill, m_character.gameObject);
 			case Skill.TargetType.SCENEBOX:
-				return UseSkill(skill, m_role.BaseAI.SceneDetector?.gameObject);
+				return UseSkill(skill, m_character.BaseAI.SceneDetector?.gameObject);
 			case Skill.TargetType.CURRENT:
-				return UseSkill(skill, m_role.CurrentEnemy?.gameObject);
+				return UseSkill(skill, m_character.CurrentEnemy?.gameObject);
 			default:
 				return UseSkill(skill, null);
 		}
@@ -104,18 +104,18 @@ public class SkillUser : MonoBehaviour
 			}
 			if (entry.skill.TType == Skill.TargetType.CURRENT && target == null)
 			{
-				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_role.CurrentEnemy);
+				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_character.CurrentEnemy);
 				return false;
 				// if (m_role.CurrentEnemy == null || (entry.skill.layers & (1 << m_role.CurrentEnemy.gameObject.layer)) == 0)
 			}
-			if (entry.skill.TType == Skill.TargetType.SCENEBOX && m_role.BaseAI.SceneBox != "blank")
+			if (entry.skill.TType == Skill.TargetType.SCENEBOX && m_character.BaseAI.SceneBox != "blank")
 			{
-				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_role.BaseAI.SceneBox);
+				Debug.Log("Can't UseSkill:" + skill.SkillName + "target =" + m_character.BaseAI.SceneBox);
 				return false;
 			}
 			Helpers.Log(this, "UseSkill", $"{skill.SkillName}-CD:{entry.cd})");
-			m_role.BaseAI.SkillDetector.layers = entry.skill.layers;
-			m_role.BaseAI.SkillDetector.Radius = entry.skill.radius;
+			m_character.BaseAI.SkillDetector.layers = entry.skill.layers;
+			m_character.BaseAI.SkillDetector.Radius = entry.skill.radius;
 			entry.targets = new List<GameObject>();
 			if (target != null) entry.targets.Add(target);
 			entry.cd = entry.skill.CD;
@@ -137,7 +137,7 @@ public class SkillUser : MonoBehaviour
 	}
 	void SkillStep()
 	{
-		m_UseEntry?.skill.StepEffect(m_role, m_UseEntry.targets);
+		m_UseEntry?.skill.StepEffect(m_character, m_UseEntry.targets);
 	}
 
 	public void AddTarget(GameObject target)

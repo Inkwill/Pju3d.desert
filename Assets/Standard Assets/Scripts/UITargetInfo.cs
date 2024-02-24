@@ -26,9 +26,9 @@ public class UITargetInfo : MonoBehaviour
 	UILootElement[] uilootList = new UILootElement[maxUILoot];
 	public void Init()
 	{
-		GameManager.Player.eventSender.events.AddListener(OnPlayerEvent);
-		GameManager.Player.BaseAI.InteractDetector.OnEnter.AddListener(OnInteractEnter);
-		GameManager.Player.BaseAI.InteractDetector.OnExit.AddListener(OnInteractExit);
+		GameManager.Player.GetComponent<EventSender>()?.events.AddListener(OnPlayerEvent);
+		GameManager.Player.Data.BaseAI.InteractDetector.OnEnter.AddListener(OnInteractEnter);
+		GameManager.Player.Data.BaseAI.InteractDetector.OnExit.AddListener(OnInteractExit);
 		//GameManager.Player.InteractDetector.OnStay.AddListener(OnInteractStay);
 		UpdateEnemyInfo();
 		for (int i = 0; i < maxUILoot; i++)
@@ -59,12 +59,12 @@ public class UITargetInfo : MonoBehaviour
 		infoText.text = eventName;
 		switch (eventName)
 		{
-			case "roleEvent_OnSetCurrentEnemy":
+			case "characterEvent_OnSetCurrentEnemy":
 				m_curEnemy = obj.GetComponent<CharacterData>();
 				m_curEnemy?.GetComponent<EventSender>()?.events.AddListener(OnEnemyEvent);
 				UpdateEnemyInfo();
 				break;
-			case "roleEvent_OnRemoveCurrentEnemy":
+			case "characterEvent_OnRemoveCurrentEnemy":
 				if (m_curEnemy == obj.GetComponent<CharacterData>())
 				{
 					m_curEnemy?.GetComponent<EventSender>()?.events.RemoveListener(OnEnemyEvent);

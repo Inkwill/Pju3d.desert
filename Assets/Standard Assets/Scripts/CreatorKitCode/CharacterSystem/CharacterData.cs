@@ -15,7 +15,8 @@ namespace CreatorKitCode
 	{
 		public string CharacterName;
 		public Weapon DefaultWeapon;
-
+		public float MoveSpeed = 3.0f;
+		public int Lv => m_level;
 		public StatSystem Stats;
 		/// <summary>
 		/// The starting weapon equipped when the Character is created. Set through the Unity Editor.
@@ -23,20 +24,39 @@ namespace CreatorKitCode
 		public InventorySystem Inventory = new InventorySystem();
 		public EquipmentSystem Equipment = new EquipmentSystem();
 
+		protected CharacterData m_Enemy;
+		public CharacterData CurrentEnemy
+		{
+			get { return m_Enemy; }
+			set
+			{
+				if (value != null)
+				{
+					GetComponent<EventSender>()?.Send(value.gameObject, "characterEvent_OnSetCurrentEnemy");
+					m_Enemy = value;
+				}
+				else if (m_Enemy != null && value == null)
+				{
+					GetComponent<EventSender>()?.Send(m_Enemy.gameObject, "characterEvent_OnRemoveCurrentEnemy");
+					m_Enemy = null;
+				}
+			}
+		}
 		/// <summary>
 		/// Callback for when that CharacterData receive damage. E.g. used by the player character to trigger the right
 		/// animation
 		/// </summary>
 		public Action<Damage> OnDamage { get; set; }
 
-		/// <summary>
-		/// Will return true if the attack cooldown have reached 0. False otherwise.
-		/// </summary>
+		public AIBase BaseAI => m_Ai;
+		protected AIBase m_Ai;
 		public bool CanAttack
 		{
 			get { return m_AttackCoolDown <= 0.0f; }
 		}
-
+		public SkillUser SkillUser => m_SkillUser;
+		SkillUser m_SkillUser;
+		int m_level;
 		float m_AttackCoolDown;
 
 		public void Init()
@@ -44,8 +64,13 @@ namespace CreatorKitCode
 			Stats.Init(this);
 			Inventory.Init(this);
 			Equipment.Init(this);
+
 			if (DefaultWeapon == null) DefaultWeapon = KeyValueData.GetValue<Item>(GameManager.Config.Item, "wp_unarmed") as Weapon;
 			Equipment.InitWeapon(DefaultWeapon);
+
+			m_Ai = GetComponent<AIBase>();
+			m_Ai.Init();
+			m_SkillUser = GetComponent<SkillUser>();
 
 			OnDamage += (damage) =>
 			{
@@ -97,14 +122,6 @@ namespace CreatorKitCode
 		}
 
 		/// <summary>
-		/// Call when the character die (health reach 0).
-		/// </summary>
-		public void Death()
-		{
-			Stats.Death();
-		}
-
-		/// <summary>
 		/// Attack the given target. NOTE : this WON'T check if the target CAN be attacked, you should make sure before
 		/// with the CanAttackTarget function.
 		/// </summary>
@@ -116,7 +133,7 @@ namespace CreatorKitCode
 				Equipment.Weapon.Attack(this, target);
 				if (Equipment.Weapon.Stats.AdditionalTargets > 0)
 				{
-					List<GameObject> targets = GetComponent<RoleControl>()?.BaseAI.EnemyDetector.Inners;
+					List<GameObject> targets = BaseAI.EnemyDetector.Inners;
 					int addNum = 0;
 					foreach (GameObject t in targets)
 					{

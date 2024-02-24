@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using CreatorKitCode;
 
 /// <summary>
 /// Need to be added to the GameObject that have the AnimatorController. This will receive the Event defined in the
@@ -11,7 +12,7 @@ public class AnimationDispatcher : MonoBehaviour
 	public UnityEvent AttackStep;
 	public UnityEvent FootStep;
 	public UnityEvent SkillStep;
-	RoleControl m_role;
+	CharacterData m_character;
 	Animator m_Animator;
 
 	[SerializeField]
@@ -28,16 +29,16 @@ public class AnimationDispatcher : MonoBehaviour
 	string FaintTrigger = "Faint";
 	void Start()
 	{
-		m_role = GetComponentInParent<RoleControl>();
-		if (m_role) m_role.eventSender.events.AddListener(OnRoleEvent);
+		m_character = GetComponentInParent<CharacterData>();
+		m_character.GetComponent<EventSender>().events.AddListener(OnCharacterEvent);
 		m_Animator = GetComponent<Animator>();
 	}
 
-	void OnRoleEvent(GameObject obj, string eventName)
+	void OnCharacterEvent(GameObject obj, string eventName)
 	{
 		switch (eventName)
 		{
-			case "roleEvent_OnState_DEAD":
+			case "characterEvent_OnDeath":
 				m_Animator.SetTrigger(DeathTrigger);
 				return;
 			case "characterEvent_OnDamage":
@@ -49,7 +50,7 @@ public class AnimationDispatcher : MonoBehaviour
 			default:
 				break;
 		}
-		m_Animator.SetFloat(SpeedTrigger, m_role.BaseAI.SpeedScale);
+		m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
 		// if (eventName == "characterEvent_OnDamage") m_Animator.SetTrigger(HitTrigger);
 		// if (eventName == "roleEvent_OnState_DEAD") m_Animator.SetTrigger(Animator.StringToHash(DeathTrigger));
 		// if (eventName == "roleEvent_OnState_ATTACKING") m_Animator.SetTrigger(AttackTrigger);

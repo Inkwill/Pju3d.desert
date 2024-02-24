@@ -4,7 +4,7 @@ using UnityEngine;
 using CreatorKitCode;
 
 
-[RequireComponent(typeof(RoleControl))]
+[RequireComponent(typeof(CharacterData))]
 public class AIBase : MonoBehaviour
 {
 	public enum Camp
@@ -15,7 +15,6 @@ public class AIBase : MonoBehaviour
 		NEUTRAL
 	}
 	public Camp camp;
-	public float MoveSpeed = 3.0f;
 	public virtual float SpeedScale { get { return 1; } }
 	[Header("Detector")]
 	public InteractOnTrigger SceneDetector;
@@ -24,13 +23,13 @@ public class AIBase : MonoBehaviour
 	public InteractOnTrigger SkillDetector;
 	public string SceneBox { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, false); } }
 	public string SceneBoxName { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, true); } }
-	protected RoleControl m_role;
+	protected CharacterData m_character;
 
 
 	public virtual void Init()
 	{
-		m_role = GetComponent<RoleControl>();
-		m_role.eventSender.events.AddListener(OnRoleEvent);
+		m_character = GetComponent<CharacterData>();
+		GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
 
 		if (EnemyDetector)
 		{
@@ -53,22 +52,22 @@ public class AIBase : MonoBehaviour
 		switch (camp)
 		{
 			case Camp.PLAYER:
-				m_role.gameObject.layer = LayerMask.NameToLayer("Player");
+				m_character.gameObject.layer = LayerMask.NameToLayer("Player");
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
 				InteractDetector.layers = LayerMask.GetMask("Interactable", "Player", "Neutral");
 				break;
 			case Camp.ENEMY:
-				m_role.gameObject.layer = LayerMask.NameToLayer("Enemy");
+				m_character.gameObject.layer = LayerMask.NameToLayer("Enemy");
 				EnemyDetector.layers = LayerMask.GetMask("Player");
 				InteractDetector.layers = LayerMask.GetMask("Interactable");
 				break;
 			case Camp.ALLY:
-				m_role.gameObject.layer = LayerMask.NameToLayer("Player");
+				m_character.gameObject.layer = LayerMask.NameToLayer("Player");
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
 				InteractDetector.layers = LayerMask.GetMask("Player");
 				break;
 			case Camp.NEUTRAL:
-				m_role.gameObject.layer = LayerMask.NameToLayer("Neutral");
+				m_character.gameObject.layer = LayerMask.NameToLayer("Neutral");
 				EnemyDetector.layers = LayerMask.GetMask("Noting");
 				InteractDetector.layers = LayerMask.GetMask("Player");
 				break;
@@ -76,53 +75,24 @@ public class AIBase : MonoBehaviour
 				break;
 		}
 	}
-	void Start()
-	{
-		m_role.CurState = RoleControl.State.IDLE;
-	}
 
 	public virtual void LookAt(Transform trans)
 	{
-		Vector3 forward = (trans.position - m_role.transform.position);
+		Vector3 forward = (trans.position - m_character.transform.position);
 		forward.y = 0;
 		forward.Normalize();
-		m_role.transform.forward = forward;
+		m_character.transform.forward = forward;
 	}
 
 	public virtual void Stop() { }
 
-	void OnRoleEvent(GameObject obj, string eventName)
+	void OnCharacterEvent(GameObject obj, string eventName)
 	{
-		if (eventName == "roleEvent_OnIdling")
-		{
-			if (m_role.CurrentEnemy != null) { m_role.CurState = RoleControl.State.PURSUING; return; }
-			else if (EnemyDetector.Inners.Count > 0)
-			{
-				m_role.CurrentEnemy = EnemyDetector.GetNearest().GetComponent<CharacterData>();
-				m_role.CurState = RoleControl.State.PURSUING;
-				return;
-			}
-			if (m_role.CurState == RoleControl.State.IDLE) OnIdlingAI();
-
-		}
-		if (eventName == "roleEvent_OnMoving")
-		{
-			OnMovingAI();
-		}
-		if (eventName == "roleEvent_OnPursuing")
-		{
-			if (m_role.CurrentEnemy)
-			{
-				LookAt(m_role.CurrentEnemy.transform);
-			}
-			else { m_role.CurState = RoleControl.State.IDLE; return; }
-			if (m_role.CurState == RoleControl.State.PURSUING) OnPursuingAI();
-		}
-		if (eventName == "characterEvent_OnDamage")
-			OnDamageAI();
-		if (eventName == "roleEvent_OnState_DEAD")
-			OnDeadAI();
-
+		if (eventName == "roleEvent_OnIdling") OnIdlingAI();
+		if (eventName == "roleEvent_OnMoving") OnMovingAI();
+		if (eventName == "roleEvent_OnPursuing") OnPursuingAI();
+		if (eventName == "characterEvent_OnDamage") OnDamageAI();
+		if (eventName == "characterEvent_OnDeath") OnDeadAI();
 	}
 
 	protected virtual void OnIdlingAI() { }
@@ -130,16 +100,16 @@ public class AIBase : MonoBehaviour
 	protected virtual void OnPursuingAI() { }
 	protected virtual void OnDeadAI() { }
 	protected virtual void OnDamageAI() { }
+
 	protected virtual void OnEnemyEnter(GameObject enter)
 	{
-		if (m_role.CurrentEnemy == null) m_role.CurrentEnemy = enter.GetComponent<CharacterData>();
+		if (m_character.CurrentEnemy == null) m_character.CurrentEnemy = enter.GetComponent<CharacterData>();
 	}
-
 	protected virtual void OnEnemyExit(GameObject exiter)
 	{
-		if (m_role.CurrentEnemy && m_role.CurrentEnemy.gameObject == exiter)
+		if (m_character.CurrentEnemy && m_character.CurrentEnemy.gameObject == exiter)
 		{
-			m_role.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+			m_character.CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
 			//m_eventSender.Send(exiter, "roleEvent_OnEnemyExit");
 		}
 	}
@@ -154,35 +124,35 @@ public class AIBase : MonoBehaviour
 
 	void OnSkillTargetEnter(GameObject enter)
 	{
-		if (m_role.SkillUser && m_role.SkillUser.CurSkill != null) m_role.SkillUser.AddTarget(enter);
+		if (m_character.SkillUser && m_character.SkillUser.CurSkill != null) m_character.SkillUser.AddTarget(enter);
 		//Debug.Log("OnSkillTargetEnter: enter= " + enter);
 	}
 
 	void OnSkillTargetExit(GameObject exiter)
 	{
-		if (m_role.SkillUser && m_role.SkillUser.CurSkill != null) m_role.SkillUser.RemoveTarget(exiter);
+		if (m_character.SkillUser && m_character.SkillUser.CurSkill != null) m_character.SkillUser.RemoveTarget(exiter);
 		//Debug.Log("OnSkillTargetExit: exiter= " + exiter);
 	}
 	void OnSkillTargetEvent(GameObject sender, string eventMessage)
 	{
-		if (eventMessage == "roleEvent_OnState_DEAD")
+		if (eventMessage == "characterEvent_OnDeath")
 		{
 			Debug.Log("OnSkillTargetEvent: target= " + sender + "event= " + eventMessage);
 		}
 	}
 	protected virtual void OnInteractStay(GameObject interactor, float during)
 	{
-		if (interactor.tag != "item" && m_role.CurrentEnemy == null) LookAt(interactor.transform);
+		if (interactor.tag != "item" && m_character.CurrentEnemy == null) LookAt(interactor.transform);
 		//HighlightTarget(interactor.gameObject, true);
 		//Debug.Log("[RoleAI-" + m_role + "] OnInteracting with : " + interactor.gameObject);
 	}
-	void HighlightTarget(GameObject obj, bool active)
-	{
-		HighlightableObject target = obj.GetComponent<HighlightableObject>();
-		if (target)
-		{
-			if (active) target.Highlight();
-			else target.Dehighlight();
-		}
-	}
+	// void HighlightTarget(GameObject obj, bool active)
+	// {
+	// 	HighlightableObject target = obj.GetComponent<HighlightableObject>();
+	// 	if (target)
+	// 	{
+	// 		if (active) target.Highlight();
+	// 		else target.Dehighlight();
+	// 	}
+	// }
 }

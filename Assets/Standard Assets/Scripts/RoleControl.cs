@@ -19,9 +19,8 @@ public class RoleControl : HighlightableObject
 	public Transform WeaponLocator;
 	public CharacterData Data => m_CharacterData;
 	protected CharacterData m_CharacterData;
-	public State CurState { get { return m_State; } set { SetState(value); } }
+	public State CurState { get { return m_State; } }
 	protected State m_State;
-	public EventSender eventSender => m_eventSender;
 	protected EventSender m_eventSender;
 	protected Vector3 m_BirthPos;
 	public Vector3 BirthPos => m_BirthPos;
@@ -30,29 +29,6 @@ public class RoleControl : HighlightableObject
 	public float CurStateDuring => m_StateDuring;
 	float m_StateDuring;
 
-	//[Header("AI")]
-	public AIBase BaseAI => m_Ai;
-	protected AIBase m_Ai;
-	protected CharacterData m_Enemy;
-	public CharacterData CurrentEnemy
-	{
-		get { return m_Enemy; }
-		set
-		{
-			if (value != null)
-			{
-				m_eventSender.Send(value.gameObject, "roleEvent_OnSetCurrentEnemy");
-				m_Enemy = value;
-			}
-			else if (m_Enemy != null && value == null)
-			{
-				m_eventSender.Send(m_Enemy.gameObject, "roleEvent_OnRemoveCurrentEnemy");
-				m_Enemy = null;
-			}
-		}
-	}
-	public SkillUser SkillUser => m_SkillUser;
-	SkillUser m_SkillUser;
 
 	void Awake()
 	{
@@ -71,18 +47,12 @@ public class RoleControl : HighlightableObject
 		m_CharacterData = GetComponent<CharacterData>();
 		m_CharacterData.Init();
 
-		m_Ai = GetComponent<AIBase>();
-		m_Ai.Init();
-
-
-		m_SkillUser = GetComponent<SkillUser>();
-
 		m_CharacterData.Equipment.OnEquiped += item =>
 		{
 			if (item.Slot == EquipmentItem.EquipmentSlot.Weapon && WeaponLocator)
 			{
 				Weapon wp = item as Weapon;
-				BaseAI.EnemyDetector.Radius = System.Math.Max(wp.Stats.MaxRange, BaseAI.EnemyDetector.Radius);
+				Data.BaseAI.EnemyDetector.Radius = System.Math.Max(wp.Stats.MaxRange, Data.BaseAI.EnemyDetector.Radius);
 				wp.bulletTrans = WeaponLocator;
 				if (!item.WorldObjectPrefab) return;
 				var obj = Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
@@ -100,23 +70,23 @@ public class RoleControl : HighlightableObject
 		};
 	}
 
+	void Start()
+	{
+		SetState(RoleControl.State.IDLE);
+	}
+
 	void Update()
 	{
 		m_StateDuring += Time.deltaTime;
 		//Dead
 		if (m_State == State.DEAD) return;
-		if (m_CharacterData.Stats.CurrentHealth == 0 && m_State != State.DEAD)
-		{
-			m_CharacterData.Death();
-			SetState(State.DEAD);
-		}
 		//Skill
-		if (m_SkillUser && m_State != State.SKILLING && m_SkillUser.CurSkill != null) { SetState(State.SKILLING); }
-		if (m_SkillUser && m_State == State.SKILLING && m_SkillUser.CurSkill == null) { SetState(State.IDLE); }
+		if (Data.SkillUser && m_State != State.SKILLING && Data.SkillUser.CurSkill != null) { SetState(State.SKILLING); }
+		if (Data.SkillUser && m_State == State.SKILLING && Data.SkillUser.CurSkill == null) { SetState(State.IDLE); }
 		//ATTACK
 		if (m_State == State.ATTACKING)
 		{
-			if (m_Enemy && m_CharacterData.CanAttackReach(m_Enemy)) CheckAttack();
+			if (Data.CurrentEnemy && m_CharacterData.CanAttackReach(Data.CurrentEnemy)) CheckAttack();
 			else SetState(State.PURSUING);
 		}
 		//PURSUING
@@ -130,7 +100,7 @@ public class RoleControl : HighlightableObject
 					Debug.LogError("Miss a Weapon! role = " + gameObject);
 				}
 			}
-			if (m_Enemy && m_CharacterData.CanAttackReach(m_Enemy)) { SetState(State.ATTACKING); }
+			if (Data.CurrentEnemy && m_CharacterData.CanAttackReach(Data.CurrentEnemy)) { SetState(State.ATTACKING); }
 			else m_eventSender?.Send(gameObject, "roleEvent_OnPursuing");
 		}
 		//MOVE
@@ -145,7 +115,7 @@ public class RoleControl : HighlightableObject
 		}
 	}
 
-	void SetState(State nextState)
+	public void SetState(State nextState)
 	{
 		if (m_State == nextState) return;
 		m_State = nextState;
@@ -154,10 +124,10 @@ public class RoleControl : HighlightableObject
 	}
 	public void CheckAttack()
 	{
-		if (m_CharacterData.CanAttackTarget(m_Enemy))
+		if (m_CharacterData.CanAttackTarget(Data.CurrentEnemy))
 		{
-			BaseAI.Stop();
-			BaseAI.LookAt(m_Enemy.transform);
+			Data.BaseAI.Stop();
+			Data.BaseAI.LookAt(Data.CurrentEnemy.transform);
 			m_CharacterData.AttackTriggered();
 			m_eventSender?.Send(gameObject, "roleEvent_OnAttack");
 		}
@@ -166,11 +136,11 @@ public class RoleControl : HighlightableObject
 	void AttackFrame()
 	{
 		//if we can't reach the target anymore when it's time to damage, then that attack miss.
-		if (m_Enemy && m_CharacterData.CanAttackReach(m_Enemy))
+		if (Data.CurrentEnemy && m_CharacterData.CanAttackReach(Data.CurrentEnemy))
 		{
-			m_CharacterData.Attack(m_Enemy);
+			m_CharacterData.Attack(Data.CurrentEnemy);
 		}
-		else if (m_Enemy) Helpers.Log(this, "AttackMiss: ", $"{Data.CharacterName}->{m_Enemy.CharacterName}");
+		else if (Data.CurrentEnemy) Helpers.Log(this, "AttackMiss: ", $"{Data.CharacterName}->{Data.CurrentEnemy.CharacterName}");
 		else Helpers.Log(this, "AttackMiss: ", $"{Data.CharacterName}->(Enemy Missed)");
 	}
 

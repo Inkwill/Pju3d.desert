@@ -10,18 +10,18 @@ public class StoryTeller : MonoBehaviour
 	public List<StoryNode> storyNodes;
 	public UnityEvent<StoryTeller, string> tellerEvent;
 	public StoryNode CurrentNode { get { return m_currentNode; } }
-	public string RoleName { get { return m_role.Data.CharacterName; } }
+	public string RoleName { get { return m_character.CharacterName; } }
 	public List<Entrustment> entrustments;
 	StoryNode m_currentNode;
 	InteractHandle m_interactHandle;
-	RoleControl m_role;
+	CharacterData m_character;
 
 
 	void Start()
 	{
 		GameManager.StoryListener.storyListenerEvents.AddListener(OnListenEvent);
-		m_role = GetComponent<RoleControl>();
-		m_role?.eventSender.events.AddListener(OnRoleEvent);
+		m_character = GetComponent<CharacterData>();
+		m_character.GetComponent<EventSender>()?.events.AddListener(OnRoleEvent);
 		m_interactHandle = GetComponent<InteractHandle>();
 		m_interactHandle?.InteractEvent.AddListener(OnInteractEvent);
 		entrustments = new List<Entrustment>();
@@ -78,7 +78,7 @@ public class StoryTeller : MonoBehaviour
 
 	public bool GiveItem(Item item)
 	{
-		m_role.Data.Inventory.AddItem(item);
+		m_character.Inventory.AddItem(item);
 		return true;
 	}
 }

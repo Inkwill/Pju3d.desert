@@ -31,7 +31,7 @@ public class CharacterAudio : MonoBehaviour
 	{
 		Vector3 position = obj.transform.position;
 		if (eventName == "characterEvent_OnDamage") Hit(position);
-		if (eventName == "roleEvent_OnState_DEAD") Death(position);
+		if (eventName == "characterEvent_OnDeath") Death(position);
 		if (eventName == "roleEvent_OnAttack")
 		{
 			Attack(position);

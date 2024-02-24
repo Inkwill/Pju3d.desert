@@ -13,7 +13,7 @@ public class AiPathMove : MonoBehaviour
 	void Start()
 	{
 		m_role = GetComponent<RoleControl>();
-		m_role.eventSender.events.AddListener(OnRoleEvent);
+		m_role.GetComponent<EventSender>().events.AddListener(OnRoleEvent);
 	}
 	void OnRoleEvent(GameObject obj, string eventName)
 	{
@@ -23,12 +23,12 @@ public class AiPathMove : MonoBehaviour
 		}
 		if (eventName == "roleEvent_OnIdling" && m_paths.Length > m_curPathIndex)
 		{
-			RoleAI ai = m_role.BaseAI as RoleAI;
+			RoleAI ai = m_role.Data.BaseAI as RoleAI;
 			ai?.MoveTo(m_paths[m_curPathIndex].position);
 		}
 		if (eventName == "roleEvent_OnMoving" && m_Offensive)
 		{
-			if (m_role.CurrentEnemy) m_role.CurState = RoleControl.State.PURSUING;
+			if (m_role.Data.CurrentEnemy) m_role.SetState(RoleControl.State.PURSUING);
 		}
 	}
 	public void SetPath(Transform pathRoot, bool offensive = true)
