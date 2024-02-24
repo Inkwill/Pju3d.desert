@@ -20643,6 +20643,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: Mr Box McBoxface
   DefaultWeapon: {fileID: 0}
+  WeaponLocator: {fileID: 0}
+  MoveSpeed: 3
   Stats:
     baseStats:
       health: 1
@@ -20652,7 +20654,6 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  HitClip: []
 --- !u!65 &1443302174
 BoxCollider:
   m_ObjectHideFlags: 0
