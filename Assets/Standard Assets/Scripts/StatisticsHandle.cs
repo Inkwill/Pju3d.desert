@@ -8,15 +8,15 @@ using System;
 public class StatisticsHandle : MonoBehaviour
 {
 	public Action<GameGoalSystem.GoalType, Dictionary<string, int>> UpdateAction;
-	public RoleControl Owner { get { return m_owner; } }
+	public CharacterData Owner { get { return m_owner; } }
 	Dictionary<string, int> m_AddItemCount;
-	RoleControl m_owner;
+	CharacterData m_owner;
 
 	void Start()
 	{
-		m_owner = GetComponent<RoleControl>();
+		m_owner = GetComponent<CharacterData>();
 		m_AddItemCount = new Dictionary<string, int>();
-		if (m_owner) m_owner.Data.Inventory.ItemEvent += OnItemEvent;
+		if (m_owner) m_owner.Inventory.ItemEvent += OnItemEvent;
 	}
 
 	void OnItemEvent(Item item, string actionName, int itemCount)

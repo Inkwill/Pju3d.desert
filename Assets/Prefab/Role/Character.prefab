@@ -187,8 +187,6 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  HitClip:
-  - {fileID: 8300000, guid: f8f4ccf89f1c24a45950bc9d619a7448, type: 3}
 --- !u!114 &4272129805801271086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +235,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6270cfea21ee08846acfb5d9fc865ddb, type: 3}
   - {fileID: 8300000, guid: 18a88983e88fc324a8b6fea7755dcba4, type: 3}
   - {fileID: 8300000, guid: 9598c59802d39e742977ce098d4c7323, type: 3}
+  HitClip:
+  - {fileID: 8300000, guid: f8f4ccf89f1c24a45950bc9d619a7448, type: 3}
   DeathClips:
   - {fileID: 8300000, guid: 5c47af1fd7f3e894ea3f2f8a46d22bef, type: 3}
   - {fileID: 8300000, guid: 221136505ec42324893a638b16ee826e, type: 3}

@@ -54,9 +54,6 @@ public class RoleControl : HighlightableObject
 	public SkillUser SkillUser => m_SkillUser;
 	SkillUser m_SkillUser;
 
-	[Header("Audio")]
-	public AudioClip[] HitClip;
-
 	void Awake()
 	{
 		InitHighlight();
@@ -79,12 +76,6 @@ public class RoleControl : HighlightableObject
 
 
 		m_SkillUser = GetComponent<SkillUser>();
-
-		m_CharacterData.OnDamage += (damage) =>
-		{
-			m_eventSender?.Send(gameObject, "roleEvent_OnDamage");
-			DamageUI.Instance.NewDamage(damage.GetFullDamage(), transform.position);
-		};
 
 		m_CharacterData.Equipment.OnEquiped += item =>
 		{

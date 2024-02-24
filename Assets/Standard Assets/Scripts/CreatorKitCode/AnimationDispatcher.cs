@@ -40,7 +40,7 @@ public class AnimationDispatcher : MonoBehaviour
 			case "roleEvent_OnState_DEAD":
 				m_Animator.SetTrigger(DeathTrigger);
 				return;
-			case "roleEvent_OnDamage":
+			case "characterEvent_OnDamage":
 				m_Animator.SetTrigger(HitTrigger);
 				break;
 			case "roleEvent_OnAttack":
@@ -50,7 +50,7 @@ public class AnimationDispatcher : MonoBehaviour
 				break;
 		}
 		m_Animator.SetFloat(SpeedTrigger, m_role.BaseAI.SpeedScale);
-		// if (eventName == "roleEvent_OnDamage") m_Animator.SetTrigger(HitTrigger);
+		// if (eventName == "characterEvent_OnDamage") m_Animator.SetTrigger(HitTrigger);
 		// if (eventName == "roleEvent_OnState_DEAD") m_Animator.SetTrigger(Animator.StringToHash(DeathTrigger));
 		// if (eventName == "roleEvent_OnState_ATTACKING") m_Animator.SetTrigger(AttackTrigger);
 		// if (eventName == "roleEvent_OnIdling" || eventName == "roleEvent_OnMoving" || eventName == "roleEvent_OnPursuing" || eventName == "roleEvent_OnState_ATTACKING")

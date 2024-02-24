@@ -23,10 +23,6 @@ namespace CreatorKitCode
 		public InventorySystem Inventory = new InventorySystem();
 		public EquipmentSystem Equipment = new EquipmentSystem();
 
-		public AudioClip[] HitClip;
-		// public CharacterAudio AudioPlayer => m_CharacterAudio;
-		// protected CharacterAudio m_CharacterAudio;
-
 		/// <summary>
 		/// Callback for when that CharacterData receive damage. E.g. used by the player character to trigger the right
 		/// animation
@@ -50,6 +46,12 @@ namespace CreatorKitCode
 			Equipment.Init(this);
 			if (DefaultWeapon == null) DefaultWeapon = KeyValueData.GetValue<Item>(GameManager.Config.Item, "wp_unarmed") as Weapon;
 			Equipment.InitWeapon(DefaultWeapon);
+
+			OnDamage += (damage) =>
+			{
+				GetComponent<EventSender>()?.Send(gameObject, "characterEvent_OnDamage");
+				DamageUI.Instance.NewDamage(damage.GetFullDamage(), transform.position);
+			};
 		}
 
 		// Update is called once per frame

@@ -9,7 +9,8 @@ public class GameGoalSystem : MonoBehaviour
 {
 	public enum GoalType
 	{
-		AddItem
+		AddItem,
+		Build
 	}
 
 	public class GameGoal
@@ -126,10 +127,10 @@ public class GameGoalSystem : MonoBehaviour
 	void AchieveGoal(GameGoal goal)
 	{
 		GameGoalAction?.Invoke(goal, "AchieveGoal");
-		Helpers.Log(this, "AchieveGoal", $"{goal.data.goalId},reward={goal.data.rewardEffects}");
+		Helpers.Log(this, "AchieveGoal", $"{goal.data.goalId},exp={goal.data.PlayerExp}");
 		m_AchievedGoals.Add(m_curGoal.data.goalId);
 		if (goal == m_curGoal) m_curGoal = null;
-		if (m_recorder.Owner != null)
+		if (m_recorder.Owner != null && goal.data.rewardEffects != null)
 		{
 			foreach (var effect in goal.data.rewardEffects)
 			{

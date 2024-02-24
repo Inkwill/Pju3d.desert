@@ -118,7 +118,7 @@ public class AIBase : MonoBehaviour
 			else { m_role.CurState = RoleControl.State.IDLE; return; }
 			if (m_role.CurState == RoleControl.State.PURSUING) OnPursuingAI();
 		}
-		if (eventName == "roleEvent_OnDamage")
+		if (eventName == "characterEvent_OnDamage")
 			OnDamageAI();
 		if (eventName == "roleEvent_OnState_DEAD")
 			OnDeadAI();

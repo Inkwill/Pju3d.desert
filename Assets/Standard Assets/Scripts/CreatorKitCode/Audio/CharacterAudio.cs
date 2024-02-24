@@ -10,33 +10,34 @@ public class CharacterAudio : MonoBehaviour
 	public AudioClip[] SpottedAudioClip;
 	public AudioClip[] VocalAttack;
 	public AudioClip[] VocalHit;
+	public AudioClip[] HitClip;
 	public AudioClip[] DeathClips;
 	public SFXManager.Use UseType;
-	RoleControl m_role;
+	CharacterData m_Character;
 	void Start()
 	{
-		m_role = GetComponent<RoleControl>();
-		if (m_role) m_role.eventSender.events.AddListener(OnRoleEvent);
+		m_Character = GetComponent<CharacterData>();
+		GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
 		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
 		if (dispatcher)
 		{
 			dispatcher.FootStep.AddListener(() => { Step(transform.position); VFXManager.PlayVFX(VFXType.StepPuff, transform.position); });
 		}
-		m_role.Data.Inventory.ItemEvent += OnItemEvent;
-		m_role.Data.Equipment.OnEquiped += OnEquiped;
+		m_Character.Inventory.ItemEvent += OnItemEvent;
+		m_Character.Equipment.OnEquiped += OnEquiped;
 	}
 
-	void OnRoleEvent(GameObject obj, string eventName)
+	void OnCharacterEvent(GameObject obj, string eventName)
 	{
 		Vector3 position = obj.transform.position;
-		if (eventName == "roleEvent_OnDamage") Hit(position);
+		if (eventName == "characterEvent_OnDamage") Hit(position);
 		if (eventName == "roleEvent_OnState_DEAD") Death(position);
 		if (eventName == "roleEvent_OnAttack")
 		{
 			Attack(position);
 			SFXManager.PlaySound(UseType, new SFXManager.PlayData()
 			{
-				Clip = m_role.Data.Equipment.Weapon.GetSwingSound(),
+				Clip = m_Character.Equipment.Weapon.GetSwingSound(),
 				Position = position
 			});
 		}
@@ -78,14 +79,26 @@ public class CharacterAudio : MonoBehaviour
 
 	void Hit(Vector3 position)
 	{
-		if (VocalHit.Length == 0)
-			return;
-
-		SFXManager.PlaySound(UseType, new SFXManager.PlayData()
+		if (VocalHit.Length > 0)
 		{
-			Clip = VocalHit[Random.Range(0, VocalHit.Length)],
-			Position = position,
-		});
+			SFXManager.PlaySound(UseType, new SFXManager.PlayData()
+			{
+				Clip = VocalHit[Random.Range(0, VocalHit.Length)],
+				Position = position,
+			});
+		}
+		if (HitClip.Length > 0)
+		{
+			SFXManager.PlaySound(UseType, new SFXManager.PlayData()
+			{
+				Clip = HitClip[Random.Range(0, HitClip.Length)],
+				PitchMax = 1.1f,
+				PitchMin = 0.8f,
+				Position = position
+			});
+		}
+		// SFXManager.PlaySound(m_Source.AudioPlayer.UseType, new SFXManager.PlayData()
+		//  { Clip = m_Source.Equipment.Weapon.GetHitSound(), PitchMin = 0.8f, PitchMax = 1.2f, Position = damagePos });
 	}
 
 	void Step(Vector3 position)
