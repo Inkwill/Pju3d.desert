@@ -24,14 +24,7 @@ public class AIBase : MonoBehaviour
 	public bool isIdle { get { return m_State == State.IDLE; } }
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 	public bool isActive { get { return m_State != State.INACTIVE && m_State != State.DEAD; } }
-	public enum Camp
-	{
-		PLAYER,
-		ALLY,
-		ENEMY,
-		NEUTRAL
-	}
-	public Camp camp;
+
 	[Header("Detector")]
 	public InteractOnTrigger SceneDetector;
 	public InteractOnTrigger InteractDetector;
@@ -40,30 +33,15 @@ public class AIBase : MonoBehaviour
 	public string SceneBox { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, false); } }
 	public string SceneBoxName { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, true); } }
 	protected CharacterData m_Enemy;
-	public CharacterData CurrentEnemy
-	{
-		get { return m_Enemy; }
-		set
-		{
-			if (value != null)
-			{
-				GetComponent<EventSender>()?.Send(value.gameObject, "characterEvent_OnSetCurrentEnemy");
-				m_Enemy = value;
-			}
-			else if (m_Enemy != null && value == null)
-			{
-				GetComponent<EventSender>()?.Send(m_Enemy.gameObject, "characterEvent_OnRemoveCurrentEnemy");
-				m_Enemy = null;
-			}
-		}
-	}
+	public CharacterData CurrentEnemy { get { return m_Enemy; } }
 	public virtual float SpeedScale { get { return 1; } }
 	protected CharacterData m_character;
 
 	public virtual void Init(CharacterData data)
 	{
 		m_character = data;
-		GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
+		m_character.OnDamage += OnDamageAI;
+		m_character.OnDeath.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
 
 		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
 		if (dispatcher) dispatcher.AttackStep.AddListener(AttackFrame);
@@ -86,25 +64,21 @@ public class AIBase : MonoBehaviour
 			// m_role.InteractDetector.OnExit.AddListener(OnInteracterExit);
 			// m_role.InteractDetector.OnEvent.AddListener(OnInteractorEvent);
 		}
-		switch (camp)
+		switch (m_character.camp)
 		{
-			case Camp.PLAYER:
-				m_character.gameObject.layer = LayerMask.NameToLayer("Player");
+			case CharacterData.Camp.PLAYER:
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
 				InteractDetector.layers = LayerMask.GetMask("Interactable", "Player", "Neutral");
 				break;
-			case Camp.ENEMY:
-				m_character.gameObject.layer = LayerMask.NameToLayer("Enemy");
+			case CharacterData.Camp.ENEMY:
 				EnemyDetector.layers = LayerMask.GetMask("Player");
 				InteractDetector.layers = LayerMask.GetMask("Interactable");
 				break;
-			case Camp.ALLY:
-				m_character.gameObject.layer = LayerMask.NameToLayer("Player");
+			case CharacterData.Camp.ALLY:
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
 				InteractDetector.layers = LayerMask.GetMask("Player");
 				break;
-			case Camp.NEUTRAL:
-				m_character.gameObject.layer = LayerMask.NameToLayer("Neutral");
+			case CharacterData.Camp.NEUTRAL:
 				EnemyDetector.layers = LayerMask.GetMask("Noting");
 				InteractDetector.layers = LayerMask.GetMask("Player");
 				break;
@@ -142,16 +116,18 @@ public class AIBase : MonoBehaviour
 				}
 			}
 			if (CurrentEnemy && m_character.CanAttackReach(CurrentEnemy)) { SetState(State.ATTACKING); }
-			else GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnPursuing");
+			else { OnPursuingAI(); GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnPursuing"); }
 		}
 		//MOVE
 		if (m_State == State.MOVE)
 		{
+			OnMovingAI();
 			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnMoving");
 		}
 		//IDLE
 		if (m_State == State.IDLE)
 		{
+			OnIdlingAI();
 			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnIdling");
 		}
 	}
@@ -193,31 +169,21 @@ public class AIBase : MonoBehaviour
 	}
 
 	public virtual void Stop() { }
-
-	void OnCharacterEvent(GameObject obj, string eventName)
-	{
-		if (eventName == "roleEvent_OnIdling") OnIdlingAI();
-		if (eventName == "roleEvent_OnMoving") OnMovingAI();
-		if (eventName == "roleEvent_OnPursuing") OnPursuingAI();
-		if (eventName == "characterEvent_OnDamage") OnDamageAI();
-		if (eventName == "characterEvent_OnDeath") OnDeadAI();
-	}
-
 	protected virtual void OnIdlingAI() { }
 	protected virtual void OnMovingAI() { }
 	protected virtual void OnPursuingAI() { }
-	protected virtual void OnDeadAI() { }
-	protected virtual void OnDamageAI() { }
+	protected virtual void OnDeathAI() { }
+	protected virtual void OnDamageAI(Damage damage) { }
 
 	protected virtual void OnEnemyEnter(GameObject enter)
 	{
-		if (CurrentEnemy == null) CurrentEnemy = enter.GetComponent<CharacterData>();
+		if (m_Enemy == null) m_Enemy = enter.GetComponent<CharacterData>();
 	}
 	protected virtual void OnEnemyExit(GameObject exiter)
 	{
-		if (CurrentEnemy && CurrentEnemy.gameObject == exiter)
+		if (m_Enemy && m_Enemy.gameObject == exiter)
 		{
-			CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+			m_Enemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
 			//m_eventSender.Send(exiter, "roleEvent_OnEnemyExit");
 		}
 	}
@@ -243,7 +209,7 @@ public class AIBase : MonoBehaviour
 	}
 	void OnSkillTargetEvent(GameObject sender, string eventMessage)
 	{
-		if (eventMessage == "characterEvent_OnDeath")
+		if (eventMessage == "roleEvent_OnState_DEAD")
 		{
 			Debug.Log("OnSkillTargetEvent: target= " + sender + "event= " + eventMessage);
 		}

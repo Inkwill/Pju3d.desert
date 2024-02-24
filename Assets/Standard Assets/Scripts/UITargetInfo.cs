@@ -26,7 +26,6 @@ public class UITargetInfo : MonoBehaviour
 	UILootElement[] uilootList = new UILootElement[maxUILoot];
 	public void Init()
 	{
-		GameManager.Player.GetComponent<EventSender>()?.events.AddListener(OnPlayerEvent);
 		GameManager.Player.BaseAI.InteractDetector.OnEnter.AddListener(OnInteractEnter);
 		GameManager.Player.BaseAI.InteractDetector.OnExit.AddListener(OnInteractExit);
 		//GameManager.Player.InteractDetector.OnStay.AddListener(OnInteractStay);
@@ -37,6 +36,12 @@ public class UITargetInfo : MonoBehaviour
 			uilootList[i].gameObject.transform.SetParent(lootRoot);
 			uilootList[i].gameObject.SetActive(false);
 		}
+	}
+
+	void Update()
+	{
+		m_curEnemy = GameManager.Player.BaseAI.CurrentEnemy;
+		UpdateEnemyInfo();
 	}
 
 	void UpdateEnemyInfo()
@@ -54,41 +59,7 @@ public class UITargetInfo : MonoBehaviour
 			enemyHp.gameObject.SetActive(false);
 		}
 	}
-	void OnPlayerEvent(GameObject obj, string eventName)
-	{
-		infoText.text = eventName;
-		switch (eventName)
-		{
-			case "characterEvent_OnSetCurrentEnemy":
-				m_curEnemy = obj.GetComponent<CharacterData>();
-				m_curEnemy?.GetComponent<EventSender>()?.events.AddListener(OnEnemyEvent);
-				UpdateEnemyInfo();
-				break;
-			case "characterEvent_OnRemoveCurrentEnemy":
-				if (m_curEnemy == obj.GetComponent<CharacterData>())
-				{
-					m_curEnemy?.GetComponent<EventSender>()?.events.RemoveListener(OnEnemyEvent);
-					m_curEnemy = null;
-					UpdateEnemyInfo();
-				}
-				break;
-			default:
-				break;
-		}
-	}
 
-	void OnEnemyEvent(GameObject obj, string eventName)
-	{
-		switch (eventName)
-		{
-			case "characterEvent_OnDamage":
-				CharacterData data = obj.GetComponent<CharacterData>();
-				enemyHp.value = data != null ? data.Stats.CurrentHealth : 0;
-				break;
-			default:
-				break;
-		}
-	}
 	void OnInteractEnter(GameObject enter)
 	{
 		Loot loot = enter.GetComponentInParent<Loot>();

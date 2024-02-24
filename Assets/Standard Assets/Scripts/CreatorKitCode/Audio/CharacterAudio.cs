@@ -17,6 +17,8 @@ public class CharacterAudio : MonoBehaviour
 	void Start()
 	{
 		m_Character = GetComponent<CharacterData>();
+		m_Character.OnDamage += (damage) => { Hit(damage.Target.gameObject.transform.position); };
+		m_Character.OnDeath.AddListener((character) => { Death(character.transform.position); });
 		GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
 		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
 		if (dispatcher)
@@ -30,8 +32,6 @@ public class CharacterAudio : MonoBehaviour
 	void OnCharacterEvent(GameObject obj, string eventName)
 	{
 		Vector3 position = obj.transform.position;
-		if (eventName == "characterEvent_OnDamage") Hit(position);
-		if (eventName == "characterEvent_OnDeath") Death(position);
 		if (eventName == "roleEvent_OnAttack")
 		{
 			Attack(position);

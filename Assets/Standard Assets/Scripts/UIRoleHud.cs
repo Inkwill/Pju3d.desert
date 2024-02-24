@@ -26,7 +26,7 @@ public class UIRoleHud : MonoBehaviour
 	void Start()
 	{
 		m_character = GetComponentInParent<CharacterData>();
-		if (m_character) m_character.Inventory.ItemEvent += OnItemEvent;
+		m_character.Inventory.ItemEvent += OnItemEvent;
 		m_character.GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
 
 		if (sliderHp)
@@ -38,7 +38,12 @@ public class UIRoleHud : MonoBehaviour
 		sliderPg?.gameObject.SetActive(false);
 		sliderInteract?.gameObject.SetActive(false);
 		GetComponentInParent<StoryTeller>()?.tellerEvent.AddListener(OnTellerEvent);
-		//iconStory?.gameObject.SetActive(false);
+		m_character.OnDeath.AddListener((character) =>
+		{
+			sliderHp?.gameObject.SetActive(false);
+			sliderPg?.gameObject.SetActive(false);
+			GetComponentInParent<EventSender>()?.events.RemoveListener(OnCharacterEvent);
+		});
 	}
 
 	void OnCharacterEvent(GameObject role, string eventName)
@@ -55,11 +60,6 @@ public class UIRoleHud : MonoBehaviour
 			case "roleEvent_OnState_SKILLING":
 				sliderPg?.gameObject.SetActive(true);
 				sliderPg.maxValue = m_character.SkillUser.CurSkill.skill.Duration;
-				break;
-			case "characterEvent_OnDeath":
-				sliderHp?.gameObject.SetActive(false);
-				sliderPg?.gameObject.SetActive(false);
-				GetComponentInParent<EventSender>()?.events.RemoveListener(OnCharacterEvent);
 				break;
 			case "characterEvent_OnHpChange":
 				if (!sliderHp.gameObject.activeSelf) sliderHp.gameObject.SetActive(true);

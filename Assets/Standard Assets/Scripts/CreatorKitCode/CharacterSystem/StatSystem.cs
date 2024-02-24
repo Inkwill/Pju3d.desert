@@ -256,6 +256,7 @@ namespace CreatorKitCode
 			TimedModifierStack.Clear();
 
 			UpdateFinalStats();
+			m_Owner.OnDeath?.Invoke(m_Owner);
 		}
 
 		public void Tick()
@@ -303,11 +304,7 @@ namespace CreatorKitCode
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.health);
 			m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject, "characterEvent_OnHpChange");
-			if (CurrentHealth <= 0)
-			{
-				Death();
-				m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject, "characterEvent_OnDeath");
-			}
+			if (CurrentHealth <= 0) Death();
 		}
 
 		void UpdateFinalStats()

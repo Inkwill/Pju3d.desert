@@ -54,10 +54,10 @@ public class RoleAI : AIBase
 
 	protected override void OnIdlingAI()
 	{
-		if (CurrentEnemy != null) { SetState(State.PURSUING); return; }
+		if (m_Enemy != null) { SetState(State.PURSUING); return; }
 		else if (EnemyDetector.Inners.Count > 0)
 		{
-			CurrentEnemy = EnemyDetector.GetNearest().GetComponent<CharacterData>();
+			m_Enemy = EnemyDetector.GetNearest().GetComponent<CharacterData>();
 			SetState(State.PURSUING);
 			return;
 		}
@@ -78,9 +78,8 @@ public class RoleAI : AIBase
 		}
 	}
 
-	protected override void OnDeadAI()
+	protected override void OnDeathAI()
 	{
-		SetState(State.DEAD);
 		Agent.isStopped = true;
 		Agent.enabled = false;
 	}

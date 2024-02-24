@@ -26,6 +26,7 @@ public class NPCAI : RoleAI
 
 	protected override void OnIdlingAI()
 	{
+		base.OnIdlingAI();
 		m_IdleDuring += Time.deltaTime;
 		if (m_IdleDuring > m_WanderBeat && m_WanderRadius > 0)
 		{
@@ -37,6 +38,7 @@ public class NPCAI : RoleAI
 
 	protected override void OnPursuingAI()
 	{
+		base.OnPursuingAI();
 		if (CurrentEnemy && m_Offensive && m_character.MoveSpeed > 0)
 		{
 			Agent.isStopped = false;
@@ -47,15 +49,15 @@ public class NPCAI : RoleAI
 			Helpers.Log(this, "OnPursuingAI", "enemy= " + CurrentEnemy);
 		}
 	}
-	protected override void OnDamageAI()
+	protected override void OnDamageAI(Damage damage)
 	{
 		if (!m_Offensive) m_Offensive = true;
-		if (!CurrentEnemy) CurrentEnemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+		if (!m_Enemy) m_Enemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
 		if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
 	}
-	protected override void OnDeadAI()
+	protected override void OnDeathAI()
 	{
-		base.OnDeadAI();
+		base.OnDeathAI();
 		bool corpse = (Random.Range(1, 101) <= CorpseChance);
 		if (corpse)
 		{
@@ -73,8 +75,7 @@ public class NPCAI : RoleAI
 	IEnumerator DestroyCorpse(float waitTime)
 	{
 		yield return new WaitForSeconds(waitTime);
-		VFXManager.PlayVFX(VFXType.Death, transform.position);
-		Destroy(gameObject);
+		m_character.DestroyCharacter();
 	}
 	void Wandering()
 	{
