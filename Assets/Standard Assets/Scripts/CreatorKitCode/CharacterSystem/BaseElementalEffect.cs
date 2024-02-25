@@ -5,7 +5,7 @@ using CreatorKitCode;
 using TMPro;
 using UnityEngine;
 
-namespace CreatorKitCode 
+namespace CreatorKitCode
 {
     /// <summary>
     /// The base class to derive from to write you own custom Elemental effect that can be added to a StatsSystem. There
@@ -20,7 +20,7 @@ namespace CreatorKitCode
         public bool Done => m_Timer <= 0.0f;
         public float CurrentTime => m_Timer;
         public float Duration => m_Duration;
-        
+
         protected float m_Duration;
         protected float m_Timer;
         protected CharacterData m_Target;
@@ -38,7 +38,7 @@ namespace CreatorKitCode
 
         public virtual void Removed()
         {
-        
+
         }
 
         public virtual void Update(StatSystem statSystem)
@@ -67,7 +67,7 @@ namespace CreatorKitCode
             m_EffectData = data;
             m_DamageSpeed = speed;
         }
-        
+
         public override void Update(StatSystem statSystem)
         {
             base.Update(statSystem);
@@ -79,9 +79,9 @@ namespace CreatorKitCode
                 m_SinceLastDamage = 0;
 
                 Damage damage = new Damage(m_Target);
-                damage.Take();
+                damage.TakeDamage();
             }
-            
+
             //we do not parent as if the original object is destroy it would destroy the instance
             m_FireInstance.Effect.transform.position = m_Target.transform.position + Vector3.up;
         }
@@ -110,7 +110,7 @@ namespace CreatorKitCode
         public override void Removed()
         {
             base.Removed();
-            
+
             m_FireInstance.Effect.SetActive(false);
         }
     }

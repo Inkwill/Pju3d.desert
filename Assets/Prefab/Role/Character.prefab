@@ -161,7 +161,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45ba4cd943b6c745bb32ca76b631cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterName: Jack
+  camp: 0
+  CharacterName: Mahler
   DefaultWeapon: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
   WeaponLocator: {fileID: 226675115136632130}
   MoveSpeed: 4
@@ -174,6 +175,9 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4272129805801271086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,7 +190,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1c58a18c6857d41bac517b20c0efc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camp: 0
   SceneDetector: {fileID: 2035109682229800503}
   InteractDetector: {fileID: 4597439104978932822}
   EnemyDetector: {fileID: 1134714616160843028}
@@ -242,6 +245,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   events:
+    m_PersistentCalls:
+      m_Calls: []
+  countEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &8207529441758577494

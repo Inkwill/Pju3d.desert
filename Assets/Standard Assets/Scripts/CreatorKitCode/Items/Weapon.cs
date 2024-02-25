@@ -50,7 +50,7 @@ namespace CreatorKitCode
 				bullet.damage = damage;
 				bullet.target = target;
 			}
-			else damage.Take();
+			else damage.TakeDamage();
 			//foreach (var wae in AttackEffects)
 			//wae.OnAttack(target, attacker, ref attackEffect);
 

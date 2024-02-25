@@ -30,7 +30,6 @@ namespace CreatorKitCodeInternal
 				m_HealTimer -= Time.deltaTime;
 			else if (m_CharData.Stats.CurrentHealth != m_CharData.Stats.stats.health)
 			{
-				m_CharData.Stats.ChangeHealth(10000000);
 			}
 		}
 	}

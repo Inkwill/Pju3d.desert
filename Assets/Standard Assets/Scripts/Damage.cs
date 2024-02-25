@@ -17,16 +17,16 @@ public class Damage
 		m_Source = sourcer;
 	}
 
-	public void Take(CharacterData target)
+	public void TakeDamage(CharacterData attacker, CharacterData target)
 	{
 		int totalDamage = GetFullDamage();
-		target.Stats.ChangeHealth(-totalDamage);
+		target.Stats.ChangeHealth(-totalDamage, attacker);
 		var damagePos = target.transform.position + target.transform.up * 0.5f;
 		VFXManager.PlayVFX(VFXType.Hit, damagePos);
 		target.OnDamage?.Invoke(this);
 	}
 
-	public void Take() { Take(m_Target); }
+	public void TakeDamage() { TakeDamage(m_Source, m_Target); }
 
 	public int AddDamage(StatSystem.DamageType damageType, int amount)
 	{

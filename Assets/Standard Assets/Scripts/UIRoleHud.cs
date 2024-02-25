@@ -5,7 +5,7 @@ using CreatorKitCode;
 using TMPro;
 using UnityEngine.InputSystem.Controls;
 
-public class UIRoleHud : MonoBehaviour
+public class UIRoleHud : UIWorldHud
 {
 	[SerializeField]
 	TMP_Text textName;
@@ -59,7 +59,7 @@ public class UIRoleHud : MonoBehaviour
 				break;
 			case "roleEvent_OnState_SKILLING":
 				sliderPg?.gameObject.SetActive(true);
-				sliderPg.maxValue = m_character.SkillUser.CurSkill.skill.Duration;
+				sliderPg.maxValue = m_character.BaseAI.SkillUser.CurSkill.skill.Duration;
 				break;
 			case "characterEvent_OnHpChange":
 				if (!sliderHp.gameObject.activeSelf) sliderHp.gameObject.SetActive(true);
@@ -90,10 +90,6 @@ public class UIRoleHud : MonoBehaviour
 		// 	else story_anim.SetTrigger("hide");
 		// }
 
-	}
-	private void Update()
-	{
-		this.transform.forward = Camera.main.transform.forward;
 	}
 
 	public void Bubble(string content, float duration = 1.0f)

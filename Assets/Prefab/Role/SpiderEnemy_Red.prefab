@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45ba4cd943b6c745bb32ca76b631cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camp: 2
   CharacterName: Cactus Nails
   DefaultWeapon: {fileID: 0}
   WeaponLocator: {fileID: 0}
@@ -109,6 +110,9 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1956787967552379151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,6 +189,9 @@ MonoBehaviour:
   events:
     m_PersistentCalls:
       m_Calls: []
+  countEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &9015557579248510583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,7 +204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camp: 2
   SceneDetector: {fileID: 1386117853255137259}
   InteractDetector: {fileID: 3517083912815299978}
   EnemyDetector: {fileID: 53202347197689032}

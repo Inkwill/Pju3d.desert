@@ -17,7 +17,9 @@ public class CharacterData : HighlightableObject
 		PLAYER,
 		ALLY,
 		ENEMY,
-		NEUTRAL
+		NEUTRAL,
+		BUILDING,
+		ENEMYBUILDING
 	}
 	public Camp camp;
 	public string CharacterName;
@@ -29,19 +31,25 @@ public class CharacterData : HighlightableObject
 	public EquipmentSystem Equipment = new EquipmentSystem();
 	public Action<Damage> OnDamage { get; set; }
 	public UnityEvent<CharacterData> OnDeath;
-	protected Vector3 m_BirthPos;
+	public Action<CharacterData> OnAttack { get; set; }
+	public Action<CharacterData> OnKillEnemy { get; set; }
+	Vector3 m_BirthPos;
 	public Vector3 BirthPos => m_BirthPos;
+	CharacterData m_Enemy;
+	public CharacterData CurrentEnemy { get { return m_Enemy; } }
 	public AIBase BaseAI => m_Ai;
-	protected AIBase m_Ai;
-	public SkillUser SkillUser => m_SkillUser;
-	SkillUser m_SkillUser;
+	AIBase m_Ai;
 	float m_AttackCoolDown;
+	StatisticsHandle m_recorder;
 
 	void Awake()
 	{
 		InitHighlight();
 		Stats.Init(this);
+		Inventory.Init(this);
+		Equipment.Init(this);
 		m_BirthPos = transform.position;
+
 		switch (camp)
 		{
 			case CharacterData.Camp.PLAYER:
@@ -56,21 +64,25 @@ public class CharacterData : HighlightableObject
 			case CharacterData.Camp.NEUTRAL:
 				gameObject.layer = LayerMask.NameToLayer("Neutral");
 				break;
+			case CharacterData.Camp.BUILDING:
+				gameObject.layer = LayerMask.NameToLayer("Building");
+				break;
 			default:
 				break;
 		}
 	}
 	public void Active()
 	{
-		Inventory.Init(this);
-		Equipment.Init(this);
+		GetComponentInChildren<AnimationDispatcher>()?.AttackStep.AddListener(AttackFrame);
 
 		if (DefaultWeapon == null) DefaultWeapon = KeyValueData.GetValue<Item>(GameManager.Config.Item, "wp_unarmed") as Weapon;
 		Equipment.InitWeapon(DefaultWeapon);
 
-		m_SkillUser = GetComponent<SkillUser>();
 		m_Ai = GetComponent<AIBase>();
 		m_Ai.Init(this);
+
+		m_recorder = GetComponent<StatisticsHandle>();
+		m_recorder?.Init(this);
 
 		OnDamage += (damage) =>
 		{
@@ -109,13 +121,20 @@ public class CharacterData : HighlightableObject
 			m_AttackCoolDown -= Time.deltaTime;
 	}
 
-	public bool CanAttackReach(CharacterData target)
+	public void SetEnemy(CharacterData enemy)
 	{
-		return Equipment.Weapon.CanHit(this, target);
+		if (enemy != m_Enemy) m_Enemy = enemy;
 	}
 
+	public bool CanAttackReach(CharacterData target)
+	{
+		if (target == null) return false;
+		return Equipment.Weapon.CanHit(this, target);
+	}
+	public bool CanAttackReach() { return CanAttackReach(m_Enemy); }
 	public bool CanAttackTarget(CharacterData target)
 	{
+		if (target == null) return false;
 		if (target.Stats.CurrentHealth == 0)
 			return false;
 
@@ -127,7 +146,27 @@ public class CharacterData : HighlightableObject
 
 		return true;
 	}
-
+	public bool CanAttackTarget() { return CanAttackTarget(m_Enemy); }
+	public void CheckAttack()
+	{
+		if (CanAttackTarget())
+		{
+			BaseAI.Stop();
+			BaseAI.LookAt(CurrentEnemy.transform);
+			AttackTriggered();
+			OnAttack?.Invoke(this);
+		}
+	}
+	void AttackFrame()
+	{
+		//if we can't reach the target anymore when it's time to damage, then that attack miss.
+		if (CurrentEnemy && CanAttackReach(CurrentEnemy))
+		{
+			Attack(CurrentEnemy);
+		}
+		else if (CurrentEnemy) Helpers.Log(this, "AttackMiss: ", $"{CharacterName}->{CurrentEnemy.CharacterName}");
+		else Helpers.Log(this, "AttackMiss: ", $"{CharacterName}->(Enemy Missed)");
+	}
 	public void Attack(CharacterData target)
 	{
 		if (Equipment.Weapon)
@@ -149,13 +188,11 @@ public class CharacterData : HighlightableObject
 		}
 		else Debug.LogError("Character missing weapon : " + gameObject);
 	}
-
 	public void AttackTriggered()
 	{
 		//Agility reduce by 0.5% the cooldown to attack (e.g. if agility = 50, 25% faster to attack)
 		m_AttackCoolDown = Math.Max(0.1f, Equipment.Weapon.Stats.Speed - (Stats.stats.agility * 0.5f * 0.001f * Equipment.Weapon.Stats.Speed));
 	}
-
 	public void DestroyCharacter()
 	{
 		VFXManager.PlayVFX(VFXType.Death, transform.position);

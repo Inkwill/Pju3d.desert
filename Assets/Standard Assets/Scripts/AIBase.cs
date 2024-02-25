@@ -32,19 +32,19 @@ public class AIBase : MonoBehaviour
 	public InteractOnTrigger SkillDetector;
 	public string SceneBox { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, false); } }
 	public string SceneBoxName { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, true); } }
-	protected CharacterData m_Enemy;
-	public CharacterData CurrentEnemy { get { return m_Enemy; } }
 	public virtual float SpeedScale { get { return 1; } }
+	public CharacterData CurrentEnemy => m_character.CurrentEnemy;
+	public CharacterData Character => m_character;
 	protected CharacterData m_character;
+	public SkillUser SkillUser => m_SkillUser;
+	SkillUser m_SkillUser;
 
 	public virtual void Init(CharacterData data)
 	{
 		m_character = data;
 		m_character.OnDamage += OnDamageAI;
 		m_character.OnDeath.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
-
-		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
-		if (dispatcher) dispatcher.AttackStep.AddListener(AttackFrame);
+		m_SkillUser = GetComponent<SkillUser>();
 
 		if (EnemyDetector)
 		{
@@ -71,7 +71,7 @@ public class AIBase : MonoBehaviour
 				InteractDetector.layers = LayerMask.GetMask("Interactable", "Player", "Neutral");
 				break;
 			case CharacterData.Camp.ENEMY:
-				EnemyDetector.layers = LayerMask.GetMask("Player");
+				EnemyDetector.layers = LayerMask.GetMask("Player", "Building");
 				InteractDetector.layers = LayerMask.GetMask("Interactable");
 				break;
 			case CharacterData.Camp.ALLY:
@@ -81,6 +81,10 @@ public class AIBase : MonoBehaviour
 			case CharacterData.Camp.NEUTRAL:
 				EnemyDetector.layers = LayerMask.GetMask("Noting");
 				InteractDetector.layers = LayerMask.GetMask("Player");
+				break;
+			case CharacterData.Camp.BUILDING:
+				EnemyDetector.layers = LayerMask.GetMask("Enemy");
+				InteractDetector.layers = LayerMask.GetMask("Noting");
 				break;
 			default:
 				break;
@@ -96,12 +100,12 @@ public class AIBase : MonoBehaviour
 		//Dead
 		if (m_State == State.DEAD) return;
 		//Skill
-		if (m_character.SkillUser && m_State != State.SKILLING && m_character.SkillUser.CurSkill != null) { SetState(State.SKILLING); }
-		if (m_character.SkillUser && m_State == State.SKILLING && m_character.SkillUser.CurSkill == null) { SetState(State.IDLE); }
+		if (SkillUser && m_State != State.SKILLING && SkillUser.CurSkill != null) { SetState(State.SKILLING); }
+		if (SkillUser && m_State == State.SKILLING && SkillUser.CurSkill == null) { SetState(State.IDLE); }
 		//ATTACK
 		if (m_State == State.ATTACKING)
 		{
-			if (CurrentEnemy && m_character.CanAttackReach(CurrentEnemy)) CheckAttack();
+			if (m_character.CanAttackReach()) m_character.CheckAttack();
 			else SetState(State.PURSUING);
 		}
 		//PURSUING
@@ -115,7 +119,7 @@ public class AIBase : MonoBehaviour
 					Debug.LogError("Miss a Weapon! role = " + gameObject);
 				}
 			}
-			if (CurrentEnemy && m_character.CanAttackReach(CurrentEnemy)) { SetState(State.ATTACKING); }
+			if (m_character.CanAttackReach()) { SetState(State.ATTACKING); }
 			else { OnPursuingAI(); GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnPursuing"); }
 		}
 		//MOVE
@@ -139,27 +143,6 @@ public class AIBase : MonoBehaviour
 		GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
 	}
 
-	public void CheckAttack()
-	{
-		if (m_character.CanAttackTarget(CurrentEnemy))
-		{
-			m_character.BaseAI.Stop();
-			m_character.BaseAI.LookAt(CurrentEnemy.transform);
-			m_character.AttackTriggered();
-			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnAttack");
-		}
-	}
-
-	void AttackFrame()
-	{
-		//if we can't reach the target anymore when it's time to damage, then that attack miss.
-		if (CurrentEnemy && m_character.CanAttackReach(CurrentEnemy))
-		{
-			m_character.Attack(CurrentEnemy);
-		}
-		else if (CurrentEnemy) Helpers.Log(this, "AttackMiss: ", $"{m_character.CharacterName}->{CurrentEnemy.CharacterName}");
-		else Helpers.Log(this, "AttackMiss: ", $"{m_character.CharacterName}->(Enemy Missed)");
-	}
 	public virtual void LookAt(Transform trans)
 	{
 		Vector3 forward = (trans.position - m_character.transform.position);
@@ -177,13 +160,13 @@ public class AIBase : MonoBehaviour
 
 	protected virtual void OnEnemyEnter(GameObject enter)
 	{
-		if (m_Enemy == null) m_Enemy = enter.GetComponent<CharacterData>();
+		if (m_character.CurrentEnemy == null) m_character.SetEnemy(enter.GetComponent<CharacterData>());
 	}
 	protected virtual void OnEnemyExit(GameObject exiter)
 	{
-		if (m_Enemy && m_Enemy.gameObject == exiter)
+		if (m_character.CurrentEnemy && m_character.CurrentEnemy.gameObject == exiter)
 		{
-			m_Enemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+			m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<CharacterData>());
 			//m_eventSender.Send(exiter, "roleEvent_OnEnemyExit");
 		}
 	}
@@ -198,13 +181,13 @@ public class AIBase : MonoBehaviour
 
 	void OnSkillTargetEnter(GameObject enter)
 	{
-		if (m_character.SkillUser && m_character.SkillUser.CurSkill != null) m_character.SkillUser.AddTarget(enter);
+		if (SkillUser && SkillUser.CurSkill != null) SkillUser.AddTarget(enter);
 		//Debug.Log("OnSkillTargetEnter: enter= " + enter);
 	}
 
 	void OnSkillTargetExit(GameObject exiter)
 	{
-		if (m_character.SkillUser && m_character.SkillUser.CurSkill != null) m_character.SkillUser.RemoveTarget(exiter);
+		if (SkillUser && SkillUser.CurSkill != null) SkillUser.RemoveTarget(exiter);
 		//Debug.Log("OnSkillTargetExit: exiter= " + exiter);
 	}
 	void OnSkillTargetEvent(GameObject sender, string eventMessage)
@@ -216,7 +199,7 @@ public class AIBase : MonoBehaviour
 	}
 	protected virtual void OnInteractStay(GameObject interactor, float during)
 	{
-		if (interactor.tag != "item" && CurrentEnemy == null) LookAt(interactor.transform);
+		if (interactor.tag != "item" && m_character.CurrentEnemy == null) LookAt(interactor.transform);
 		//HighlightTarget(interactor.gameObject, true);
 		//Debug.Log("[RoleAI-" + m_role + "] OnInteracting with : " + interactor.gameObject);
 	}

@@ -52,7 +52,7 @@ public class NPCAI : RoleAI
 	protected override void OnDamageAI(Damage damage)
 	{
 		if (!m_Offensive) m_Offensive = true;
-		if (!m_Enemy) m_Enemy = EnemyDetector.GetNearest()?.GetComponent<CharacterData>();
+		if (!CurrentEnemy) m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<CharacterData>());
 		if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
 	}
 	protected override void OnDeathAI()
@@ -66,7 +66,7 @@ public class NPCAI : RoleAI
 		}
 		else
 		{
-			if (dropEffect != null) dropEffect.Take(m_character.gameObject);
+			if (dropEffect != null) dropEffect.TakeEffect(m_character.gameObject, m_character.gameObject);
 			Helpers.RecursiveLayerChange(m_character.transform, LayerMask.NameToLayer("EnemyCorpse"));
 			StartCoroutine(DestroyCorpse(1.0f));
 		}

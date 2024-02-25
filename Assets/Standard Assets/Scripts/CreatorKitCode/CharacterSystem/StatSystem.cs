@@ -247,7 +247,7 @@ namespace CreatorKitCode
 				m_ElementalEffects.Add(effect);
 		}
 
-		public void Death()
+		public void Death(CharacterData attacker)
 		{
 			foreach (var e in ElementalEffects)
 				e.Removed();
@@ -257,6 +257,7 @@ namespace CreatorKitCode
 
 			UpdateFinalStats();
 			m_Owner.OnDeath?.Invoke(m_Owner);
+			attacker.OnKillEnemy?.Invoke(m_Owner);
 		}
 
 		public void Tick()
@@ -300,11 +301,11 @@ namespace CreatorKitCode
 		/// take care of clamping the value in the range [0...MaxHealth]
 		/// </summary>
 		/// <param name="amount"></param>
-		public void ChangeHealth(int amount)
+		public void ChangeHealth(int amount, CharacterData attacker)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.health);
 			m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject, "characterEvent_OnHpChange");
-			if (CurrentHealth <= 0) Death();
+			if (CurrentHealth <= 0) Death(attacker);
 		}
 
 		void UpdateFinalStats()

@@ -18,9 +18,9 @@ MonoBehaviour:
   PlayerExp: 1
   type: 0
   param:
-  - Key: Wood
+  - Key: any
     Value:
-    - 3
+    - 5
   rewardEffects:
   - Key: {fileID: 11400000, guid: 914632a637ca46447acc281c33ff3c12, type: 2}
     Value:

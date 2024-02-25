@@ -37,7 +37,7 @@ public class EffectData : ScriptableObject
 		return Description;
 	}
 
-	public bool Take(GameObject user, string[] param = null, GameObject target = null)
+	public bool TakeEffect(GameObject user, GameObject target, string[] param = null)
 	{
 		bool success = false;
 		switch (Type)
@@ -45,12 +45,10 @@ public class EffectData : ScriptableObject
 			case EffectType.DAMAGE:
 				break;
 			case EffectType.HPCHANGE:
-				CharacterData changer = target ? target.GetComponent<CharacterData>() : user.GetComponent<CharacterData>();
-				if (changer == null) break;
-				int addMount;
+				int addMount = 0;
 				if (param != null && param.Length > 0 && int.TryParse(param[0], out addMount))
-					success = ChangeHealth(changer, EffectAmount + addMount);
-				else success = ChangeHealth(changer, EffectAmount);
+					success = ChangeHealth(user.GetComponent<CharacterData>(), target.GetComponent<CharacterData>(), EffectAmount + addMount);
+				else success = ChangeHealth(user.GetComponent<CharacterData>(), target.GetComponent<CharacterData>(), EffectAmount);
 				break;
 			case EffectType.DIG:
 				if (target != null)
@@ -64,11 +62,11 @@ public class EffectData : ScriptableObject
 				}
 				break;
 			case EffectType.SUMMON:
-				Vector3 pos = (target != null) ? target.transform.position : user.transform.position;
+				Transform trans = (target != null) ? target.transform : user.transform;
 				if (param != null && param.Length > 0)
 				{
 					GameObject pbObj = Resources.Load(param[0]) as GameObject;
-					if (pbObj != null) { Instantiate(pbObj, pos, Quaternion.Euler(0, 180, 0)); success = true; }
+					if (pbObj != null) { Instantiate(pbObj, trans.position, trans.rotation); success = true; }
 				}
 				break;
 			case EffectType.DROPBOX:
@@ -92,18 +90,18 @@ public class EffectData : ScriptableObject
 		return success;
 	}
 
-	bool ChangeHealth(CharacterData user, int value)
+	bool ChangeHealth(CharacterData attacker, CharacterData target, int value)
 	{
 		if (EffectMode == StatSystem.StatModifier.Mode.Absolute)
 		{
-			user.Stats.ChangeHealth(value);
+			target.Stats.ChangeHealth(value, attacker);
 			return true;
 		}
 		else if (EffectMode == StatSystem.StatModifier.Mode.Percentage)
 		{
-			if (user.Stats.CurrentHealth == user.Stats.stats.health && value > 0)
+			if (target.Stats.CurrentHealth == target.Stats.stats.health && value > 0)
 				return true;
-			user.Stats.ChangeHealth(Mathf.FloorToInt(value / 100.0f * user.Stats.stats.health));
+			target.Stats.ChangeHealth(Mathf.FloorToInt(value / 100.0f * target.Stats.stats.health), attacker);
 			return true;
 		}
 		return false;
@@ -130,10 +128,10 @@ public class EffectData : ScriptableObject
 			return $"Convert {PercentageHealthStolen}% of physical damage into Health";
 		}
 
-		public void OnPostAttack(CharacterData target, CharacterData user, Damage damage)
+		public void OnPostAttack(CharacterData target, CharacterData attacker, Damage damage)
 		{
 			int amount = Mathf.FloorToInt(damage.GetDamage(StatSystem.DamageType.Physical) * (PercentageHealthStolen / 100.0f));
-			user.Stats.ChangeHealth(amount);
+			target.Stats.ChangeHealth(amount, attacker);
 		}
 	}
 

@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
 			var targetPos = target.transform.position + Vector3.up * 1.0f;
 			if (Vector3.SqrMagnitude(targetPos - transform.position) < 1)
 			{
-				damage.Take();
+				damage.TakeDamage();
 				Destroy(gameObject);
 				return;
 			}

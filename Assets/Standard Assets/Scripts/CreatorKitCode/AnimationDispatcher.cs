@@ -32,26 +32,14 @@ public class AnimationDispatcher : MonoBehaviour
 		m_character = GetComponentInParent<CharacterData>();
 		m_character.OnDamage += (damage) => { m_Animator.SetTrigger(HitTrigger); };
 		m_character.OnDeath.AddListener((character) => { m_Animator.SetTrigger(DeathTrigger); });
+		m_character.OnAttack += (attacker) => { m_Animator.SetTrigger(AttackTrigger); };
 		m_character.GetComponent<EventSender>().events.AddListener(OnCharacterEvent);
 		m_Animator = GetComponent<Animator>();
 	}
 
 	void OnCharacterEvent(GameObject obj, string eventName)
 	{
-		switch (eventName)
-		{
-			case "roleEvent_OnAttack":
-				m_Animator.SetTrigger(AttackTrigger);
-				break;
-			default:
-				break;
-		}
 		m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
-		// if (eventName == "roleEvent_OnState_DEAD") m_Animator.SetTrigger(Animator.StringToHash(DeathTrigger));
-		// if (eventName == "roleEvent_OnState_ATTACKING") m_Animator.SetTrigger(AttackTrigger);
-		// if (eventName == "roleEvent_OnIdling" || eventName == "roleEvent_OnMoving" || eventName == "roleEvent_OnPursuing" || eventName == "roleEvent_OnState_ATTACKING")
-		// 	m_Animator.SetFloat(SpeedTrigger, m_role.BaseAI.SpeedScale);
-
 	}
 
 	void AttackEvent()

@@ -57,8 +57,9 @@ public class InteractHandle : MonoBehaviour
 			if (m_during >= handleTime)
 			{
 				During = 0;
-				InteractEvent?.Invoke(stayer, "Completed");
+				InteractEvent?.Invoke(stayer, "Ready");
 				slider?.gameObject.SetActive(false);
+				m_target = stayer;
 			}
 			InteractEvent?.Invoke(stayer, "Stay");
 			//Helpers.Log(this, "OninterStay", "stayer= " + stayer);

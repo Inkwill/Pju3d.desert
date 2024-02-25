@@ -21,6 +21,8 @@ public class GoalData : ScriptableObject
 			switch (type)
 			{
 				case GameGoalSystem.GoalType.AddItem:
+				case GameGoalSystem.GoalType.ItemDemand:
+				case GameGoalSystem.GoalType.KillEnemy:
 					foreach (var para in param)
 					{
 						int value;

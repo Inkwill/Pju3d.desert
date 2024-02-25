@@ -10,7 +10,8 @@ public class GameGoalSystem : MonoBehaviour
 	public enum GoalType
 	{
 		AddItem,
-		Build
+		ItemDemand,
+		KillEnemy
 	}
 
 	public class GameGoal
@@ -48,6 +49,8 @@ public class GameGoalSystem : MonoBehaviour
 			switch (m_data.type)
 			{
 				case GameGoalSystem.GoalType.AddItem:
+				case GameGoalSystem.GoalType.ItemDemand:
+				case GameGoalSystem.GoalType.KillEnemy:
 					foreach (var data in recordData)
 					{
 						bool update = false;
@@ -87,6 +90,8 @@ public class GameGoalSystem : MonoBehaviour
 				switch (m_data.type)
 				{
 					case GoalType.AddItem:
+					case GoalType.ItemDemand:
+					case GoalType.KillEnemy:
 						result += ProgressInfo[0];
 						break;
 					default:
@@ -134,7 +139,7 @@ public class GameGoalSystem : MonoBehaviour
 		{
 			foreach (var effect in goal.data.rewardEffects)
 			{
-				effect.Key.Take(m_recorder.Owner.gameObject, effect.Value);
+				effect.Key.TakeEffect(m_recorder.Owner.gameObject, m_recorder.Owner.gameObject, effect.Value);
 			}
 		}
 	}

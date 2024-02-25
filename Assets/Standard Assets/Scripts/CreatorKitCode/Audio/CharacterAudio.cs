@@ -19,6 +19,7 @@ public class CharacterAudio : MonoBehaviour
 		m_Character = GetComponent<CharacterData>();
 		m_Character.OnDamage += (damage) => { Hit(damage.Target.gameObject.transform.position); };
 		m_Character.OnDeath.AddListener((character) => { Death(character.transform.position); });
+		m_Character.OnAttack += (attacker) => { Attack(attacker.transform.position); };
 		GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
 		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
 		if (dispatcher)
@@ -32,15 +33,6 @@ public class CharacterAudio : MonoBehaviour
 	void OnCharacterEvent(GameObject obj, string eventName)
 	{
 		Vector3 position = obj.transform.position;
-		if (eventName == "roleEvent_OnAttack")
-		{
-			Attack(position);
-			SFXManager.PlaySound(UseType, new SFXManager.PlayData()
-			{
-				Clip = m_Character.Equipment.Weapon.GetSwingSound(),
-				Position = position
-			});
-		}
 		if (eventName == "roleEvent_OnPursuing")
 		{
 			if (SpottedAudioClip.Length != 0)
@@ -67,13 +59,18 @@ public class CharacterAudio : MonoBehaviour
 	}
 	public void Attack(Vector3 position)
 	{
-		if (VocalAttack.Length == 0)
-			return;
-
+		if (VocalAttack.Length > 0)
+		{
+			SFXManager.PlaySound(UseType, new SFXManager.PlayData()
+			{
+				Clip = VocalAttack[Random.Range(0, VocalAttack.Length)],
+				Position = position,
+			});
+		}
 		SFXManager.PlaySound(UseType, new SFXManager.PlayData()
 		{
-			Clip = VocalAttack[Random.Range(0, VocalAttack.Length)],
-			Position = position,
+			Clip = m_Character.Equipment.Weapon.GetSwingSound(),
+			Position = position
 		});
 	}
 

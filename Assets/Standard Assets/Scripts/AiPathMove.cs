@@ -27,7 +27,7 @@ public class AiPathMove : MonoBehaviour
 		}
 		if (eventName == "roleEvent_OnMoving" && m_Offensive)
 		{
-			if (m_roleAi.CurrentEnemy) m_roleAi.SetState(AIBase.State.PURSUING);
+			if (m_roleAi.Character.CurrentEnemy) m_roleAi.SetState(AIBase.State.PURSUING);
 		}
 	}
 	public void SetPath(Transform pathRoot, bool offensive = true)

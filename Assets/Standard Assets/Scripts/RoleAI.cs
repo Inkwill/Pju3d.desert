@@ -54,10 +54,10 @@ public class RoleAI : AIBase
 
 	protected override void OnIdlingAI()
 	{
-		if (m_Enemy != null) { SetState(State.PURSUING); return; }
+		if (CurrentEnemy != null) { SetState(State.PURSUING); return; }
 		else if (EnemyDetector.Inners.Count > 0)
 		{
-			m_Enemy = EnemyDetector.GetNearest().GetComponent<CharacterData>();
+			m_character.SetEnemy(EnemyDetector.GetNearest().GetComponent<CharacterData>());
 			SetState(State.PURSUING);
 			return;
 		}

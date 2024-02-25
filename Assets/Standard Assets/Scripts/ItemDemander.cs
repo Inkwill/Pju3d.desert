@@ -6,6 +6,7 @@ using CreatorKitCodeInternal;
 
 public class ItemDemander : TimerBehaviour
 {
+	public string demanderId;
 	[SerializeField]
 	InteractOnTrigger detector;
 	[SerializeField]
@@ -15,6 +16,7 @@ public class ItemDemander : TimerBehaviour
 	[SerializeField]
 	List<KeyValueData.KeyValue<EffectData, string[]>> EndEffect;
 	InventorySystem.ItemDemand m_Demand;
+	CharacterData m_character;
 	void Start()
 	{
 		m_Demand = new InventorySystem.ItemDemand(KeyValueData.ToDic(DemandData));
@@ -27,52 +29,16 @@ public class ItemDemander : TimerBehaviour
 
 	public void OnInteractEvent(GameObject actor, string eventName)
 	{
-		var character = actor.GetComponent<CharacterData>();
-		if (eventName == "Completed" && character != null)
+		m_character = actor.GetComponent<CharacterData>();
+		if (eventName == "Ready" && m_character != null)
 		{
-			if (character.BaseAI.isIdle)
+			if (m_character.BaseAI.isIdle && !m_Demand.Completed)
 			{
-				if (m_Demand.Completed) { isStarted = true; character.Inventory.ItemEvent -= OnItemEvent; }
-				else { character.Inventory.ItemEvent += OnItemEvent; m_Demand.Fulfill(character.Inventory); }
+				m_character.Inventory.ItemEvent += OnItemEvent;
+				m_Demand.Fulfill(m_character.Inventory);
 			}
 		}
 	}
-
-	// void OnInterEnter(GameObject enter)
-	// {
-	// 	Helpers.Log(this, "OninterEnter", "enter= " + enter);
-	// }
-
-	// void OnInterExit(GameObject exiter)
-	// {
-	// 	Helpers.Log(this, "OninterEnter", "exiter= " + exiter);
-	// }
-
-	// void OnInterStay(GameObject stayer, float during)
-	// {
-	// 	Helpers.Log(this, "OninterEnter", "stayer= " + stayer);
-	// }
-
-
-	// RoleControl role = inter.GetComponent<RoleControl>();
-	// if (role && role.isIdle)
-	// {
-	// 	if (m_Demand.Completed) { isStarted = true; role.Data.Inventory.Actions -= OnInventoryAction; }
-	// 	else { role.Data.Inventory.Actions += OnInventoryAction; m_Demand.Fulfill(role.Data.Inventory); }
-	// }
-
-
-	// protected override void OnInterval()
-	// {
-	// 	if (m_role && m_role.isIdle)
-	// 	{
-	// 		if (m_Demand.Completed) isStarted = true;
-	// 		else m_Demand.Fulfill(m_role.Data.Inventory);
-	// 	}
-
-	// }
-
-
 
 	protected override void OnStart()
 	{
@@ -84,8 +50,9 @@ public class ItemDemander : TimerBehaviour
 	{
 		foreach (var effect in EndEffect)
 		{
-			effect.Key.Take(gameObject, effect.Value);
+			effect.Key.TakeEffect(gameObject, gameObject, effect.Value);
 		}
+		m_character.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, demanderId);
 	}
 	protected override void OnTimer()
 	{
@@ -103,8 +70,14 @@ public class ItemDemander : TimerBehaviour
 		if (actionName == "Fulfill")
 		{
 			ui_demand.Show(m_Demand);
-			if (m_Demand.Completed) isStarted = true;
 			Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
+			if (m_Demand.Completed) OnDemandeComplete();
 		}
+	}
+
+	void OnDemandeComplete()
+	{
+		isStarted = true;
+		m_character.Inventory.ItemEvent -= OnItemEvent;
 	}
 }
