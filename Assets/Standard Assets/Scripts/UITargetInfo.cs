@@ -26,9 +26,9 @@ public class UITargetInfo : MonoBehaviour
 	UILootElement[] uilootList = new UILootElement[maxUILoot];
 	public void Init()
 	{
-		GameManager.Player.BaseAI.InteractDetector.OnEnter.AddListener(OnInteractEnter);
-		GameManager.Player.BaseAI.InteractDetector.OnExit.AddListener(OnInteractExit);
-		//GameManager.Player.InteractDetector.OnStay.AddListener(OnInteractStay);
+		GameManager.CurHero.BaseAI.InteractDetector.OnEnter.AddListener(OnInteractEnter);
+		GameManager.CurHero.BaseAI.InteractDetector.OnExit.AddListener(OnInteractExit);
+		//GameManager.CurHero.InteractDetector.OnStay.AddListener(OnInteractStay);
 		UpdateEnemyInfo();
 		for (int i = 0; i < maxUILoot; i++)
 		{
@@ -40,7 +40,7 @@ public class UITargetInfo : MonoBehaviour
 
 	void Update()
 	{
-		m_curEnemy = GameManager.Player.BaseAI.CurrentEnemy;
+		m_curEnemy = GameManager.CurHero.BaseAI.CurrentEnemy;
 		UpdateEnemyInfo();
 	}
 

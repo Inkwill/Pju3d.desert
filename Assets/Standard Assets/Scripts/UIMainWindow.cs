@@ -12,6 +12,9 @@ public class UIMainWindow : UIWindow
 	public Button btSwitchWeapon;
 	public UITalkButton[] btTalks = new UITalkButton[2];
 	public Image iconWeapon;
+	public Slider lordExp;
+	public Text lordLv;
+	public Text lordMoney;
 	public Text infoPos;
 	public Text infoTerrian;
 	public Text infoTime;
@@ -28,16 +31,16 @@ public class UIMainWindow : UIWindow
 		targetUI.Init();
 		m_buttons = GetComponentsInChildren<Button>();
 		m_skillButtons = GetComponentsInChildren<UISkillButton>();
-		GameManager.Player.GetComponent<EventSender>()?.events.AddListener(OnPlayerEvent);
-		GameManager.Player.Equipment.OnEquiped += (equip) => { UpdateWeapon(GameManager.Player.Equipment); };
-		GameManager.Player.Equipment.OnUnequip += (equip) => { UpdateWeapon(GameManager.Player.Equipment); };
-		GameManager.Player.Equipment.OnEquipViceWeapon += (equip) => { UpdateWeapon(GameManager.Player.Equipment); };
+		GameManager.CurHero.GetComponent<EventSender>()?.events.AddListener(OnPlayerEvent);
+		GameManager.CurHero.Equipment.OnEquiped += (equip) => { UpdateWeapon(GameManager.CurHero.Equipment); };
+		GameManager.CurHero.Equipment.OnUnequip += (equip) => { UpdateWeapon(GameManager.CurHero.Equipment); };
+		GameManager.CurHero.Equipment.OnEquipViceWeapon += (equip) => { UpdateWeapon(GameManager.CurHero.Equipment); };
 		GameManager.StoryListener.storyListenerEvents.AddListener(OnStoryListenerEvent);
 		GameManager.GameGoal.GameGoalAction += UpdateGoalInfo;
 	}
 	protected override void OnOpen()
 	{
-		UpdateWeapon(GameManager.Player.Equipment);
+		UpdateWeapon(GameManager.CurHero.Equipment);
 		CloseTalkButton();
 		tellContent.SetActive(false);
 		uiGoalInfo.SetGoal(GameManager.GameGoal.CurrentGoal);
@@ -95,7 +98,7 @@ public class UIMainWindow : UIWindow
 
 	void UpdateWeapon(EquipmentSystem equipment)
 	{
-		btWeapon.gameObject.SetActive(equipment.Weapon && equipment.Weapon != GameManager.Player.DefaultWeapon);
+		btWeapon.gameObject.SetActive(equipment.Weapon && equipment.Weapon != GameManager.CurHero.DefaultWeapon);
 		btSwitchWeapon.gameObject.SetActive(equipment.ViceWeapon != null);
 		iconWeapon.enabled = (btWeapon.gameObject.activeSelf);
 		if (btWeapon.gameObject.activeSelf)
@@ -141,12 +144,15 @@ public class UIMainWindow : UIWindow
 		btTalks[0].gameObject.SetActive(false);
 		btTalks[1].gameObject.SetActive(false);
 	}
-	void FixedUpdate()
+	void Update()
 	{
-		infoPos.text = GameManager.Player.gameObject.transform.position.ToString();
-		infoTerrian.text = GameManager.Player.BaseAI.SceneBoxName;
+		lordExp.value = GameManager.Lord.ExpPercent;
+		lordLv.text = GameManager.Lord.Lv.ToString();
+		lordMoney.text = GameManager.Lord.Money.ToString();
+		infoPos.text = GameManager.CurHero.gameObject.transform.position.ToString();
+		infoTerrian.text = GameManager.CurHero.BaseAI.SceneBoxName;
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
-		btSwitchWeapon.interactable = GameManager.Player.BaseAI.isStandBy;
+		btSwitchWeapon.interactable = GameManager.CurHero.BaseAI.isStandBy;
 	}
 
 	public override void OnButtonClick(string eventName)
@@ -154,8 +160,8 @@ public class UIMainWindow : UIWindow
 		switch (eventName)
 		{
 			case "SwitchWeapon":
-				GameManager.Player.Equipment.SwitchWeapon();
-				//UpdateWeapon(GameManager.Player.Equipment);
+				GameManager.CurHero.Equipment.SwitchWeapon();
+				//UpdateWeapon(GameManager.CurHero.Equipment);
 				break;
 			case "package":
 				GameManager.GameUI.SwitchWindow("winInventory");

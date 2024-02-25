@@ -19,6 +19,7 @@ namespace CreatorKitCode
 	public class UsableItem : Item
 	{
 		public List<KeyValueData.KeyValue<EffectData, string[]>> UsageEffects;
+		public bool autoUse;
 
 		public override bool UsedBy(CharacterData user)
 		{

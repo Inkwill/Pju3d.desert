@@ -18,7 +18,7 @@ public class UIGoalInfo : UIEventSender
 	public void SetGoal(GameGoalSystem.GameGoal goal)
 	{
 		m_gameGoal = goal;
-		expCount.text = m_gameGoal != null ? m_gameGoal.data.PlayerExp.ToString() : "";
+		expCount.text = m_gameGoal != null ? m_gameGoal.data.LordExp.ToString() : "";
 		goalDes.text = m_gameGoal != null ? m_gameGoal.data.describe : "";
 		gameObject.SetActive(m_gameGoal != null);
 		animInfo.gameObject.SetActive(m_gameGoal != null);

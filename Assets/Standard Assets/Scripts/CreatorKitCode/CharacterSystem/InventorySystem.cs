@@ -100,6 +100,7 @@ namespace CreatorKitCode
 		/// <param name="item">The item to add to the inventory</param>
 		public void AddItem(Item item, int num = 1)
 		{
+			if (AutoUseItem(item)) return;
 			bool found = false;
 			int firstEmpty = -1;
 			for (int i = 0; i < 32; ++i)
@@ -198,6 +199,16 @@ namespace CreatorKitCode
 				return true;
 			}
 
+			return false;
+		}
+
+		bool AutoUseItem(Item item)
+		{
+			var useable = item as UsableItem;
+			if (useable && useable.autoUse)
+			{
+				return item.UsedBy(m_Owner);
+			}
 			return false;
 		}
 

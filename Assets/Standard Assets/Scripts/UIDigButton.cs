@@ -23,7 +23,7 @@ public class UIDigButton : UISkillButton
 
 	void FixedUpdate()
 	{
-		switch (GameManager.Player.BaseAI.SceneBox)
+		switch (GameManager.CurHero.BaseAI.SceneBox)
 		{
 			case "blank":
 				bg.color = Color.white;
@@ -38,6 +38,6 @@ public class UIDigButton : UISkillButton
 	{
 		m_buildToggle = value;
 		buildToggle.enabled = value;
-		//GameManager.Player.BaseAI.BuildRender.enabled = value;
+		//GameManager.CurHero.BaseAI.BuildRender.enabled = value;
 	}
 }

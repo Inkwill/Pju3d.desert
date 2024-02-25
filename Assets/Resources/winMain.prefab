@@ -677,7 +677,7 @@ GameObject:
   - component: {fileID: 3349791361339768479}
   - component: {fileID: 8461865831010978096}
   m_Layer: 5
-  m_Name: PlayerLv
+  m_Name: LordLv
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2641,7 +2641,7 @@ GameObject:
   - component: {fileID: 7390962546044772191}
   - component: {fileID: 7556962845782978419}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: text_lv
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5544,6 +5544,9 @@ MonoBehaviour:
   - {fileID: 2708568616892800116}
   - {fileID: 3633109331515933209}
   iconWeapon: {fileID: 4309016525513069149}
+  lordExp: {fileID: 4581471941150645299}
+  lordLv: {fileID: 7556962845782978419}
+  lordMoney: {fileID: 2013131006221721081}
   infoPos: {fileID: 7274684995533362386}
   infoTerrian: {fileID: 3687622633540119601}
   infoTime: {fileID: 5716731260109438116}

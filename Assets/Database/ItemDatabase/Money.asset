@@ -18,4 +18,8 @@ MonoBehaviour:
   WorldObjectPrefab: {fileID: 5425733448891748066, guid: 78a62d5ec617d564f8925757d757eabe,
     type: 3}
   SpawnClip: {fileID: 8300000, guid: aa9f51999376d094486f2363c9a8219d, type: 3}
-  UsageEffects: []
+  UsageEffects:
+  - Key: {fileID: 11400000, guid: 20fbc3e582495204c92890a479aa4500, type: 2}
+    Value:
+    - 1
+  autoUse: 1

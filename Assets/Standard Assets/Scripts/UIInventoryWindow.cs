@@ -65,13 +65,13 @@ public class UIInventoryWindow : UIWindow
 	}
 	public void Load()
 	{
-		UpdateEquipment(GameManager.Player.Equipment, GameManager.Player.Stats);
-		UpdateWeapon(GameManager.Player.Equipment);
+		UpdateEquipment(GameManager.CurHero.Equipment, GameManager.CurHero.Stats);
+		UpdateWeapon(GameManager.CurHero.Equipment);
 		for (int i = 0; i < m_ItemEntries.Length; ++i)
 		{
-			m_ItemEntries[i].UpdateEntry(GameManager.Player);
+			m_ItemEntries[i].UpdateEntry(GameManager.CurHero);
 		}
-		StatSystem.Stats stats = GameManager.Player.Stats.stats;
+		StatSystem.Stats stats = GameManager.CurHero.Stats.stats;
 		textStats.text = $"Str : {stats.strength} Def : {stats.defense} Agi : {stats.agility}  Spr : {stats.spirit}";
 	}
 
@@ -90,7 +90,7 @@ public class UIInventoryWindow : UIWindow
 			case "Equip":
 				if (equip)
 				{
-					GameManager.Player.Inventory.EquipItem(equip);
+					GameManager.CurHero.Inventory.EquipItem(equip);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
 
@@ -99,7 +99,7 @@ public class UIInventoryWindow : UIWindow
 			case "UnEquip":
 				if (equip)
 				{
-					GameManager.Player.Inventory.UnEquipItem(equip);
+					GameManager.CurHero.Inventory.UnEquipItem(equip);
 					m_SelectedSlot.tog.isOn = false;
 					Load();
 				}
@@ -108,8 +108,8 @@ public class UIInventoryWindow : UIWindow
 				GameObject lootObj = Resources.Load("Loot") as GameObject;
 				if (lootObj)
 				{
-					GameManager.Player.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
-					Loot loot = Instantiate(lootObj, GameManager.Player.transform.position, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
+					GameManager.CurHero.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
+					Loot loot = Instantiate(lootObj, GameManager.CurHero.transform.position, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
 					loot.Item = m_SelectedSlot.item;
 					m_SelectedSlot.tog.isOn = false;
 					Load();
@@ -118,10 +118,10 @@ public class UIInventoryWindow : UIWindow
 				break;
 			case "Use":
 				UsableItem item = m_SelectedSlot.item as UsableItem;
-				if (item.UsedBy(GameManager.Player))
+				if (item.UsedBy(GameManager.CurHero))
 				{
-					GameManager.Player.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
-					m_SelectedSlot.tog.isOn = GameManager.Player.Inventory.ItemCount(item.ItemName) > 1;
+					GameManager.CurHero.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
+					m_SelectedSlot.tog.isOn = GameManager.CurHero.Inventory.ItemCount(item.ItemName) > 1;
 					Load();
 				}
 				break;
@@ -130,7 +130,7 @@ public class UIInventoryWindow : UIWindow
 				break;
 			case "Give":
 				if (GameManager.StoryListener.CurrentTeller.GiveItem(m_SelectedSlot.item))
-					GameManager.Player.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
+					GameManager.CurHero.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
 				m_SelectedSlot.tog.isOn = false;
 				Load();
 				break;

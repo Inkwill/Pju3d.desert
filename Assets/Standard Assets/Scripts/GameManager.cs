@@ -12,7 +12,8 @@ using Unity.VisualScripting;
 public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
-	public static CharacterData Player;
+	public static LordData Lord => Instance.GetComponent<LordData>();
+	public static CharacterData CurHero;
 	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
 	public static GameGoalSystem GameGoal => Instance.GetComponent<GameGoalSystem>();
 	public static UIManager GameUI;
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
 		{
 			m_buildMode = value;
 			GameManager.GameUI.JoyStick.enabled = !value;
-			Instance.buildModeFollow.position = Player.transform.position;
+			Instance.buildModeFollow.position = CurHero.transform.position;
 			if (value)
 			{
 				Instance.CameraCtrl.SetMode(CameraController.Mode.BUILD);
@@ -95,13 +96,14 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
-		Player = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterData>();
-		Player.Active();
-		SFXManager.ListenerTarget = Player.gameObject.transform;
+		Lord.Init();
+		CurHero = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterData>();
+		CurHero.Active();
+		SFXManager.ListenerTarget = CurHero.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();
 		GameUI.transform.SetParent(ui_trans);
-		VCamera.Follow = Player.gameObject.transform;
-		VCamera.LookAt = Player.gameObject.transform;
+		VCamera.Follow = CurHero.gameObject.transform;
+		VCamera.LookAt = CurHero.gameObject.transform;
 
 
 		// 注册应用退出事件
@@ -113,8 +115,8 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		GameUI.OpenWindow("winMain");
-		UIRoleHud playerHud = Player.GetComponentInChildren<UIRoleHud>();
-		StartCoroutine(StartPaly(playerHud));
+		UIRoleHud hud = CurHero.GetComponentInChildren<UIRoleHud>();
+		StartCoroutine(StartPaly(hud));
 		StoryMode = true;
 	}
 
@@ -148,7 +150,7 @@ public class GameManager : MonoBehaviour
 				RaycastHit hit;
 
 				// 如果射线与物体碰撞
-				if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask(new string[] { "Player", "Enemy", "Neutral", "Interactable" })))
+				if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask(new string[] { "CurHero", "Enemy", "Neutral", "Interactable" })))
 				{
 					CurrentSlected = hit.collider.gameObject;
 				}

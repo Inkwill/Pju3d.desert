@@ -14,7 +14,9 @@ public class EffectData : ScriptableObject
 		DIG,
 		SUMMON,
 		DROPBOX,
-		ADDGOAL
+		ADDGOAL,
+		LORDMONEY,
+		LORDEXP
 	}
 	public EffectType Type;
 	public VFXType TakeVFX = VFXType.NONE;
@@ -79,7 +81,26 @@ public class EffectData : ScriptableObject
 				break;
 			case EffectType.ADDGOAL:
 				if (param != null && param.Length > 0)
+				{
 					GameManager.GameGoal.AddGoal(GoalData.GetDataByKey(param[0]));
+					success = true;
+				}
+				break;
+			case EffectType.LORDMONEY:
+				int money = 0;
+				if (param != null && param.Length > 0 && int.TryParse(param[0], out money))
+				{
+					GameManager.Lord.AddMoney(money);
+					success = true;
+				}
+				break;
+			case EffectType.LORDEXP:
+				int exp = 0;
+				if (param != null && param.Length > 0 && int.TryParse(param[0], out exp))
+				{
+					GameManager.Lord.AddExp(exp);
+					success = true;
+				}
 				break;
 			default:
 				Debug.LogError("Take a illegal Effect:" + this);

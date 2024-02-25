@@ -125,7 +125,7 @@ namespace CreatorKitCodeInternal
 			switch (m_curMode)
 			{
 				case Mode.RPG:
-					GameManager.Instance.VCamera.Follow = GameManager.Instance.VCamera.LookAt = GameManager.Player.transform;
+					GameManager.Instance.VCamera.Follow = GameManager.Instance.VCamera.LookAt = GameManager.CurHero.transform;
 					if (cine)
 					{
 						cine.m_XDamping = 0f;

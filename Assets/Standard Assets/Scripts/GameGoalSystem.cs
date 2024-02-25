@@ -118,12 +118,13 @@ public class GameGoalSystem : MonoBehaviour
 	public void Init()
 	{
 		m_AchievedGoals = new List<string>();
-		m_recorder = GameManager.Player.GetComponent<StatisticsHandle>();
-		m_curGoal = AddGoal(TestGoal);
+		m_recorder = GameManager.CurHero.GetComponent<StatisticsHandle>();
+		AddGoal(TestGoal);
 	}
 	public GameGoal AddGoal(GoalData data)
 	{
 		var goal = new GameGoal(this, data);
+		if (m_curGoal == null) m_curGoal = goal;
 		GameGoalAction?.Invoke(goal, "AddGoal");
 		Helpers.Log(this, "AddGoal", $"{goal.data.goalId},completed={goal.ProgressInfo}");
 		return goal;
@@ -131,9 +132,9 @@ public class GameGoalSystem : MonoBehaviour
 
 	void AchieveGoal(GameGoal goal)
 	{
+		m_AchievedGoals.Add(goal.data.goalId);
 		GameGoalAction?.Invoke(goal, "AchieveGoal");
-		Helpers.Log(this, "AchieveGoal", $"{goal.data.goalId},exp={goal.data.PlayerExp}");
-		m_AchievedGoals.Add(m_curGoal.data.goalId);
+		Helpers.Log(this, "AchieveGoal", $"{goal.data.goalId},exp={goal.data.LordExp}");
 		if (goal == m_curGoal) m_curGoal = null;
 		if (m_recorder.Owner != null && goal.data.rewardEffects != null)
 		{
@@ -142,5 +143,6 @@ public class GameGoalSystem : MonoBehaviour
 				effect.Key.TakeEffect(m_recorder.Owner.gameObject, m_recorder.Owner.gameObject, effect.Value);
 			}
 		}
+		GameManager.Lord.AddExp(goal.data.LordExp);
 	}
 }

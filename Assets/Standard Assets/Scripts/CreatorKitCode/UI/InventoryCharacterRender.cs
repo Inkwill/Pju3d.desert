@@ -34,7 +34,7 @@ namespace CreatorKitCodeInternal
 		// Update is called once per frame
 		void Update()
 		{
-			Transform playerTransform = GameManager.Player.transform;
+			Transform playerTransform = GameManager.CurHero.transform;
 			m_Camera.transform.position = playerTransform.position + playerTransform.forward * 1.6f + Vector3.up * 1.5f;
 			m_Camera.transform.LookAt(playerTransform.position + Vector3.up * 1.0f);
 

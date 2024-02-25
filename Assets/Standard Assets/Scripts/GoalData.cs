@@ -8,7 +8,7 @@ public class GoalData : ScriptableObject
 	public string goalId;
 	public string describe;
 	public string summary;
-	public int PlayerExp;
+	public int LordExp;
 	public GameGoalSystem.GoalType type;
 	public List<KeyValueData.KeyValue<string, string[]>> param;
 	public List<KeyValueData.KeyValue<EffectData, string[]>> rewardEffects;

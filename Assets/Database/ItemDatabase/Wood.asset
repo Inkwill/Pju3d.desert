@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: 
   ItemName: Wood
-  ItemSprite: {fileID: 21300000, guid: dcaf4c3e70883730fb13caa83341c2d3, type: 3}
+  ItemSprite: {fileID: 21300000, guid: 65c59ccc59b5690458cb9e5324edc5dc, type: 3}
   Description: 
   WorldObjectPrefab: {fileID: 4171029783028862324, guid: 40777583afbf3224c86b02eae35fa41b,
     type: 3}
