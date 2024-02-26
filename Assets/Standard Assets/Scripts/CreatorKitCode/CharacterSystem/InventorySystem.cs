@@ -100,7 +100,7 @@ namespace CreatorKitCode
 		/// <param name="item">The item to add to the inventory</param>
 		public void AddItem(Item item, int num = 1)
 		{
-			if (AutoUseItem(item)) return;
+			if (AutoUseItem(item, num)) return;
 			bool found = false;
 			int firstEmpty = -1;
 			for (int i = 0; i < 32; ++i)
@@ -202,12 +202,13 @@ namespace CreatorKitCode
 			return false;
 		}
 
-		bool AutoUseItem(Item item)
+		bool AutoUseItem(Item item, int count)
 		{
 			var useable = item as UsableItem;
 			if (useable && useable.autoUse)
 			{
-				return item.UsedBy(m_Owner);
+				ItemEvent?.Invoke(item, "Add", count);
+				return item.UsedBy(m_Owner, count);
 			}
 			return false;
 		}

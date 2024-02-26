@@ -30,9 +30,9 @@ MonoBehaviour:
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
   Stats:
-    Speed: 2
-    MinimumDamage: 0
-    MaximumDamage: 0
+    Speed: 1
+    MinimumDamage: 1
+    MaximumDamage: 1
     MaxRange: 2
     AdditionalTargets: 0
   damageType: 0

@@ -6,7 +6,6 @@ using Random = UnityEngine.Random;
 
 public class NPCAI : RoleAI
 {
-	public EffectData dropEffect;
 	public int CorpseChance;
 	[SerializeField] float m_CorpseRetention;
 	[SerializeField] bool m_Offensive;
@@ -66,7 +65,6 @@ public class NPCAI : RoleAI
 		}
 		else
 		{
-			if (dropEffect != null) dropEffect.TakeEffect(m_character.gameObject, m_character.gameObject);
 			Helpers.RecursiveLayerChange(m_character.transform, LayerMask.NameToLayer("EnemyCorpse"));
 			StartCoroutine(DestroyCorpse(1.0f));
 		}
@@ -75,7 +73,7 @@ public class NPCAI : RoleAI
 	IEnumerator DestroyCorpse(float waitTime)
 	{
 		yield return new WaitForSeconds(waitTime);
-		m_character.DestroyCharacter();
+		m_character.DropAndDestroy();
 	}
 	void Wandering()
 	{

@@ -54,31 +54,20 @@ public class Skill : ScriptableObject
 
 	public virtual void Implement(CharacterData user, List<GameObject> targets = null)
 	{
-		if (implementEffects.Count > 0) TakeEffects(implementEffects, user, targets);
+		if (implementEffects.Count > 0) EffectData.TakeEffects(implementEffects, user.gameObject, targets);
 		Helpers.Log(this, "SkillImplement", $"{user.CharacterName}->{SkillName}-Targets={targets.Count}");
 	}
 
 	public virtual void Operating(CharacterData user, List<GameObject> targets = null)
 	{
-		if (operatEffects.Count > 0) TakeEffects(operatEffects, user, targets);
+		if (operatEffects.Count > 0) EffectData.TakeEffects(operatEffects, user.gameObject, targets);
 	}
 
 	public virtual void StepEffect(CharacterData user, List<GameObject> targets = null)
 	{
-		if (stepEffects.Count > 0) TakeEffects(stepEffects, user, targets);
+		if (stepEffects.Count > 0) EffectData.TakeEffects(stepEffects, user.gameObject, targets);
 		var Effectpos = (targets != null && targets.Count > 0) ? targets[0].transform.position : user.transform.position;
 		VFXManager.PlayVFX(fxStep, Effectpos);
 		//Debug.Log("StepEffect Skill:" + SkillName);
-	}
-
-	void TakeEffects(List<KeyValueData.KeyValue<EffectData, string[]>> effectGroup, CharacterData user, List<GameObject> targets)
-	{
-		foreach (var effect in effectGroup)
-		{
-			foreach (var target in targets)
-			{
-				effect.Key.TakeEffect(user.gameObject, target, effect.Value);
-			}
-		}
 	}
 }

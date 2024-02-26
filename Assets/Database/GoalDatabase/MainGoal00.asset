@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d0c837d0e930a4ab7e25738d516182, type: 3}
+  m_Name: MainGoal00
+  m_EditorClassIdentifier: 
+  goalId: main00
+  describe: "\u79FB\u52A8\u5230\u9053\u5177\u9644\u8FD1\u53EF\u81EA\u52A8\u62FE\u53D6"
+  summary: "\u6361\u8D77\u6563\u843D\u7684\u7269\u8D44:"
+  LordExp: 1
+  type: 0
+  param:
+  - Key: any
+    Value:
+    - 5
+  rewardEffects:
+  - Key: {fileID: 11400000, guid: 914632a637ca46447acc281c33ff3c12, type: 2}
+    Value:
+    - main01

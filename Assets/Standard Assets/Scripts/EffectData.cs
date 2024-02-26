@@ -1,5 +1,6 @@
 using Random = UnityEngine.Random;
 using UnityEngine;
+using System.Collections.Generic;
 using CreatorKitCode;
 using MyBox;
 
@@ -27,8 +28,6 @@ public class EffectData : ScriptableObject
 
 	[ConditionalField(nameof(Type), false, EffectType.HPCHANGE)]
 	public StatSystem.StatModifier.Mode EffectMode;
-	[ConditionalField(nameof(Type), false, EffectType.DROPBOX)]
-	public DropBox dropBox;
 
 	[ConditionalField(nameof(Type), false, EffectType.DAMAGE)]
 	public StatSystem.DamageType damageType;
@@ -72,11 +71,22 @@ public class EffectData : ScriptableObject
 				}
 				break;
 			case EffectType.DROPBOX:
-				foreach (var drop in dropBox.GetDropItem())
+				DropBox dropBox = DropBox.GetDropBoxByKey(param[0]);
+				if (dropBox != null)
 				{
-					DropItem(user.transform.position, drop.item, drop.itemNum);
-					success = true;
-					Helpers.Log(this, "Drop", $"{drop.item.ItemName}x{drop.itemNum}");
+					int count = 1;
+					if (param != null && param.Length > 0 && int.TryParse(param[1], out count))
+					{
+						for (int i = 0; i < count; i++)
+						{
+							foreach (var drop in dropBox.GetDropItem())
+							{
+								DropItem(user.transform.position, drop.item, drop.itemNum);
+								success = true;
+								Helpers.Log(this, "Drop", $"{drop.item.ItemName}x{drop.itemNum}");
+							}
+						}
+					}
 				}
 				break;
 			case EffectType.ADDGOAL:
@@ -137,6 +147,25 @@ public class EffectData : ScriptableObject
 		{
 			Loot loot = Instantiate(lootObj, spawnPosition, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
 			loot.Item = item;
+		}
+	}
+
+	public static void TakeEffects(List<KeyValueData.KeyValue<EffectData, string[]>> effectGroup, GameObject user, List<GameObject> targets)
+	{
+		foreach (var effect in effectGroup)
+		{
+			foreach (var target in targets)
+			{
+				effect.Key.TakeEffect(user, target, effect.Value);
+			}
+		}
+	}
+
+	public static void TakeEffects(List<KeyValueData.KeyValue<EffectData, string[]>> effectGroup, GameObject user, GameObject target)
+	{
+		foreach (var effect in effectGroup)
+		{
+			effect.Key.TakeEffect(user, target, effect.Value);
 		}
 	}
 

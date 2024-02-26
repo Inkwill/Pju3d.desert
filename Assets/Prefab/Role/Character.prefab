@@ -178,6 +178,7 @@ MonoBehaviour:
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
+  dropEffects: []
 --- !u!114 &4272129805801271086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Tracked: {fileID: 7376814686079395463}
-  m_Size: {x: 200, y: 20, z: 100}
+  m_Size: {x: 200, y: 20, z: 150}
 --- !u!114 &844399017392488554
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,6 +31,7 @@ public class CharacterData : HighlightableObject
 	public EquipmentSystem Equipment = new EquipmentSystem();
 	public Action<Damage> OnDamage { get; set; }
 	public UnityEvent<CharacterData> OnDeath;
+	public List<KeyValueData.KeyValue<EffectData, string[]>> dropEffects;
 	public Action<CharacterData> OnAttack { get; set; }
 	public Action<CharacterData> OnKillEnemy { get; set; }
 	Vector3 m_BirthPos;
@@ -193,8 +194,9 @@ public class CharacterData : HighlightableObject
 		//Agility reduce by 0.5% the cooldown to attack (e.g. if agility = 50, 25% faster to attack)
 		m_AttackCoolDown = Math.Max(0.1f, Equipment.Weapon.Stats.Speed - (Stats.stats.agility * 0.5f * 0.001f * Equipment.Weapon.Stats.Speed));
 	}
-	public void DestroyCharacter()
+	public void DropAndDestroy()
 	{
+		if (dropEffects != null && dropEffects.Count > 0) EffectData.TakeEffects(dropEffects, gameObject, gameObject);
 		VFXManager.PlayVFX(VFXType.Death, transform.position);
 		Destroy(gameObject);
 	}

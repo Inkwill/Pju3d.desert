@@ -21,18 +21,16 @@ namespace CreatorKitCode
 		public List<KeyValueData.KeyValue<EffectData, string[]>> UsageEffects;
 		public bool autoUse;
 
-		public override bool UsedBy(CharacterData user)
+		public override bool UsedBy(CharacterData user, int count = 1)
 		{
 			bool wasUsed = false;
-			for (int i = 0; i < UsageEffects.Count; i++)
+			for (int n = 0; n < count; n++)
 			{
-				wasUsed |= UsageEffects[i].Key.TakeEffect(user.gameObject, user.gameObject, UsageEffects[i].Value);
+				for (int i = 0; i < UsageEffects.Count; i++)
+				{
+					wasUsed |= UsageEffects[i].Key.TakeEffect(user.gameObject, user.gameObject, UsageEffects[i].Value);
+				}
 			}
-			// foreach (var effect in UsageEffects)
-			// {
-			// 	wasUsed |= effect.Take(user);
-			// }
-
 			return wasUsed;
 		}
 

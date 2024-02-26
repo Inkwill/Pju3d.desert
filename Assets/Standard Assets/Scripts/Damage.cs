@@ -38,9 +38,9 @@ public class Damage
 			if (m_Source != null)
 				addedAmount += Mathf.FloorToInt(addedAmount * m_Source.Stats.stats.strength * 0.01f);
 
-			//each poitn of defense remove 1 damage, with a minimum of 1 damage
+			//each poitn of defense remove 1 damage, with a minimum of 0 damage
 			if (m_Target != null)
-				addedAmount = Mathf.Max(addedAmount - m_Target.Stats.stats.defense, 1);
+				addedAmount = Mathf.Max(addedAmount - m_Target.Stats.stats.defense, 0);
 		}
 
 		//we then add boost per damage type. Not this is called elementalBoost, but physical can also be boosted

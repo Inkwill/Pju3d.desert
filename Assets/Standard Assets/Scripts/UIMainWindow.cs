@@ -98,7 +98,7 @@ public class UIMainWindow : UIWindow
 
 	void UpdateWeapon(EquipmentSystem equipment)
 	{
-		btWeapon.gameObject.SetActive(equipment.Weapon && equipment.Weapon != GameManager.CurHero.DefaultWeapon);
+		btWeapon.gameObject.SetActive(equipment.Weapon && equipment.Weapon != GameManager.CurHero.DefaultWeapon && equipment.Weapon.WeaponSkill != null);
 		btSwitchWeapon.gameObject.SetActive(equipment.ViceWeapon != null);
 		iconWeapon.enabled = (btWeapon.gameObject.activeSelf);
 		if (btWeapon.gameObject.activeSelf)
