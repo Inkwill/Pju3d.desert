@@ -256,8 +256,8 @@ namespace CreatorKitCode
 			TimedModifierStack.Clear();
 
 			UpdateFinalStats();
-			m_Owner.OnDeath?.Invoke(m_Owner);
 			attacker.OnKillEnemy?.Invoke(m_Owner);
+			m_Owner.Dead();
 		}
 
 		public void Tick()

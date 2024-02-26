@@ -6,8 +6,6 @@ using Random = UnityEngine.Random;
 
 public class NPCAI : RoleAI
 {
-	public int CorpseChance;
-	[SerializeField] float m_CorpseRetention;
 	[SerializeField] bool m_Offensive;
 	[SerializeField] float m_WanderRadius;
 	[SerializeField] float m_WanderBeat = 3.0f;
@@ -54,27 +52,7 @@ public class NPCAI : RoleAI
 		if (!CurrentEnemy) m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<CharacterData>());
 		if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
 	}
-	protected override void OnDeathAI()
-	{
-		base.OnDeathAI();
-		bool corpse = (Random.Range(1, 101) <= CorpseChance);
-		if (corpse)
-		{
-			m_character.gameObject.layer = LayerMask.NameToLayer("Interactable");
-			StartCoroutine(DestroyCorpse(m_CorpseRetention));
-		}
-		else
-		{
-			Helpers.RecursiveLayerChange(m_character.transform, LayerMask.NameToLayer("EnemyCorpse"));
-			StartCoroutine(DestroyCorpse(1.0f));
-		}
-	}
 
-	IEnumerator DestroyCorpse(float waitTime)
-	{
-		yield return new WaitForSeconds(waitTime);
-		m_character.DropAndDestroy();
-	}
 	void Wandering()
 	{
 		float randomX = Random.Range(0f, m_WanderRadius);

@@ -37,6 +37,8 @@ MonoBehaviour:
     Value: 1
   - Key: Fulfill
     Value: 1
+  - Key: HitTrigger
+    Value: 1
   AudioDic:
   - Key: cancle
     Value: {fileID: 8300000, guid: 2cfe31bd25480fa4184ff3a6f4856b0d, type: 3}
@@ -71,3 +73,6 @@ MonoBehaviour:
     Value: {fileID: 11400000, guid: aeb49cb8f4de4f6439869acd3a4639bd, type: 2}
   - Key: main04
     Value: {fileID: 11400000, guid: caf00ecfe4b72474e90e05fe5ac298c5, type: 2}
+  DropBox:
+  - Key: drop_wood
+    Value: {fileID: 11400000, guid: 2aedcb0f1a173b746b0f00d850f136ae, type: 2}

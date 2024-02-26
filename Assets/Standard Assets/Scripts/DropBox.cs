@@ -47,6 +47,7 @@ public class DropBox : ScriptableObject
 
 	DropItem GetRandomElement(List<DropItem> box)
 	{
+		Initialize();
 		// 计算总权重
 		int totalWeight = box.Sum(x => x.dropWeight);
 

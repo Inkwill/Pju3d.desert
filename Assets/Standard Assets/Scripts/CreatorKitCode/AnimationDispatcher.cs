@@ -30,16 +30,16 @@ public class AnimationDispatcher : MonoBehaviour
 	void Start()
 	{
 		m_character = GetComponentInParent<CharacterData>();
-		m_character.OnDamage += (damage) => { m_Animator.SetTrigger(HitTrigger); };
-		m_character.OnDeath.AddListener((character) => { m_Animator.SetTrigger(DeathTrigger); });
-		m_character.OnAttack += (attacker) => { m_Animator.SetTrigger(AttackTrigger); };
-		m_character.GetComponent<EventSender>().events.AddListener(OnCharacterEvent);
+		m_character.OnDamage += (damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); };
+		m_character.OnDeath.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
+		m_character.OnAttack += (attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); };
+		m_character.GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
 		m_Animator = GetComponent<Animator>();
 	}
 
 	void OnCharacterEvent(GameObject obj, string eventName)
 	{
-		m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
+		if (SpeedTrigger != "") m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
 	}
 
 	void AttackEvent()

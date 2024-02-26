@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
@@ -26,6 +27,8 @@ public class CharacterData : HighlightableObject
 	public Weapon DefaultWeapon;
 	public Transform WeaponLocator;
 	public float MoveSpeed = 3.0f;
+	public int CorpseChance;
+	[SerializeField] float m_CorpseRetention;
 	public StatSystem Stats;
 	public InventorySystem Inventory = new InventorySystem();
 	public EquipmentSystem Equipment = new EquipmentSystem();
@@ -194,9 +197,27 @@ public class CharacterData : HighlightableObject
 		//Agility reduce by 0.5% the cooldown to attack (e.g. if agility = 50, 25% faster to attack)
 		m_AttackCoolDown = Math.Max(0.1f, Equipment.Weapon.Stats.Speed - (Stats.stats.agility * 0.5f * 0.001f * Equipment.Weapon.Stats.Speed));
 	}
-	public void DropAndDestroy()
+
+	public void Dead()
 	{
-		if (dropEffects != null && dropEffects.Count > 0) EffectData.TakeEffects(dropEffects, gameObject, gameObject);
+		OnDeath?.Invoke(this);
+		bool corpse = (Random.Range(1, 101) <= CorpseChance);
+		if (corpse)
+		{
+			gameObject.layer = LayerMask.NameToLayer("Interactable");
+			StartCoroutine(DestroyCorpse(m_CorpseRetention));
+		}
+		else
+		{
+			gameObject.layer = (camp == Camp.PLAYER) ? LayerMask.NameToLayer("PlayerCorpse") : LayerMask.NameToLayer("Corpse");
+			if (dropEffects != null && dropEffects.Count > 0) EffectData.TakeEffects(dropEffects, gameObject, gameObject);
+			StartCoroutine(DestroyCorpse(1.0f));
+		}
+
+	}
+	IEnumerator DestroyCorpse(float time)
+	{
+		yield return new WaitForSeconds(time);
 		VFXManager.PlayVFX(VFXType.Death, transform.position);
 		Destroy(gameObject);
 	}
