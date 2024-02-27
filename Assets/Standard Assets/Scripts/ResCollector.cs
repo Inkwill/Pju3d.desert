@@ -1,22 +1,21 @@
+using UnityEngine;
+using CreatorKitCode;
+using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
-using CreatorKitCode;
 
 [RequireComponent(typeof(CharacterData))]
 public class ResCollector : MonoBehaviour
 {
 	public ResItem.ResType ResType;
 	public Transform root;
-	InventorySystem m_Inventory;
 	int m_Count;
+	CharacterData m_character;
 	void Start()
 	{
-		m_Inventory = GetComponent<CharacterData>().Inventory;
+		m_character = GetComponent<CharacterData>();
 		//Debug.Log("m_Inventory = " + m_Inventory);
-		m_Inventory.ItemEvent += OnItemEvent;
+		m_character.Inventory.ItemEvent += OnItemEvent;
 		m_Count = 0;
 	}
 
@@ -43,7 +42,28 @@ public class ResCollector : MonoBehaviour
 					m_Count--;
 				}
 			}
+			// else if (eventName == "Fulfill")
+			// {
+			// 	for (int i = 0; i < itemCount; i++)
+			// 	{
+			// 		GameObject resObj = Instantiate(r_item.WorldObjectPrefab, root, false);
+			// 		resObj.transform.DOMove(resObj.transform.position + new Vector3(0, 4, 0), 2);
+
+			// 	}
+			// }
 		}
+	}
+	public void Display(Item item, int count, Action action)
+	{
+
+		Debug.Log("ResCollector display item= " + item.ItemName + " count= " + count.ToString());
+		StartCoroutine(DisplayAction(action));
+	}
+
+	IEnumerator DisplayAction(Action action)
+	{
+		yield return new WaitForSeconds(2.0f);
+		action?.Invoke();
 	}
 
 

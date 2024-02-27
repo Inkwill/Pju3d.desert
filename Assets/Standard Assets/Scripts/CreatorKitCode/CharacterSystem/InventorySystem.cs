@@ -37,26 +37,51 @@ namespace CreatorKitCode
 			}
 			public Dictionary<string, int> Demand;
 			public Dictionary<string, int> DemandLeft;
-			public void Fulfill(InventorySystem inventory)
+			public Dictionary<string, int> Submittable(InventorySystem inventory)
 			{
-				if (Completed) { Debug.LogError("ItemDemand had completed! : " + Helpers.DictionaryToString(DemandLeft)); return; }
-				foreach (var demand in Demand)
+				var submits = new Dictionary<string, int>();
+				foreach (var left in DemandLeft)
 				{
-					int id = inventory.EntryID(demand.Key);
-					if (id != -1)
+					int id = inventory.EntryID(left.Key);
+					if (id != -1 && left.Value > 0)
 					{
-						Item item = inventory.Entries[id].Item;
-						InventoryEntry entry = inventory.Entries[id];
-						int leftNum = DemandLeft[demand.Key];
-						int fulfillNum = 0;
-						for (int i = 0; i < leftNum; i++)
-						{
-							if (inventory.MinusItem(entry, 1) > 0) { fulfillNum++; DemandLeft[demand.Key]--; }
-							else break;
-						}
-						inventory.ItemEvent?.Invoke(entry.Item, "Fulfill", fulfillNum);
+						submits[left.Key] = Math.Min(left.Value, inventory.Entries[id].Count);
 					}
 				}
+				return submits;
+			}
+
+			public bool Fulfill(InventorySystem inventory)
+			{
+				if (Completed) { Debug.LogError("ItemDemand had completed! : " + Helpers.DictionaryToString(DemandLeft)); return false; }
+				var submits = Submittable(inventory);
+				if (submits.Count < 1) return false;
+				foreach (var submit in submits)
+				{
+					int entryId = inventory.EntryID(submit.Key);
+					DemandLeft[submit.Key] -= submit.Value;
+					inventory.ItemEvent?.Invoke(inventory.Entries[entryId].Item, "Fulfill", submit.Value);
+					inventory.MinusItem(entryId, submit.Value);
+				}
+				// bool success = false;
+				// foreach (var demand in Demand)
+				// {
+				// 	int id = inventory.EntryID(demand.Key);
+				// 	if (id != -1)
+				// 	{
+				// 		Item item = inventory.Entries[inventory.EntryID(submit.Key)].Item;
+				// 		InventoryEntry entry = inventory.Entries[id];
+				// 		int leftNum = DemandLeft[demand.Key];
+				// 		int fulfillNum = 0;
+				// 		for (int i = 0; i < leftNum; i++)
+				// 		{
+				// 			if (inventory.MinusItem(entry, 1) > 0) { fulfillNum++; DemandLeft[demand.Key]--; success = true; }
+				// 			else break;
+				// 		}
+				// 		inventory.ItemEvent?.Invoke(entry.Item, "Fulfill", fulfillNum);
+				// 	}
+				// }
+				return true;
 			}
 		}
 
@@ -70,13 +95,13 @@ namespace CreatorKitCode
 			m_Owner = owner;
 		}
 
-		public int EntryID(string ItemName)
+		public int EntryID(string itemKey)
 		{
 			for (int i = 0; i < 32; ++i)
 			{
 				if (Entries[i] != null)
 				{
-					if (Entries[i].Item.ItemName == ItemName) return i;
+					if (Entries[i].Item.ItemName == itemKey) return i;
 				}
 			}
 			return -1;

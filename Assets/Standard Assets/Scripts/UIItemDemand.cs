@@ -24,4 +24,14 @@ public class UIItemDemand : MonoBehaviour
 		}
 		gameObject.SetActive(true);
 	}
+
+	public void Inter()
+	{
+		GetComponent<Animator>()?.SetTrigger("inter");
+	}
+
+	public void Fail()
+	{
+		GetComponent<Animator>()?.SetTrigger("fail");
+	}
 }

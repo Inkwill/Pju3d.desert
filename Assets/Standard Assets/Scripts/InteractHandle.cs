@@ -13,6 +13,8 @@ public class InteractHandle : MonoBehaviour
 	float handleTime = 1.0f;
 	[SerializeField]
 	Slider slider;
+	[SerializeField]
+	string sliderString;
 	public float During { get { return m_during; } set { m_during = value; if (slider) slider.value = value; } }
 	float m_during;
 	public GameObject CurrentTarget { get { return m_target; } set { m_target = value; } }
@@ -33,6 +35,8 @@ public class InteractHandle : MonoBehaviour
 		InteractEvent?.Invoke(enter, "Enter");
 		During = 0;
 		slider?.gameObject.SetActive(true);
+		UISliderText sliderT = slider?.GetComponent<UISliderText>();
+		if (sliderT) sliderT.form = sliderString;
 		//Helpers.Log(this, "OninterEnter", "enter= " + enter);
 	}
 

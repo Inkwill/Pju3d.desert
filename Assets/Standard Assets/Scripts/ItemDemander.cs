@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
-using CreatorKitCodeInternal;
+using DG.Tweening;
 
 public class ItemDemander : TimerBehaviour
 {
@@ -29,14 +29,28 @@ public class ItemDemander : TimerBehaviour
 
 	public void OnInteractEvent(GameObject actor, string eventName)
 	{
-		m_character = actor.GetComponent<CharacterData>();
+		if (m_character == null) m_character = actor.GetComponent<CharacterData>();
+		if (eventName == "Enter" && m_character != null)
+		{
+			ui_demand.Inter();
+			m_character.Inventory.ItemEvent += OnItemEvent;
+		}
 		if (eventName == "Ready" && m_character != null)
 		{
 			if (m_character.BaseAI.isIdle && !m_Demand.Completed)
 			{
-				m_character.Inventory.ItemEvent += OnItemEvent;
-				m_Demand.Fulfill(m_character.Inventory);
+				var submitable = m_Demand.Submittable(m_character.Inventory);
+				if (submitable.Count > 0)
+				{
+					m_Demand.Fulfill(m_character.Inventory);
+				}
+				else ui_demand.Fail();
 			}
+		}
+		if (eventName == "Exit" && m_character != null)
+		{
+			m_character.Inventory.ItemEvent -= OnItemEvent;
+			m_character = null;
 		}
 	}
 
@@ -69,15 +83,31 @@ public class ItemDemander : TimerBehaviour
 	{
 		if (actionName == "Fulfill")
 		{
-			ui_demand.Show(m_Demand);
-			Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
-			if (m_Demand.Completed) OnDemandeComplete();
+			ResCollector collector = m_character.GetComponent<ResCollector>();
+			if (collector)
+			{
+				//collector.Display(item, itemCount, UpdateDemand);
+				Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
+				StartCoroutine(UpdateDemand(item, itemCount));
+			}
 		}
 	}
 
-	void OnDemandeComplete()
+	IEnumerator UpdateDemand(Item item, int itemCount)
 	{
-		isStarted = true;
-		m_character.Inventory.ItemEvent -= OnItemEvent;
+		var resObjs = new List<GameObject>();
+		for (int i = 0; i < itemCount; i++)
+		{
+			GameObject resObj = Instantiate(item.WorldObjectPrefab, transform);
+			resObjs.Add(resObj);
+			resObj.transform.DOMove(m_character.transform.position + new Vector3(0, 2, 0), 1).From();
+		}
+		yield return new WaitForSeconds(1.0f);
+		ui_demand.Show(m_Demand);
+		if (m_Demand.Completed) isStarted = true;
+		foreach (var obj in resObjs)
+		{
+			Destroy(obj);
+		}
 	}
 }
