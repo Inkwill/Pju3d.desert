@@ -37,6 +37,7 @@ public class UIRoleHud : UIWorldHud
 		}
 		sliderPg?.gameObject.SetActive(false);
 		sliderInteract?.gameObject.SetActive(false);
+		bubble_anim?.gameObject.SetActive(false);
 		GetComponentInParent<StoryTeller>()?.tellerEvent.AddListener(OnTellerEvent);
 		m_character.OnDeath.AddListener((character) =>
 		{
@@ -79,7 +80,7 @@ public class UIRoleHud : UIWorldHud
 
 	void OnItemEvent(Item item, string actionName, int itemCount)
 	{
-		Bubble(actionName + "item = " + item.ItemName + "count=" + itemCount);
+		//Bubble(actionName + "item = " + item.ItemName + "count=" + itemCount);
 	}
 
 	void OnTellerEvent(StoryTeller teller, string eventName)
@@ -92,18 +93,20 @@ public class UIRoleHud : UIWorldHud
 
 	}
 
-	public void Bubble(string content, float duration = 1.0f)
+	public void Bubble(string content, float duration = 0f)
 	{
-		// if (bubble_anim.GetCurrentAnimatorStateInfo(0).IsName("hide"))
-		// {
+		if (!bubble_anim.gameObject.activeSelf) bubble_anim.gameObject.SetActive(true);
+		else bubble_anim.SetBool("show", true);
+		StartCoroutine(ShowText(content));
+		if (duration > 0) StartCoroutine(GameManager.Instance.WaitAction(duration, () => bubble_anim.SetBool("show", false)));
+	}
 
-		// }
-		// else
-		// {
-		// 	bubble_text.text = content;
-		// }
-		bubble_text.text = content;
-		bubble_anim.SetTrigger("show");
-		StartCoroutine(GameManager.Instance.WaitAction(duration, () => bubble_anim.SetTrigger("hide")));
+	IEnumerator ShowText(string content)
+	{
+		for (int i = 0; i < content.Length; i++)
+		{
+			bubble_text.text = content.Substring(0, i);
+			yield return new WaitForSeconds(0.1f);
+		}
 	}
 }

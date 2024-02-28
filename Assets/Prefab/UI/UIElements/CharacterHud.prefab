@@ -33,7 +33,7 @@ RectTransform:
   m_Children:
   - {fileID: 4021925412215994341}
   m_Father: {fileID: 8445916009198093280}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -88.073685}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 100, y: 50}

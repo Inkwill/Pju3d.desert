@@ -54,7 +54,7 @@ public class UIInventoryWindow : UIWindow
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
 		EquipRoot.SetActive(GameManager.StoryListener.CurrentTeller == null);
-		GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.STORY);
+		GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.INVENTORY);
 		Load();
 	}
 

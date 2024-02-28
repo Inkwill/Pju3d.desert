@@ -166,6 +166,8 @@ MonoBehaviour:
   DefaultWeapon: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
   WeaponLocator: {fileID: 226675115136632130}
   MoveSpeed: 4
+  CorpseChance: 0
+  m_CorpseRetention: 0
   Stats:
     baseStats:
       health: 20
@@ -391,6 +393,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1490716436863270110, guid: 54707c86cb650ed41a8c70adb389a0b9,
+        type: 3}
+      propertyPath: m_Radius
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8254353542103075312, guid: 54707c86cb650ed41a8c70adb389a0b9,
         type: 3}

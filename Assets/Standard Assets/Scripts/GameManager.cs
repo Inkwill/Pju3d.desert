@@ -115,22 +115,6 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		GameUI.OpenWindow("winMain");
-		UIRoleHud hud = CurHero.GetComponentInChildren<UIRoleHud>();
-		StartCoroutine(StartPaly(hud));
-		StoryMode = true;
-	}
-
-	IEnumerator StartPaly(UIRoleHud hud)
-	{
-		hud.Bubble("麋鹿麋鹿迷了路,");
-		yield return new WaitForSeconds(2.0f);
-		hud.Bubble("地上一堆小杂物,");
-		yield return new WaitForSeconds(2.0f);
-		hud.Bubble("捡起杂物找出路！");
-		yield return new WaitForSeconds(2.0f);
-		StoryMode = false;
-		GameGoal.Init();
-
 	}
 
 	void OnApplicationQuit()

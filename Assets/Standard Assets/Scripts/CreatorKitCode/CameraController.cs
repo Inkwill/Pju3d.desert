@@ -17,7 +17,8 @@ namespace CreatorKitCodeInternal
 		{
 			RPG,
 			BUILD,
-			STORY
+			STORY,
+			INVENTORY
 		}
 
 		public Camera GameplayCamera;
@@ -46,6 +47,7 @@ namespace CreatorKitCodeInternal
 		Mode m_lastMode;
 		Mode m_curMode;
 		float m_setDistance;
+		int m_switchSpeed = 1;
 		bool m_setTrigger;
 
 		void Awake()
@@ -65,8 +67,8 @@ namespace CreatorKitCodeInternal
 			if (Mathf.Abs(m_setDistance - m_CurrentDistance) > 0.01f && m_setTrigger)
 			{
 				// 在 10 秒内从 m_CurrentDistance 插值到 m_setDistance
-				float t = Mathf.PingPong(Time.time / 10f, 1f); // 控制插值的比例
-				float interpolatedValue = m_CurrentDistance < m_setDistance ? 0.05f : -0.05f;
+				//float t = Mathf.PingPong(Time.time / 10f, 1f); // 控制插值的比例
+				float interpolatedValue = m_CurrentDistance < m_setDistance ? m_switchSpeed * 0.01f : -0.01f * m_switchSpeed;
 				//float interpolatedValue = m_CurrentDistance < m_setDistance ? Mathf.Lerp(m_CurrentDistance, m_setDistance, t) : (-1 * Mathf.Lerp(m_setDistance, m_CurrentDistance, t));
 				Zoom(interpolatedValue);
 			}
@@ -106,12 +108,18 @@ namespace CreatorKitCodeInternal
 			{
 				case Mode.RPG:
 					m_setDistance = 0.3f;
+					m_switchSpeed = 2;
 					break;
 				case Mode.BUILD:
 					m_setDistance = 1.0f;
 					break;
 				case Mode.STORY:
 					m_setDistance = 0f;
+					m_switchSpeed = 1;
+					break;
+				case Mode.INVENTORY:
+					m_setDistance = 0f;
+					m_switchSpeed = 5;
 					break;
 				default:
 					break;

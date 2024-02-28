@@ -63,7 +63,7 @@ public class CharacterData : HighlightableObject
 				gameObject.layer = LayerMask.NameToLayer("Enemy");
 				break;
 			case CharacterData.Camp.ALLY:
-				gameObject.layer = LayerMask.NameToLayer("Player");
+				gameObject.layer = LayerMask.NameToLayer("Ally");
 				break;
 			case CharacterData.Camp.NEUTRAL:
 				gameObject.layer = LayerMask.NameToLayer("Neutral");
