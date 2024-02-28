@@ -37,7 +37,7 @@ public class UIRoleHud : UIWorldHud
 		}
 		sliderPg?.gameObject.SetActive(false);
 		sliderInteract?.gameObject.SetActive(false);
-		bubble_anim?.gameObject.SetActive(false);
+		//bubble_anim?.gameObject.SetActive(false);
 		GetComponentInParent<StoryTeller>()?.tellerEvent.AddListener(OnTellerEvent);
 		m_character.OnDeath.AddListener((character) =>
 		{
@@ -105,7 +105,7 @@ public class UIRoleHud : UIWorldHud
 	{
 		for (int i = 0; i < content.Length; i++)
 		{
-			bubble_text.text = content.Substring(0, i);
+			bubble_text.text = content.Substring(0, i + 1);
 			yield return new WaitForSeconds(0.1f);
 		}
 	}
