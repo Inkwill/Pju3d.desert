@@ -107,7 +107,6 @@ public class GameGoalSystem : MonoBehaviour
 		}
 	}
 
-	public GoalData TestGoal;
 	public Action<GameGoal, string> GameGoalAction;
 	public StatisticsHandle Recorder => m_recorder;
 	public GameGoal CurrentGoal => m_curGoal;
@@ -119,10 +118,18 @@ public class GameGoalSystem : MonoBehaviour
 	{
 		m_AchievedGoals = new List<string>();
 		m_recorder = GameManager.CurHero.GetComponent<StatisticsHandle>();
-		AddGoal(TestGoal);
 	}
 	public GameGoal AddGoal(GoalData data)
 	{
+		if (m_curGoal != null)
+		{
+			if (m_curGoal.Completed) m_curGoal.Acheve();
+			else
+			{
+				Helpers.Log(this, "AddGoal", $"Fail:{data.goalId},cur:{m_curGoal.data.goalId}");
+				return null;
+			}
+		}
 		var goal = new GameGoal(this, data);
 		if (m_curGoal == null) m_curGoal = goal;
 		GameGoalAction?.Invoke(goal, "AddGoal");
@@ -144,5 +151,10 @@ public class GameGoalSystem : MonoBehaviour
 			}
 		}
 		GameManager.Lord.AddExp(goal.data.LordExp);
+	}
+
+	public bool IsAchievedGoal(string goalId)
+	{
+		return m_AchievedGoals.Contains(goalId);
 	}
 }

@@ -32,7 +32,7 @@ public class CharacterData : HighlightableObject
 	public StatSystem Stats;
 	public InventorySystem Inventory = new InventorySystem();
 	public EquipmentSystem Equipment = new EquipmentSystem();
-	public Action<Damage> OnDamage { get; set; }
+	public UnityEvent<Damage> OnDamage;
 	public UnityEvent<CharacterData> OnDeath;
 	public List<KeyValueData.KeyValue<EffectData, string[]>> dropEffects;
 	public Action<CharacterData> OnAttack { get; set; }
@@ -88,10 +88,10 @@ public class CharacterData : HighlightableObject
 		m_recorder = GetComponent<StatisticsHandle>();
 		m_recorder?.Init(this);
 
-		OnDamage += (damage) =>
+		OnDamage.AddListener((damage) =>
 		{
 			DamageUI.Instance.NewDamage(damage.GetFullDamage(), transform.position);
-		};
+		});
 
 		Equipment.OnEquiped += item =>
 		{

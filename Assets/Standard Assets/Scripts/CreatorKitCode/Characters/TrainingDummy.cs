@@ -17,10 +17,10 @@ namespace CreatorKitCodeInternal
 			m_CharData = GetComponent<CharacterData>();
 			m_CharData.Active();
 
-			m_CharData.OnDamage += (damage) =>
+			m_CharData.OnDamage.AddListener((damage) =>
 			{
 				m_HealTimer = 3.0f;
-			};
+			});
 		}
 
 		// Update is called once per frame

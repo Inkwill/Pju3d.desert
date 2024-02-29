@@ -42,7 +42,7 @@ public class AIBase : MonoBehaviour
 	public virtual void Init(CharacterData data)
 	{
 		m_character = data;
-		m_character.OnDamage += OnDamageAI;
+		m_character.OnDamage.AddListener(OnDamageAI);
 		m_character.OnDeath.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
 		m_SkillUser = GetComponent<SkillUser>();
 
@@ -140,12 +140,18 @@ public class AIBase : MonoBehaviour
 		if (m_State == nextState) return;
 		m_State = nextState;
 		m_StateDuring = 0;
+		if (m_State == State.INACTIVE) m_character.SetEnemy(null);
 		GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
 	}
 
 	public virtual void LookAt(Transform trans)
 	{
-		Vector3 forward = (trans.position - m_character.transform.position);
+		LookAt(trans.position - m_character.transform.position);
+
+	}
+
+	public virtual void LookAt(Vector3 forward)
+	{
 		forward.y = 0;
 		forward.Normalize();
 		m_character.transform.forward = forward;

@@ -48,10 +48,12 @@ public class GameManager : MonoBehaviour
 			if (value)
 			{
 				Instance.CameraCtrl.SetMode(CameraController.Mode.BUILD);
+				GameManager.CurHero.BaseAI.SetState(AIBase.State.INACTIVE);
 			}
 			else
 			{
 				Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
+				GameManager.CurHero.BaseAI.SetState(AIBase.State.IDLE);
 			}
 		}
 	}
@@ -66,10 +68,12 @@ public class GameManager : MonoBehaviour
 			if (value)
 			{
 				Instance.CameraCtrl.SetMode(CameraController.Mode.STORY);
+				GameManager.CurHero.BaseAI.SetState(AIBase.State.INACTIVE);
 			}
 			else
 			{
 				Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
+				GameManager.CurHero.BaseAI.SetState(AIBase.State.IDLE);
 			}
 		}
 	}
@@ -99,6 +103,7 @@ public class GameManager : MonoBehaviour
 		Lord.Init();
 		CurHero = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterData>();
 		CurHero.Active();
+		GameGoal.Init();
 		SFXManager.ListenerTarget = CurHero.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();
 		GameUI.transform.SetParent(ui_trans);

@@ -30,7 +30,7 @@ public class AnimationDispatcher : MonoBehaviour
 	void Start()
 	{
 		m_character = GetComponentInParent<CharacterData>();
-		m_character.OnDamage += (damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); };
+		m_character.OnDamage.AddListener((damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); });
 		m_character.OnDeath.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
 		m_character.OnAttack += (attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); };
 		m_character.GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
