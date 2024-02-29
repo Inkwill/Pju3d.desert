@@ -4941,6 +4941,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5116674e42294924098b3eb22e4670d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_TriggerTime: 0
+  Dialogues:
+  - Key: "\u9E8B\u9E7F\u9E8B\u9E7F\u8FF7\u4E86\u8DEF"
+    Value: 2
+  - Key: "\u773C\u524D\u4E00\u7247\u5927\u6208\u58C1"
+    Value: 2
+  - Key: "\u5730\u4E0A\u6563\u843D\u5C0F\u6742\u7269"
+    Value: 2
+  - Key: "\u62FE\u8D77\u6742\u7269\u627E\u51FA\u8DEF"
+    Value: 2
 --- !u!65 &452466815
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31908,7 +31918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a86f8cad4f2b5cb4ba0d6084f111d9e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expTemplate: 0100000002000000030000000400000005000000
+  expTemplate: 0a00000002000000030000000400000005000000
 --- !u!224 &5564097808944322120
 RectTransform:
   m_ObjectHideFlags: 0

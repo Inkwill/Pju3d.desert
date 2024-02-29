@@ -191,7 +191,7 @@ namespace CreatorKitCode
 					if (m_HeadSlot != null)
 					{
 						m_HeadSlot.UnequippedBy(m_Owner);
-						m_Owner.Inventory.AddItem(m_HeadSlot);
+						//m_Owner.Inventory.AddItem(m_HeadSlot);
 						OnUnequip?.Invoke(m_HeadSlot);
 						m_HeadSlot = null;
 					}
@@ -200,7 +200,7 @@ namespace CreatorKitCode
 					if (m_TorsoSlot != null)
 					{
 						m_TorsoSlot.UnequippedBy(m_Owner);
-						m_Owner.Inventory.AddItem(m_TorsoSlot);
+						//m_Owner.Inventory.AddItem(m_TorsoSlot);
 						OnUnequip?.Invoke(m_TorsoSlot);
 						m_TorsoSlot = null;
 					}
@@ -209,7 +209,7 @@ namespace CreatorKitCode
 					if (m_LegsSlot != null)
 					{
 						m_LegsSlot.UnequippedBy(m_Owner);
-						m_Owner.Inventory.AddItem(m_LegsSlot);
+						//m_Owner.Inventory.AddItem(m_LegsSlot);
 						OnUnequip?.Invoke(m_LegsSlot);
 						m_LegsSlot = null;
 					}
@@ -218,7 +218,7 @@ namespace CreatorKitCode
 					if (m_FeetSlot != null)
 					{
 						m_FeetSlot.UnequippedBy(m_Owner);
-						m_Owner.Inventory.AddItem(m_FeetSlot);
+						//m_Owner.Inventory.AddItem(m_FeetSlot);
 						OnUnequip?.Invoke(m_FeetSlot);
 						m_FeetSlot = null;
 					}
@@ -227,7 +227,7 @@ namespace CreatorKitCode
 					if (m_AccessorySlot != null)
 					{
 						m_AccessorySlot.UnequippedBy(m_Owner);
-						m_Owner.Inventory.AddItem(m_AccessorySlot);
+						//m_Owner.Inventory.AddItem(m_AccessorySlot);
 						OnUnequip?.Invoke(m_AccessorySlot);
 						m_AccessorySlot = null;
 					}

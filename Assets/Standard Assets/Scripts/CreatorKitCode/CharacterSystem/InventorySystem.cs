@@ -86,9 +86,12 @@ namespace CreatorKitCode
 		}
 
 		//Only 32 slots in inventory
-		public InventoryEntry[] Entries = new InventoryEntry[32];
+		public InventoryEntry[] Entries = new InventoryEntry[m_baseSlots];
 		public Action<Item, string, int> ItemEvent;
 		CharacterData m_Owner;
+		public int SlotsNum { get { return m_baseSlots; } }
+		public int CurSlotsNum { get { return Entries.Where(en => en != null).Count(); } }
+		static int m_baseSlots = 8;
 
 		public void Init(CharacterData owner)
 		{
@@ -97,7 +100,7 @@ namespace CreatorKitCode
 
 		public int EntryID(string itemKey)
 		{
-			for (int i = 0; i < 32; ++i)
+			for (int i = 0; i < SlotsNum; ++i)
 			{
 				if (Entries[i] != null)
 				{
@@ -109,7 +112,7 @@ namespace CreatorKitCode
 
 		public int ItemCount(string ItemName)
 		{
-			for (int i = 0; i < 32; ++i)
+			for (int i = 0; i < SlotsNum; ++i)
 			{
 				if (Entries[i] != null)
 				{
@@ -123,40 +126,68 @@ namespace CreatorKitCode
 		/// stack counter there instead of using another slot.
 		/// </summary>
 		/// <param name="item">The item to add to the inventory</param>
-		public void AddItem(Item item, int num = 1)
+		public bool AddItem(Item item, int num = 1)
 		{
-			if (AutoUseItem(item, num)) return;
-			bool found = false;
-			int firstEmpty = -1;
-			for (int i = 0; i < 32; ++i)
+			if (AutoUseItem(item, num)) return true;
+			else if (PutItem(item, num))
 			{
-				if (Entries[i] == null)
-				{
-					if (firstEmpty == -1)
-						firstEmpty = i;
-				}
-				else if (Entries[i].Item == item)
-				{
-					Entries[i].Count += num;
-					found = true;
-					ItemEvent?.Invoke(item, "Add", num);
-				}
-			}
-
-			if (!found && firstEmpty != -1)
-			{
-				InventoryEntry entry = new InventoryEntry();
-				entry.Item = item;
-				entry.Count = num;
-
-				Entries[firstEmpty] = entry;
 				ItemEvent?.Invoke(item, "Add", num);
+				return true;
+			}
+			return false;
+			// bool found = false;
+			// int firstEmpty = -1;
+			// for (int i = 0; i < SlotsNum; ++i)
+			// {
+			// 	if (Entries[i] == null)
+			// 	{
+			// 		if (firstEmpty == -1)
+			// 			firstEmpty = i;
+			// 	}
+			// 	else if (Entries[i].Item == item)
+			// 	{
+			// 		Entries[i].Count += num;
+			// 		found = true;
+			// 		ItemEvent?.Invoke(item, "Add", num);
+			// 	}
+			// }
+
+			// if (!found && firstEmpty != -1)
+			// {
+			// 	InventoryEntry entry = new InventoryEntry();
+			// 	entry.Item = item;
+			// 	entry.Count = num;
+
+			// 	Entries[firstEmpty] = entry;
+			// 	ItemEvent?.Invoke(item, "Add", num);
+			// }
+		}
+
+		bool PutItem(Item item, int num = 1)
+		{
+			var entry = Entries.Where(en => (en != null && en.Item.ItemName == item.ItemName)).FirstOrDefault();
+			if (entry != null) { entry.Count += num; return true; }
+			else
+			{
+				for (int i = 0; i < SlotsNum; ++i)
+				{
+					if (Entries[i] == null)
+					{
+						entry = new InventoryEntry();
+						entry.Item = item;
+						entry.Count = num;
+						Entries[i] = entry;
+						return true;
+					}
+				}
+				ItemEvent?.Invoke(item, "Full", num);
+				return false;
 			}
 		}
 
 		public void RemoveItem(int InventoryID)
 		{
-			for (int i = 0; i < 32; ++i)
+			for (int i = 0; i < SlotsNum; ++i)
 			{
 				if (i == InventoryID)
 				{
@@ -175,7 +206,7 @@ namespace CreatorKitCode
 		{
 			int minusNum = 0;
 			if (minusEntry == null) return minusNum;
-			for (int i = 0; i < 32; ++i)
+			for (int i = 0; i < SlotsNum; ++i)
 			{
 				if (Entries[i] == minusEntry)
 				{
@@ -211,7 +242,7 @@ namespace CreatorKitCode
 				if (item.Count <= 0)
 				{
 					//maybe store the index in the InventoryEntry to avoid having to find it again here
-					for (int i = 0; i < 32; ++i)
+					for (int i = 0; i < SlotsNum; ++i)
 					{
 						if (Entries[i] == item)
 						{
@@ -250,9 +281,9 @@ namespace CreatorKitCode
 		public void UnEquipItem(EquipmentItem equip)
 		{
 			Weapon wp = equip as Weapon;
-			if (wp) m_Owner.Equipment.UnWeapon(wp);
-			else m_Owner.Equipment.Unequip(equip.Slot);
-			if (wp != m_Owner.DefaultWeapon) m_Owner.Inventory.AddItem(wp);
+			if (wp == m_Owner.DefaultWeapon) m_Owner.Equipment.UnWeapon(wp);
+			else if (wp != null && PutItem(wp)) m_Owner.Equipment.UnWeapon(wp);
+			else if (wp == null) m_Owner.Equipment.Unequip(equip.Slot);
 			// RemoveItem(EntryID(equip.ItemName));
 			// SFXManager.PlayClip("equiped");
 		}

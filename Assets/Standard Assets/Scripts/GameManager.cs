@@ -190,9 +190,12 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public IEnumerator WaitAction(float waitTime, Action action)
+	public static void StartWaitAction(float waitTime, Action action)
 	{
-		// 等待一定的时间
+		Instance.StartCoroutine(Instance.WaitAction(waitTime, action));
+	}
+	IEnumerator WaitAction(float waitTime, Action action)
+	{
 		yield return new WaitForSeconds(waitTime);
 		action?.Invoke();
 	}

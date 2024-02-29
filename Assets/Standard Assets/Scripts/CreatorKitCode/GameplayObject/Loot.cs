@@ -61,9 +61,11 @@ namespace CreatorKitCode
 		}
 		public void InteractWith(CharacterData target)
 		{
-			target.Inventory.AddItem(Item);
-			SFXManager.PlayClip("picked");
-			Destroy(gameObject);
+			if (target.Inventory.AddItem(Item))
+			{
+				SFXManager.PlayClip("picked");
+				Destroy(gameObject);
+			}
 
 		}
 

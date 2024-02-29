@@ -98,7 +98,7 @@ public class UIRoleHud : UIWorldHud
 		if (!bubble_anim.gameObject.activeSelf) bubble_anim.gameObject.SetActive(true);
 		else bubble_anim.SetBool("show", true);
 		StartCoroutine(ShowText(content));
-		if (duration > 0) StartCoroutine(GameManager.Instance.WaitAction(duration, () => bubble_anim.SetBool("show", false)));
+		if (duration > 0) GameManager.StartWaitAction(duration, () => bubble_anim.SetBool("show", false));
 	}
 
 	IEnumerator ShowText(string content)

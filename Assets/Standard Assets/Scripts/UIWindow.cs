@@ -8,6 +8,7 @@ using CreatorKitCodeInternal;
 public class UIWindow : MonoBehaviour
 {
 	public string winName;
+	public UIWindow Instance;
 	public Image winMask;
 	public AudioClip OpenClip;
 	public AudioClip CloseClip;
@@ -16,6 +17,7 @@ public class UIWindow : MonoBehaviour
 	{
 		if (OpenClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = OpenClip });
 		if (winMask) winMask.enabled = false;
+		Instance = this;
 		OnOpen();
 	}
 

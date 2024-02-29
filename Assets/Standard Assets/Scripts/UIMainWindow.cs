@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
@@ -23,6 +22,7 @@ public class UIMainWindow : UIWindow
 	public UITargetInfo targetUI;
 	public Skill sprintSkill;
 	public UIGoalInfo uiGoalInfo;
+	public Image iconExp;
 	Button[] m_buttons;
 	UISkillButton[] m_skillButtons;
 

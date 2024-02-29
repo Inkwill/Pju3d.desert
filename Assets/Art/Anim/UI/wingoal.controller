@@ -21,7 +21,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 2af60df275b661f4a9b78a168314c2ab, type: 2}
+  m_Motion: {fileID: 7400000, guid: 853075bd1c831d94e9e99504f6615679, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -58,7 +58,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: goalInfo
+  m_Name: wingoal
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: show
@@ -260,7 +260,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 478ee08099025eb4f9d6bd8d4ab21829, type: 2}
+  m_Motion: {fileID: 7400000, guid: 1b19be88c77be8144b7f07ad0a441de7, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
