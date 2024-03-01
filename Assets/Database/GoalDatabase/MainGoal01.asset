@@ -15,6 +15,7 @@ MonoBehaviour:
   goalId: main01
   describe: "\u56F4\u680F\u5F88\u575A\u56FA\uFF0C\u8BD5\u7740\u5728\u9644\u8FD1\u627E\u628A\u6B66\u5668"
   summary: "\u6E05\u9664\u6321\u8DEF\u7684\u56F4\u680F:"
+  forcedToAdd: 0
   LordExp: 2
   type: 2
   param:

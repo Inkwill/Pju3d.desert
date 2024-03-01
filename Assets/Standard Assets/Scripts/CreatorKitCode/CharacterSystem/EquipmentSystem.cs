@@ -36,6 +36,18 @@ namespace CreatorKitCode
 			m_DefaultWeapon = wep;
 		}
 
+		public bool IsEquiped(string itemId)
+		{
+			return Weapon?.ItemName == itemId ||
+					ViceWeapon?.ItemName == itemId ||
+					m_HeadSlot?.ItemName == itemId ||
+					m_TorsoSlot?.ItemName == itemId ||
+					m_LegsSlot?.ItemName == itemId ||
+					m_FeetSlot?.ItemName == itemId ||
+					m_AccessorySlot?.ItemName == itemId;
+
+
+		}
 		public EquipmentItem GetItem(EquipmentItem.EquipmentSlot slot)
 		{
 			switch (slot)

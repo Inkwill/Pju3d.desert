@@ -9,17 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25d0c837d0e930a4ab7e25738d516182, type: 3}
-  m_Name: MainGoal02
+  m_Script: {fileID: 11500000, guid: 2ef3cab07a9e40847a7d1f9364000c12, type: 3}
+  m_Name: Condition_ExcludeItem
   m_EditorClassIdentifier: 
-  goalId: main03
-  describe: 
-  summary: "\u6D88\u706D:"
-  forcedToAdd: 0
-  LordExp: 1
-  type: 2
-  param:
-  - Key: building_fence
-    Value:
-    - 1
-  rewardEffects: []
+  type: 1

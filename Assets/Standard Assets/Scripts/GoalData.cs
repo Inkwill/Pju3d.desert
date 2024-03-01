@@ -8,6 +8,7 @@ public class GoalData : ScriptableObject
 	public string goalId;
 	public string describe;
 	public string summary;
+	public bool forcedToAdd;
 	public int LordExp;
 	public GameGoalSystem.GoalType type;
 	public List<KeyValueData.KeyValue<string, string[]>> param;

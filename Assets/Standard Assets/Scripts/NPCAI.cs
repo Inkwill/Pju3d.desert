@@ -21,29 +21,30 @@ public class NPCAI : RoleAI
 	}
 	bool m_itemPick;
 
-	protected override void OnIdlingAI()
+	protected override void OnStateUpdate(State curState)
 	{
-		base.OnIdlingAI();
-		m_IdleDuring += Time.deltaTime;
-		if (m_IdleDuring > m_WanderBeat && m_WanderRadius > 0)
+		base.OnStateUpdate(curState);
+		if (curState == State.IDLE)
 		{
-			Agent.isStopped = false;
-			Wandering();
-			m_IdleDuring = 0;
+			m_IdleDuring += Time.deltaTime;
+			if (m_IdleDuring > m_WanderBeat && m_WanderRadius > 0)
+			{
+				Agent.isStopped = false;
+				Wandering();
+				m_IdleDuring = 0;
+			}
 		}
-	}
-
-	protected override void OnPursuingAI()
-	{
-		base.OnPursuingAI();
-		if (CurrentEnemy && m_Offensive && m_character.MoveSpeed > 0)
+		if (curState == State.PURSUING)
 		{
-			Agent.isStopped = false;
-			Agent.SetDestination(CurrentEnemy.gameObject.transform.position);
-		}
-		else
-		{
-			Helpers.Log(this, "OnPursuingAI", "enemy= " + CurrentEnemy);
+			if (CurrentEnemy && m_Offensive && m_character.MoveSpeed > 0)
+			{
+				Agent.isStopped = false;
+				Agent.SetDestination(CurrentEnemy.gameObject.transform.position);
+			}
+			else
+			{
+				Helpers.Log(this, "OnPursuingAI", "enemy= " + CurrentEnemy);
+			}
 		}
 	}
 	protected override void OnDamageAI(Damage damage)

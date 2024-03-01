@@ -52,32 +52,37 @@ public class RoleAI : AIBase
 		Agent.ResetPath();
 	}
 
-	protected override void OnIdlingAI()
+	protected override void OnStateUpdate(State curState)
 	{
-		if (CurrentEnemy != null) { SetState(State.PURSUING); return; }
-		else if (EnemyDetector.Inners.Count > 0)
+		if (curState == State.IDLE)
 		{
-			m_character.SetEnemy(EnemyDetector.GetNearest().GetComponent<CharacterData>());
-			SetState(State.PURSUING);
-			return;
+			if (CurrentEnemy != null) { SetState(State.PURSUING); return; }
+			else if (EnemyDetector.Inners.Count > 0)
+			{
+				m_character.SetEnemy(EnemyDetector.GetNearest().GetComponent<CharacterData>());
+				SetState(State.PURSUING);
+				return;
+			}
+			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnIdling");
 		}
-	}
-
-	protected override void OnPursuingAI()
-	{
-		if (CurrentEnemy) LookAt(CurrentEnemy.transform);
-		else SetState(State.IDLE);
-	}
-	protected override void OnMovingAI()
-	{
-		if (m_Destination != Vector3.zero && Vector3.SqrMagnitude(m_Destination - transform.position) <= 1)
+		if (curState == State.PURSUING)
 		{
-			GetComponent<EventSender>()?.Send(gameObject, "roleAIEvent_OnMoveEnd");
-			SetState(State.IDLE);
-			return;
+			if (CurrentEnemy) LookAt(CurrentEnemy.transform);
+			else { SetState(State.IDLE); return; }
+			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnPursuing");
 		}
-	}
+		if (curState == State.MOVE)
+		{
+			if (m_Destination != Vector3.zero && Vector3.SqrMagnitude(m_Destination - transform.position) <= 1)
+			{
+				GetComponent<EventSender>()?.Send(gameObject, "roleAIEvent_OnMoveEnd");
+				SetState(State.IDLE);
+				return;
+			}
+			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnMoving");
+		}
 
+	}
 	protected override void OnDeathAI()
 	{
 		Agent.isStopped = true;

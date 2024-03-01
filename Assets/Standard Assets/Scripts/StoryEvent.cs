@@ -7,26 +7,30 @@ using UnityEngine.Events;
 public class StoryEvent : MonoBehaviour
 {
 	[SerializeField]
+	int TriggerTimes = 1;
+	[SerializeField]
+	List<KeyValueData.KeyValue<ConditionData, string[]>> Conditions;
+	[SerializeField]
 	List<KeyValueData.KeyValue<string, float>> Dialogues;
 	[SerializeField]
 	List<KeyValueData.KeyValue<EffectData, string[]>> TriggerEffects;
 	bool m_completed;
-	CharacterData m_player;
+	int m_triggerTimes;
 
 	public void OnDamageEvent(Damage damage)
 	{
-		if (m_completed) return;
-		m_player = damage.Source;
-		if (m_player == GameManager.CurHero) StartStoryEvent();
+		OnTrigger(damage.Source);
 	}
-	public void OnTriggerEvent(GameObject player, string eventName)
+	public void OnTriggerEvent(GameObject player)
 	{
-		if (m_completed) return;
-		if (eventName == "Ready")
-		{
-			m_player = player.GetComponent<CharacterData>();
-			if (m_player == GameManager.CurHero) StartStoryEvent();
-		}
+		OnTrigger(player.GetComponent<CharacterData>());
+	}
+
+	void OnTrigger(CharacterData player)
+	{
+		if (m_completed || !ConditionData.JudgmentList(Conditions)) return;
+		if (++m_triggerTimes < TriggerTimes) return;
+		if (player == GameManager.CurHero) StartStoryEvent();
 	}
 
 	void StartStoryEvent()
@@ -34,7 +38,7 @@ public class StoryEvent : MonoBehaviour
 		// m_player.BaseAI.Stop();
 		// m_player.BaseAI.LookAt(Camera.main.transform);
 		GameManager.StoryMode = true;
-		UIRoleHud hud = m_player.GetComponentInChildren<UIRoleHud>();
+		UIRoleHud hud = GameManager.CurHero.GetComponentInChildren<UIRoleHud>();
 		StartCoroutine(PalyStory(hud));
 	}
 
@@ -53,6 +57,6 @@ public class StoryEvent : MonoBehaviour
 	{
 		m_completed = true;
 		GameManager.StoryMode = false;
-		EffectData.TakeEffects(TriggerEffects, m_player.gameObject, m_player.gameObject);
+		EffectData.TakeEffects(TriggerEffects, GameManager.CurHero.gameObject, GameManager.CurHero.gameObject);
 	}
 }

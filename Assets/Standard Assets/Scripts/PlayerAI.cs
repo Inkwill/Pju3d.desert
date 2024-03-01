@@ -10,10 +10,17 @@ public class PlayerAI : RoleAI
 		base.Init(data);
 		m_character.Inventory.ItemEvent += (OnItemEvent);
 	}
-	void FixedUpdate()
+	protected override void OnStateUpdate(State curState)
 	{
-		if (CurState == State.DEAD || CurState == State.SKILLING) return;
+		if (curState == State.IDLE || curState == State.MOVE || curState == State.PURSUING || curState == State.ATTACKING)
+		{
+			HandleMoveInput();
+			base.OnStateUpdate(curState);
+		}
+	}
 
+	void HandleMoveInput()
+	{
 		Vector3 direction = Vector3.forward * GameManager.GameUI.JoyStick.Vertical + Vector3.right * GameManager.GameUI.JoyStick.Horizontal;
 		if (direction.magnitude > 0)
 		{

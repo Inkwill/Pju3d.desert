@@ -94,11 +94,9 @@ public class AIBase : MonoBehaviour
 
 	void Update()
 	{
-		if (m_State == State.INACTIVE) return;
-
 		m_StateDuring += Time.deltaTime;
-		//Dead
-		if (m_State == State.DEAD) return;
+		//Dead or Inactive
+		if (m_State == State.DEAD || m_State == State.INACTIVE) return;
 		//Skill
 		if (SkillUser && m_State != State.SKILLING && SkillUser.CurSkill != null) { SetState(State.SKILLING); }
 		if (SkillUser && m_State == State.SKILLING && SkillUser.CurSkill == null) { SetState(State.IDLE); }
@@ -119,35 +117,23 @@ public class AIBase : MonoBehaviour
 					Debug.LogError("Miss a Weapon! role = " + gameObject);
 				}
 			}
-			if (m_character.CanAttackReach()) { SetState(State.ATTACKING); }
-			else { OnPursuingAI(); GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnPursuing"); }
+			if (m_character.CanAttackReach()) SetState(State.ATTACKING);
 		}
-		//MOVE
-		if (m_State == State.MOVE)
-		{
-			OnMovingAI();
-			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnMoving");
-		}
-		//IDLE
-		if (m_State == State.IDLE)
-		{
-			OnIdlingAI();
-			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnIdling");
-		}
+		m_character.OnStateUpdate?.Invoke(m_State);
+		OnStateUpdate(m_State);
 	}
 	public void SetState(State nextState)
 	{
 		if (m_State == nextState) return;
 		m_State = nextState;
 		m_StateDuring = 0;
-		if (m_State == State.INACTIVE) m_character.SetEnemy(null);
+		if (m_State == State.INACTIVE) { m_character.BaseAI.Stop(); m_character.SetEnemy(null); }
 		GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
 	}
 
 	public virtual void LookAt(Transform trans)
 	{
 		LookAt(trans.position - m_character.transform.position);
-
 	}
 
 	public virtual void LookAt(Vector3 forward)
@@ -158,9 +144,7 @@ public class AIBase : MonoBehaviour
 	}
 
 	public virtual void Stop() { }
-	protected virtual void OnIdlingAI() { }
-	protected virtual void OnMovingAI() { }
-	protected virtual void OnPursuingAI() { }
+	protected virtual void OnStateUpdate(State state) { }
 	protected virtual void OnDeathAI() { }
 	protected virtual void OnDamageAI(Damage damage) { }
 

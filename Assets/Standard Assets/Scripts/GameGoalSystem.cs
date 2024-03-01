@@ -105,12 +105,18 @@ public class GameGoalSystem : MonoBehaviour
 		{
 			m_owner.AchieveGoal(this);
 		}
+
+		public void Abandon()
+		{
+			m_owner.AbandonGoal(this);
+		}
 	}
 
 	public Action<GameGoal, string> GameGoalAction;
 	public StatisticsHandle Recorder => m_recorder;
 	public GameGoal CurrentGoal => m_curGoal;
 	List<string> m_AchievedGoals;
+	List<string> m_FailedGoals;
 	GameGoal m_curGoal;
 	StatisticsHandle m_recorder;
 
@@ -126,8 +132,12 @@ public class GameGoalSystem : MonoBehaviour
 			if (m_curGoal.Completed) m_curGoal.Acheve();
 			else
 			{
-				Helpers.Log(this, "AddGoal", $"Fail:{data.goalId},cur:{m_curGoal.data.goalId}");
-				return null;
+				if (data.forcedToAdd) m_curGoal.Abandon();
+				else
+				{
+					Helpers.Log(this, "AddGoal", $"Fail:{data.goalId},cur:{m_curGoal.data.goalId}");
+					return null;
+				}
 			}
 		}
 		var goal = new GameGoal(this, data);
@@ -153,8 +163,14 @@ public class GameGoalSystem : MonoBehaviour
 		GameManager.Lord.AddExp(goal.data.LordExp);
 	}
 
-	public bool IsAchievedGoal(string goalId)
+	void AbandonGoal(GameGoal goal)
 	{
-		return m_AchievedGoals.Contains(goalId);
+		m_FailedGoals.Add(goal.data.goalId);
+		if (goal == m_curGoal) m_curGoal = null;
 	}
+
+	// public bool IsAchievedGoal(string goalId)
+	// {
+	// 	return m_AchievedGoals.Contains(goalId);
+	// }
 }

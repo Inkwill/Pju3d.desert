@@ -32,6 +32,7 @@ public class CharacterData : HighlightableObject
 	public StatSystem Stats;
 	public InventorySystem Inventory = new InventorySystem();
 	public EquipmentSystem Equipment = new EquipmentSystem();
+	public Action<AIBase.State> OnStateUpdate;
 	public UnityEvent<Damage> OnDamage;
 	public UnityEvent<CharacterData> OnDeath;
 	public List<KeyValueData.KeyValue<EffectData, string[]>> DeadEffects;
