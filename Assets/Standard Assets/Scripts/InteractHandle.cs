@@ -14,19 +14,32 @@ public class InteractHandle : MonoBehaviour
 	[SerializeField]
 	Slider slider;
 	[SerializeField]
-	string sliderString;
+	bool autoStart;
 	public float During { get { return m_during; } set { m_during = value; if (slider) slider.value = value; } }
 	float m_during;
 	public GameObject CurrentTarget { get { return m_target; } set { m_target = value; } }
 	GameObject m_target;
 
-	void Start()
+	public void Start()
 	{
-		if (slider) slider.maxValue = handleTime;
-		slider?.gameObject.SetActive(false);
-		Detector?.OnEnter.AddListener(OnInterEnter);
-		Detector?.OnExit.AddListener(OnInterExit);
-		Detector?.OnStay.AddListener(OnInterStay);
+		if (autoStart) SetHandle(true);
+	}
+	public void SetHandle(bool active)
+	{
+		if (active)
+		{
+			if (slider) slider.maxValue = handleTime;
+			slider?.gameObject.SetActive(false);
+			Detector.OnEnter.AddListener(OnInterEnter);
+			Detector.OnExit.AddListener(OnInterExit);
+			Detector.OnStay.AddListener(OnInterStay);
+		}
+		else
+		{
+			Detector.OnEnter.RemoveListener(OnInterEnter);
+			Detector.OnExit.RemoveListener(OnInterExit);
+			Detector.OnStay.RemoveListener(OnInterStay);
+		}
 	}
 
 	void OnInterEnter(GameObject enter)
@@ -35,8 +48,6 @@ public class InteractHandle : MonoBehaviour
 		InteractEvent?.Invoke(enter, "Enter");
 		During = 0;
 		slider?.gameObject.SetActive(true);
-		UISliderText sliderT = slider?.GetComponent<UISliderText>();
-		if (sliderT) sliderT.form = sliderString;
 		//Helpers.Log(this, "OninterEnter", "enter= " + enter);
 	}
 

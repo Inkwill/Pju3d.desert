@@ -76,3 +76,5 @@ MonoBehaviour:
   DropBox:
   - Key: drop_wood
     Value: {fileID: 11400000, guid: 2aedcb0f1a173b746b0f00d850f136ae, type: 2}
+  - Key: drop_test
+    Value: {fileID: 11400000, guid: 2aedcb0f1a173b746b0f00d850f136ae, type: 2}

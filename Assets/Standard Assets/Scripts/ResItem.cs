@@ -10,8 +10,7 @@ public class ResItem : Item
 	{
 		Wood,
 		Warter,
-		Money,
 	}
-	public ResType Type { get; private set; }
+	public ResType Type;
 }
 

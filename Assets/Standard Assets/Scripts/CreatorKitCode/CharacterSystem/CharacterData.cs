@@ -34,7 +34,7 @@ public class CharacterData : HighlightableObject
 	public EquipmentSystem Equipment = new EquipmentSystem();
 	public UnityEvent<Damage> OnDamage;
 	public UnityEvent<CharacterData> OnDeath;
-	public List<KeyValueData.KeyValue<EffectData, string[]>> dropEffects;
+	public List<KeyValueData.KeyValue<EffectData, string[]>> DeadEffects;
 	public Action<CharacterData> OnAttack { get; set; }
 	public Action<CharacterData> OnKillEnemy { get; set; }
 	Vector3 m_BirthPos;
@@ -210,10 +210,9 @@ public class CharacterData : HighlightableObject
 		else
 		{
 			gameObject.layer = (camp == Camp.PLAYER) ? LayerMask.NameToLayer("PlayerCorpse") : LayerMask.NameToLayer("Corpse");
-			if (dropEffects != null && dropEffects.Count > 0) EffectData.TakeEffects(dropEffects, gameObject, gameObject);
+			if (DeadEffects != null) EffectData.TakeEffects(DeadEffects, gameObject, gameObject);
 			StartCoroutine(DestroyCorpse(1.0f));
 		}
-
 	}
 	IEnumerator DestroyCorpse(float time)
 	{

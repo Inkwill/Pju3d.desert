@@ -1,30 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using CreatorKitCode;
 using DG.Tweening;
 
+[RequireComponent(typeof(InteractHandle))]
 public class ItemDemander : TimerBehaviour
 {
 	public string demanderId;
-	[SerializeField]
-	InteractOnTrigger detector;
+	public UnityEvent<GameObject, GameObject> DemandeEvents;
+	public UnityEvent RefreshEvents;
 	[SerializeField]
 	UIItemDemand ui_demand;
 	[SerializeField]
 	List<KeyValueData.KeyValue<Item, int>> DemandData;
-	[SerializeField]
-	List<KeyValueData.KeyValue<EffectData, string[]>> EndEffect;
 	InventorySystem.ItemDemand m_Demand;
 	CharacterData m_character;
+	InteractHandle m_interactHandle;
 	void Start()
+	{
+		m_interactHandle = GetComponent<InteractHandle>();
+		m_interactHandle.InteractEvent.AddListener(OnInteractEvent);
+		m_interactHandle.SetHandle(true);
+		Init();
+	}
+
+	public void Init()
 	{
 		m_Demand = new InventorySystem.ItemDemand(KeyValueData.ToDic(DemandData));
 		ui_demand.Show(m_Demand);
-
-		//detector?.OnEnter.AddListener(OnInterEnter);
-		//detector?.OnExit.AddListener(OnInterExit);
-		//detector?.OnStay.AddListener(OnInterStay);
 	}
 
 	public void OnInteractEvent(GameObject actor, string eventName)
@@ -47,13 +52,13 @@ public class ItemDemander : TimerBehaviour
 				else ui_demand.Fail();
 			}
 		}
-		if (eventName == "Exit" && m_character != null)
-		{
-			m_character.Inventory.ItemEvent -= OnItemEvent;
-			m_character = null;
-		}
 	}
 
+	protected override void OnRefresh()
+	{
+		Init();
+		RefreshEvents?.Invoke();
+	}
 	protected override void OnStart()
 	{
 		ui_demand.gameObject.SetActive(false);
@@ -62,15 +67,22 @@ public class ItemDemander : TimerBehaviour
 
 	protected override void OnEnd()
 	{
-		foreach (var effect in EndEffect)
+		m_interactHandle.SetHandle(false);
+		if (m_character != null)
 		{
-			effect.Key.TakeEffect(gameObject, gameObject, effect.Value);
+			m_character.Inventory.ItemEvent -= OnItemEvent;
+			m_character = null;
 		}
-		m_character.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, demanderId);
 	}
 	protected override void OnTimer()
 	{
-		Helpers.Log(this, "OnTimer");
+		if (m_character != null)
+		{
+			DemandeEvents?.Invoke(gameObject, m_character.gameObject);
+			m_character.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, demanderId);
+		}
+
+
 		// GameObject createObj = Resources.Load(creatPrefab) as GameObject;
 		// if (createObj)
 		// {

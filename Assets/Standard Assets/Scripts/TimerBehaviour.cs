@@ -8,11 +8,11 @@ public class TimerBehaviour : MonoBehaviour
 {
 	public float during = 10.0f;
 	float interval = 1.0f;
-	//public virtual int TotalTimes { get { return times; } }
-	public int times = -1;  //times <= 0  means loop
+	public int times = 1;  //times <= 0  means loop
+	public float cd;
 	public Slider progressSlider;
-	public bool destroyOnEnd;
-	float m_curTimer = 0f;
+	float m_curTimer;
+	float m_curCD;
 	float m_step = 0f;
 	bool m_started = false;
 	public bool isStarted
@@ -21,6 +21,7 @@ public class TimerBehaviour : MonoBehaviour
 		set
 		{
 			if (times == 0 && value) return;
+			if (m_curCD > 0 && value) return;
 			m_started = value;
 			if (progressSlider)
 			{
@@ -32,10 +33,6 @@ public class TimerBehaviour : MonoBehaviour
 			{
 				OnStart();
 			}
-			else
-			{
-				OnEnd();
-			}
 		}
 	}
 
@@ -45,7 +42,7 @@ public class TimerBehaviour : MonoBehaviour
 		if (m_started)
 		{
 			m_curTimer += Time.deltaTime;
-
+			if (progressSlider) progressSlider.value = m_curTimer;
 			if (m_curTimer >= during)
 			{
 				OnTimer();
@@ -54,7 +51,12 @@ public class TimerBehaviour : MonoBehaviour
 				if (times == 0)
 				{
 					isStarted = false;
-					if (destroyOnEnd) Destroy(gameObject);
+					OnEnd();
+				}
+				else if (cd > 0)
+				{
+					m_curCD = cd;
+					isStarted = false;
 				}
 
 			}
@@ -63,16 +65,19 @@ public class TimerBehaviour : MonoBehaviour
 				OnProcessing(m_curTimer / during);
 				m_step = 0f;
 			}
-			if (progressSlider)
-			{
-				if (!progressSlider.gameObject.activeSelf) progressSlider.gameObject.SetActive(true);
-				progressSlider.value = m_curTimer;
-			}
 		}
-		else if (m_step >= interval)
+		else
 		{
-			OnInterval();
-			m_step = 0f;
+			if (m_step >= interval)
+			{
+				OnInterval();
+				m_step = 0f;
+			}
+			if (m_curCD > 0)
+			{
+				m_curCD -= Time.deltaTime;
+				if (m_curCD <= 0 && times > 0) OnRefresh();
+			}
 		}
 	}
 
@@ -80,6 +85,6 @@ public class TimerBehaviour : MonoBehaviour
 	protected virtual void OnProcessing(float completed) { }
 	protected virtual void OnStart() { }
 	protected virtual void OnEnd() { }
-
 	protected virtual void OnInterval() { }
+	protected virtual void OnRefresh() { }
 }

@@ -17,7 +17,8 @@ public class EffectData : ScriptableObject
 		DROPBOX,
 		ADDGOAL,
 		LORDMONEY,
-		LORDEXP
+		LORDEXP,
+		DESTROYSELF,
 	}
 	public EffectType Type;
 	public VFXType TakeVFX = VFXType.NONE;
@@ -71,12 +72,17 @@ public class EffectData : ScriptableObject
 				}
 				break;
 			case EffectType.DROPBOX:
-				DropBox dropBox = DropBox.GetDropBoxByKey(param[0]);
-				if (dropBox != null)
+				if (param == null || param.Length == 0)
 				{
-					int count = 1;
-					if (param != null && param.Length > 0 && int.TryParse(param[1], out count))
+					Debug.LogError("DropBoxEffect take missing enough parameters! " + "user= " + user);
+					return false;
+				}
+				{
+					DropBox dropBox = DropBox.GetDropBoxByKey(param[0]);
+					if (dropBox != null)
 					{
+						int count = 1;
+						if (param.Length > 1) int.TryParse(param[1], out count);
 						for (int i = 0; i < count; i++)
 						{
 							foreach (var drop in dropBox.GetDropItem())
@@ -111,6 +117,10 @@ public class EffectData : ScriptableObject
 					GameManager.Lord.AddExp(exp);
 					success = true;
 				}
+				break;
+			case EffectType.DESTROYSELF:
+				Destroy(user);
+				success = true;
 				break;
 			default:
 				Debug.LogError("Take a illegal Effect:" + this);
