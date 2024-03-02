@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goalId: main03
   describe: "\u79FB\u52A8\u65F6\u4E0D\u80FD\u653B\u51FB\uFF0C\u505C\u6B62\u79FB\u52A8\u53EF\u81EA\u52A8\u653B\u51FB"
-  summary: "\u6D88\u706D:"
+  summary: "\u6D88\u706D\u6363\u4E71\u7684\u4ED9\u4EBA\u638C:"
   forcedToAdd: 0
   LordExp: 3
   type: 2
   param:
-  - Key: any
+  - Key: Cactus Nails
     Value:
     - 5
   rewardEffects: []

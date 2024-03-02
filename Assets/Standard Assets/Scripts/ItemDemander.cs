@@ -34,11 +34,10 @@ public class ItemDemander : TimerBehaviour
 
 	public void OnInteractEvent(GameObject actor, string eventName)
 	{
-		if (m_character == null) m_character = actor.GetComponent<CharacterData>();
-		if (eventName == "Enter" && m_character != null)
+		var character = actor.GetComponent<CharacterData>();
+		if (eventName == "Enter" && character != null)
 		{
 			ui_demand.Inter();
-			m_character.Inventory.ItemEvent += OnItemEvent;
 		}
 		if (eventName == "Ready" && m_character != null)
 		{
@@ -47,6 +46,7 @@ public class ItemDemander : TimerBehaviour
 				var submitable = m_Demand.Submittable(m_character.Inventory);
 				if (submitable.Count > 0)
 				{
+					m_character.Inventory.ItemEvent += OnItemEvent;
 					m_Demand.Fulfill(m_character.Inventory);
 				}
 				else ui_demand.Fail();
@@ -68,11 +68,6 @@ public class ItemDemander : TimerBehaviour
 	protected override void OnEnd()
 	{
 		m_interactHandle.SetHandle(false);
-		if (m_character != null)
-		{
-			m_character.Inventory.ItemEvent -= OnItemEvent;
-			m_character = null;
-		}
 	}
 	protected override void OnTimer()
 	{
@@ -95,13 +90,18 @@ public class ItemDemander : TimerBehaviour
 	{
 		if (actionName == "Fulfill")
 		{
-			ResCollector collector = m_character.GetComponent<ResCollector>();
-			if (collector)
+			if (m_character != null)
 			{
-				//collector.Display(item, itemCount, UpdateDemand);
-				Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
-				StartCoroutine(UpdateDemand(item, itemCount));
+				m_character.Inventory.ItemEvent -= OnItemEvent;
+				ResCollector collector = m_character.GetComponent<ResCollector>();
+				if (collector)
+				{
+					//collector.Display(item, itemCount, UpdateDemand);
+					Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
+					StartCoroutine(UpdateDemand(item, itemCount));
+				}
 			}
+			else ui_demand.Show(m_Demand);
 		}
 	}
 
