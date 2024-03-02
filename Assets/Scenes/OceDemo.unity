@@ -2105,6 +2105,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_fence (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469229888965626834, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7037626247196388736, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4531,6 +4551,7 @@ Transform:
   m_Children:
   - {fileID: 1157170178}
   - {fileID: 1283425417}
+  - {fileID: 1483239283}
   - {fileID: 808402201}
   - {fileID: 1607788259}
   - {fileID: 2093202909}
@@ -7896,6 +7917,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: building_fence (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469229888965626834, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7037626247196388736, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14754,6 +14795,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_fence
       objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469229888965626834, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7037626247196388736, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14827,6 +14888,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: building_fence (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469229888965626834, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7037626247196388736, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15356,7 +15437,7 @@ MonoBehaviour:
     Value: 1.5
   - Key: "\u8FCE\u9762Hotel\u4E00\u95F4"
     Value: 1.5
-  - Key: "\u90A3\u8FB9\u7EFF\u8272\u4F19\u8BA1\u6709\u96BE"
+  - Key: "\u90A3\u8FB9\u4F19\u8BA1\u6709\u96BE"
     Value: 1.5
   - Key: "\u9E8B\u9E7F\u600E\u80FD\u65C1\u89C2"
     Value: 1.5
@@ -21209,13 +21290,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1483239278}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 85, y: 10, z: 15.9}
+  m_LocalRotation: {x: -0, y: -0.2855006, z: -0, w: 0.9583786}
+  m_LocalPosition: {x: 19.517475, y: 0, z: -0.97893727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 375547313}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 427273653}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1483432756
 PrefabInstance:
@@ -26528,6 +26609,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: building_fence (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3121713885932499550, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: camp
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3121713885932499550, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: MoveSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3121713885932499550, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: CharacterName
+      value: Fence
+      objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4258207218712722552, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469229888965626834, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7037626247196388736, guid: c739483f9de27494da7af47be65325b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -33270,7 +33386,6 @@ SceneRoots:
   - {fileID: 427273653}
   - {fileID: 1048797698}
   - {fileID: 1419090759}
-  - {fileID: 1483239283}
   - {fileID: 481848067}
   - {fileID: 1711097186}
   - {fileID: 53769696}

@@ -14,7 +14,7 @@ public class UISkillButton : UIEventSender
 	void Start()
 	{
 		OnLonePressEvent.AddListener(ShowSkillTips);
-		OnClickEvent.AddListener(() => { GameManager.CurHero.BaseAI.SkillUser.UseSkill(m_entry.skill); });
+		OnClickEvent.AddListener(() => { GameManager.CurHero.SkillUser.UseSkill(m_entry.skill); });
 		if (skill != null) Init(skill);
 		OnStart();
 	}
@@ -23,9 +23,9 @@ public class UISkillButton : UIEventSender
 	public void Init(Skill sk)
 	{
 		skill = sk;
-		GameManager.CurHero.BaseAI.SkillUser.AddSkill(skill);
+		GameManager.CurHero.SkillUser.AddSkill(skill);
 		textName.text = skill.SkillName;
-		m_entry = GameManager.CurHero.BaseAI.SkillUser.GetEntry(skill.SkillName);
+		m_entry = GameManager.CurHero.SkillUser.GetEntry(skill.SkillName);
 	}
 	protected virtual void ShowSkillTips()
 	{

@@ -31,7 +31,6 @@ public class UIMainWindow : UIWindow
 		targetUI.Init();
 		m_buttons = GetComponentsInChildren<Button>();
 		m_skillButtons = GetComponentsInChildren<UISkillButton>();
-		GameManager.CurHero.GetComponent<EventSender>()?.events.AddListener(OnPlayerEvent);
 		GameManager.CurHero.Equipment.OnEquiped += (equip) => { UpdateWeapon(GameManager.CurHero.Equipment); };
 		GameManager.CurHero.Equipment.OnUnequip += (equip) => { UpdateWeapon(GameManager.CurHero.Equipment); };
 		GameManager.CurHero.Equipment.OnEquipViceWeapon += (equip) => { UpdateWeapon(GameManager.CurHero.Equipment); };
@@ -44,11 +43,6 @@ public class UIMainWindow : UIWindow
 		CloseTalkButton();
 		tellContent.SetActive(false);
 		uiGoalInfo.SetGoal(GameManager.GameGoal.CurrentGoal);
-	}
-
-	void OnPlayerEvent(GameObject obj, string eventName)
-	{
-		//btDig.interactable = (eventName == "roleEvent_OnState_IDLE");
 	}
 
 	void OnStoryListenerEvent(string eventName, string content)

@@ -21,7 +21,6 @@ public class StoryTeller : MonoBehaviour
 	{
 		GameManager.StoryListener.storyListenerEvents.AddListener(OnListenEvent);
 		m_character = GetComponent<CharacterData>();
-		m_character.GetComponent<EventSender>()?.events.AddListener(OnRoleEvent);
 		m_interactHandle = GetComponent<InteractHandle>();
 		m_interactHandle?.InteractEvent.AddListener(OnInteractEvent);
 		entrustments = new List<Entrustment>();
@@ -53,12 +52,6 @@ public class StoryTeller : MonoBehaviour
 		{
 			TellStory(content);
 		}
-	}
-
-	void OnRoleEvent(GameObject role, string eventName)
-	{
-		// if (eventName == "aiEvent_wandering" && m_currentNode == null)
-		// 	TellStory();
 	}
 
 	void TellStory(string ask)

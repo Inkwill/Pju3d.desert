@@ -23,7 +23,7 @@ public class Damage
 		target.Stats.ChangeHealth(-totalDamage, attacker);
 		var damagePos = target.transform.position + target.transform.up * 0.5f;
 		VFXManager.PlayVFX(VFXType.Hit, damagePos);
-		target.OnDamage?.Invoke(this);
+		target.DamageEvent?.Invoke(this);
 	}
 
 	public void TakeDamage() { TakeDamage(m_Source, m_Target); }

@@ -21,7 +21,6 @@ public class AIBase : MonoBehaviour
 	protected State m_State = State.INACTIVE;
 	public float CurStateDuring => m_StateDuring;
 	float m_StateDuring;
-	public Action<State> StateUpdateEvent;
 	public bool isIdle { get { return m_State == State.IDLE; } }
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 	public bool isActive { get { return m_State != State.INACTIVE && m_State != State.DEAD; } }
@@ -37,15 +36,12 @@ public class AIBase : MonoBehaviour
 	public CharacterData CurrentEnemy => m_character.CurrentEnemy;
 	public CharacterData Character => m_character;
 	protected CharacterData m_character;
-	public SkillUser SkillUser => m_SkillUser;
-	SkillUser m_SkillUser;
 
 	void Start()
 	{
 		m_character = GetComponent<CharacterData>();
-		m_character.OnDamage.AddListener(OnDamageAI);
-		m_character.OnDeath.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
-		m_SkillUser = GetComponent<SkillUser>();
+		m_character.DamageEvent.AddListener(OnDamageAI);
+		m_character.DeathEvent.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
 
 		if (EnemyDetector)
 		{
@@ -100,8 +96,8 @@ public class AIBase : MonoBehaviour
 		//Dead or Inactive
 		if (m_State == State.DEAD || m_State == State.INACTIVE) return;
 		//Skill
-		if (SkillUser && m_State != State.SKILLING && SkillUser.CurSkill != null) { SetState(State.SKILLING); }
-		if (SkillUser && m_State == State.SKILLING && SkillUser.CurSkill == null) { SetState(State.IDLE); }
+		if (m_character.SkillUser && m_State != State.SKILLING && m_character.SkillUser.CurSkill != null) { SetState(State.SKILLING); }
+		if (m_character.SkillUser && m_State == State.SKILLING && m_character.SkillUser.CurSkill == null) { SetState(State.IDLE); }
 		//ATTACK
 		if (m_State == State.ATTACKING)
 		{
@@ -121,7 +117,7 @@ public class AIBase : MonoBehaviour
 			}
 			if (m_character.CanAttackReach()) SetState(State.ATTACKING);
 		}
-		StateUpdateEvent?.Invoke(m_State);
+		m_character.StateUpdateAction?.Invoke(m_State);
 		OnStateUpdate(m_State);
 	}
 	public void SetState(State nextState)
@@ -130,7 +126,7 @@ public class AIBase : MonoBehaviour
 		m_State = nextState;
 		m_StateDuring = 0;
 		if (m_State == State.INACTIVE) { m_character.BaseAI.Stop(); m_character.SetEnemy(null); }
-		GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnState_" + System.Enum.GetName(typeof(State), m_State));
+		m_character.StateStartAction?.Invoke(m_State);
 	}
 
 	public virtual void LookAt(Transform trans)
@@ -160,35 +156,27 @@ public class AIBase : MonoBehaviour
 		if (m_character.CurrentEnemy && m_character.CurrentEnemy.gameObject == exiter)
 		{
 			m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<CharacterData>());
-			//m_eventSender.Send(exiter, "roleEvent_OnEnemyExit");
 		}
 	}
 	protected virtual void OnEnemyEvent(GameObject sender, string eventMessage)
 	{
-		if (eventMessage == "roleEvent_OnState_DEAD")
-		{
-			//m_role.CurState = RoleControl.State.IDLE;
-			//Debug.Log("OnEnemyEvent: target= " + sender + "event= " + eventMessage);
-		}
+
 	}
 
 	void OnSkillTargetEnter(GameObject enter)
 	{
-		if (SkillUser && SkillUser.CurSkill != null) SkillUser.AddTarget(enter);
+		if (m_character.SkillUser && m_character.SkillUser.CurSkill != null) m_character.SkillUser.AddTarget(enter);
 		//Debug.Log("OnSkillTargetEnter: enter= " + enter);
 	}
 
 	void OnSkillTargetExit(GameObject exiter)
 	{
-		if (SkillUser && SkillUser.CurSkill != null) SkillUser.RemoveTarget(exiter);
+		if (m_character.SkillUser && m_character.SkillUser.CurSkill != null) m_character.SkillUser.RemoveTarget(exiter);
 		//Debug.Log("OnSkillTargetExit: exiter= " + exiter);
 	}
 	void OnSkillTargetEvent(GameObject sender, string eventMessage)
 	{
-		if (eventMessage == "roleEvent_OnState_DEAD")
-		{
-			Debug.Log("OnSkillTargetEvent: target= " + sender + "event= " + eventMessage);
-		}
+
 	}
 	protected virtual void OnInteractStay(GameObject interactor, float during)
 	{

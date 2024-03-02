@@ -46,6 +46,7 @@ namespace CreatorKitCodeInternal
 					btDrop.gameObject.SetActive(!slot.equipment);
 					btUse.gameObject.SetActive(useItem);
 				}
+				btUnEquip.interactable = GameManager.CurHero.BaseAI.isIdle;
 			}
 			else
 			{

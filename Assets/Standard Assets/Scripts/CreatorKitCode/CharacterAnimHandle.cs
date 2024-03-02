@@ -30,11 +30,10 @@ public class CharacterAnimHandle : MonoBehaviour
 	void Start()
 	{
 		m_character = GetComponentInParent<CharacterData>();
-		m_character.OnDamage.AddListener((damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); });
-		m_character.OnDeath.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
-		m_character.OnAttack += (attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); };
-		//m_character.GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
-		if (m_character.BaseAI != null) m_character.BaseAI.StateUpdateEvent += OnCharacterStating;
+		m_character.DamageEvent.AddListener((damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); });
+		m_character.DeathEvent.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
+		m_character.AttackAction += (attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); };
+		if (m_character.BaseAI != null) m_character.StateUpdateAction += OnCharacterStating;
 		m_Animator = GetComponent<Animator>();
 	}
 

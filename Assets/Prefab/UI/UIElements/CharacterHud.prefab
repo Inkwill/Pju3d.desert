@@ -1055,6 +1055,7 @@ GameObject:
   m_Component:
   - component: {fileID: 653586547211128516}
   - component: {fileID: 4577293500429084900}
+  - component: {fileID: 5624562813509706678}
   m_Layer: 5
   m_Name: hp
   m_TagString: Untagged
@@ -1134,6 +1135,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5624562813509706678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076895084683073356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8445336e0f9a394d8526affde042871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8159646576522130129
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,15 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using CreatorKitCode;
 using UnityEngine.AI;
-using CreatorKitCodeInternal;
-using MyBox;
 
 public class RoleAI : AIBase
 {
 	public NavMeshAgent Agent => m_Agent;
 	protected NavMeshAgent m_Agent;
+	public Action MoveEndAction;
 	public override float SpeedScale { get { return Agent.velocity.magnitude / m_character.MoveSpeed; } }
 	protected Vector3 m_Destination = Vector3.zero;
 	NavMeshPath m_CalculatedPath;
@@ -36,7 +33,6 @@ public class RoleAI : AIBase
 			}
 		}
 	}
-
 	public void MoveTo(Vector3 pos)
 	{
 		m_Destination = pos;
@@ -62,23 +58,21 @@ public class RoleAI : AIBase
 				SetState(State.PURSUING);
 				return;
 			}
-			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnIdling");
 		}
 		if (curState == State.PURSUING)
 		{
 			if (CurrentEnemy) LookAt(CurrentEnemy.transform);
 			else { SetState(State.IDLE); return; }
-			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnPursuing");
 		}
 		if (curState == State.MOVE)
 		{
 			if (m_Destination != Vector3.zero && Vector3.SqrMagnitude(m_Destination - transform.position) <= 1)
 			{
-				GetComponent<EventSender>()?.Send(gameObject, "roleAIEvent_OnMoveEnd");
-				SetState(State.IDLE);
+				MoveEndAction?.Invoke();
+				if (m_character.CurrentEnemy) SetState(State.PURSUING);
+				else SetState(State.IDLE);
 				return;
 			}
-			GetComponent<EventSender>()?.Send(gameObject, "roleEvent_OnMoving");
 		}
 
 	}

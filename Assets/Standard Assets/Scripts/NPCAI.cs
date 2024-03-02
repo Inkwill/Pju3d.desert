@@ -61,7 +61,6 @@ public class NPCAI : RoleAI
 
 		Vector3 randomPos = new Vector3(m_character.BirthPos.x + randomX, m_character.BirthPos.y, m_character.BirthPos.z + randomZ);
 		MoveTo(randomPos);
-		m_character.GetComponent<EventSender>()?.Send(m_character.gameObject, "aiEvent_wandering");
 	}
 
 	void OnItemEnter(Loot loot)

@@ -19,14 +19,12 @@ public class SkillUser : MonoBehaviour
 	List<SkillEntry> m_SkillEntries;
 	CharacterData m_character;
 	Animator m_Animator;
-	EventSender m_eventSender;
 	float m_During;
 
 	void Start()
 	{
 		m_SkillEntries = new List<SkillEntry>();
 		m_character = GetComponent<CharacterData>();
-		m_eventSender = GetComponent<EventSender>();
 		CharacterAnimHandle animHandle = GetComponentInChildren<CharacterAnimHandle>();
 		if (animHandle) { animHandle.SkillStep.AddListener(SkillStep); m_Animator = animHandle.GetComponent<Animator>(); }
 		else m_Animator = GetComponentInChildren<Animator>();
@@ -44,13 +42,13 @@ public class SkillUser : MonoBehaviour
 			{
 				if (m_Animator) m_Animator.SetTrigger(m_UseEntry.skill.SkillAnim);
 				m_UseEntry.skill.Operating(m_character, m_UseEntry.targets);
-				m_eventSender?.Send(gameObject, "skillEvent_OnOperat");
+				m_character.SkillAction?.Invoke(m_UseEntry.skill, "Operat");
 				m_During += Time.deltaTime;
 			}
 			else
 			{
 				m_UseEntry.skill.Implement(m_character, m_UseEntry.targets);
-				m_eventSender?.Send(gameObject, "skillEvent_OnImplement");
+				m_character.SkillAction?.Invoke(m_UseEntry.skill, "Implement");
 				m_UseEntry = null;
 				m_During = 0;
 				m_character.BaseAI.SkillDetector.layers = LayerMask.GetMask("Nothing");

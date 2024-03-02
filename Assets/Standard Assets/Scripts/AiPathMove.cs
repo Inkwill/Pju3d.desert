@@ -13,22 +13,30 @@ public class AiPathMove : MonoBehaviour
 	void Start()
 	{
 		m_roleAi = GetComponent<RoleAI>();
-		m_roleAi.GetComponent<EventSender>().events.AddListener(OnRoleEvent);
+		m_roleAi.Character.StateUpdateAction += OnStateUpdate;
+		m_roleAi.MoveEndAction += () =>
+		{
+			if (m_paths.Length > m_curPathIndex)
+			{
+				m_curPathIndex++;
+			}
+		};
 	}
-	void OnRoleEvent(GameObject obj, string eventName)
+
+	void OnStateUpdate(AIBase.State curState)
 	{
-		if (eventName == "roleAIEvent_OnMoveEnd" && m_paths.Length > m_curPathIndex)
+		if (curState == AIBase.State.IDLE)
 		{
-			m_curPathIndex++;
+			if (m_paths.Length > m_curPathIndex)
+			{
+				m_roleAi.MoveTo(m_paths[m_curPathIndex].position);
+			}
 		}
-		if (eventName == "roleEvent_OnIdling" && m_paths.Length > m_curPathIndex)
+		if (curState == AIBase.State.MOVE)
 		{
-			m_roleAi.MoveTo(m_paths[m_curPathIndex].position);
+			if (m_roleAi.Character.CurrentEnemy && m_Offensive) m_roleAi.SetState(AIBase.State.PURSUING);
 		}
-		if (eventName == "roleEvent_OnMoving" && m_Offensive)
-		{
-			if (m_roleAi.Character.CurrentEnemy) m_roleAi.SetState(AIBase.State.PURSUING);
-		}
+
 	}
 	public void SetPath(Transform pathRoot, bool offensive = true)
 	{

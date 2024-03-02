@@ -42,7 +42,6 @@ public class Creater : TimerBehaviour
 	protected override void OnTimer()
 	{
 		CreateObj(transform);
-		//GetComponent<EventSender>()?.Send(gameObject, "event_work_completed");
 	}
 
 	void CreateObj(Transform trans)

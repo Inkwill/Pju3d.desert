@@ -54,7 +54,6 @@ public class Pit : TimerBehaviour
 	// 	{
 	// 		m_timer = 0f;
 	// 		isDigging = false;
-	// 		GetComponent<EventSender>()?.Send(gameObject, "event_work_completed");
 	// 		return;
 	// 	}
 	// 	else if (m_step >= 1.0f)

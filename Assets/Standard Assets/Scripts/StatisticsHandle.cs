@@ -23,7 +23,7 @@ public class StatisticsHandle : MonoBehaviour
 		if (m_owner)
 		{
 			m_owner.Inventory.ItemEvent += OnItemEvent;
-			m_owner.OnKillEnemy += OnKillEnemyCount;
+			m_owner.KillEnemyAction += OnKillEnemyCount;
 			m_owner.GetComponent<EventSender>()?.countEvent.AddListener(OnCountEvent);
 		}
 	}

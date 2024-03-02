@@ -17,10 +17,10 @@ public class CharacterAudio : MonoBehaviour
 	void Start()
 	{
 		m_Character = GetComponent<CharacterData>();
-		m_Character.OnDamage.AddListener((damage) => { Hit(damage.Target.gameObject.transform.position); });
-		m_Character.OnDeath.AddListener((character) => { Death(character.transform.position); });
-		m_Character.OnAttack += (attacker) => { Attack(attacker.transform.position); };
-		GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
+		m_Character.DamageEvent.AddListener((damage) => { Hit(damage.Target.gameObject.transform.position); });
+		m_Character.DeathEvent.AddListener((character) => { Death(character.transform.position); });
+		m_Character.AttackAction += (attacker) => { Attack(attacker.transform.position); };
+
 		CharacterAnimHandle animHandle = GetComponentInChildren<CharacterAnimHandle>();
 		if (animHandle)
 		{
@@ -28,23 +28,20 @@ public class CharacterAudio : MonoBehaviour
 		}
 		m_Character.Inventory.ItemEvent += OnItemEvent;
 		m_Character.Equipment.OnEquiped += OnEquiped;
-	}
 
-	void OnCharacterEvent(GameObject obj, string eventName)
-	{
-		Vector3 position = obj.transform.position;
-		if (eventName == "roleEvent_OnPursuing")
+		if (m_Character.BaseAI != null) m_Character.StateUpdateAction += (state) =>
 		{
-			if (SpottedAudioClip.Length != 0)
+			if (state == AIBase.State.PURSUING && SpottedAudioClip.Length != 0)
 			{
 				SFXManager.PlaySound(SFXManager.Use.Enemies, new SFXManager.PlayData()
 				{
 					Clip = SpottedAudioClip[Random.Range(0, SpottedAudioClip.Length)],
-					Position = position
+					Position = m_Character.transform.position,
 				});
 			}
-		}
+		};
 	}
+
 
 	void OnItemEvent(Item item, string eventName, int num)
 	{

@@ -119,7 +119,7 @@ public class EffectData : ScriptableObject
 				}
 				break;
 			case EffectType.DESTROYSELF:
-				Destroy(user);
+				GameManager.StartWaitAction(0.1f, () => Destroy(user));
 				success = true;
 				break;
 			default:
@@ -128,6 +128,8 @@ public class EffectData : ScriptableObject
 		}
 
 		if (TakeVFX != VFXType.NONE && success) VFXManager.PlayVFX(TakeVFX, user.transform.position);
+		var character = user.GetComponent<CharacterData>();
+		if (success && character) character.EffectAction?.Invoke(this);
 		return success;
 	}
 

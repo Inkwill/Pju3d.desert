@@ -31,15 +31,20 @@ public class CharacterData : HighlightableObject
 	public StatSystem Stats;
 	public InventorySystem Inventory = new InventorySystem();
 	public EquipmentSystem Equipment = new EquipmentSystem();
-	public UnityEvent<Damage> OnDamage;
-	public UnityEvent<CharacterData> OnDeath;
+	public UnityEvent<Damage> DamageEvent;
+	public UnityEvent<CharacterData> DeathEvent;
+	public Action<CharacterData> AttackAction { get; set; }
+	public Action<CharacterData> KillEnemyAction { get; set; }
+	public Action<Skill, string> SkillAction { get; set; }
+	public Action<AIBase.State> StateUpdateAction { get; set; }
+	public Action<AIBase.State> StateStartAction { get; set; }
+	public Action<EffectData> EffectAction { get; set; }
 	public List<KeyValueData.KeyValue<EffectData, string[]>> DeadEffects;
-	public Action<CharacterData> OnAttack { get; set; }
-	public Action<CharacterData> OnKillEnemy { get; set; }
 	Vector3 m_BirthPos;
 	public Vector3 BirthPos => m_BirthPos;
 	CharacterData m_Enemy;
 	public CharacterData CurrentEnemy { get { return m_Enemy; } }
+	public SkillUser SkillUser => GetComponent<SkillUser>();
 	public AIBase BaseAI => GetComponent<AIBase>();
 	float m_AttackCoolDown;
 
@@ -142,7 +147,7 @@ public class CharacterData : HighlightableObject
 			BaseAI.Stop();
 			BaseAI.LookAt(CurrentEnemy.transform);
 			AttackTriggered();
-			OnAttack?.Invoke(this);
+			AttackAction?.Invoke(this);
 		}
 	}
 	public void AttackFrame()
@@ -184,7 +189,7 @@ public class CharacterData : HighlightableObject
 
 	public void Dead()
 	{
-		OnDeath?.Invoke(this);
+		DeathEvent?.Invoke(this);
 		bool corpse = (Random.Range(1, 101) <= CorpseChance);
 		if (corpse)
 		{

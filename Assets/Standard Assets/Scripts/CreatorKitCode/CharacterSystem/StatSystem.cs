@@ -256,7 +256,7 @@ namespace CreatorKitCode
 			TimedModifierStack.Clear();
 
 			UpdateFinalStats();
-			attacker.OnKillEnemy?.Invoke(m_Owner);
+			attacker.KillEnemyAction?.Invoke(m_Owner);
 			m_Owner.Dead();
 		}
 
@@ -304,7 +304,6 @@ namespace CreatorKitCode
 		public void ChangeHealth(int amount, CharacterData attacker)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.health);
-			m_Owner.GetComponent<EventSender>()?.Send(m_Owner.gameObject, "characterEvent_OnHpChange");
 			if (CurrentHealth <= 0) Death(attacker);
 		}
 
