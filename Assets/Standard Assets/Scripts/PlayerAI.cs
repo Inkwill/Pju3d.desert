@@ -5,9 +5,9 @@ using CreatorKitCode;
 
 public class PlayerAI : RoleAI
 {
-	public override void Init(CharacterData data)
+	protected override void OnStart()
 	{
-		base.Init(data);
+		base.OnStart();
 		m_character.Inventory.ItemEvent += (OnItemEvent);
 	}
 	protected override void OnStateUpdate(State curState)

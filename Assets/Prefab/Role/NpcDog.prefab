@@ -16,8 +16,6 @@ GameObject:
   - component: {fileID: 1104240081277863604}
   - component: {fileID: 4435226131399032823}
   - component: {fileID: 8877045567101703517}
-  - component: {fileID: 8602139102725245164}
-  - component: {fileID: 7018478599041671957}
   m_Layer: 6
   m_Name: NpcDog
   m_TagString: Untagged
@@ -98,23 +96,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45ba4cd943b6c745bb32ca76b631cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camp: 3
+  camp: 1
   CharacterName: NpcBull
   DefaultWeapon: {fileID: 0}
   WeaponLocator: {fileID: 0}
   MoveSpeed: 3
+  CorpseChance: 0
+  m_CorpseRetention: 0
   Stats:
     baseStats:
       health: 10
       strength: 2
-      defense: 1
+      defense: 0
       agility: 0
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls: []
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
+  DeadEffects: []
 --- !u!114 &2134693030728375183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,49 +214,9 @@ MonoBehaviour:
   InteractDetector: {fileID: 872058957261826820}
   EnemyDetector: {fileID: 4352763605142096454}
   SkillDetector: {fileID: 3246637890045457507}
-  dropEffect: {fileID: 0}
-  CorpseChance: 0
-  m_CorpseRetention: 0
   m_Offensive: 1
-  m_WanderRadius: 3
-  m_WanderBeat: 2
---- !u!114 &8602139102725245164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4942053394312810848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dca09db2199373478811fb34fe131b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  storyNodes:
-  - {fileID: 11400000, guid: abafee94e47cc854a91039ec7a6ba588, type: 2}
-  - {fileID: 11400000, guid: d88c89255068dd140a77d29989494ce9, type: 2}
-  - {fileID: 11400000, guid: abc50b646f702204580d05d4e544f2ba, type: 2}
-  tellerEvent:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &7018478599041671957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4942053394312810848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 379bc15926d879049950d1d2859120b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InteractEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  Detector: {fileID: 872058957261826820}
-  handleTime: 1
-  slider: {fileID: 2223634915404233045}
+  m_WanderRadius: 0
+  m_WanderBeat: 0
 --- !u!1001 &2688779954868180939
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -635,15 +599,3 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 8897094925192330381}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2223634915404233045 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7323737682471273944, guid: aa96cce25b973164eb6aff0eb2866553,
-    type: 3}
-  m_PrefabInstance: {fileID: 8897094925192330381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

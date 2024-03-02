@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
@@ -21,6 +21,7 @@ public class AIBase : MonoBehaviour
 	protected State m_State = State.INACTIVE;
 	public float CurStateDuring => m_StateDuring;
 	float m_StateDuring;
+	public Action<State> StateUpdateEvent;
 	public bool isIdle { get { return m_State == State.IDLE; } }
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 	public bool isActive { get { return m_State != State.INACTIVE && m_State != State.DEAD; } }
@@ -39,9 +40,9 @@ public class AIBase : MonoBehaviour
 	public SkillUser SkillUser => m_SkillUser;
 	SkillUser m_SkillUser;
 
-	public virtual void Init(CharacterData data)
+	void Start()
 	{
-		m_character = data;
+		m_character = GetComponent<CharacterData>();
 		m_character.OnDamage.AddListener(OnDamageAI);
 		m_character.OnDeath.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
 		m_SkillUser = GetComponent<SkillUser>();
@@ -90,6 +91,7 @@ public class AIBase : MonoBehaviour
 				break;
 		}
 		m_State = State.IDLE;
+		OnStart();
 	}
 
 	void Update()
@@ -119,7 +121,7 @@ public class AIBase : MonoBehaviour
 			}
 			if (m_character.CanAttackReach()) SetState(State.ATTACKING);
 		}
-		m_character.OnStateUpdate?.Invoke(m_State);
+		StateUpdateEvent?.Invoke(m_State);
 		OnStateUpdate(m_State);
 	}
 	public void SetState(State nextState)
@@ -143,6 +145,7 @@ public class AIBase : MonoBehaviour
 		m_character.transform.forward = forward;
 	}
 
+	protected virtual void OnStart() { }
 	public virtual void Stop() { }
 	protected virtual void OnStateUpdate(State state) { }
 	protected virtual void OnDeathAI() { }

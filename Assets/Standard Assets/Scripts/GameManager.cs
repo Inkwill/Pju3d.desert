@@ -102,7 +102,6 @@ public class GameManager : MonoBehaviour
 		Instance = this;
 		Lord.Init();
 		CurHero = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterData>();
-		CurHero.Active();
 		GameGoal.Init();
 		SFXManager.ListenerTarget = CurHero.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();

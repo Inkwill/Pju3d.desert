@@ -24,7 +24,6 @@ namespace CreatorKitCodeInternal
 		void Start()
 		{
 			m_CharacterData = GetComponent<CharacterData>();
-			m_CharacterData.Active();
 
 			m_LootSpawner = GetComponent<LootSpawner>();
 		}

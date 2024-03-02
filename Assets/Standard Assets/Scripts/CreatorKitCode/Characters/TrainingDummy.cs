@@ -15,7 +15,6 @@ namespace CreatorKitCodeInternal
 		void Start()
 		{
 			m_CharData = GetComponent<CharacterData>();
-			m_CharData.Active();
 
 			m_CharData.OnDamage.AddListener((damage) =>
 			{

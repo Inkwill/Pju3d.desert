@@ -21,10 +21,10 @@ public class CharacterAudio : MonoBehaviour
 		m_Character.OnDeath.AddListener((character) => { Death(character.transform.position); });
 		m_Character.OnAttack += (attacker) => { Attack(attacker.transform.position); };
 		GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
-		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
-		if (dispatcher)
+		CharacterAnimHandle animHandle = GetComponentInChildren<CharacterAnimHandle>();
+		if (animHandle)
 		{
-			dispatcher.FootStep.AddListener(() => { Step(transform.position); VFXManager.PlayVFX(VFXType.StepPuff, transform.position); });
+			animHandle.FootStep.AddListener(() => { Step(transform.position); VFXManager.PlayVFX(VFXType.StepPuff, transform.position); });
 		}
 		m_Character.Inventory.ItemEvent += OnItemEvent;
 		m_Character.Equipment.OnEquiped += OnEquiped;

@@ -15,9 +15,8 @@ public class RoleAI : AIBase
 	NavMeshPath m_CalculatedPath;
 
 
-	public override void Init(CharacterData data)
+	protected override void OnStart()
 	{
-		base.Init(data);
 		m_Agent = GetComponent<NavMeshAgent>();
 		m_Agent.speed = m_character.MoveSpeed;
 		m_Agent.angularSpeed = 360.0f;

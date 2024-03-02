@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CreatorKitCode;
 using TMPro;
-using UnityEngine.InputSystem.Controls;
+using CreatorKitCodeInternal;
 
 public class UIRoleHud : UIWorldHud
 {
@@ -26,7 +26,14 @@ public class UIRoleHud : UIWorldHud
 	void Start()
 	{
 		m_character = GetComponentInParent<CharacterData>();
-		m_character.Inventory.ItemEvent += OnItemEvent;
+		m_character.OnDamage.AddListener((damage) =>
+		{
+			sliderHp.gameObject.SetActive(true);
+			sliderHp.value = m_character.Stats.CurrentHealth;
+			DamageUI.Instance.NewDamage(damage.GetFullDamage(), transform.position);
+		});
+		if (m_character.BaseAI != null) m_character.BaseAI.StateUpdateEvent += OnCharacterStating;
+		//m_character.Inventory.ItemEvent += OnItemEvent;
 		m_character.GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
 
 		if (sliderHp)
@@ -38,30 +45,39 @@ public class UIRoleHud : UIWorldHud
 		sliderPg?.gameObject.SetActive(false);
 		sliderInteract?.gameObject.SetActive(false);
 		//bubble_anim?.gameObject.SetActive(false);
-		GetComponentInParent<StoryTeller>()?.tellerEvent.AddListener(OnTellerEvent);
+		//GetComponentInParent<StoryTeller>()?.tellerEvent.AddListener(OnTellerEvent);
 		m_character.OnDeath.AddListener((character) =>
 		{
 			sliderHp?.gameObject.SetActive(false);
 			sliderPg?.gameObject.SetActive(false);
-			GetComponentInParent<EventSender>()?.events.RemoveListener(OnCharacterEvent);
+			//GetComponentInParent<EventSender>()?.events.RemoveListener(OnCharacterEvent);
 		});
 	}
 
-	void OnCharacterEvent(GameObject role, string eventName)
+	void OnCharacterStating(AIBase.State curState)
 	{
-		switch (eventName)
+		switch (curState)
 		{
-			case "roleEvent_OnState_IDLE":
+			case AIBase.State.IDLE:
 				sliderHp?.gameObject.SetActive(false);
 				break;
-			case "roleEvent_OnState_ATTACKING":
-			case "roleEvent_OnState_PURSUING":
+			case AIBase.State.ATTACKING:
+			case AIBase.State.PURSUING:
 				sliderHp?.gameObject.SetActive(true);
 				break;
-			case "roleEvent_OnState_SKILLING":
+			case AIBase.State.SKILLING:
 				sliderPg?.gameObject.SetActive(true);
 				sliderPg.maxValue = m_character.BaseAI.SkillUser.CurSkill.skill.Duration;
 				break;
+
+		}
+	}
+
+	void OnCharacterEvent(GameObject character, string eventName)
+	{
+
+		switch (eventName)
+		{
 			case "characterEvent_OnHpChange":
 				if (!sliderHp.gameObject.activeSelf) sliderHp.gameObject.SetActive(true);
 				sliderHp.value = m_character.Stats.CurrentHealth;

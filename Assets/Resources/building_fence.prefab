@@ -74,6 +74,8 @@ MonoBehaviour:
   DefaultWeapon: {fileID: 0}
   WeaponLocator: {fileID: 0}
   MoveSpeed: 3
+  CorpseChance: 0
+  m_CorpseRetention: 0
   Stats:
     baseStats:
       health: 10
@@ -83,6 +85,9 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls: []
   OnDeath:
     m_PersistentCalls:
       m_Calls:
@@ -98,6 +103,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  DeadEffects: []
 --- !u!114 &849404431048742885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,17 +315,17 @@ PrefabInstance:
     - target: {fileID: 1583755592681558826, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1583755592681558826, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5712880437704622802, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6569298571137308718, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
@@ -329,7 +335,7 @@ PrefabInstance:
     - target: {fileID: 6569298571137308718, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8445916009198093280, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
@@ -434,7 +440,7 @@ PrefabInstance:
     - target: {fileID: 8585483749562541184, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

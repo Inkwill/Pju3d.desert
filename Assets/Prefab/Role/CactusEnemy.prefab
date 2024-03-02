@@ -128,18 +128,24 @@ MonoBehaviour:
   DefaultWeapon: {fileID: 0}
   WeaponLocator: {fileID: 0}
   MoveSpeed: 3
+  CorpseChance: 0
+  m_CorpseRetention: 0
   Stats:
     baseStats:
       health: 10
       strength: 2
-      defense: 1
+      defense: 0
       agility: 0
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls: []
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
+  DeadEffects: []
 --- !u!114 &1219315396725883836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,9 +214,6 @@ MonoBehaviour:
   InteractDetector: {fileID: 1507304276479509446}
   EnemyDetector: {fileID: 2637199733257052804}
   SkillDetector: {fileID: 3890960223070805153}
-  dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
-  CorpseChance: 50
-  m_CorpseRetention: 60
   m_Offensive: 1
   m_WanderRadius: 5
   m_WanderBeat: 3

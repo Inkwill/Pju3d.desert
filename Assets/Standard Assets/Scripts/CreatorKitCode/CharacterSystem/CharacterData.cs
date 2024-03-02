@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using CreatorKitCode;
-using CreatorKitCodeInternal;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -32,7 +31,6 @@ public class CharacterData : HighlightableObject
 	public StatSystem Stats;
 	public InventorySystem Inventory = new InventorySystem();
 	public EquipmentSystem Equipment = new EquipmentSystem();
-	public Action<AIBase.State> OnStateUpdate;
 	public UnityEvent<Damage> OnDamage;
 	public UnityEvent<CharacterData> OnDeath;
 	public List<KeyValueData.KeyValue<EffectData, string[]>> DeadEffects;
@@ -42,10 +40,8 @@ public class CharacterData : HighlightableObject
 	public Vector3 BirthPos => m_BirthPos;
 	CharacterData m_Enemy;
 	public CharacterData CurrentEnemy { get { return m_Enemy; } }
-	public AIBase BaseAI => m_Ai;
-	AIBase m_Ai;
+	public AIBase BaseAI => GetComponent<AIBase>();
 	float m_AttackCoolDown;
-	StatisticsHandle m_recorder;
 
 	void Awake()
 	{
@@ -75,24 +71,6 @@ public class CharacterData : HighlightableObject
 			default:
 				break;
 		}
-	}
-	public void Active()
-	{
-		GetComponentInChildren<AnimationDispatcher>()?.AttackStep.AddListener(AttackFrame);
-
-		if (DefaultWeapon == null) DefaultWeapon = KeyValueData.GetValue<Item>(GameManager.Config.Item, "wp_unarmed") as Weapon;
-		Equipment.InitWeapon(DefaultWeapon);
-
-		m_Ai = GetComponent<AIBase>();
-		m_Ai.Init(this);
-
-		m_recorder = GetComponent<StatisticsHandle>();
-		m_recorder?.Init(this);
-
-		OnDamage.AddListener((damage) =>
-		{
-			DamageUI.Instance.NewDamage(damage.GetFullDamage(), transform.position);
-		});
 
 		Equipment.OnEquiped += item =>
 		{
@@ -103,7 +81,6 @@ public class CharacterData : HighlightableObject
 				wp.bulletTrans = WeaponLocator;
 				if (WeaponLocator && item.WorldObjectPrefab)
 					Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
-
 				//Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
 			}
 		};
@@ -118,6 +95,12 @@ public class CharacterData : HighlightableObject
 		};
 	}
 
+	void Start()
+	{
+		if (DefaultWeapon == null)
+			DefaultWeapon = KeyValueData.GetValue<Item>(GameManager.Config.Item, "wp_unarmed") as Weapon;
+		Equipment.InitWeapon(DefaultWeapon);
+	}
 	void Update()
 	{
 		Stats.Tick();
@@ -162,7 +145,7 @@ public class CharacterData : HighlightableObject
 			OnAttack?.Invoke(this);
 		}
 	}
-	void AttackFrame()
+	public void AttackFrame()
 	{
 		//if we can't reach the target anymore when it's time to damage, then that attack miss.
 		if (CurrentEnemy && CanAttackReach(CurrentEnemy))

@@ -23,6 +23,11 @@ public class SpawnerSample : TimerBehaviour
 			Spawn(angleStep * (i + 1), radius);
 		}
 	}
+
+	protected override void OnRefresh()
+	{
+		isStarted = auto;
+	}
 	// void Update()
 	// {
 	// 	if (spawnTimes <= 0) return;
@@ -64,7 +69,6 @@ public class SpawnerSample : TimerBehaviour
 		Vector3 spawnPosition = transform.position + direction * radius;
 		CharacterData enemy = Instantiate(ObjectToSpawn, spawnPosition, Quaternion.identity).GetComponent<CharacterData>();
 		if (pathRoot) enemy.gameObject.AddComponent<AiPathMove>().SetPath(pathRoot);
-		enemy.Active();
 	}
 }
 

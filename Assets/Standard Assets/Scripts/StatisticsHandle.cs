@@ -14,9 +14,9 @@ public class StatisticsHandle : MonoBehaviour
 	Dictionary<string, int> m_KillEnemyCount;
 	CharacterData m_owner;
 
-	public void Init(CharacterData data)
+	void Start()
 	{
-		m_owner = data;
+		m_owner = GetComponent<CharacterData>();
 		m_AddItemCount = new Dictionary<string, int>();
 		m_ItemDemandCount = new Dictionary<string, int>();
 		m_KillEnemyCount = new Dictionary<string, int>();

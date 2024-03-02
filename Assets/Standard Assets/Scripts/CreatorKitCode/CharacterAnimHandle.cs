@@ -7,7 +7,7 @@ using CreatorKitCode;
 /// import of the animations and can dispatch them to some receivers. Used by step event and attack frame event on
 /// characters.
 /// </summary>
-public class AnimationDispatcher : MonoBehaviour
+public class CharacterAnimHandle : MonoBehaviour
 {
 	public UnityEvent AttackStep;
 	public UnityEvent FootStep;
@@ -34,11 +34,11 @@ public class AnimationDispatcher : MonoBehaviour
 		m_character.OnDeath.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
 		m_character.OnAttack += (attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); };
 		//m_character.GetComponent<EventSender>()?.events.AddListener(OnCharacterEvent);
-		m_character.OnStateUpdate += OnCharacterState;
+		if (m_character.BaseAI != null) m_character.BaseAI.StateUpdateEvent += OnCharacterStating;
 		m_Animator = GetComponent<Animator>();
 	}
 
-	void OnCharacterState(AIBase.State curState)
+	void OnCharacterStating(AIBase.State curState)
 	{
 		if (SpeedTrigger == "") return;
 		if (curState == AIBase.State.IDLE || curState == AIBase.State.MOVE || curState == AIBase.State.PURSUING || curState == AIBase.State.ATTACKING)
@@ -47,6 +47,7 @@ public class AnimationDispatcher : MonoBehaviour
 
 	void AttackEvent()
 	{
+		m_character.AttackFrame();
 		AttackStep?.Invoke();
 	}
 

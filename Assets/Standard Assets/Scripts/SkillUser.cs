@@ -27,8 +27,8 @@ public class SkillUser : MonoBehaviour
 		m_SkillEntries = new List<SkillEntry>();
 		m_character = GetComponent<CharacterData>();
 		m_eventSender = GetComponent<EventSender>();
-		AnimationDispatcher dispatcher = GetComponentInChildren<AnimationDispatcher>();
-		if (dispatcher) { dispatcher.SkillStep.AddListener(SkillStep); m_Animator = dispatcher.GetComponent<Animator>(); }
+		CharacterAnimHandle animHandle = GetComponentInChildren<CharacterAnimHandle>();
+		if (animHandle) { animHandle.SkillStep.AddListener(SkillStep); m_Animator = animHandle.GetComponent<Animator>(); }
 		else m_Animator = GetComponentInChildren<Animator>();
 	}
 

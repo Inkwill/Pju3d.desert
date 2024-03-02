@@ -59,6 +59,8 @@ MonoBehaviour:
     Value: {fileID: 11400000, guid: a0d631c24b3e80c4893034ac481dd1bd, type: 2}
   - Key: wp_unarmed
     Value: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
+  - Key: ChestKey
+    Value: {fileID: 11400000, guid: 1d5ec5573c8307744a74d8eb6783a08b, type: 2}
   Effect:
   - Key: WeaponDamage
     Value: {fileID: 0}
