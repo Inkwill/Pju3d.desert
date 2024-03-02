@@ -34,14 +34,14 @@ public class ItemDemander : TimerBehaviour
 
 	public void OnInteractEvent(GameObject actor, string eventName)
 	{
-		var character = actor.GetComponent<CharacterData>();
-		if (eventName == "Enter" && character != null)
+		if (eventName == "Enter")
 		{
 			ui_demand.Inter();
 		}
-		if (eventName == "Ready" && m_character != null)
+		if (eventName == "Ready" && m_character == null)
 		{
-			if (m_character.BaseAI.isIdle && !m_Demand.Completed)
+			m_character = actor.GetComponent<CharacterData>();
+			if (m_character && m_character.BaseAI.isIdle && !m_Demand.Completed)
 			{
 				var submitable = m_Demand.Submittable(m_character.Inventory);
 				if (submitable.Count > 0)
@@ -49,7 +49,7 @@ public class ItemDemander : TimerBehaviour
 					m_character.Inventory.ItemEvent += OnItemEvent;
 					m_Demand.Fulfill(m_character.Inventory);
 				}
-				else ui_demand.Fail();
+				else { ui_demand.Fail(); m_character = null; }
 			}
 		}
 	}
@@ -75,6 +75,7 @@ public class ItemDemander : TimerBehaviour
 		{
 			DemandeEvents?.Invoke(gameObject, m_character.gameObject);
 			m_character.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, demanderId);
+			m_character = null;
 		}
 
 
@@ -115,11 +116,12 @@ public class ItemDemander : TimerBehaviour
 			resObj.transform.DOMove(m_character.transform.position + new Vector3(0, 2, 0), 1).From();
 		}
 		yield return new WaitForSeconds(1.0f);
-		ui_demand.Show(m_Demand);
-		if (m_Demand.Completed) isStarted = true;
 		foreach (var obj in resObjs)
 		{
 			Destroy(obj);
 		}
+		ui_demand.Show(m_Demand);
+		if (m_Demand.Completed) isStarted = true;
+		else m_character = null;
 	}
 }

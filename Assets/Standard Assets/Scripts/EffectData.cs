@@ -65,6 +65,7 @@ public class EffectData : ScriptableObject
 				break;
 			case EffectType.SUMMON:
 				Transform trans = (target != null) ? target.transform : user.transform;
+				if (param != null && param.Length > 1 && param[1] == "self") trans = user.transform;
 				if (param != null && param.Length > 0)
 				{
 					GameObject pbObj = Resources.Load(param[0]) as GameObject;

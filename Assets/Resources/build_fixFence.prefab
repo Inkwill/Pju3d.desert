@@ -408,8 +408,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.02999878, y: 0}
-  m_SizeDelta: {x: -0.08, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4423777626589767575
 GameObject:
@@ -576,8 +576,9 @@ GameObject:
   - component: {fileID: 39831047438342558}
   - component: {fileID: 1153180368876741269}
   - component: {fileID: 7253659820280487118}
+  - component: {fileID: 2464491415854990839}
   m_Layer: 8
-  m_Name: fixbuild_fence
+  m_Name: build_fixFence
   m_TagString: building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -591,8 +592,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5050785731468398963}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.3111741, z: 0, w: 0.95035297}
-  m_LocalPosition: {x: 22.14, y: 0, z: 4.69}
+  m_LocalRotation: {x: 0, y: -0.064192586, z: 0, w: 0.9979376}
+  m_LocalPosition: {x: -17.62, y: 0.16, z: 30.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -600,7 +601,7 @@ Transform:
   - {fileID: 7699951062441740978}
   - {fileID: 7431522238870446194}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 36.26, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -7.361, z: 0}
 --- !u!114 &1153180368876741269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,18 +616,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   during: 1
   times: 1
+  cd: 0
   progressSlider: {fileID: 4085670195397977502}
-  destroyOnEnd: 1
   demanderId: fixbuild_fence
-  detector: {fileID: 5064897746433516885}
+  DemandeEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2464491415854990839}
+        m_TargetAssemblyTypeName: EffectTrigger, Assembly-CSharp-firstpass
+        m_MethodName: TakEffects
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  RefreshEvents:
+    m_PersistentCalls:
+      m_Calls: []
   ui_demand: {fileID: 3771108339628840308}
   DemandData:
   - Key: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
-    Value: 3
-  EndEffect:
-  - Key: {fileID: 11400000, guid: 5a5deaa6e62beb846b029334991f1576, type: 2}
-    Value:
-    - building_fence
+    Value: 1
 --- !u!114 &7253659820280487118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,7 +671,26 @@ MonoBehaviour:
   Detector: {fileID: 5064897746433516885}
   handleTime: 2
   slider: {fileID: 4085670195397977502}
-  sliderString: Check...
+  autoStart: 0
+--- !u!114 &2464491415854990839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5050785731468398963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79dceb943f782ea4cb697a562b4ccdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effects:
+  - Key: {fileID: 11400000, guid: 5a5deaa6e62beb846b029334991f1576, type: 2}
+    Value:
+    - building_fence
+    - self
+  - Key: {fileID: 11400000, guid: 08a26aedc7f9d2d4786984f013ed2005, type: 2}
+    Value: []
 --- !u!1 &6492868605222064836
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,8 +812,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8.73, y: 55}
-  m_SizeDelta: {x: 134.92, y: 30}
+  m_AnchoredPosition: {x: 8.73, y: 40}
+  m_SizeDelta: {x: 150, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4085670195397977502
 MonoBehaviour:
@@ -846,7 +879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
-  form: '{0}'
+  form: "\u4EA4\u4ED8\u8D44\u6E90..."
 --- !u!1 &8761103849899131355
 GameObject:
   m_ObjectHideFlags: 0

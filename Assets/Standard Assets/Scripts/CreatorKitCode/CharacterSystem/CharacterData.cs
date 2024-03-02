@@ -39,7 +39,6 @@ public class CharacterData : HighlightableObject
 	public Action<AIBase.State> StateUpdateAction { get; set; }
 	public Action<AIBase.State> StateStartAction { get; set; }
 	public Action<EffectData> EffectAction { get; set; }
-	public List<KeyValueData.KeyValue<EffectData, string[]>> DeadEffects;
 	Vector3 m_BirthPos;
 	public Vector3 BirthPos => m_BirthPos;
 	CharacterData m_Enemy;
@@ -199,7 +198,6 @@ public class CharacterData : HighlightableObject
 		else
 		{
 			gameObject.layer = (camp == Camp.PLAYER) ? LayerMask.NameToLayer("PlayerCorpse") : LayerMask.NameToLayer("Corpse");
-			if (DeadEffects != null) EffectData.TakeEffects(DeadEffects, gameObject, gameObject);
 			StartCoroutine(DestroyCorpse(1.0f));
 		}
 	}
