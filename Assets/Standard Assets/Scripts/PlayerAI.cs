@@ -12,7 +12,7 @@ public class PlayerAI : RoleAI
 	}
 	protected override void OnStateUpdate(State curState)
 	{
-		if (curState == State.IDLE || curState == State.MOVE || curState == State.PURSUING || curState == State.ATTACKING)
+		if (curState != State.DEAD && curState != State.INACTIVE && curState != State.SKILLING)
 		{
 			HandleMoveInput();
 			base.OnStateUpdate(curState);

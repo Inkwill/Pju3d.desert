@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System;
 
 public class InteractHandle : MonoBehaviour
 {
@@ -63,7 +64,7 @@ public class InteractHandle : MonoBehaviour
 
 	void OnInterStay(GameObject stayer, float duration)
 	{
-		if (m_target != null) return;
+		if (m_target != null && m_target != stayer) return;
 		RoleAI roleAi = stayer.GetComponent<RoleAI>();
 		if (roleAi && roleAi.isIdle)
 		{
@@ -73,6 +74,8 @@ public class InteractHandle : MonoBehaviour
 			{
 				During = 0;
 				InteractEvent?.Invoke(stayer, "Ready");
+				var interactor = GetComponent<IInteractable>();
+				if (interactor != null) roleAi.StartInteractWith(interactor);
 				slider?.gameObject.SetActive(false);
 				m_target = stayer;
 			}

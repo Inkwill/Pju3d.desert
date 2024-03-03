@@ -16,4 +16,9 @@ public class EffectTrigger : MonoBehaviour
 	{
 		EffectData.TakeEffects(Effects, character.gameObject, character.gameObject);
 	}
+
+	public void TakeEffects(Damage damage)
+	{
+		EffectData.TakeEffects(Effects, damage.Source.gameObject, damage.Target.gameObject);
+	}
 }

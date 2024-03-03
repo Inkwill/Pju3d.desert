@@ -14,6 +14,7 @@ public class AIBase : MonoBehaviour
 		PURSUING,
 		ATTACKING,
 		SKILLING,
+		INTERACTING,
 		DEAD,
 		INACTIVE
 	}
@@ -36,12 +37,15 @@ public class AIBase : MonoBehaviour
 	public CharacterData CurrentEnemy => m_character.CurrentEnemy;
 	public CharacterData Character => m_character;
 	protected CharacterData m_character;
+	public IInteractable CurrentInteractor => m_interactor;
+	protected IInteractable m_interactor;
 
 	void Start()
 	{
 		m_character = GetComponent<CharacterData>();
 		m_character.DamageEvent.AddListener(OnDamageAI);
 		m_character.DeathEvent.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
+		m_character.StateStepAction += OnStateStep;
 
 		if (EnemyDetector)
 		{
@@ -144,9 +148,11 @@ public class AIBase : MonoBehaviour
 	protected virtual void OnStart() { }
 	public virtual void Stop() { }
 	protected virtual void OnStateUpdate(State state) { }
+	protected virtual void OnStateStep(State state) { }
 	protected virtual void OnDeathAI() { }
 	protected virtual void OnDamageAI(Damage damage) { }
-
+	public virtual void StartInteractWith(IInteractable interactor) { }
+	public virtual void StopInteract(IInteractable interactor) { }
 	protected virtual void OnEnemyEnter(GameObject enter)
 	{
 		if (m_character.CurrentEnemy == null) m_character.SetEnemy(enter.GetComponent<CharacterData>());

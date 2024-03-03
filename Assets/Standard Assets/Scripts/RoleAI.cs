@@ -49,7 +49,7 @@ public class RoleAI : AIBase
 
 	protected override void OnStateUpdate(State curState)
 	{
-		if (curState == State.IDLE)
+		if (curState == State.IDLE || curState == State.INTERACTING)
 		{
 			if (CurrentEnemy != null) { SetState(State.PURSUING); return; }
 			else if (EnemyDetector.Inners.Count > 0)
@@ -76,6 +76,29 @@ public class RoleAI : AIBase
 		}
 
 	}
+
+	public override void StartInteractWith(IInteractable interactor)
+	{
+		if (interactor.CanInteract(m_character))
+		{
+			m_interactor = interactor;
+			Helpers.Log(this, "StartInteract", "with: " + m_interactor.ToString());
+			SetState(State.INTERACTING);
+		}
+		else interactor.InteractFail(m_character);
+	}
+
+	protected override void OnStateStep(State state)
+	{
+		if (state == State.INTERACTING && m_interactor != null) m_interactor.InteractWith(m_character);
+	}
+
+	public override void StopInteract(IInteractable interactor)
+	{
+		if (interactor == m_interactor) m_interactor = null;
+		if (m_State == State.INTERACTING) SetState(State.IDLE);
+	}
+
 	protected override void OnDeathAI()
 	{
 		Agent.isStopped = true;

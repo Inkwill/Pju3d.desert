@@ -9,7 +9,6 @@ using CreatorKitCode;
 /// </summary>
 public class CharacterAnimHandle : MonoBehaviour
 {
-	public UnityEvent AttackStep;
 	public UnityEvent FootStep;
 	public UnityEvent SkillStep;
 	CharacterData m_character;
@@ -33,29 +32,45 @@ public class CharacterAnimHandle : MonoBehaviour
 		m_character.DamageEvent.AddListener((damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); });
 		m_character.DeathEvent.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
 		m_character.AttackAction += (attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); };
-		if (m_character.BaseAI != null) m_character.StateUpdateAction += OnCharacterStating;
+		if (m_character.BaseAI != null)
+		{
+			m_character.StateUpdateAction += OnCharacterStating;
+		}
 		m_Animator = GetComponent<Animator>();
 	}
 
 	void OnCharacterStating(AIBase.State curState)
 	{
 		if (SpeedTrigger == "") return;
-		if (curState == AIBase.State.IDLE || curState == AIBase.State.MOVE || curState == AIBase.State.PURSUING || curState == AIBase.State.ATTACKING)
+		if (curState != AIBase.State.DEAD && curState != AIBase.State.INACTIVE)
 			m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
+		if (curState == AIBase.State.INTERACTING)
+		{
+			if (m_character.BaseAI.CurrentInteractor is InteractorTree) m_Animator.SetTrigger("Skill");
+			else m_character.StateStepAction?.Invoke(curState);
+		}
+	}
+
+	void StepEvent()
+	{
+		m_character.StateStepAction?.Invoke(m_character.BaseAI.CurState);
+		if (m_character.BaseAI.CurState == AIBase.State.ATTACKING)
+		{
+			AttackEvent();
+		}
+
+		if (m_character.BaseAI.CurState == AIBase.State.SKILLING)
+		{
+			SkillStep?.Invoke();
+		}
 	}
 
 	void AttackEvent()
 	{
 		m_character.AttackFrame();
-		AttackStep?.Invoke();
 	}
-
 	void FootstepEvent()
 	{
 		FootStep?.Invoke();
-	}
-	void SkillstepEvent()
-	{
-		SkillStep?.Invoke();
 	}
 }

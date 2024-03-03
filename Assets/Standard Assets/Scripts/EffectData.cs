@@ -94,6 +94,10 @@ public class EffectData : ScriptableObject
 							}
 						}
 					}
+					else
+					{
+						Debug.LogError("Get by a noexist dropbox key = " + param[0]);
+					}
 				}
 				break;
 			case EffectType.ADDGOAL:
@@ -180,6 +184,15 @@ public class EffectData : ScriptableObject
 		{
 			effect.Key.TakeEffect(user, target, effect.Value);
 		}
+	}
+
+	public static EffectData GetEffectDataByKey(string key)
+	{
+		return KeyValueData.GetValue<EffectData>(GameManager.Config.Effect, key);
+	}
+	public static List<KeyValueData.KeyValue<EffectData, string[]>> GetEffectGroupByKey(string key)
+	{
+		return KeyValueData.GetValue<List<KeyValueData.KeyValue<EffectData, string[]>>>(GameManager.Config.EffectGroup, key);
 	}
 
 	public class VampiricWeaponEffect : EffectData

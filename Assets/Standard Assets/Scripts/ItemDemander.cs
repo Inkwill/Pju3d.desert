@@ -6,7 +6,7 @@ using CreatorKitCode;
 using DG.Tweening;
 
 [RequireComponent(typeof(InteractHandle))]
-public class ItemDemander : TimerBehaviour
+public class ItemDemander : TimerBehaviour, IInteractable
 {
 	public string demanderId;
 	public UnityEvent<GameObject, GameObject> DemandeEvents;
@@ -38,20 +38,42 @@ public class ItemDemander : TimerBehaviour
 		{
 			ui_demand.Inter();
 		}
-		if (eventName == "Ready" && m_character == null)
+		// if (eventName == "Ready" && m_character == null)
+		// {
+		// 	m_character = actor.GetComponent<CharacterData>();
+		// 	if (m_character && m_character.BaseAI.isIdle && !m_Demand.Completed)
+		// 	{
+		// 		var submitable = m_Demand.Submittable(m_character.Inventory);
+		// 		if (submitable.Count > 0)
+		// 		{
+
+		// 		}
+		// 		else { ui_demand.Fail(); m_character = null; }
+		// 	}
+		// }
+	}
+
+	public virtual bool CanInteract(CharacterData character)
+	{
+		if (character && character.BaseAI.isIdle && !m_Demand.Completed)
 		{
-			m_character = actor.GetComponent<CharacterData>();
-			if (m_character && m_character.BaseAI.isIdle && !m_Demand.Completed)
-			{
-				var submitable = m_Demand.Submittable(m_character.Inventory);
-				if (submitable.Count > 0)
-				{
-					m_character.Inventory.ItemEvent += OnItemEvent;
-					m_Demand.Fulfill(m_character.Inventory);
-				}
-				else { ui_demand.Fail(); m_character = null; }
-			}
+			var submitable = m_Demand.Submittable(character.Inventory);
+			return submitable.Count > 0;
 		}
+		else return false;
+	}
+
+	public void InteractWith(CharacterData character)
+	{
+		m_character = character;
+		m_character.Inventory.ItemEvent += OnItemEvent;
+		m_Demand.Fulfill(m_character.Inventory);
+		m_character.BaseAI?.StopInteract(this);
+	}
+
+	public void InteractFail(CharacterData character)
+	{
+		ui_demand.Fail();
 	}
 
 	protected override void OnRefresh()

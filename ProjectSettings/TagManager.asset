@@ -12,6 +12,7 @@ TagManager:
   - npc
   - creater
   - item
+  - tree
   layers:
   - Default
   - TransparentFX
