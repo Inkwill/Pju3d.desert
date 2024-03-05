@@ -58,6 +58,7 @@ public class InteractOnTrigger : MonoBehaviour
 
 	protected virtual void ExecuteOnEnter(GameObject enter)
 	{
+		OnEnter?.Invoke(enter);
 		lastInner = enter;
 		if (!interObjects.Contains(lastInner))
 		{
@@ -66,7 +67,6 @@ public class InteractOnTrigger : MonoBehaviour
 			if (character) character.DeathEvent.AddListener((c) => { RemoveTarget(c.gameObject); });
 			lastInner.GetComponent<EventSender>()?.events.AddListener(OnInterEvent);
 		}
-		OnEnter?.Invoke(enter);
 		if (once) GetComponent<Collider>().enabled = false;
 	}
 
@@ -81,6 +81,7 @@ public class InteractOnTrigger : MonoBehaviour
 
 	protected virtual void ExecuteOnExit(GameObject exiter)
 	{
+		OnExit?.Invoke(exiter);
 		interObjects.Remove(exiter);
 		if (exiter == lastInner)
 		{
@@ -92,7 +93,6 @@ public class InteractOnTrigger : MonoBehaviour
 			m_stayDuring = 0;
 		}
 		exiter.GetComponent<EventSender>()?.events.RemoveListener(OnInterEvent);
-		OnExit?.Invoke(exiter);
 	}
 
 	void OnTriggerStay(Collider other)

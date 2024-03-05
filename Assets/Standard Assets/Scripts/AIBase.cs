@@ -22,7 +22,7 @@ public class AIBase : MonoBehaviour
 	protected State m_State = State.INACTIVE;
 	public float CurStateDuring => m_StateDuring;
 	float m_StateDuring;
-	public bool isIdle { get { return m_State == State.IDLE; } }
+	public bool isIdle { get { return m_State == State.IDLE || m_State == State.INTERACTING; } }
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 	public bool isActive { get { return m_State != State.INACTIVE && m_State != State.DEAD; } }
 
@@ -45,7 +45,6 @@ public class AIBase : MonoBehaviour
 		m_character = GetComponent<CharacterData>();
 		m_character.DamageEvent.AddListener(OnDamageAI);
 		m_character.DeathEvent.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
-		m_character.StateStepAction += OnStateStep;
 
 		if (EnemyDetector)
 		{
@@ -148,11 +147,9 @@ public class AIBase : MonoBehaviour
 	protected virtual void OnStart() { }
 	public virtual void Stop() { }
 	protected virtual void OnStateUpdate(State state) { }
-	protected virtual void OnStateStep(State state) { }
 	protected virtual void OnDeathAI() { }
 	protected virtual void OnDamageAI(Damage damage) { }
-	public virtual void StartInteractWith(IInteractable interactor) { }
-	public virtual void StopInteract(IInteractable interactor) { }
+	public virtual void StartInteract(IInteractable interactor) { }
 	protected virtual void OnEnemyEnter(GameObject enter)
 	{
 		if (m_character.CurrentEnemy == null) m_character.SetEnemy(enter.GetComponent<CharacterData>());

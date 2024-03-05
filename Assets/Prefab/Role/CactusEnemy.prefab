@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1219315396725883836}
   - component: {fileID: 9141399745136244042}
   - component: {fileID: 7936165839796859715}
+  - component: {fileID: 1804525636040782235}
   m_Layer: 7
   m_Name: CactusEnemy
   m_TagString: Untagged
@@ -139,13 +140,24 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  OnDamage:
+  DamageEvent:
     m_PersistentCalls:
       m_Calls: []
-  OnDeath:
+  DeathEvent:
     m_PersistentCalls:
-      m_Calls: []
-  DeadEffects: []
+      m_Calls:
+      - m_Target: {fileID: 1804525636040782235}
+        m_TargetAssemblyTypeName: EffectTrigger, Assembly-CSharp-firstpass
+        m_MethodName: TakeEffects
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1219315396725883836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +229,22 @@ MonoBehaviour:
   m_Offensive: 1
   m_WanderRadius: 5
   m_WanderBeat: 3
+--- !u!114 &1804525636040782235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253957173911874756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79dceb943f782ea4cb697a562b4ccdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effects:
+  - Key: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
+    Value:
+    - drop_test
 --- !u!1001 &4229250126243815178
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -748,9 +776,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3d267ff6fabdc4e8b9a091ba04c8df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackStep:
-    m_PersistentCalls:
-      m_Calls: []
   FootStep:
     m_PersistentCalls:
       m_Calls: []

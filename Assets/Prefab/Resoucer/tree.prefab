@@ -242,9 +242,10 @@ GameObject:
   - component: {fileID: 3188222650857789985}
   - component: {fileID: 1592294647468658116}
   - component: {fileID: 7881082111562284268}
+  - component: {fileID: 83618183156582405}
   m_Layer: 8
   m_Name: tree
-  m_TagString: Untagged
+  m_TagString: tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -259,7 +260,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 26.44, y: -0.16, z: -18.02}
-  m_LocalScale: {x: 1.5000004, y: 1.5000002, z: 1.5000001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5559558988966687910}
@@ -319,6 +320,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: decd7e7cf04a1474fb9c781f6e463fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InteractEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 83618183156582405}
+        m_TargetAssemblyTypeName: EffectTrigger, Assembly-CSharp-firstpass
+        m_MethodName: TakEffects
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  ExhaustedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &83618183156582405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3074467860807229621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79dceb943f782ea4cb697a562b4ccdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effects:
+  - Key: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
+    Value:
+    - drop_wood
 --- !u!1001 &5559558988967079462
 PrefabInstance:
   m_ObjectHideFlags: 0

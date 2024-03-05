@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 7253659820280487118}
   - component: {fileID: 2464491415854990839}
   m_Layer: 8
-  m_Name: build_fixFence
+  m_Name: builder_fixFence
   m_TagString: building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -614,7 +614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03aa0f4915897fd45af92c979df190ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  during: 1
+  during: 2
   times: 1
   cd: 0
   BehaveEvents:
@@ -634,6 +634,7 @@ MonoBehaviour:
         m_CallState: 2
   autoStart: 0
   progressSlider: {fileID: 4085670195397977502}
+  BehaveName: Fix
   demanderId: fixbuild_fence
   RefreshEvents:
     m_PersistentCalls:
@@ -641,7 +642,7 @@ MonoBehaviour:
   ui_demand: {fileID: 3771108339628840308}
   DemandData:
   - Key: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
-    Value: 1
+    Value: 4
 --- !u!114 &7253659820280487118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,7 +671,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   Detector: {fileID: 5064897746433516885}
-  handleTime: 2
+  handleTime: 1
   slider: {fileID: 4085670195397977502}
   autoStart: 0
 --- !u!114 &2464491415854990839
@@ -813,8 +814,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8.73, y: 40}
-  m_SizeDelta: {x: 150, y: 30}
+  m_AnchoredPosition: {x: 8.89, y: 54.41}
+  m_SizeDelta: {x: 134.95, y: 29.56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4085670195397977502
 MonoBehaviour:
@@ -879,8 +880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e82b183ffdb9e41bf36d4490765e6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  form: Check...
+  Type: 0
 --- !u!1 &8761103849899131355
 GameObject:
   m_ObjectHideFlags: 0

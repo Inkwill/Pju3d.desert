@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 5794499560094676238}
   - component: {fileID: 4540755274622520481}
   m_Layer: 8
-  m_Name: building_fence
+  m_Name: building_fence_once
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

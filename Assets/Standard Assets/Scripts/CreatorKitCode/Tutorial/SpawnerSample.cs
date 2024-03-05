@@ -9,14 +9,8 @@ public class SpawnerSample : TimerBehaviour
 	public int radius = 5;
 	public int angleStep = 15;
 	public int spawnNum = 5;
-	public bool auto = true;
 
-
-	private void Start()
-	{
-		isStarted = auto;
-	}
-	protected override void OnTimer()
+	protected override void OnBehaved()
 	{
 		for (int i = 0; i < spawnNum; i++)
 		{
@@ -26,7 +20,7 @@ public class SpawnerSample : TimerBehaviour
 
 	protected override void OnRefresh()
 	{
-		isStarted = auto;
+		if (autoStart) StartBehaviour();
 	}
 	// void Update()
 	// {

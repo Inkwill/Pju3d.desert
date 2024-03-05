@@ -22,28 +22,27 @@ public class StoryTeller : MonoBehaviour
 		GameManager.StoryListener.storyListenerEvents.AddListener(OnListenEvent);
 		m_character = GetComponent<CharacterData>();
 		m_interactHandle = GetComponent<InteractHandle>();
-		m_interactHandle?.InteractEvent.AddListener(OnInteractEvent);
 		entrustments = new List<Entrustment>();
 		AddEntrustment();
 	}
 
 	public void OnInteractEvent(GameObject actor, string eventName)
 	{
-		var character = actor.GetComponent<CharacterData>();
-		if (eventName == "Completed" && character != null)
-		{
-			if (character.BaseAI.isIdle)
-			{
-				if (m_interactHandle) m_interactHandle.CurrentTarget = actor;
-				GameManager.StoryListener.StartListening(this);
-				if (m_currentNode == null) m_currentNode = storyNodes.Where(story => GameManager.StoryListener.CanListen(story)).FirstOrDefault();
-				TellStory(GameManager.StoryListener.LastStoryAsk(m_currentNode));
-			}
-		}
-		if (eventName == "Exit")
-		{
-			GameManager.StoryListener.StopListening(this);
-		}
+		// var character = actor.GetComponent<CharacterData>();
+		// if (eventName == "Completed" && character != null)
+		// {
+		// 	if (character.BaseAI.isIdle)
+		// 	{
+		// 		//if (m_interactHandle) m_interactHandle.CurrentTarget = actor;
+		// 		GameManager.StoryListener.StartListening(this);
+		// 		if (m_currentNode == null) m_currentNode = storyNodes.Where(story => GameManager.StoryListener.CanListen(story)).FirstOrDefault();
+		// 		TellStory(GameManager.StoryListener.LastStoryAsk(m_currentNode));
+		// 	}
+		// }
+		// if (eventName == "Exit")
+		// {
+		// 	GameManager.StoryListener.StopListening(this);
+		// }
 	}
 
 	void OnListenEvent(string eventName, string content)

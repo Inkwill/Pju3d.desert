@@ -5,77 +5,50 @@ using UnityEngine.Events;
 using CreatorKitCode;
 using DG.Tweening;
 
-[RequireComponent(typeof(InteractHandle))]
 public class ItemDemander : TimerBehaviour, IInteractable
 {
 	public string demanderId;
-	public UnityEvent<GameObject, GameObject> DemandeEvents;
 	public UnityEvent RefreshEvents;
 	[SerializeField]
 	UIItemDemand ui_demand;
 	[SerializeField]
 	List<KeyValueData.KeyValue<Item, int>> DemandData;
 	InventorySystem.ItemDemand m_Demand;
-	CharacterData m_character;
-	InteractHandle m_interactHandle;
+	bool m_interactable;
 	void Start()
 	{
-		m_interactHandle = GetComponent<InteractHandle>();
-		m_interactHandle.InteractEvent.AddListener(OnInteractEvent);
-		m_interactHandle.SetHandle(true);
 		Init();
 	}
 
 	public void Init()
 	{
+		m_interactable = true;
 		m_Demand = new InventorySystem.ItemDemand(KeyValueData.ToDic(DemandData));
 		ui_demand.Show(m_Demand);
 	}
 
-	public void OnInteractEvent(GameObject actor, string eventName)
+	public void OnInteractorEnter(CharacterData enter)
 	{
-		if (eventName == "Enter")
-		{
-			ui_demand.Inter();
-		}
-		// if (eventName == "Ready" && m_character == null)
-		// {
-		// 	m_character = actor.GetComponent<CharacterData>();
-		// 	if (m_character && m_character.BaseAI.isIdle && !m_Demand.Completed)
-		// 	{
-		// 		var submitable = m_Demand.Submittable(m_character.Inventory);
-		// 		if (submitable.Count > 0)
-		// 		{
-
-		// 		}
-		// 		else { ui_demand.Fail(); m_character = null; }
-		// 	}
-		// }
+		ui_demand.Inter();
+		m_interactable = true;
 	}
 
-	public virtual bool CanInteract(CharacterData character)
+	public bool CanInteract(CharacterData character)
 	{
-		if (character && character.BaseAI.isIdle && !m_Demand.Completed)
-		{
-			var submitable = m_Demand.Submittable(character.Inventory);
-			return submitable.Count > 0;
-		}
-		else return false;
+		return character.BaseAI.isIdle && !m_Demand.Completed && m_interactable;
 	}
 
 	public void InteractWith(CharacterData character)
 	{
-		m_character = character;
-		m_character.Inventory.ItemEvent += OnItemEvent;
-		m_Demand.Fulfill(m_character.Inventory);
-		m_character.BaseAI?.StopInteract(this);
+		var submitable = m_Demand.Submittable(character.Inventory);
+		if (submitable.Count > 0)
+		{
+			m_target = character.gameObject;
+			character.Inventory.ItemEvent += OnItemEvent;
+			m_Demand.Fulfill(character.Inventory);
+		}
+		else { ui_demand.Fail(); m_interactable = false; }
 	}
-
-	public void InteractFail(CharacterData character)
-	{
-		ui_demand.Fail();
-	}
-
 	protected override void OnRefresh()
 	{
 		Init();
@@ -84,39 +57,24 @@ public class ItemDemander : TimerBehaviour, IInteractable
 	protected override void OnStart()
 	{
 		ui_demand.gameObject.SetActive(false);
+		m_interactable = false;
 		//if (m_character) m_character.ChangeState(CharacterControl.State.WORKING, true);
 	}
 
-	protected override void OnEnd()
+	protected override void OnBehaved()
 	{
-		m_interactHandle.SetHandle(false);
-	}
-	protected override void OnTimer()
-	{
-		if (m_character != null)
-		{
-			DemandeEvents?.Invoke(gameObject, m_character.gameObject);
-			m_character.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, demanderId);
-			m_character = null;
-		}
-
-
-		// GameObject createObj = Resources.Load(creatPrefab) as GameObject;
-		// if (createObj)
-		// {
-		// 	GameObject obj = Instantiate(createObj, trans.position, Quaternion.Euler(0, 180, 0)) as GameObject;
-		// 	//GameObject obj = Instantiate(prefab, builder.GetNavMeshRandomPos(gameObject), Quaternion.Euler(0, 180, 0)) as GameObject;
-		// }
+		m_target?.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, demanderId);
+		m_target = null;
 	}
 
 	void OnItemEvent(Item item, string actionName, int itemCount)
 	{
 		if (actionName == "Fulfill")
 		{
-			if (m_character != null)
+			if (m_target != null)
 			{
-				m_character.Inventory.ItemEvent -= OnItemEvent;
-				ResCollector collector = m_character.GetComponent<ResCollector>();
+				m_target.GetComponent<CharacterData>().Inventory.ItemEvent -= OnItemEvent;
+				ResCollector collector = m_target.GetComponent<ResCollector>();
 				if (collector)
 				{
 					//collector.Display(item, itemCount, UpdateDemand);
@@ -135,7 +93,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		{
 			GameObject resObj = Instantiate(item.WorldObjectPrefab, transform);
 			resObjs.Add(resObj);
-			resObj.transform.DOMove(m_character.transform.position + new Vector3(0, 2, 0), 1).From();
+			resObj.transform.DOMove(m_target.transform.position + new Vector3(0, 2, 0), 1).From();
 		}
 		yield return new WaitForSeconds(1.0f);
 		foreach (var obj in resObjs)
@@ -143,7 +101,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 			Destroy(obj);
 		}
 		ui_demand.Show(m_Demand);
-		if (m_Demand.Completed) isStarted = true;
-		else m_character = null;
+		if (m_Demand.Completed) StartBehaviour();
+		else m_target = null;
 	}
 }

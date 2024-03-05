@@ -28,7 +28,7 @@ public class UITargetInfo : MonoBehaviour
 	{
 		GameManager.CurHero.BaseAI.InteractDetector.OnEnter.AddListener(OnInteractEnter);
 		GameManager.CurHero.BaseAI.InteractDetector.OnExit.AddListener(OnInteractExit);
-		//GameManager.CurHero.InteractDetector.OnStay.AddListener(OnInteractStay);
+		GameManager.CurHero.StateUpdateAction += (state) => { infoText.text = state.ToString(); };
 		UpdateEnemyInfo();
 		for (int i = 0; i < maxUILoot; i++)
 		{

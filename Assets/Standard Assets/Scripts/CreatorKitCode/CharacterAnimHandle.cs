@@ -46,14 +46,13 @@ public class CharacterAnimHandle : MonoBehaviour
 			m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
 		if (curState == AIBase.State.INTERACTING)
 		{
-			if (m_character.BaseAI.CurrentInteractor is InteractorTree) m_Animator.SetTrigger("Skill");
-			else m_character.StateStepAction?.Invoke(curState);
+			if (m_character.BaseAI.CurrentInteractor is InteractProducer) m_Animator.SetTrigger("Skill");
+			else m_character.BaseAI.CurrentInteractor.InteractWith(m_character);
 		}
 	}
 
 	void StepEvent()
 	{
-		m_character.StateStepAction?.Invoke(m_character.BaseAI.CurState);
 		if (m_character.BaseAI.CurState == AIBase.State.ATTACKING)
 		{
 			AttackEvent();
@@ -62,6 +61,10 @@ public class CharacterAnimHandle : MonoBehaviour
 		if (m_character.BaseAI.CurState == AIBase.State.SKILLING)
 		{
 			SkillStep?.Invoke();
+		}
+		if (m_character.BaseAI.CurState == AIBase.State.INTERACTING)
+		{
+			m_character.BaseAI.CurrentInteractor.InteractWith(m_character);
 		}
 	}
 

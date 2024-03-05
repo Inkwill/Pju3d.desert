@@ -38,7 +38,6 @@ public class CharacterData : HighlightableObject
 	public Action<Skill, string> SkillAction { get; set; }
 	public Action<AIBase.State> StateUpdateAction { get; set; }
 	public Action<AIBase.State> StateStartAction { get; set; }
-	public Action<AIBase.State> StateStepAction { get; set; }
 	public Action<EffectData> EffectAction { get; set; }
 	Vector3 m_BirthPos;
 	public Vector3 BirthPos => m_BirthPos;
@@ -72,6 +71,9 @@ public class CharacterData : HighlightableObject
 				break;
 			case CharacterData.Camp.BUILDING:
 				gameObject.layer = LayerMask.NameToLayer("Building");
+				break;
+			case CharacterData.Camp.ENEMYBUILDING:
+				gameObject.layer = LayerMask.NameToLayer("Enemy");
 				break;
 			default:
 				break;

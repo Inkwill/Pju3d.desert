@@ -85,7 +85,9 @@ MonoBehaviour:
   - Key: drop_wood
     Value: {fileID: 11400000, guid: 2aedcb0f1a173b746b0f00d850f136ae, type: 2}
   - Key: drop_test
-    Value: {fileID: 11400000, guid: 2aedcb0f1a173b746b0f00d850f136ae, type: 2}
+    Value: {fileID: 11400000, guid: 1e1f26041e5ddf942a4012d99e22b604, type: 2}
+  - Key: drop_chest
+    Value: {fileID: 11400000, guid: a1f74af427f009e48b6994d04c0e6703, type: 2}
   EffectGroup:
   - Key: treeOnDamageDrop
     Value:

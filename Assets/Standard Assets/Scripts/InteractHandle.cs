@@ -5,32 +5,31 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System;
 
+[RequireComponent(typeof(IInteractable))]
 public class InteractHandle : MonoBehaviour
 {
-	public UnityEvent<GameObject, string> InteractEvent;
 	[SerializeField]
 	InteractOnTrigger Detector;
 	[SerializeField]
 	float handleTime = 1.0f;
 	[SerializeField]
-	Slider slider;
+	bool exclusive;
 	[SerializeField]
-	bool autoStart;
-	public float During { get { return m_during; } set { m_during = value; if (slider) slider.value = value; } }
+	UISliderHandle slider;
 	float m_during;
-	public GameObject CurrentTarget { get { return m_target; } set { m_target = value; } }
-	GameObject m_target;
+	IInteractable m_interactor;
+	CharacterData m_monopolist;
 
 	public void Start()
 	{
-		if (autoStart) SetHandle(true);
+		m_interactor = GetComponent<IInteractable>();
+		SetHandle(true);
+		slider?.Init(handleTime, 0, "Check...", UISliderHandle.TextType.Text);
 	}
 	public void SetHandle(bool active)
 	{
 		if (active)
 		{
-			if (slider) slider.maxValue = handleTime;
-			slider?.gameObject.SetActive(false);
 			Detector.OnEnter.AddListener(OnInterEnter);
 			Detector.OnExit.AddListener(OnInterExit);
 			Detector.OnStay.AddListener(OnInterStay);
@@ -45,42 +44,34 @@ public class InteractHandle : MonoBehaviour
 
 	void OnInterEnter(GameObject enter)
 	{
-		if (m_target != null || m_target == enter) return;
-		InteractEvent?.Invoke(enter, "Enter");
-		During = 0;
-		slider?.gameObject.SetActive(true);
-		//Helpers.Log(this, "OninterEnter", "enter= " + enter);
+		if (m_monopolist) return;
+		CharacterData character = enter.GetComponent<CharacterData>();
+		if (character && character.BaseAI) m_interactor.OnInteractorEnter(character);
 	}
 
 	void OnInterExit(GameObject exiter)
 	{
-		if (m_target != null && m_target == exiter) { m_target = null; }
-		InteractEvent?.Invoke(exiter, "Exit");
-		During = 0;
-		slider?.gameObject.SetActive(false);
-		//Helpers.ShowUIElement(slider.gameObject, false);
-		//Helpers.Log(this, "OninterExit", "exiter= " + exiter);
+		if (m_monopolist && exiter == m_monopolist.gameObject) m_monopolist = null;
+		if (exiter == Detector.lastInner && slider) slider.SetValue(handleTime, 0);
 	}
 
 	void OnInterStay(GameObject stayer, float duration)
 	{
-		if (m_target != null && m_target != stayer) return;
-		RoleAI roleAi = stayer.GetComponent<RoleAI>();
-		if (roleAi && roleAi.isIdle)
+		if (m_monopolist) return;
+		CharacterData character = stayer.GetComponent<CharacterData>();
+		if (character && character.BaseAI && m_interactor.CanInteract(character))
 		{
 			m_during += Time.deltaTime;
-			During = m_during;
+			slider?.SetValue(handleTime, m_during, "Check...", UISliderHandle.TextType.Text);
 			if (m_during >= handleTime)
 			{
-				During = 0;
-				InteractEvent?.Invoke(stayer, "Ready");
-				var interactor = GetComponent<IInteractable>();
-				if (interactor != null) roleAi.StartInteractWith(interactor);
-				slider?.gameObject.SetActive(false);
-				m_target = stayer;
+				if (exclusive && m_monopolist == null)
+				{
+					m_monopolist = character;
+				}
+				character.BaseAI.StartInteract(m_interactor);
+				m_during = 0;
 			}
-			InteractEvent?.Invoke(stayer, "Stay");
-			//Helpers.Log(this, "OninterStay", "stayer= " + stayer);
 		}
 	}
 }

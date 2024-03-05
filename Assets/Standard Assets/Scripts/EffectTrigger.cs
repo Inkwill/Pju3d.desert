@@ -12,9 +12,13 @@ public class EffectTrigger : MonoBehaviour
 		EffectData.TakeEffects(Effects, user, target);
 	}
 
+	public void TakeEffects(GameObject user)
+	{
+		EffectData.TakeEffects(Effects, user, user);
+	}
 	public void TakeEffects(CharacterData character)
 	{
-		EffectData.TakeEffects(Effects, character.gameObject, character.gameObject);
+		TakeEffects(character.gameObject);
 	}
 
 	public void TakeEffects(Damage damage)

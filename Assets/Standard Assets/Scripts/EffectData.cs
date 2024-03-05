@@ -159,7 +159,7 @@ public class EffectData : ScriptableObject
 	{
 		GameObject lootObj = Resources.Load("Loot") as GameObject;
 		Vector3 direction = Quaternion.Euler(0, Random.Range(0, 360), 0) * Vector3.right;
-		Vector3 spawnPosition = pos + direction * Random.Range(0, 2);
+		Vector3 spawnPosition = pos + direction * Random.Range(1, 3);
 		for (int i = 0; i < num; i++)
 		{
 			Loot loot = Instantiate(lootObj, spawnPosition, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();

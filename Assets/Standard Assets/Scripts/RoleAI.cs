@@ -74,29 +74,24 @@ public class RoleAI : AIBase
 				return;
 			}
 		}
-
-	}
-
-	public override void StartInteractWith(IInteractable interactor)
-	{
-		if (interactor.CanInteract(m_character))
+		if (curState == State.INTERACTING)
 		{
-			m_interactor = interactor;
-			Helpers.Log(this, "StartInteract", "with: " + m_interactor.ToString());
-			SetState(State.INTERACTING);
+			if (m_interactor == null || !m_interactor.CanInteract(m_character))
+			{
+				m_interactor = null;
+				SetState(State.IDLE);
+				return;
+			}
 		}
-		else interactor.InteractFail(m_character);
+
 	}
 
-	protected override void OnStateStep(State state)
+	public override void StartInteract(IInteractable interactor)
 	{
-		if (state == State.INTERACTING && m_interactor != null) m_interactor.InteractWith(m_character);
-	}
-
-	public override void StopInteract(IInteractable interactor)
-	{
-		if (interactor == m_interactor) m_interactor = null;
-		if (m_State == State.INTERACTING) SetState(State.IDLE);
+		if (interactor == m_interactor) return;
+		m_interactor = interactor;
+		Helpers.Log(this, "StartInteract", "with: " + m_interactor.ToString());
+		SetState(State.INTERACTING);
 	}
 
 	protected override void OnDeathAI()
