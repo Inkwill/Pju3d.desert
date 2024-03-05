@@ -364,25 +364,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 379bc15926d879049950d1d2859120b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6094410193544458595}
-        m_TargetAssemblyTypeName: ItemDemander, Assembly-CSharp-firstpass
-        m_MethodName: OnInteractEvent
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   Detector: {fileID: 6829872174852652575}
   handleTime: 1
+  exclusive: 1
   slider: {fileID: 7909870035461895522}
-  autoStart: 0
 --- !u!114 &6094410193544458595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,9 +380,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03aa0f4915897fd45af92c979df190ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timerDuration: 10
-  loopTimes: 1
-  cd: 0
+  timerDuration: 0
+  loopTimes: 99
+  cd: 60
   behaveEvents:
     m_PersistentCalls:
       m_Calls:
@@ -415,7 +400,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 3082298721846466815}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: ResetTrigger
+        m_MethodName: SetTrigger
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -427,7 +412,7 @@ MonoBehaviour:
         m_CallState: 2
   autoStart: 0
   progressSlider: {fileID: 7909870035461895522}
-  behavePrompt: 
+  behavePrompt: Open
   demanderId: Chest
   RefreshEvents:
     m_PersistentCalls:
@@ -446,7 +431,7 @@ MonoBehaviour:
         m_CallState: 1
   ui_demand: {fileID: 6698977783078293247}
   DemandData:
-  - Key: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
+  - Key: {fileID: 11400000, guid: 1d5ec5573c8307744a74d8eb6783a08b, type: 2}
     Value: 1
 --- !u!114 &3715231181847673851
 MonoBehaviour:
@@ -565,7 +550,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5226080347697280327}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.6}
+  m_LocalPosition: {x: 0, y: 0, z: 2.59}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -576,8 +561,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8.73, y: 40}
-  m_SizeDelta: {x: 150, y: 30}
+  m_AnchoredPosition: {x: 8.89, y: 53.54}
+  m_SizeDelta: {x: 136.12, y: 27.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4394656406234210594
 MonoBehaviour:

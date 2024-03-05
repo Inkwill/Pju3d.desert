@@ -96,7 +96,7 @@ public class RoleAI : AIBase
 
 	protected override void OnDeathAI()
 	{
-		Agent.isStopped = true;
+		//Agent.isStopped = true;
 		Agent.enabled = false;
 	}
 }

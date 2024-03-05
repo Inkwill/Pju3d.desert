@@ -574,8 +574,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 39831047438342558}
-  - component: {fileID: 1153180368876741269}
   - component: {fileID: 7253659820280487118}
+  - component: {fileID: 1153180368876741269}
   - component: {fileID: 2464491415854990839}
   m_Layer: 8
   m_Name: builder_fixFence
@@ -602,6 +602,22 @@ Transform:
   - {fileID: 7431522238870446194}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -7.361, z: 0}
+--- !u!114 &7253659820280487118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5050785731468398963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 379bc15926d879049950d1d2859120b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Detector: {fileID: 5064897746433516885}
+  handleTime: 2
+  exclusive: 0
+  slider: {fileID: 811499038154323719}
 --- !u!114 &1153180368876741269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614,10 +630,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03aa0f4915897fd45af92c979df190ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  during: 2
-  times: 1
+  timerDuration: 1
+  loopTimes: 1
   cd: 0
-  BehaveEvents:
+  behaveEvents:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2464491415854990839}
@@ -633,8 +649,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   autoStart: 0
-  progressSlider: {fileID: 4085670195397977502}
-  BehaveName: Fix
+  progressSlider: {fileID: 811499038154323719}
+  behavePrompt: Fix
   demanderId: fixbuild_fence
   RefreshEvents:
     m_PersistentCalls:
@@ -643,37 +659,6 @@ MonoBehaviour:
   DemandData:
   - Key: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
     Value: 4
---- !u!114 &7253659820280487118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5050785731468398963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 379bc15926d879049950d1d2859120b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InteractEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1153180368876741269}
-        m_TargetAssemblyTypeName: ItemDemander, Assembly-CSharp-firstpass
-        m_MethodName: OnInteractEvent
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  Detector: {fileID: 5064897746433516885}
-  handleTime: 1
-  slider: {fileID: 4085670195397977502}
-  autoStart: 0
 --- !u!114 &2464491415854990839
 MonoBehaviour:
   m_ObjectHideFlags: 0

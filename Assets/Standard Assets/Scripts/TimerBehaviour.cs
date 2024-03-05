@@ -37,7 +37,7 @@ public class TimerBehaviour : MonoBehaviour
 		if (m_started)
 		{
 			m_passedTime += Time.deltaTime;
-			progressSlider?.SetValue(timerDuration, m_passedTime);
+			progressSlider?.SetValue(timerDuration, m_passedTime, behavePrompt, UISliderHandle.TextType.Percent);
 			if (m_passedTime >= timerDuration)
 			{
 				if (m_target != null) behaveEvents?.Invoke(gameObject, m_target);

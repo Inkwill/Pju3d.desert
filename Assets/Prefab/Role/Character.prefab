@@ -167,23 +167,22 @@ MonoBehaviour:
   WeaponLocator: {fileID: 226675115136632130}
   MoveSpeed: 4
   CorpseChance: 100
-  m_CorpseRetention: 10
+  m_CorpseRetention: 999
   Stats:
     baseStats:
-      health: 20
+      health: 50
       strength: 5
       defense: 0
       agility: 1
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  OnDamage:
+  DamageEvent:
     m_PersistentCalls:
       m_Calls: []
-  OnDeath:
+  DeathEvent:
     m_PersistentCalls:
       m_Calls: []
-  DeadEffects: []
 --- !u!114 &4272129805801271086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3115,9 +3114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3d267ff6fabdc4e8b9a091ba04c8df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackStep:
-    m_PersistentCalls:
-      m_Calls: []
   FootStep:
     m_PersistentCalls:
       m_Calls: []

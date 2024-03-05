@@ -59,4 +59,10 @@ public class StoryEvent : MonoBehaviour
 		GameManager.StoryMode = false;
 		EffectData.TakeEffects(TriggerEffects, GameManager.CurHero.gameObject, GameManager.CurHero.gameObject);
 	}
+
+	void OnDestroy()
+	{
+		m_completed = true;
+		GameManager.StoryMode = false;
+	}
 }
