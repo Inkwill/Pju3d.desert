@@ -61,7 +61,7 @@ public class SpawnerSample : TimerBehaviour
 	{
 		Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.right;
 		Vector3 spawnPosition = transform.position + direction * radius;
-		CharacterData enemy = Instantiate(ObjectToSpawn, spawnPosition, Quaternion.identity).GetComponent<CharacterData>();
+		CharacterData enemy = Instantiate(ObjectToSpawn, spawnPosition, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterData>();
 		if (pathRoot) enemy.gameObject.AddComponent<AiPathMove>().SetPath(pathRoot);
 	}
 }

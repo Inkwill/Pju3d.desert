@@ -10,14 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4349176422864021648}
   - component: {fileID: 1132595425594053966}
+  - component: {fileID: 1104240081277863604}
   - component: {fileID: 1729241072519778576}
   - component: {fileID: 9157260762653468870}
   - component: {fileID: 2134693030728375183}
-  - component: {fileID: 1104240081277863604}
-  - component: {fileID: 4435226131399032823}
   - component: {fileID: 8877045567101703517}
   m_Layer: 6
-  m_Name: NpcDog
+  m_Name: Npc_Dog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,6 +62,33 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!54 &1104240081277863604
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4942053394312810848}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &1729241072519778576
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -97,9 +123,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camp: 1
-  CharacterName: NpcBull
+  CharacterName: DogKnight
   DefaultWeapon: {fileID: 0}
-  WeaponLocator: {fileID: 0}
+  WeaponLocator: {fileID: 3506814719559824095}
   MoveSpeed: 3
   CorpseChance: 0
   m_CorpseRetention: 0
@@ -112,13 +138,12 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  OnDamage:
+  DamageEvent:
     m_PersistentCalls:
       m_Calls: []
-  OnDeath:
+  DeathEvent:
     m_PersistentCalls:
       m_Calls: []
-  DeadEffects: []
 --- !u!114 &2134693030728375183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,51 +178,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2672e27cd06d1404eb0f211f0d838a5f, type: 3}
   - {fileID: 8300000, guid: 873d7f1ace050d347b3a7966bca26594, type: 3}
   UseType: 1
---- !u!54 &1104240081277863604
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4942053394312810848}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &4435226131399032823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4942053394312810848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70b8b18bf2b167a48a7c439d75abe615, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  events:
-    m_PersistentCalls:
-      m_Calls: []
-  countEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &8877045567101703517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,6 +195,8 @@ MonoBehaviour:
   EnemyDetector: {fileID: 4352763605142096454}
   SkillDetector: {fileID: 3246637890045457507}
   m_Offensive: 1
+  m_guarder: 1
+  m_itemPick: 0
   m_WanderRadius: 0
   m_WanderBeat: 0
 --- !u!1001 &2688779954868180939
@@ -416,6 +398,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8018296538341076226}
   m_SourcePrefab: {fileID: 100100000, guid: 214e08cd5e5d74c458e2a81b7ec2c84c, type: 3}
+--- !u!4 &3506814719559824095 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8422892626600249714, guid: 214e08cd5e5d74c458e2a81b7ec2c84c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4922035682206727085}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3506814719559824221 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8422892626600249584, guid: 214e08cd5e5d74c458e2a81b7ec2c84c,
@@ -440,9 +428,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3d267ff6fabdc4e8b9a091ba04c8df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackStep:
-    m_PersistentCalls:
-      m_Calls: []
   FootStep:
     m_PersistentCalls:
       m_Calls: []

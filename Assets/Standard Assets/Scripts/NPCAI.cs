@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using CreatorKitCode;
 using Random = UnityEngine.Random;
@@ -7,25 +5,22 @@ using Random = UnityEngine.Random;
 public class NPCAI : RoleAI
 {
 	[SerializeField] bool m_Offensive;
+	[SerializeField] bool m_guarder;
+	[SerializeField] bool m_itemPick;
 	[SerializeField] float m_WanderRadius;
 	[SerializeField] float m_WanderBeat = 3.0f;
 	float m_IdleDuring;
-
-	public bool PickItem
-	{
-		get { return m_itemPick; }
-		set
-		{
-			m_itemPick = value;
-		}
-	}
-	bool m_itemPick;
 
 	protected override void OnStateUpdate(State curState)
 	{
 		base.OnStateUpdate(curState);
 		if (curState == State.IDLE)
 		{
+			if (m_guarder && Vector3.SqrMagnitude(m_character.BirthPos - transform.position) >= 1)
+			{
+				MoveTo(m_character.BirthPos);
+				SetState(State.MOVE);
+			}
 			m_IdleDuring += Time.deltaTime;
 			if (m_IdleDuring > m_WanderBeat && m_WanderRadius > 0)
 			{
@@ -40,10 +35,6 @@ public class NPCAI : RoleAI
 			{
 				Agent.isStopped = false;
 				Agent.SetDestination(CurrentEnemy.gameObject.transform.position);
-			}
-			else
-			{
-				Helpers.Log(this, "OnPursuingAI", "enemy= " + CurrentEnemy);
 			}
 		}
 	}

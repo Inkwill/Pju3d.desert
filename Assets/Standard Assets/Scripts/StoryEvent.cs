@@ -60,9 +60,8 @@ public class StoryEvent : MonoBehaviour
 		EffectData.TakeEffects(TriggerEffects, GameManager.CurHero.gameObject, GameManager.CurHero.gameObject);
 	}
 
-	void OnDestroy()
+	public void OnDeathEvent(CharacterData character)
 	{
-		m_completed = true;
 		GameManager.StoryMode = false;
 	}
 }

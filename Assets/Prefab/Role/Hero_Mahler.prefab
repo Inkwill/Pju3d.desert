@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 8083394617915932574}
   - component: {fileID: 5207904639715509024}
   m_Layer: 6
-  m_Name: Character
+  m_Name: Hero_Mahler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
