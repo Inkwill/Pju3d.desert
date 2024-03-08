@@ -33,7 +33,7 @@ public class CharacterData : HighlightableObject
 	public EquipmentSystem Equipment = new EquipmentSystem();
 	public UnityEvent<Damage> DamageEvent;
 	public UnityEvent<CharacterData> DeathEvent;
-	public Action<CharacterData> AttackAction { get; set; }
+	public UnityEvent<CharacterData> AttackEvent;
 	public Action<CharacterData> KillEnemyAction { get; set; }
 	public Action<Skill, string> SkillAction { get; set; }
 	public Action<AIBase.State> StateUpdateAction { get; set; }
@@ -149,7 +149,7 @@ public class CharacterData : HighlightableObject
 			BaseAI.Stop();
 			BaseAI.LookAt(CurrentEnemy.transform);
 			AttackTriggered();
-			AttackAction?.Invoke(this);
+			AttackEvent?.Invoke(this);
 		}
 	}
 	public void AttackFrame()

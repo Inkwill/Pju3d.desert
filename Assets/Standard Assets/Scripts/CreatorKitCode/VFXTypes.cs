@@ -8,5 +8,6 @@ public enum VFXType
 	Stronger,
 	SmokePoof,
 	Death,
+	Water,
 	NONE
 }

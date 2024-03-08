@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd59d6612e8c0f64e851fbc14d980b1e, type: 3}
   m_Name: DestroySelf
   m_EditorClassIdentifier: 
-  Type: 9
-  TakeVFX: 8
+  Type: 10
+  TakeVFX: 7
   Description: 
   EffectAmount: 0
   EffectMode: 0

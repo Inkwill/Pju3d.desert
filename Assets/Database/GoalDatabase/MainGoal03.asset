@@ -15,7 +15,8 @@ MonoBehaviour:
   goalId: main03
   describe: "\u79FB\u52A8\u5230\u56F4\u680F\u9644\u8FD1\u53EF\u81EA\u52A8\u5F00\u59CB\u4FEE\u590D"
   summary: "\u4FEE\u590D\u7834\u635F\u7684\u56F4\u680F:"
-  LordExp: 2
+  forcedToAdd: 0
+  LordExp: 4
   type: 1
   param:
   - Key: fixbuild_fence

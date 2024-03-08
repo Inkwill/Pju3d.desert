@@ -118,7 +118,9 @@ public class AIBase : MonoBehaviour
 					Debug.LogError("Miss a Weapon! role = " + gameObject);
 				}
 			}
-			if (m_character.CanAttackReach()) SetState(State.ATTACKING);
+			if (m_character.CurrentEnemy && m_character.CanAttackReach()) SetState(State.ATTACKING);
+			else m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<CharacterData>());
+			if (m_character.CurrentEnemy == null) SetState(State.IDLE);
 		}
 		m_character.StateUpdateAction?.Invoke(m_State);
 		OnStateUpdate(m_State);
@@ -158,7 +160,7 @@ public class AIBase : MonoBehaviour
 	{
 		if (m_character.CurrentEnemy && m_character.CurrentEnemy.gameObject == exiter)
 		{
-			m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<CharacterData>());
+			m_character.SetEnemy(null);
 		}
 	}
 	protected virtual void OnEnemyEvent(GameObject sender, string eventMessage)

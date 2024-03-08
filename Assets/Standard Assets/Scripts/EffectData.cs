@@ -18,6 +18,7 @@ public class EffectData : ScriptableObject
 		ADDGOAL,
 		LORDMONEY,
 		LORDEXP,
+		LORDEWARTER,
 		DESTROYSELF,
 	}
 	public EffectType Type;

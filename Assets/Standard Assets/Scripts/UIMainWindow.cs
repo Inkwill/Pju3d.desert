@@ -23,6 +23,7 @@ public class UIMainWindow : UIWindow
 	public Skill sprintSkill;
 	public UIGoalInfo uiGoalInfo;
 	public Image iconExp;
+	public Slider sliderWater;
 	Button[] m_buttons;
 	UISkillButton[] m_skillButtons;
 
@@ -141,12 +142,13 @@ public class UIMainWindow : UIWindow
 	void Update()
 	{
 		lordExp.value = GameManager.Lord.ExpPercent;
-		lordLv.text = GameManager.Lord.Lv.ToString();
+		lordLv.text = $"Lv.{GameManager.Lord.Lv}";
 		lordMoney.text = GameManager.Lord.Money.ToString();
 		infoPos.text = GameManager.CurHero.gameObject.transform.position.ToString();
 		infoTerrian.text = GameManager.CurHero.BaseAI.SceneBoxName;
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
 		btSwitchWeapon.interactable = GameManager.CurHero.BaseAI.isStandBy;
+		sliderWater.value = GameManager.Lord.waterBottle.Volume;
 	}
 
 	public override void OnButtonClick(string eventName)

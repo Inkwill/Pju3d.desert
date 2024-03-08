@@ -31,7 +31,7 @@ public class CharacterAnimHandle : MonoBehaviour
 		m_character = GetComponentInParent<CharacterData>();
 		m_character.DamageEvent.AddListener((damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); });
 		m_character.DeathEvent.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
-		m_character.AttackAction += (attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); };
+		m_character.AttackEvent.AddListener((attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); });
 		if (m_character.BaseAI != null)
 		{
 			m_character.StateUpdateAction += OnCharacterStating;
@@ -46,7 +46,8 @@ public class CharacterAnimHandle : MonoBehaviour
 			m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
 		if (curState == AIBase.State.INTERACTING)
 		{
-			if (m_character.BaseAI.CurrentInteractor is InteractProducer) m_Animator.SetTrigger("Skill");
+			string anim = m_character.BaseAI.CurrentInteractor.InteractAnim(m_character);
+			if (anim != "") m_Animator.SetTrigger(anim);
 			else m_character.BaseAI.CurrentInteractor.InteractWith(m_character);
 		}
 	}

@@ -57,7 +57,7 @@ public class InteractHandle : MonoBehaviour
 
 	void OnInterStay(GameObject stayer, float duration)
 	{
-		if (m_monopolist) return;
+		if (m_monopolist || duration < 0.5f) return;
 		CharacterData character = stayer.GetComponent<CharacterData>();
 		if (character && character.BaseAI && m_interactor.CanInteract(character))
 		{

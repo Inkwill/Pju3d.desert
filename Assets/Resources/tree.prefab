@@ -302,13 +302,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 379bc15926d879049950d1d2859120b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractEvent:
-    m_PersistentCalls:
-      m_Calls: []
   Detector: {fileID: 453860157913378093}
   handleTime: 0.5
+  exclusive: 0
   slider: {fileID: 0}
-  autoStart: 1
 --- !u!114 &7881082111562284268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,6 +318,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: decd7e7cf04a1474fb9c781f6e463fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_maxCount: 10
+  m_collectCd: 1
+  m_replenishTime: -1
   InteractEvent:
     m_PersistentCalls:
       m_Calls:
@@ -351,6 +351,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  text_Count: {fileID: 0}
 --- !u!114 &83618183156582405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,6 +384,7 @@ MonoBehaviour:
   - Key: {fileID: 11400000, guid: 5a5deaa6e62beb846b029334991f1576, type: 2}
     Value:
     - tree_stump
+    - self
   - Key: {fileID: 11400000, guid: 08a26aedc7f9d2d4786984f013ed2005, type: 2}
     Value: []
 --- !u!1001 &5559558988967079462

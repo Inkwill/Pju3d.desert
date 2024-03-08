@@ -43,3 +43,7 @@ MonoBehaviour:
   - Name: Death
     Prefab: {fileID: 100006, guid: 2a474af3f4c27be4e9bdce39cfe4315d, type: 3}
     PoolSize: 6
+  - Name: Water
+    Prefab: {fileID: 1211639657851661640, guid: 25bbae2c2b140544b9bf86635d13103f,
+      type: 3}
+    PoolSize: 6

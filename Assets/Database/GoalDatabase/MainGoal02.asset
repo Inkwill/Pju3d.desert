@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d0c837d0e930a4ab7e25738d516182, type: 3}
   m_Name: MainGoal02
   m_EditorClassIdentifier: 
-  goalId: main03
+  goalId: main02
   describe: "\u79FB\u52A8\u65F6\u4E0D\u80FD\u653B\u51FB\uFF0C\u505C\u6B62\u79FB\u52A8\u53EF\u81EA\u52A8\u653B\u51FB"
   summary: "\u6D88\u706D\u6363\u4E71\u7684\u4ED9\u4EBA\u638C:"
   forcedToAdd: 0
@@ -22,4 +22,7 @@ MonoBehaviour:
   - Key: Cactus Nails
     Value:
     - 5
-  rewardEffects: []
+  rewardEffects:
+  - Key: {fileID: 11400000, guid: 914632a637ca46447acc281c33ff3c12, type: 2}
+    Value:
+    - main03

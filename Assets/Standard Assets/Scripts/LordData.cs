@@ -13,13 +13,26 @@ public class LordData : MonoBehaviour
 	int m_exp;
 	public int Money => m_money;
 	int m_money;
+	public WaterContainer waterBottle => m_bottle;
+	WaterContainer m_bottle;
 	[SerializeField]
 	int[] expTemplate;
+
+	public class WaterContainer
+	{
+		const int m_max = 10;
+		public int Count { get { return GameManager.CurHero.Inventory.ItemCount("Water"); } }
+		public float Volume
+		{
+			get { return 1.0f * Count / m_max; }
+		}
+	}
 
 	public void Init()
 	{
 		m_level = 1;
 		m_exp = 0;
+		m_bottle = new WaterContainer();
 	}
 
 	public void AddExp(int exp)

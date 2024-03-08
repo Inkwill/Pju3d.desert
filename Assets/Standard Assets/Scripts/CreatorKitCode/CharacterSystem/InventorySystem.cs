@@ -63,25 +63,14 @@ namespace CreatorKitCode
 					inventory.ItemEvent?.Invoke(inventory.Entries[entryId].Item, "Fulfill", submit.Value);
 					inventory.MinusItem(entryId, submit.Value);
 				}
-				// bool success = false;
-				// foreach (var demand in Demand)
-				// {
-				// 	int id = inventory.EntryID(demand.Key);
-				// 	if (id != -1)
-				// 	{
-				// 		Item item = inventory.Entries[inventory.EntryID(submit.Key)].Item;
-				// 		InventoryEntry entry = inventory.Entries[id];
-				// 		int leftNum = DemandLeft[demand.Key];
-				// 		int fulfillNum = 0;
-				// 		for (int i = 0; i < leftNum; i++)
-				// 		{
-				// 			if (inventory.MinusItem(entry, 1) > 0) { fulfillNum++; DemandLeft[demand.Key]--; success = true; }
-				// 			else break;
-				// 		}
-				// 		inventory.ItemEvent?.Invoke(entry.Item, "Fulfill", fulfillNum);
-				// 	}
-				// }
 				return true;
+			}
+
+			public float GetProgress(string itemKey)
+			{
+				float result = 0;
+				if (Demand.Keys.Contains(itemKey)) result = 1.0f - 1.0f * DemandLeft[itemKey] / Demand[itemKey];
+				return result;
 			}
 		}
 

@@ -33,6 +33,11 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		m_interactable = true;
 	}
 
+	public string InteractAnim(CharacterData character)
+	{
+		return "";
+	}
+
 	public bool CanInteract(CharacterData character)
 	{
 		return character.BaseAI.isIdle && !m_Demand.Completed && m_interactable;
@@ -49,6 +54,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		}
 		else { ui_demand.Fail(); m_interactable = false; }
 	}
+
 	protected override void OnRefresh()
 	{
 		Init();

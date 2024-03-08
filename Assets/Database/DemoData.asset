@@ -65,6 +65,8 @@ MonoBehaviour:
     Value: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
   - Key: ChestKey
     Value: {fileID: 11400000, guid: 1d5ec5573c8307744a74d8eb6783a08b, type: 2}
+  - Key: Water
+    Value: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363, type: 2}
   Effect:
   - Key: WeaponDamage
     Value: {fileID: 0}
@@ -88,6 +90,8 @@ MonoBehaviour:
     Value: {fileID: 11400000, guid: 1e1f26041e5ddf942a4012d99e22b604, type: 2}
   - Key: drop_chest
     Value: {fileID: 11400000, guid: a1f74af427f009e48b6994d04c0e6703, type: 2}
+  - Key: drop_water
+    Value: {fileID: 11400000, guid: 6cc6fd01ff8e9a0478713b77d07a0c10, type: 2}
   EffectGroup:
   - Key: treeOnDamageDrop
     Value:

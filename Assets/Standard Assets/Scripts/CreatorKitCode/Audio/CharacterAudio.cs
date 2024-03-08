@@ -19,7 +19,7 @@ public class CharacterAudio : MonoBehaviour
 		m_Character = GetComponent<CharacterData>();
 		m_Character.DamageEvent.AddListener((damage) => { Hit(damage.Target.gameObject.transform.position); });
 		m_Character.DeathEvent.AddListener((character) => { Death(character.transform.position); });
-		m_Character.AttackAction += (attacker) => { Attack(attacker.transform.position); };
+		m_Character.AttackEvent.AddListener((attacker) => { Attack(attacker.transform.position); });
 
 		CharacterAnimHandle animHandle = GetComponentInChildren<CharacterAnimHandle>();
 		if (animHandle)
