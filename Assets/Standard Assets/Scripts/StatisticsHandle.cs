@@ -22,7 +22,7 @@ public class StatisticsHandle : MonoBehaviour
 		m_KillEnemyCount = new Dictionary<string, int>();
 		if (m_owner)
 		{
-			m_owner.Inventory.ItemEvent += OnItemEvent;
+			m_owner.Inventory.ItemAction += OnItemEvent;
 			m_owner.KillEnemyAction += OnKillEnemyCount;
 			m_owner.GetComponent<EventSender>()?.countEvent.AddListener(OnCountEvent);
 		}

@@ -35,6 +35,7 @@ public class UIMainWindow : UIWindow
 		GameManager.CurHero.Equipment.OnEquiped += (equip) => { UpdateWeapon(GameManager.CurHero.Equipment); };
 		GameManager.CurHero.Equipment.OnUnequip += (equip) => { UpdateWeapon(GameManager.CurHero.Equipment); };
 		GameManager.CurHero.Equipment.OnEquipViceWeapon += (equip) => { UpdateWeapon(GameManager.CurHero.Equipment); };
+		GameManager.CurHero.Inventory.ItemAction += OnItemAction;
 		GameManager.StoryListener.storyListenerEvents.AddListener(OnStoryListenerEvent);
 		GameManager.GameGoal.GameGoalAction += UpdateGoalInfo;
 	}
@@ -44,6 +45,32 @@ public class UIMainWindow : UIWindow
 		CloseTalkButton();
 		tellContent.SetActive(false);
 		uiGoalInfo.SetGoal(GameManager.GameGoal.CurrentGoal);
+		sliderWater.gameObject.SetActive(GameManager.CurHero.Inventory.GetResInventory(ResItem.ResType.Water) != null);
+	}
+
+	void OnItemAction(Item item, string eventName, int num)
+	{
+		if (eventName == "AddResInventory")
+		{
+			ResInventoryItem it = item as ResInventoryItem;
+			if (it.Type == ResItem.ResType.Water)
+			{
+				sliderWater?.gameObject.SetActive(true);
+				sliderWater.value = GameManager.CurHero.Inventory.GetResInventory(ResItem.ResType.Water).Volume;
+			}
+		}
+		if (eventName == "RemoveResInventory")
+		{
+			ResInventoryItem it = item as ResInventoryItem;
+			if (it.Type == ResItem.ResType.Water)
+				sliderWater?.gameObject.SetActive(false);
+		}
+		if (eventName == "AddRes" || eventName == "Minus")
+		{
+			ResItem resitem = item as ResItem;
+			if (resitem && resitem.Type == ResItem.ResType.Water)
+				sliderWater.value = GameManager.CurHero.Inventory.GetResInventory(ResItem.ResType.Water).Volume;
+		}
 	}
 
 	void OnStoryListenerEvent(string eventName, string content)
@@ -148,7 +175,6 @@ public class UIMainWindow : UIWindow
 		infoTerrian.text = GameManager.CurHero.BaseAI.SceneBoxName;
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;
 		btSwitchWeapon.interactable = GameManager.CurHero.BaseAI.isStandBy;
-		sliderWater.value = GameManager.Lord.waterBottle.Volume;
 	}
 
 	public override void OnButtonClick(string eventName)

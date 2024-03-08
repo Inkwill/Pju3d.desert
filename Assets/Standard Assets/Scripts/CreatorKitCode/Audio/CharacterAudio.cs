@@ -26,7 +26,7 @@ public class CharacterAudio : MonoBehaviour
 		{
 			animHandle.FootStep.AddListener(() => { Step(transform.position); VFXManager.PlayVFX(VFXType.StepPuff, transform.position); });
 		}
-		m_Character.Inventory.ItemEvent += OnItemEvent;
+		m_Character.Inventory.ItemAction += OnItemEvent;
 		m_Character.Equipment.OnEquiped += OnEquiped;
 
 		if (m_Character.BaseAI != null) m_Character.StateUpdateAction += (state) =>

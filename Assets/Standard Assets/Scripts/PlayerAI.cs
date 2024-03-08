@@ -8,7 +8,7 @@ public class PlayerAI : RoleAI
 	protected override void OnStart()
 	{
 		base.OnStart();
-		m_character.Inventory.ItemEvent += (OnItemEvent);
+		m_character.Inventory.ItemAction += (OnItemEvent);
 	}
 	protected override void OnStateUpdate(State curState)
 	{

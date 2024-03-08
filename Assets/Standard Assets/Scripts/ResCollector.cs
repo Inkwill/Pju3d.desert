@@ -14,7 +14,7 @@ public class ResCollector : MonoBehaviour
 	{
 		m_character = GetComponent<CharacterData>();
 		//Debug.Log("m_Inventory = " + m_Inventory);
-		m_character.Inventory.ItemEvent += OnItemEvent;
+		m_character.Inventory.ItemAction += OnItemEvent;
 		m_Count = 0;
 	}
 

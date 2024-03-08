@@ -643,7 +643,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Item
       value: 
-      objectReference: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363,
+      objectReference: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70,
         type: 2}
     - target: {fileID: 5872896046095046624, guid: fc5833809198d0e4bb118b339dcaa5fb,
         type: 3}
@@ -729,7 +729,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Item
       value: 
-      objectReference: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363,
+      objectReference: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70,
         type: 2}
     - target: {fileID: 5872896046095046624, guid: fc5833809198d0e4bb118b339dcaa5fb,
         type: 3}
@@ -3101,7 +3101,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Item
       value: 
-      objectReference: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363,
+      objectReference: {fileID: 11400000, guid: 60eb5c81496263d4f91f0c3223aa13eb,
         type: 2}
     - target: {fileID: 5872896046095046624, guid: fc5833809198d0e4bb118b339dcaa5fb,
         type: 3}
@@ -16852,7 +16852,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Item
       value: 
-      objectReference: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363,
+      objectReference: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70,
         type: 2}
     - target: {fileID: 5872896046095046624, guid: fc5833809198d0e4bb118b339dcaa5fb,
         type: 3}
@@ -18986,7 +18986,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Item
       value: 
-      objectReference: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363,
+      objectReference: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70,
         type: 2}
     - target: {fileID: 5872896046095046624, guid: fc5833809198d0e4bb118b339dcaa5fb,
         type: 3}
@@ -21813,7 +21813,7 @@ MonoBehaviour:
   behaveEvents:
     m_PersistentCalls:
       m_Calls: []
-  autoStart: 0
+  autoStart: 1
   progressSlider: {fileID: 0}
   behavePrompt: 
   ObjectToSpawn: {fileID: 1253957173911874756, guid: 7dc50689892245c49b48a9272b3e8e09,
@@ -22957,7 +22957,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Item
       value: 
-      objectReference: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363,
+      objectReference: {fileID: 11400000, guid: d3f9319a79561f346b623756e7fdb8c7,
         type: 2}
     - target: {fileID: 5872896046095046624, guid: fc5833809198d0e4bb118b339dcaa5fb,
         type: 3}
@@ -26337,7 +26337,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Item
       value: 
-      objectReference: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363,
+      objectReference: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70,
         type: 2}
     - target: {fileID: 5872896046095046624, guid: fc5833809198d0e4bb118b339dcaa5fb,
         type: 3}
@@ -32922,7 +32922,7 @@ MonoBehaviour:
   TerrainTool: {fileID: 1996416778}
   buildModeFollow: {fileID: 2072677016}
   ui_trans: {fileID: 5564097808944322120}
-  position_born: {x: 92, y: 5, z: 17}
+  position_born: {x: 92, y: 5, z: -17}
   baseBoundary_LB: {x: 75, y: -5}
   baseBoundary_RT: {x: 90, y: 20}
   prefab_character: {fileID: 8112423057566066908, guid: 13412434e049bcc419706b33d84a668e,
@@ -33441,6 +33441,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 427273653}
     m_Modifications:
+    - target: {fileID: 1788767501413717586, guid: 90e77cc43c04c224eae100e83492eaf5,
+        type: 3}
+      propertyPath: m_collectCd
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8184757580538591925, guid: 90e77cc43c04c224eae100e83492eaf5,
         type: 3}
       propertyPath: m_Name

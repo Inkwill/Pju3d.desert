@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,6 +21,19 @@ namespace CreatorKitCode
 		{
 			public int Count;
 			public Item Item;
+		}
+
+		public class ResInventory
+		{
+			public ResInventoryItem data;
+			public int count;
+
+			public float Volume { get { return count * 1.0f / data.capacity; } }
+
+			public ResInventory(ResInventoryItem item)
+			{
+				data = item;
+			}
 		}
 
 		public class ItemDemand
@@ -42,10 +56,21 @@ namespace CreatorKitCode
 				var submits = new Dictionary<string, int>();
 				foreach (var left in DemandLeft)
 				{
-					int id = inventory.EntryID(left.Key);
-					if (id != -1 && left.Value > 0)
+					if (left.Key == ResItem.GetResItemByType(ResItem.ResType.Water).ItemName && left.Value > 0)
 					{
-						submits[left.Key] = Math.Min(left.Value, inventory.Entries[id].Count);
+						submits[left.Key] = Math.Min(left.Value, inventory.GetResInventory(ResItem.ResType.Water).count);
+					}
+					else if (left.Key == ResItem.GetResItemByType(ResItem.ResType.Wood).ItemName && left.Value > 0)
+					{
+						submits[left.Key] = Math.Min(left.Value, inventory.GetResInventory(ResItem.ResType.Wood).count);
+					}
+					else
+					{
+						int id = inventory.EntryID(left.Key);
+						if (id != -1 && left.Value > 0)
+						{
+							submits[left.Key] = Math.Min(left.Value, inventory.Entries[id].Count);
+						}
 					}
 				}
 				return submits;
@@ -58,10 +83,26 @@ namespace CreatorKitCode
 				if (submits.Count < 1) return false;
 				foreach (var submit in submits)
 				{
-					int entryId = inventory.EntryID(submit.Key);
-					DemandLeft[submit.Key] -= submit.Value;
-					inventory.ItemEvent?.Invoke(inventory.Entries[entryId].Item, "Fulfill", submit.Value);
-					inventory.MinusItem(entryId, submit.Value);
+					if (submit.Key == ResItem.GetResItemByType(ResItem.ResType.Water).ItemName && submit.Value > 0)
+					{
+						DemandLeft[submit.Key] -= submit.Value;
+						inventory.GetResInventory(ResItem.ResType.Water).count -= submit.Value;
+						inventory.ItemAction?.Invoke(ResItem.GetResItemByType(ResItem.ResType.Water), "Fulfill", submit.Value);
+					}
+					else if (submit.Key == ResItem.GetResItemByType(ResItem.ResType.Wood).ItemName && submit.Value > 0)
+					{
+						DemandLeft[submit.Key] -= submit.Value;
+						inventory.GetResInventory(ResItem.ResType.Wood).count -= submit.Value;
+						inventory.ItemAction?.Invoke(ResItem.GetResItemByType(ResItem.ResType.Wood), "Fulfill", submit.Value);
+					}
+					else
+					{
+						int entryId = inventory.EntryID(submit.Key);
+						DemandLeft[submit.Key] -= submit.Value;
+						inventory.ItemAction?.Invoke(inventory.Entries[entryId].Item, "Fulfill", submit.Value);
+						inventory.MinusItem(entryId, submit.Value);
+					}
+
 				}
 				return true;
 			}
@@ -76,7 +117,8 @@ namespace CreatorKitCode
 
 		//Only 32 slots in inventory
 		public InventoryEntry[] Entries = new InventoryEntry[m_baseSlots];
-		public Action<Item, string, int> ItemEvent;
+		public Action<Item, string, int> ItemAction;
+		public List<ResInventory> ResInventories;
 		CharacterData m_Owner;
 		public int SlotsNum { get { return m_baseSlots; } }
 		public int CurSlotsNum { get { return Entries.Where(en => en != null).Count(); } }
@@ -85,6 +127,7 @@ namespace CreatorKitCode
 		public void Init(CharacterData owner)
 		{
 			m_Owner = owner;
+			ResInventories = new List<ResInventory>();
 		}
 
 		public int EntryID(string itemKey)
@@ -117,10 +160,12 @@ namespace CreatorKitCode
 		/// <param name="item">The item to add to the inventory</param>
 		public bool AddItem(Item item, int num = 1)
 		{
+			if (item is ResItem) return AddResItem(item as ResItem, num);
 			if (AutoUseItem(item, num)) return true;
 			else if (PutItem(item, num))
 			{
-				ItemEvent?.Invoke(item, "Add", num);
+				ItemAction?.Invoke(item, "Add", num);
+				if (item is ResInventoryItem) AddResInventory(item as ResInventoryItem);
 				return true;
 			}
 			return false;
@@ -137,7 +182,7 @@ namespace CreatorKitCode
 			// 	{
 			// 		Entries[i].Count += num;
 			// 		found = true;
-			// 		ItemEvent?.Invoke(item, "Add", num);
+			// 		ItemAction?.Invoke(item, "Add", num);
 			// 	}
 			// }
 
@@ -148,13 +193,18 @@ namespace CreatorKitCode
 			// 	entry.Count = num;
 
 			// 	Entries[firstEmpty] = entry;
-			// 	ItemEvent?.Invoke(item, "Add", num);
+			// 	ItemAction?.Invoke(item, "Add", num);
 			// }
 		}
 
 		bool PutItem(Item item, int num = 1)
 		{
 			var entry = Entries.Where(en => (en != null && en.Item.ItemName == item.ItemName)).FirstOrDefault();
+			if (entry != null && item is ResInventoryItem)
+			{
+				ItemAction?.Invoke(item, "DuplicateContainer", num);
+				return false;
+			}
 			if (entry != null) { entry.Count += num; return true; }
 			else
 			{
@@ -169,7 +219,7 @@ namespace CreatorKitCode
 						return true;
 					}
 				}
-				ItemEvent?.Invoke(item, "Full", num);
+				ItemAction?.Invoke(item, "Full", num);
 				return false;
 			}
 		}
@@ -180,7 +230,8 @@ namespace CreatorKitCode
 			{
 				if (i == InventoryID)
 				{
-					ItemEvent?.Invoke(Entries[i].Item, "Remove", Entries[i].Count);
+					ItemAction?.Invoke(Entries[i].Item, "Remove", Entries[i].Count);
+					if (Entries[i].Item is ResInventoryItem) RemoveResInventory(Entries[i].Item as ResInventoryItem);
 					Entries[i] = null;
 					break;
 				}
@@ -201,7 +252,7 @@ namespace CreatorKitCode
 				{
 					minusNum = Math.Min(num, Entries[i].Count);
 					Entries[i].Count -= minusNum;
-					if (minusNum > 0) ItemEvent?.Invoke(Entries[i].Item, "Minus", minusNum);
+					if (minusNum > 0) ItemAction?.Invoke(Entries[i].Item, "Minus", minusNum);
 					if (Entries[i].Count < 1)
 					{
 						RemoveItem(i);
@@ -240,7 +291,7 @@ namespace CreatorKitCode
 						}
 					}
 				}
-				ItemEvent?.Invoke(item.Item, "Use", 1);
+				ItemAction?.Invoke(item.Item, "Use", 1);
 				return true;
 			}
 
@@ -252,7 +303,7 @@ namespace CreatorKitCode
 			var useable = item as UsableItem;
 			if (useable && useable.autoUse)
 			{
-				ItemEvent?.Invoke(item, "Add", count);
+				ItemAction?.Invoke(item, "Add", count);
 				return item.UsedBy(m_Owner, count);
 			}
 			return false;
@@ -275,6 +326,64 @@ namespace CreatorKitCode
 			else if (wp == null) m_Owner.Equipment.Unequip(equip.Slot);
 			// RemoveItem(EntryID(equip.ItemName));
 			// SFXManager.PlayClip("equiped");
+		}
+
+		void AddResInventory(ResInventoryItem item)
+		{
+			ResInventory resInvent = new ResInventory(item);
+			ResInventories.Add(resInvent);
+			ItemAction?.Invoke(item, "AddResInventory", 1);
+		}
+
+		void RemoveResInventory(ResInventoryItem item)
+		{
+			var resInventory = GetResInventory(item.Type);
+			if (resInventory != null)
+			{
+				ResInventories.Remove(resInventory);
+				GameObject lootObj = Resources.Load("Loot") as GameObject;
+				for (int i = 0; i < resInventory.count; i++)
+				{
+					Loot loot = GameObject.Instantiate(lootObj, m_Owner.transform.position, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
+					loot.Item = item;
+				}
+				ItemAction?.Invoke(item, "RemoveResInventory", 1);
+			}
+		}
+
+		bool AddResItem(ResItem item, int num)
+		{
+			bool added = false;
+			var resInventory = GetResInventory(item.Type);
+			if (resInventory == null) added = false;
+			else added = resInventory.count < resInventory.data.capacity;
+			if (!added) ItemAction?.Invoke(item, "NotEnoughSpace", num);
+			else
+			{
+				resInventory.count += num;
+				ItemAction?.Invoke(item, "AddRes", num);
+			}
+			return added;
+		}
+
+		bool MinusResItem(ResItem item, int num)
+		{
+			bool minused = false;
+			var resInventory = GetResInventory(item.Type);
+			if (resInventory == null) minused = false;
+			else minused = resInventory.count >= num;
+			if (!minused) ItemAction?.Invoke(item, "NotEnoughRes", num);
+			else
+			{
+				resInventory.count -= num;
+				ItemAction?.Invoke(item, "MinusRes", num);
+			}
+			return minused;
+		}
+
+		public ResInventory GetResInventory(ResItem.ResType type)
+		{
+			return ResInventories.Where(resin => resin.data.Type == type).FirstOrDefault();
 		}
 	}
 }

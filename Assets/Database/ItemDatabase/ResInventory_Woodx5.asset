@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b403f04301a8c514a973de9073835732, type: 3}
-  m_Name: Water
+  m_Script: {fileID: 11500000, guid: 77efebc043fe8b940ba68c0a6ebfe29e, type: 3}
+  m_Name: ResInventory_Woodx5
   m_EditorClassIdentifier: 
-  ItemName: Water
-  ItemSprite: {fileID: 21300000, guid: f661638cadd85ef4f9c51d6b7f01b351, type: 3}
+  ItemName: ResInventory_Woodx5
+  ItemSprite: {fileID: 21300000, guid: 7b4d15d1b586c5143a58314171c26213, type: 3}
   Description: 
-  WorldObjectPrefab: {fileID: 5425733448891748066, guid: a70f87bab4686f041a1c83caecf5e105,
+  WorldObjectPrefab: {fileID: 1926261722200423199, guid: 265ed1fd071eee145b7fbdba2f5cb978,
     type: 3}
   SpawnClip: {fileID: 0}
-  Type: 1
+  Type: 0
+  capacity: 5

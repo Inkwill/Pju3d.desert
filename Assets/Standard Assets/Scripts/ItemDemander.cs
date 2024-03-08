@@ -49,7 +49,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		if (submitable.Count > 0)
 		{
 			m_target = character.gameObject;
-			character.Inventory.ItemEvent += OnItemEvent;
+			character.Inventory.ItemAction += OnItemEvent;
 			m_Demand.Fulfill(character.Inventory);
 		}
 		else { ui_demand.Fail(); m_interactable = false; }
@@ -79,7 +79,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		{
 			if (m_target != null)
 			{
-				m_target.GetComponent<CharacterData>().Inventory.ItemEvent -= OnItemEvent;
+				m_target.GetComponent<CharacterData>().Inventory.ItemAction -= OnItemEvent;
 				ResCollector collector = m_target.GetComponent<ResCollector>();
 				if (collector)
 				{

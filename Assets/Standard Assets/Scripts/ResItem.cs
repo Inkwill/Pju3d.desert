@@ -9,8 +9,21 @@ public class ResItem : Item
 	public enum ResType
 	{
 		Wood,
-		Warter,
+		Water,
 	}
 	public ResType Type;
+
+	public static ResItem GetResItemByType(ResType restype)
+	{
+		switch (restype)
+		{
+			case ResType.Wood:
+				return KeyValueData.GetValue<Item>(GameManager.Config.Item, "Wood") as ResItem;
+			case ResType.Water:
+				return KeyValueData.GetValue<Item>(GameManager.Config.Item, "Water") as ResItem;
+			default:
+				return null;
+		}
+	}
 }
 

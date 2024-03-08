@@ -66,7 +66,7 @@ MonoBehaviour:
   - Key: ChestKey
     Value: {fileID: 11400000, guid: 1d5ec5573c8307744a74d8eb6783a08b, type: 2}
   - Key: Water
-    Value: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363, type: 2}
+    Value: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70, type: 2}
   Effect:
   - Key: WeaponDamage
     Value: {fileID: 0}
