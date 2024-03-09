@@ -76,9 +76,9 @@ MonoBehaviour:
   - Key: main00
     Value: {fileID: 11400000, guid: c9d1571e6754c2b48971139a25d8d22f, type: 2}
   - Key: main01
-    Value: {fileID: 11400000, guid: 984e2b8f5d1b7a540bc660163094b6cb, type: 2}
-  - Key: main02
     Value: {fileID: 11400000, guid: c3a16ce7cf579694c8e6a9c7d5828c6e, type: 2}
+  - Key: main02
+    Value: {fileID: 11400000, guid: dc8f35e677826f84d9098c32e19a702c, type: 2}
   - Key: main03
     Value: {fileID: 11400000, guid: aeb49cb8f4de4f6439869acd3a4639bd, type: 2}
   - Key: main04

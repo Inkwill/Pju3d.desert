@@ -6,7 +6,7 @@ using CreatorKitCode;
 [CreateAssetMenu(fileName = "ResInventoryItem", menuName = "Data/ResInventory Item", order = -900)]
 public class ResInventoryItem : Item
 {
-	public ResItem.ResType Type;
+	public ResItem.ResType resType;
 	public int capacity;
 
 

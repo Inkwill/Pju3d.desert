@@ -20,16 +20,12 @@ public class InteractHandle : MonoBehaviour
 	IInteractable m_interactor;
 	CharacterData m_monopolist;
 
-	public void Start()
-	{
-		m_interactor = GetComponent<IInteractable>();
-		SetHandle(true);
-		slider?.Init(handleTime, 0, "Check...", UISliderHandle.TextType.Text);
-	}
 	public void SetHandle(bool active)
 	{
 		if (active)
 		{
+			m_interactor = GetComponent<IInteractable>();
+			slider?.Init(handleTime, 0, "Check...", UISliderHandle.TextType.Text);
 			Detector.OnEnter.AddListener(OnInterEnter);
 			Detector.OnExit.AddListener(OnInterExit);
 			Detector.OnStay.AddListener(OnInterStay);

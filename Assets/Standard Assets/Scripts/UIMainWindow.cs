@@ -3,6 +3,7 @@ using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
 using UnityEngine.UI;
+using System.Linq;
 
 public class UIMainWindow : UIWindow
 {
@@ -45,7 +46,7 @@ public class UIMainWindow : UIWindow
 		CloseTalkButton();
 		tellContent.SetActive(false);
 		uiGoalInfo.SetGoal(GameManager.GameGoal.CurrentGoal);
-		sliderWater.gameObject.SetActive(GameManager.CurHero.Inventory.GetResInventory(ResItem.ResType.Water) != null);
+		sliderWater.gameObject.SetActive(GameManager.CurHero.Inventory.ResInventories.Keys.Contains(ResItem.ResType.Water));
 	}
 
 	void OnItemAction(Item item, string eventName, int num)
@@ -53,23 +54,23 @@ public class UIMainWindow : UIWindow
 		if (eventName == "AddResInventory")
 		{
 			ResInventoryItem it = item as ResInventoryItem;
-			if (it.Type == ResItem.ResType.Water)
+			if (it.resType == ResItem.ResType.Water)
 			{
 				sliderWater?.gameObject.SetActive(true);
-				sliderWater.value = GameManager.CurHero.Inventory.GetResInventory(ResItem.ResType.Water).Volume;
+				sliderWater.value = GameManager.CurHero.Inventory.ResInventories[ResItem.ResType.Water].Volume;
 			}
 		}
 		if (eventName == "RemoveResInventory")
 		{
 			ResInventoryItem it = item as ResInventoryItem;
-			if (it.Type == ResItem.ResType.Water)
+			if (it.resType == ResItem.ResType.Water)
 				sliderWater?.gameObject.SetActive(false);
 		}
-		if (eventName == "AddRes" || eventName == "Minus")
+		if (eventName == "Add" || eventName == "Minus")
 		{
 			ResItem resitem = item as ResItem;
-			if (resitem && resitem.Type == ResItem.ResType.Water)
-				sliderWater.value = GameManager.CurHero.Inventory.GetResInventory(ResItem.ResType.Water).Volume;
+			if (resitem && resitem.resType == ResItem.ResType.Water)
+				sliderWater.value = GameManager.CurHero.Inventory.ResInventories[ResItem.ResType.Water].Volume;
 		}
 	}
 

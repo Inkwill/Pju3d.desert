@@ -15,16 +15,20 @@ public class ItemDemander : TimerBehaviour, IInteractable
 	List<KeyValueData.KeyValue<Item, int>> DemandData;
 	InventorySystem.ItemDemand m_Demand;
 	bool m_interactable;
+	[SerializeField]
+	bool autoActive;
 	void Start()
 	{
-		Init();
+		ui_demand.gameObject.SetActive(false);
+		if (autoActive) ActiveInteract();
 	}
 
-	public void Init()
+	public void ActiveInteract()
 	{
 		m_interactable = true;
 		m_Demand = new InventorySystem.ItemDemand(KeyValueData.ToDic(DemandData));
 		ui_demand.Show(m_Demand);
+		GetComponent<InteractHandle>()?.SetHandle(true);
 	}
 
 	public void OnInteractorEnter(CharacterData enter)
@@ -57,7 +61,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 
 	protected override void OnRefresh()
 	{
-		Init();
+		ActiveInteract();
 		RefreshEvents?.Invoke();
 	}
 	protected override void OnStart()

@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: 
   ItemName: Wood
+  onlyOne: 0
+  stackNum: 1
   ItemSprite: {fileID: 21300000, guid: 65c59ccc59b5690458cb9e5324edc5dc, type: 3}
   Description: 
   WorldObjectPrefab: {fileID: 4171029783028862324, guid: 40777583afbf3224c86b02eae35fa41b,
     type: 3}
   SpawnClip: {fileID: 0}
+  resType: 0
+  Tools: []
+  Inventorys: []

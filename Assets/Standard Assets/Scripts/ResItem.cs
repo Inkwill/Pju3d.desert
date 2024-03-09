@@ -11,7 +11,9 @@ public class ResItem : Item
 		Wood,
 		Water,
 	}
-	public ResType Type;
+	public ResType resType;
+	public List<Weapon> toolWeapon;
+	public List<ResInventoryItem> Inventorys;
 
 	public static ResItem GetResItemByType(ResType restype)
 	{

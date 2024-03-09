@@ -13,16 +13,13 @@ MonoBehaviour:
   m_Name: MainGoal02
   m_EditorClassIdentifier: 
   goalId: main02
-  describe: "\u79FB\u52A8\u65F6\u4E0D\u80FD\u653B\u51FB\uFF0C\u505C\u6B62\u79FB\u52A8\u53EF\u81EA\u52A8\u653B\u51FB"
-  summary: "\u6D88\u706D\u6363\u4E71\u7684\u4ED9\u4EBA\u638C:"
-  forcedToAdd: 0
+  describe: "\u8352\u6F20\u65C5\u5E97\u7684\u540E\u9662\u6709\u4E00\u53E3\u6C34\u4E95\uFF0C\u4ECE\u90A3\u513F\u4E5F\u8BB8\u53EF\u4EE5\u627E\u5230\u996E\u6C34"
+  summary: "\u5E2E\u52A9\u6FD2\u6B7B\u7684\u65C5\u4EBA\u5BFB\u627E\u51C0\u6C34:"
+  forcedToAdd: 1
   LordExp: 3
-  type: 2
+  type: 0
   param:
-  - Key: Cactus Nails
+  - Key: Water
     Value:
-    - 5
-  rewardEffects:
-  - Key: {fileID: 11400000, guid: 914632a637ca46447acc281c33ff3c12, type: 2}
-    Value:
-    - main03
+    - 3
+  rewardEffects: []

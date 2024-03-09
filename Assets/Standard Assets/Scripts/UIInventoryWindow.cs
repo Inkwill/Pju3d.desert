@@ -109,7 +109,7 @@ public class UIInventoryWindow : UIWindow
 				if (lootObj)
 				{
 					GameManager.CurHero.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
-					Loot loot = Instantiate(lootObj, GameManager.CurHero.transform.position, Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
+					Loot loot = Instantiate(lootObj, GameManager.CurHero.transform.position + new Vector3(2, 0, 0), Quaternion.Euler(0, 0, 0)).GetComponent<Loot>();
 					loot.Item = m_SelectedSlot.item;
 					m_SelectedSlot.tog.isOn = false;
 					Load();

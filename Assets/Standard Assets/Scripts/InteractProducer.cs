@@ -6,6 +6,8 @@ using UnityEngine.Events;
 public class InteractProducer : MonoBehaviour, IInteractable
 {
 	[SerializeField]
+	ResItem resItem;
+	[SerializeField]
 	int maxCount = 10;
 	[SerializeField]
 	int initCount = 10;
@@ -27,11 +29,21 @@ public class InteractProducer : MonoBehaviour, IInteractable
 		m_count = initCount;
 		itemGrid?.Init(maxCount);
 		itemGrid?.ShowItem(m_count);
+		GetComponent<InteractHandle>()?.SetHandle(true);
 		if (m_count < maxCount && m_replenishTime != -1) StartCoroutine(Replenish());
 	}
 	public bool CanInteract(CharacterData character)
 	{
-		return character.BaseAI.isIdle && m_cd <= 0 && (m_count > 0 || maxCount == -1);
+		if (character.BaseAI.isIdle && m_cd <= 0 && (m_count > 0 || maxCount == -1))
+		{
+			if (character.HoldTools(resItem)) return true;
+			else
+			{
+				character.GetComponentInChildren<UIRoleHud>().Bubble("I need a " + resItem.toolWeapon[0].ItemName);
+				return false;
+			}
+		}
+		return false;
 	}
 
 	public void OnInteractorEnter(CharacterData character)

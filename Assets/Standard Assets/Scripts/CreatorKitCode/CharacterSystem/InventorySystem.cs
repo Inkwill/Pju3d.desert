@@ -56,22 +56,7 @@ namespace CreatorKitCode
 				var submits = new Dictionary<string, int>();
 				foreach (var left in DemandLeft)
 				{
-					if (left.Key == ResItem.GetResItemByType(ResItem.ResType.Water).ItemName && left.Value > 0)
-					{
-						submits[left.Key] = Math.Min(left.Value, inventory.GetResInventory(ResItem.ResType.Water).count);
-					}
-					else if (left.Key == ResItem.GetResItemByType(ResItem.ResType.Wood).ItemName && left.Value > 0)
-					{
-						submits[left.Key] = Math.Min(left.Value, inventory.GetResInventory(ResItem.ResType.Wood).count);
-					}
-					else
-					{
-						int id = inventory.EntryID(left.Key);
-						if (id != -1 && left.Value > 0)
-						{
-							submits[left.Key] = Math.Min(left.Value, inventory.Entries[id].Count);
-						}
-					}
+					submits[left.Key] = Math.Min(left.Value, inventory.ItemCount(left.Key));
 				}
 				return submits;
 			}
@@ -83,26 +68,29 @@ namespace CreatorKitCode
 				if (submits.Count < 1) return false;
 				foreach (var submit in submits)
 				{
-					if (submit.Key == ResItem.GetResItemByType(ResItem.ResType.Water).ItemName && submit.Value > 0)
+					Item item = KeyValueData.GetValue<Item>(GameManager.Config.Item, submit.Key);
+					ResItem resitem = item as ResItem;
+					if (resitem && resitem.Inventorys.Count > 0 && submit.Value > 0)
 					{
 						DemandLeft[submit.Key] -= submit.Value;
-						inventory.GetResInventory(ResItem.ResType.Water).count -= submit.Value;
-						inventory.ItemAction?.Invoke(ResItem.GetResItemByType(ResItem.ResType.Water), "Fulfill", submit.Value);
-					}
-					else if (submit.Key == ResItem.GetResItemByType(ResItem.ResType.Wood).ItemName && submit.Value > 0)
-					{
-						DemandLeft[submit.Key] -= submit.Value;
-						inventory.GetResInventory(ResItem.ResType.Wood).count -= submit.Value;
-						inventory.ItemAction?.Invoke(ResItem.GetResItemByType(ResItem.ResType.Wood), "Fulfill", submit.Value);
+						inventory.ResInventories[resitem.resType].count -= submit.Value;
+						inventory.ItemAction?.Invoke(resitem, "Fulfill", submit.Value);
 					}
 					else
 					{
-						int entryId = inventory.EntryID(submit.Key);
-						DemandLeft[submit.Key] -= submit.Value;
-						inventory.ItemAction?.Invoke(inventory.Entries[entryId].Item, "Fulfill", submit.Value);
-						inventory.MinusItem(entryId, submit.Value);
+						var entryIds = inventory.EntryID(submit.Key);
+						if (entryIds.Count > 0)
+						{
+							foreach (int id in entryIds)
+							{
+								int count = Math.Min(submit.Value, inventory.Entries[id].Count);
+								DemandLeft[submit.Key] -= count;
+								inventory.MinusItem(id, count);
+								if (DemandLeft[submit.Key] == 0) break;
+							}
+							inventory.ItemAction?.Invoke(item, "Fulfill", submit.Value);
+						}
 					}
-
 				}
 				return true;
 			}
@@ -118,7 +106,7 @@ namespace CreatorKitCode
 		//Only 32 slots in inventory
 		public InventoryEntry[] Entries = new InventoryEntry[m_baseSlots];
 		public Action<Item, string, int> ItemAction;
-		public List<ResInventory> ResInventories;
+		public Dictionary<ResItem.ResType, ResInventory> ResInventories;
 		CharacterData m_Owner;
 		public int SlotsNum { get { return m_baseSlots; } }
 		public int CurSlotsNum { get { return Entries.Where(en => en != null).Count(); } }
@@ -127,31 +115,40 @@ namespace CreatorKitCode
 		public void Init(CharacterData owner)
 		{
 			m_Owner = owner;
-			ResInventories = new List<ResInventory>();
+			ResInventories = new Dictionary<ResItem.ResType, ResInventory>();
 		}
 
-		public int EntryID(string itemKey)
+		public List<int> EntryID(string itemKey)
 		{
+			List<int> result = new List<int>();
 			for (int i = 0; i < SlotsNum; ++i)
 			{
 				if (Entries[i] != null)
 				{
-					if (Entries[i].Item.ItemName == itemKey) return i;
+					if (Entries[i].Item.ItemName == itemKey) result.Add(i);
 				}
 			}
-			return -1;
+			return result;
 		}
 
 		public int ItemCount(string ItemName)
 		{
+			Item item = KeyValueData.GetValue<Item>(GameManager.Config.Item, ItemName);
+			ResItem resitem = item as ResItem;
+			int count = 0;
+			if (resitem && resitem.Inventorys.Count > 0)
+			{
+				return ResInventories[resitem.resType].count;
+			}
+
 			for (int i = 0; i < SlotsNum; ++i)
 			{
 				if (Entries[i] != null)
 				{
-					if (Entries[i].Item.ItemName == ItemName) return Entries[i].Count;
+					if (Entries[i].Item.ItemName == ItemName) count += Entries[i].Count;
 				}
 			}
-			return -1;
+			return count;
 		}
 		/// <summary>
 		/// Add an item to the inventory. This will look if this item already exist in one of the slot and increment the
@@ -160,7 +157,8 @@ namespace CreatorKitCode
 		/// <param name="item">The item to add to the inventory</param>
 		public bool AddItem(Item item, int num = 1)
 		{
-			if (item is ResItem) return AddResItem(item as ResItem, num);
+			ResItem resi = item as ResItem;
+			if (resi && resi.Inventorys != null && resi.Inventorys.Count > 0) return AddResItem(resi, num);
 			if (AutoUseItem(item, num)) return true;
 			else if (PutItem(item, num))
 			{
@@ -200,12 +198,12 @@ namespace CreatorKitCode
 		bool PutItem(Item item, int num = 1)
 		{
 			var entry = Entries.Where(en => (en != null && en.Item.ItemName == item.ItemName)).FirstOrDefault();
-			if (entry != null && item is ResInventoryItem)
+			if (entry != null && item.onlyOne)
 			{
-				ItemAction?.Invoke(item, "DuplicateContainer", num);
+				ItemAction?.Invoke(item, "DuplicateOnlyOne", num);
 				return false;
 			}
-			if (entry != null) { entry.Count += num; return true; }
+			if (entry != null && item.stackNum >= (entry.Count + num)) { entry.Count += num; return true; }
 			else
 			{
 				for (int i = 0; i < SlotsNum; ++i)
@@ -219,7 +217,7 @@ namespace CreatorKitCode
 						return true;
 					}
 				}
-				ItemAction?.Invoke(item, "Full", num);
+				ItemAction?.Invoke(item, "NotEnoughSpace", num);
 				return false;
 			}
 		}
@@ -237,7 +235,17 @@ namespace CreatorKitCode
 				}
 			}
 		}
-
+		public int MinusItem(string itemKey, int num = 1)
+		{
+			int count = num;
+			var entryIds = EntryID(itemKey);
+			foreach (var id in entryIds)
+			{
+				count -= MinusItem(Entries[id], count);
+				if (count == 0) break;
+			}
+			return num - count;
+		}
 		public int MinusItem(int InventoryID, int num = 1)
 		{
 			return MinusItem(Entries[InventoryID], num);
@@ -314,7 +322,7 @@ namespace CreatorKitCode
 			Weapon wp = equip as Weapon;
 			if (wp) m_Owner.Equipment.EquipWeapon(wp);
 			else m_Owner.Equipment.Equip(equip);
-			RemoveItem(EntryID(equip.ItemName));
+			MinusItem(equip.ItemName);
 			//SFXManager.PlayClip("equiped");
 		}
 
@@ -331,16 +339,16 @@ namespace CreatorKitCode
 		void AddResInventory(ResInventoryItem item)
 		{
 			ResInventory resInvent = new ResInventory(item);
-			ResInventories.Add(resInvent);
+			ResInventories.Add(item.resType, resInvent);
 			ItemAction?.Invoke(item, "AddResInventory", 1);
 		}
 
 		void RemoveResInventory(ResInventoryItem item)
 		{
-			var resInventory = GetResInventory(item.Type);
+			var resInventory = ResInventories[item.resType];
 			if (resInventory != null)
 			{
-				ResInventories.Remove(resInventory);
+				ResInventories.Remove(item.resType);
 				GameObject lootObj = Resources.Load("Loot") as GameObject;
 				for (int i = 0; i < resInventory.count; i++)
 				{
@@ -354,36 +362,16 @@ namespace CreatorKitCode
 		bool AddResItem(ResItem item, int num)
 		{
 			bool added = false;
-			var resInventory = GetResInventory(item.Type);
+			var resInventory = ResInventories[item.resType];
 			if (resInventory == null) added = false;
 			else added = resInventory.count < resInventory.data.capacity;
 			if (!added) ItemAction?.Invoke(item, "NotEnoughSpace", num);
 			else
 			{
 				resInventory.count += num;
-				ItemAction?.Invoke(item, "AddRes", num);
+				ItemAction?.Invoke(item, "Add", num);
 			}
 			return added;
-		}
-
-		bool MinusResItem(ResItem item, int num)
-		{
-			bool minused = false;
-			var resInventory = GetResInventory(item.Type);
-			if (resInventory == null) minused = false;
-			else minused = resInventory.count >= num;
-			if (!minused) ItemAction?.Invoke(item, "NotEnoughRes", num);
-			else
-			{
-				resInventory.count -= num;
-				ItemAction?.Invoke(item, "MinusRes", num);
-			}
-			return minused;
-		}
-
-		public ResInventory GetResInventory(ResItem.ResType type)
-		{
-			return ResInventories.Where(resin => resin.data.Type == type).FirstOrDefault();
 		}
 	}
 }

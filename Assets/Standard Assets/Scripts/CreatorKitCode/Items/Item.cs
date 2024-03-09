@@ -14,6 +14,8 @@ namespace CreatorKitCode
 	public abstract class Item : ScriptableObject
 	{
 		public string ItemName;
+		public bool onlyOne;
+		public int stackNum;
 		public Sprite ItemSprite;
 		public string Description;
 		public GameObject WorldObjectPrefab;

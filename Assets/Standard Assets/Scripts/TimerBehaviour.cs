@@ -4,11 +4,11 @@ using UnityEngine.Events;
 
 public class TimerBehaviour : MonoBehaviour
 {
+	public bool autoStart;
 	public float timerDuration = 10.0f;
 	public int loopTimes = 1;  //loopTimes <= 0  means infinity
 	public float cd;
 	public UnityEvent<GameObject, GameObject> behaveEvents;
-	public bool autoStart;
 	public UISliderHandle progressSlider;
 	public string behavePrompt;
 	protected GameObject m_target;

@@ -13,9 +13,15 @@ MonoBehaviour:
   m_Name: Water
   m_EditorClassIdentifier: 
   ItemName: Water
+  onlyOne: 0
+  stackNum: 0
   ItemSprite: {fileID: 21300000, guid: f661638cadd85ef4f9c51d6b7f01b351, type: 3}
   Description: 
   WorldObjectPrefab: {fileID: 5425733448891748066, guid: a70f87bab4686f041a1c83caecf5e105,
     type: 3}
   SpawnClip: {fileID: 0}
-  Type: 1
+  resType: 1
+  Tools:
+  - {fileID: 11400000, guid: d3f9319a79561f346b623756e7fdb8c7, type: 2}
+  Inventorys:
+  - {fileID: 11400000, guid: d3f9319a79561f346b623756e7fdb8c7, type: 2}

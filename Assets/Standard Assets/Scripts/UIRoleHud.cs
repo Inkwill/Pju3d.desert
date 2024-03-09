@@ -11,10 +11,6 @@ public class UIRoleHud : UIWorldHud
 	[SerializeField]
 	Slider sliderPg;
 	[SerializeField]
-	Animator bubble_anim;
-	[SerializeField]
-	Text bubble_text;
-	[SerializeField]
 	Animator story_anim;
 	[SerializeField]
 	Slider sliderInteract;
@@ -24,6 +20,7 @@ public class UIRoleHud : UIWorldHud
 	{
 		m_character = GetComponentInParent<CharacterData>();
 		if (m_character.BaseAI != null) m_character.StateUpdateAction += OnCharacterStating;
+		m_character.Inventory.ItemAction += OnItemAction;
 		m_character.SkillAction += OnSkillAction;
 		sliderPg?.gameObject.SetActive(false);
 		sliderInteract?.gameObject.SetActive(false);
@@ -48,7 +45,14 @@ public class UIRoleHud : UIWorldHud
 				sliderPg?.gameObject.SetActive(true);
 				sliderPg.maxValue = m_character.SkillUser.CurSkill.skill.Duration;
 				break;
+		}
+	}
 
+	void OnItemAction(Item item, string eventName, int num)
+	{
+		if (eventName == "NotEnoughSpace")
+		{
+			GetComponentInChildren<UIRoleHud>()?.Bubble("Not enough space of " + item.ItemName + "!");
 		}
 	}
 
@@ -65,23 +69,6 @@ public class UIRoleHud : UIWorldHud
 				break;
 			default:
 				break;
-		}
-	}
-
-	public void Bubble(string content, float duration = 0f)
-	{
-		if (!bubble_anim.gameObject.activeSelf) bubble_anim.gameObject.SetActive(true);
-		else bubble_anim.SetBool("show", true);
-		StartCoroutine(ShowText(content));
-		if (duration > 0) GameManager.StartWaitAction(duration, () => bubble_anim.SetBool("show", false));
-	}
-
-	IEnumerator ShowText(string content)
-	{
-		for (int i = 0; i < content.Length; i++)
-		{
-			bubble_text.text = content.Substring(0, i + 1);
-			yield return new WaitForSeconds(0.1f);
 		}
 	}
 }

@@ -318,8 +318,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: decd7e7cf04a1474fb9c781f6e463fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxCount: 10
+  resItem: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
+  maxCount: 10
+  initCount: 10
   m_collectCd: 1
+  CollectAnim: Skill
   m_replenishTime: -1
   InteractEvent:
     m_PersistentCalls:
@@ -351,7 +354,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  text_Count: {fileID: 0}
+  itemGrid: {fileID: 0}
 --- !u!114 &83618183156582405
 MonoBehaviour:
   m_ObjectHideFlags: 0

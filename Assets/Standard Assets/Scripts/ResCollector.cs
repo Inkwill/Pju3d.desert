@@ -21,7 +21,7 @@ public class ResCollector : MonoBehaviour
 	void OnItemEvent(Item item, string eventName, int itemCount)
 	{
 		ResItem r_item = item as ResItem;
-		if (r_item && r_item.Type == ResType)
+		if (r_item && r_item.resType == ResType)
 		{
 			if (eventName == "Add")
 			{

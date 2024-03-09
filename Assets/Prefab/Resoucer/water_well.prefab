@@ -120,6 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0e3b045ce83494d8fe8acb850e18b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bubble_anim: {fileID: 0}
+  bubble_text: {fileID: 0}
 --- !u!1 &1181311035884153489
 GameObject:
   m_ObjectHideFlags: 0
@@ -1285,9 +1287,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: decd7e7cf04a1474fb9c781f6e463fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resItem: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70, type: 2}
   maxCount: 3
   initCount: 1
-  m_collectCd: 0
+  m_collectCd: 10
   CollectAnim: 
   m_replenishTime: 60
   InteractEvent:

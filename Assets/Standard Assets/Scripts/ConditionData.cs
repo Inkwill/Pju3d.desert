@@ -21,14 +21,14 @@ public class ConditionData : ScriptableObject
 			case ConditionType.INCLUDE_ITEM:
 				foreach (var itemId in param)
 				{
-					result &= (GameManager.CurHero.Inventory.EntryID(itemId) != -1);
+					result &= (GameManager.CurHero.Inventory.ItemCount(itemId) > 0);
 					result &= GameManager.CurHero.Equipment.IsEquiped(itemId);
 				}
 				break;
 			case ConditionType.EXCLUDE_ITEM:
 				foreach (var itemId in param)
 				{
-					result &= (GameManager.CurHero.Inventory.EntryID(itemId) == -1);
+					result &= (GameManager.CurHero.Inventory.ItemCount(itemId) == 0);
 					result &= !GameManager.CurHero.Equipment.IsEquiped(itemId);
 				}
 				break;

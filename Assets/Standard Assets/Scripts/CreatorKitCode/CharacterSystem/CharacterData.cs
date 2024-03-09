@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using CreatorKitCode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -209,5 +210,17 @@ public class CharacterData : HighlightableObject
 		yield return new WaitForSeconds(time);
 		VFXManager.PlayVFX(VFXType.Death, transform.position);
 		Destroy(gameObject);
+	}
+
+	public bool HoldTools(ResItem item)
+	{
+		if (item.toolWeapon == null || item.toolWeapon.Count == 0) return true;
+		foreach (var tool in item.toolWeapon)
+		{
+			if (tool == Equipment.Weapon) return true;
+			if (tool == Equipment.ViceWeapon) { Equipment.SwitchWeapon(); return true; }
+			if (Inventory.ItemCount(tool.ItemName) > 0) { Inventory.EquipItem(tool); return true; }
+		}
+		return false;
 	}
 }
