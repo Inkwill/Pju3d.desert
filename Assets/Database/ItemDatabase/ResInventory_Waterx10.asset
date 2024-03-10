@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: ResInventory_Waterx10
   m_EditorClassIdentifier: 
   ItemName: ResInventory_Waterx10
+  onlyOne: 0
+  stackNum: 0
   ItemSprite: {fileID: 21300000, guid: 10876d86c0d0c7948ab7c3f219be6325, type: 3}
   Description: 
   WorldObjectPrefab: {fileID: 3613217881743831505, guid: 916d205a860f50a408084e75d5221c73,
     type: 3}
   SpawnClip: {fileID: 0}
-  Type: 1
+  resType: 1
   capacity: 10

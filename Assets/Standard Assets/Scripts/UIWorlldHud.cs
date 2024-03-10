@@ -10,22 +10,36 @@ public class UIWorldHud : MonoBehaviour
 	[SerializeField]
 	Text bubble_text;
 	bool m_bubble;
-	float m_bubbleDuration = 1.0f;
+	string m_storeBubble;
+	float m_bubbleDuration;
 	private void Update()
 	{
 		this.transform.forward = Camera.main.transform.forward;
-		if (m_bubble) m_bubbleDuration -= Time.deltaTime;
-		if (m_bubbleDuration <= 0f) { bubble_anim.SetBool("show", false); m_bubble = false; }
+		if (bubble_anim)
+		{
+			if (m_bubbleDuration > 0) m_bubbleDuration -= Time.deltaTime;
+			if (m_bubbleDuration <= 0f) { bubble_anim.SetBool("show", false); m_bubble = false; m_storeBubble = ""; }
+		}
 	}
 
 	public void Bubble(string content)
 	{
-		if (m_bubble) return;
-		m_bubble = true;
-		m_bubbleDuration = 1.0f;
-		if (!bubble_anim.gameObject.activeSelf) bubble_anim.gameObject.SetActive(true);
-		else if (!bubble_anim.GetBool("show")) bubble_anim.SetBool("show", true);
-		StartCoroutine(ShowText(content));
+		if (m_bubble)
+		{
+			if (m_storeBubble != content)
+			{
+				GameManager.StartWaitAction(2.0f, () => { Bubble(content); });
+				m_storeBubble = content;
+			}
+		}
+		else if (content != m_storeBubble)
+		{
+			m_bubble = true;
+			m_bubbleDuration = 2.0f;
+			if (!bubble_anim.gameObject.activeSelf) bubble_anim.gameObject.SetActive(true);
+			else bubble_anim.SetBool("show", true);
+			StartCoroutine(ShowText(content));
+		}
 	}
 
 	IEnumerator ShowText(string content)
@@ -33,8 +47,10 @@ public class UIWorldHud : MonoBehaviour
 		for (int i = 0; i < content.Length; i++)
 		{
 			bubble_text.text = content.Substring(0, i + 1);
-			m_bubbleDuration += 0.05f;
-			yield return new WaitForSeconds(0.05f);
+			m_bubbleDuration += 0.02f;
+			yield return new WaitForSeconds(0.02f);
 		}
+		m_bubble = false;
+		m_storeBubble = content;
 	}
 }

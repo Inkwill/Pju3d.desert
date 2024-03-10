@@ -21,6 +21,5 @@ MonoBehaviour:
     type: 3}
   SpawnClip: {fileID: 0}
   resType: 0
-  toolWeapon:
-  - {fileID: 11400000, guid: 52e7fa00f5a39e34491aa6dba0c4f262, type: 2}
-  Inventorys: []
+  toolType: 2
+  requireContainer: 0

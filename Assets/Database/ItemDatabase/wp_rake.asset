@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: wp_rake
   m_EditorClassIdentifier: 
   ItemName: Basic Rake
+  onlyOne: 0
+  stackNum: 0
   ItemSprite: {fileID: 21300000, guid: dd5e99205f718764d9283ccc98e6467f, type: 3}
   Description: Your trusty Rake
   WorldObjectPrefab: {fileID: 7022561314472484388, guid: e445cf79239d58a4a9b58b1d2ed99d63,
@@ -36,6 +38,7 @@ MonoBehaviour:
     MaxRange: 4
     AdditionalTargets: 0
   damageType: 0
+  weaponType: 3
   AttackEffects: []
   WeaponSkill: {fileID: 11400000, guid: 7f60ce579d8803b43ba7a611bd95cafd, type: 2}
   bulletPb: {fileID: 0}

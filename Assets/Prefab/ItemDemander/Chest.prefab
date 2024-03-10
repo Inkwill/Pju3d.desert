@@ -213,6 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0e3b045ce83494d8fe8acb850e18b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bubble_anim: {fileID: 0}
+  bubble_text: {fileID: 0}
 --- !u!1 &3331353172549286840
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,6 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03aa0f4915897fd45af92c979df190ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoStart: 0
   timerDuration: 0
   loopTimes: 99
   cd: 60
@@ -410,7 +413,6 @@ MonoBehaviour:
           m_StringArgument: Open
           m_BoolArgument: 0
         m_CallState: 2
-  autoStart: 0
   progressSlider: {fileID: 7909870035461895522}
   behavePrompt: Open
   demanderId: Chest
@@ -433,6 +435,7 @@ MonoBehaviour:
   DemandData:
   - Key: {fileID: 11400000, guid: 1d5ec5573c8307744a74d8eb6783a08b, type: 2}
     Value: 1
+  autoActive: 1
 --- !u!114 &3715231181847673851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -870,9 +873,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e1b4ada0e2d814c8f166cef955cf6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiList: []
+  Type: 0
   uiElement: {fileID: 7952083622575888246, guid: f13c6c66fd01fdc4f9873636082ff685,
     type: 3}
+  m_demandSlider: {fileID: 0}
+  m_itemIcon: {fileID: 0}
 --- !u!114 &8963723679142160957
 MonoBehaviour:
   m_ObjectHideFlags: 0

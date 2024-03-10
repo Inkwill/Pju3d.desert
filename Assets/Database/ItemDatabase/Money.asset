@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Money
   m_EditorClassIdentifier: 
   ItemName: Money
+  onlyOne: 0
+  stackNum: 0
   ItemSprite: {fileID: 21300000, guid: 92268a38b32744d4da581cc6d0b87aef, type: 3}
   Description: Makes the West go round
   WorldObjectPrefab: {fileID: 5425733448891748066, guid: 78a62d5ec617d564f8925757d757eabe,
@@ -22,4 +24,4 @@ MonoBehaviour:
   - Key: {fileID: 11400000, guid: 20fbc3e582495204c92890a479aa4500, type: 2}
     Value:
     - 1
-  autoUse: 0
+  autoUse: 1

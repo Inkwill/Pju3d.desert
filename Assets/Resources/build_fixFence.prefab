@@ -60,6 +60,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1153180368876741269, guid: 671548669d90c7242a2032228b9648ac,
         type: 3}
+      propertyPath: autoActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1153180368876741269, guid: 671548669d90c7242a2032228b9648ac,
+        type: 3}
       propertyPath: timerDuration
       value: 1
       objectReference: {fileID: 0}

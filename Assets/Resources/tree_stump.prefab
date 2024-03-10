@@ -593,6 +593,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0e3b045ce83494d8fe8acb850e18b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bubble_anim: {fileID: 0}
+  bubble_text: {fileID: 0}
 --- !u!1 &8626647891211175333
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,6 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03aa0f4915897fd45af92c979df190ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoStart: 0
   timerDuration: 0
   loopTimes: 1
   cd: 0
@@ -680,7 +683,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  autoStart: 0
   progressSlider: {fileID: 0}
   behavePrompt: 
   demanderId: tree_stump
@@ -689,8 +691,9 @@ MonoBehaviour:
       m_Calls: []
   ui_demand: {fileID: 1031991220752913750}
   DemandData:
-  - Key: {fileID: 11400000, guid: d21b8f4103494fd47970c74f16cef363, type: 2}
+  - Key: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70, type: 2}
     Value: 10
+  autoActive: 1
 --- !u!114 &5386388614482321753
 MonoBehaviour:
   m_ObjectHideFlags: 0

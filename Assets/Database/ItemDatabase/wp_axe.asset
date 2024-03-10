@@ -32,11 +32,12 @@ MonoBehaviour:
       damBoosts: 00000000000000000000000000000000
   Stats:
     Speed: 1
-    MinimumDamage: 0
-    MaximumDamage: 0
+    MinimumDamage: 1
+    MaximumDamage: 3
     MaxRange: 4
     AdditionalTargets: 0
   damageType: 0
+  weaponType: 2
   AttackEffects: []
   WeaponSkill: {fileID: 0}
   bulletPb: {fileID: 0}

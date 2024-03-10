@@ -8,9 +8,10 @@ public class TimerBehaviour : MonoBehaviour
 	public float timerDuration = 10.0f;
 	public int loopTimes = 1;  //loopTimes <= 0  means infinity
 	public float cd;
-	public UnityEvent<GameObject, GameObject> behaveEvents;
+	[Header("UI")]
 	public UISliderHandle progressSlider;
 	public string behavePrompt;
+	public UnityEvent<GameObject, GameObject> behaveEvents;
 	protected GameObject m_target;
 	float m_passedTime;
 	float m_curCd;

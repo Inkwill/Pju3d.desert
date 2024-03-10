@@ -119,11 +119,6 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		GameUI.OpenWindow("winMain");
-		Weapon wp = Instantiate(CurHero.DefaultWeapon);
-		wp.ItemName = "TestWeapon";
-
-		CurHero.Inventory.AddItem(wp);
-
 	}
 
 	void OnApplicationQuit()

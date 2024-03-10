@@ -27,6 +27,8 @@ MonoBehaviour:
   m_Name: Potion
   m_EditorClassIdentifier: 
   ItemName: Health potion
+  onlyOne: 0
+  stackNum: 99
   ItemSprite: {fileID: 21300000, guid: 3c9b1bd688b22324c9bc5eb12cc12aea, type: 3}
   Description: 
   WorldObjectPrefab: {fileID: 5898196935238221940, guid: 9be663f1d15d2a74395a9b0ff319d423,
@@ -36,6 +38,7 @@ MonoBehaviour:
   - Key: {fileID: 11400000, guid: 714b81e529d08a946ad472a661d85fcb, type: 2}
     Value:
     - 1
+  autoUse: 0
 --- !u!114 &2218347905887207402
 MonoBehaviour:
   m_ObjectHideFlags: 0

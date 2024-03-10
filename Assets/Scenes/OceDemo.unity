@@ -4921,6 +4921,7 @@ Transform:
   - {fileID: 95762340447520529}
   - {fileID: 479813856}
   - {fileID: 752848676}
+  - {fileID: 481848067}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &458415257
@@ -5196,7 +5197,7 @@ GameObject:
   - component: {fileID: 481848064}
   - component: {fileID: 481848063}
   m_Layer: 0
-  m_Name: EnemySpawner (1)
+  m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5214,20 +5215,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoStart: 0
+  autoStart: 1
   timerDuration: 10
-  loopTimes: 1
-  cd: 0
+  loopTimes: 99
+  cd: 10
+  progressSlider: {fileID: 0}
+  behavePrompt: 
   behaveEvents:
     m_PersistentCalls:
       m_Calls: []
-  progressSlider: {fileID: 0}
-  behavePrompt: 
-  ObjectToSpawn: {fileID: 7778956338015736396, guid: 1d699b0cddb8e0a4da27f89f3d61c013,
+  ObjectToSpawn: {fileID: 7187396258787047546, guid: 0b328dea7f249e34aa5555cfcbd94924,
     type: 3}
   pathRoot: {fileID: 525471455}
-  radius: 5
-  angleStep: 90
+  radius: 15
+  angleStep: 30
   spawnNum: 1
 --- !u!135 &481848064
 SphereCollider:
@@ -5309,12 +5310,12 @@ Transform:
   m_GameObject: {fileID: 481848062}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 54.41, y: 10, z: 33.87}
+  m_LocalPosition: {x: -6, y: 4, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 482859086}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 457428260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &482859084
 GameObject:
@@ -18343,11 +18344,11 @@ MonoBehaviour:
   timerDuration: 10
   loopTimes: 1
   cd: 0
+  progressSlider: {fileID: 0}
+  behavePrompt: 
   behaveEvents:
     m_PersistentCalls:
       m_Calls: []
-  progressSlider: {fileID: 0}
-  behavePrompt: 
   ObjectToSpawn: {fileID: 4942053394312810848, guid: fe3f8fd1409e5fc4dae54b8b3cf225b3,
     type: 3}
   pathRoot: {fileID: 0}
@@ -21891,15 +21892,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoStart: 1
+  autoStart: 0
   timerDuration: 10
   loopTimes: 10
   cd: 10
+  progressSlider: {fileID: 0}
+  behavePrompt: 
   behaveEvents:
     m_PersistentCalls:
       m_Calls: []
-  progressSlider: {fileID: 0}
-  behavePrompt: 
   ObjectToSpawn: {fileID: 1253957173911874756, guid: 7dc50689892245c49b48a9272b3e8e09,
     type: 3}
   pathRoot: {fileID: 2056123598}
@@ -24954,11 +24955,11 @@ MonoBehaviour:
   timerDuration: 10
   loopTimes: 1
   cd: 0
+  progressSlider: {fileID: 0}
+  behavePrompt: 
   behaveEvents:
     m_PersistentCalls:
       m_Calls: []
-  progressSlider: {fileID: 0}
-  behavePrompt: 
   ObjectToSpawn: {fileID: 7187396258787047546, guid: 0b328dea7f249e34aa5555cfcbd94924,
     type: 3}
   pathRoot: {fileID: 1305940331}
@@ -61360,11 +61361,11 @@ MonoBehaviour:
   timerDuration: 1
   loopTimes: 1
   cd: 0
+  progressSlider: {fileID: 0}
+  behavePrompt: 
   behaveEvents:
     m_PersistentCalls:
       m_Calls: []
-  progressSlider: {fileID: 0}
-  behavePrompt: 
   demanderId: 
   RefreshEvents:
     m_PersistentCalls:
@@ -61807,7 +61808,7 @@ MonoBehaviour:
   TerrainTool: {fileID: 1996416778}
   buildModeFollow: {fileID: 2072677016}
   ui_trans: {fileID: 5564097808944322120}
-  position_born: {x: 92, y: 5, z: 17}
+  position_born: {x: 92, y: 5, z: -17}
   baseBoundary_LB: {x: 75, y: -5}
   baseBoundary_RT: {x: 90, y: 20}
   prefab_character: {fileID: 8112423057566066908, guid: 13412434e049bcc419706b33d84a668e,
@@ -63062,7 +63063,6 @@ SceneRoots:
   - {fileID: 427273653}
   - {fileID: 1048797698}
   - {fileID: 1419090759}
-  - {fileID: 481848067}
   - {fileID: 1711097186}
   - {fileID: 2053598160}
   - {fileID: 1898064877}

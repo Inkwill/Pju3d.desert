@@ -123,6 +123,7 @@ public class GameGoalSystem : MonoBehaviour
 	public void Init()
 	{
 		m_AchievedGoals = new List<string>();
+		m_FailedGoals = new List<string>();
 		m_recorder = GameManager.CurHero.GetComponent<StatisticsHandle>();
 	}
 	public GameGoal AddGoal(GoalData data)

@@ -27,12 +27,13 @@ namespace CreatorKitCode
 		{
 			public ResInventoryItem data;
 			public int count;
-
-			public float Volume { get { return count * 1.0f / data.capacity; } }
+			public int capacity;
+			public float Volume { get { return count * 1.0f / capacity; } }
 
 			public ResInventory(ResInventoryItem item)
 			{
 				data = item;
+				capacity = item.capacity;
 			}
 		}
 
@@ -138,7 +139,8 @@ namespace CreatorKitCode
 			int count = 0;
 			if (resitem && resitem.requireContainer)
 			{
-				return ResInventories[resitem.resType].count;
+				if (!ResInventories.ContainsKey(resitem.resType)) return 0;
+				else return ResInventories[resitem.resType].count;
 			}
 
 			for (int i = 0; i < SlotsNum; ++i)
@@ -339,7 +341,8 @@ namespace CreatorKitCode
 		void AddResInventory(ResInventoryItem item)
 		{
 			ResInventory resInvent = new ResInventory(item);
-			ResInventories.Add(item.resType, resInvent);
+			if (ResInventories.ContainsKey(item.resType)) ResInventories[item.resType].capacity += resInvent.capacity;
+			else ResInventories.Add(item.resType, resInvent);
 			ItemAction?.Invoke(item, "AddResInventory", 1);
 		}
 
@@ -365,7 +368,7 @@ namespace CreatorKitCode
 			if (ResInventories.ContainsKey(item.resType))
 			{
 				var resInventory = ResInventories[item.resType];
-				added = resInventory.count + num <= resInventory.data.capacity;
+				added = resInventory.count + num <= resInventory.capacity;
 				if (added) { resInventory.count += num; ItemAction?.Invoke(item, "Add", num); }
 				else ItemAction?.Invoke(item, "NotEnoughSpace", num);
 			}

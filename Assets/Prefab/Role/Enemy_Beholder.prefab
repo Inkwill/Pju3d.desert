@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 3349377060174317668}
   - component: {fileID: 5227243799845401904}
   - component: {fileID: 85117475064497869}
-  - component: {fileID: 2181113161490572368}
   - component: {fileID: 6232073841664365103}
   m_Layer: 7
   m_Name: Enemy_Beholder
@@ -97,20 +96,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camp: 2
-  CharacterName: Cactus Nails
+  CharacterName: Beholder
   DefaultWeapon: {fileID: 0}
   WeaponLocator: {fileID: 0}
   MoveSpeed: 3
+  CorpseChance: 0
+  m_CorpseRetention: 0
   Stats:
     baseStats:
       health: 3
       strength: 2
-      defense: 1
+      defense: 0
       agility: 0
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  OnDeath:
+  DamageEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  DeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AttackEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &5227243799845401904
@@ -174,24 +181,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2181113161490572368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7187396258787047546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70b8b18bf2b167a48a7c439d75abe615, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  events:
-    m_PersistentCalls:
-      m_Calls: []
-  countEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &6232073841664365103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,11 +197,10 @@ MonoBehaviour:
   InteractDetector: {fileID: 6591241889224724912}
   EnemyDetector: {fileID: 7713252172596359410}
   SkillDetector: {fileID: 8821629619986255575}
-  dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
-  CorpseChance: 50
-  m_CorpseRetention: 10
   m_Offensive: 1
-  m_WanderRadius: 5
+  m_guarder: 0
+  m_itemPick: 0
+  m_WanderRadius: 20
   m_WanderBeat: 3
 --- !u!1001 &7004147645579896727
 PrefabInstance:
@@ -596,9 +584,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3d267ff6fabdc4e8b9a091ba04c8df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackStep:
-    m_PersistentCalls:
-      m_Calls: []
   FootStep:
     m_PersistentCalls:
       m_Calls: []
