@@ -66,7 +66,7 @@ public class UIMainWindow : UIWindow
 			if (it.resType == ResItem.ResType.Water)
 				sliderWater?.gameObject.SetActive(false);
 		}
-		if (eventName == "Add" || eventName == "Minus")
+		if (eventName == "Add" || eventName == "Minus" || eventName == "Fulfill")
 		{
 			ResItem resitem = item as ResItem;
 			if (resitem && resitem.resType == ResItem.ResType.Water)

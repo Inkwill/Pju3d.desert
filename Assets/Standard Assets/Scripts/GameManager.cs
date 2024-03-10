@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	Transform ui_trans;
 	[SerializeField]
-	Vector3 position_born;
+	Transform position_born;
 	[SerializeField]
 	Vector2 baseBoundary_LB;
 	[SerializeField]
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
 	{
 		Instance = this;
 		Lord.Init();
-		CurHero = Instantiate(prefab_character, position_born, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterData>();
+		CurHero = Instantiate(prefab_character, position_born.position, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterData>();
 		GameGoal.Init();
 		SFXManager.ListenerTarget = CurHero.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();
