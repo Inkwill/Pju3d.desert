@@ -36,12 +36,20 @@ public class InteractProducer : MonoBehaviour, IInteractable
 	{
 		if (character.BaseAI.isIdle && m_cd <= 0 && (m_count > 0 || maxCount == -1))
 		{
-			if (character.HoldTools(resItem)) return true;
-			else
+			if (!character.HoldTools(resItem))
 			{
-				character.GetComponentInChildren<UIRoleHud>().Bubble("I need a " + resItem.toolWeapon[0].ItemName);
+				character.GetComponentInChildren<UIRoleHud>().Bubble("I need a " + resItem.toolType);
 				return false;
 			}
+			if (resItem.requireContainer)
+			{
+				if (!character.Inventory.ResInventories.ContainsKey(resItem.resType))
+				{
+					character.GetComponentInChildren<UIRoleHud>().Bubble("I need a container of " + resItem.ItemName);
+					return false;
+				}
+			}
+			return true;
 		}
 		return false;
 	}

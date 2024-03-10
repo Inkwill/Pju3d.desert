@@ -13,19 +13,33 @@ MonoBehaviour:
   m_Name: wp_axe
   m_EditorClassIdentifier: 
   ItemName: Basic Axe
-  ItemSprite: {fileID: 21300000, guid: 4ebe3495b584a3f47bb652e3c90d7480, type: 3}
+  onlyOne: 0
+  stackNum: 0
+  ItemSprite: {fileID: 21300000, guid: 2318bcea9d39d9cea851ae64786a51e0, type: 3}
   Description: Your trusty Axe
-  WorldObjectPrefab: {fileID: 5482170467533448303, guid: 56ca1676619f33d48b134bb4a8b721c8,
-    type: 3}
+  WorldObjectPrefab: {fileID: 198070, guid: b0cfa5e3cd6c7b74394fbbb9f8e840c5, type: 3}
   SpawnClip: {fileID: 0}
   Slot: 5
-  EquippedEffects: []
-  damageType: 0
+  EquippedStat:
+    ModifierMode: 1
+    Stats:
+      health: 0
+      strength: 0
+      defense: 0
+      agility: 0
+      spirit: 0
+      damProtection: 00000000000000000000000000000000
+      damBoosts: 00000000000000000000000000000000
   Stats:
     Speed: 1
     MinimumDamage: 0
     MaximumDamage: 0
     MaxRange: 4
+    AdditionalTargets: 0
+  damageType: 0
   AttackEffects: []
+  WeaponSkill: {fileID: 0}
+  bulletPb: {fileID: 0}
+  bulletTrans: {fileID: 0}
   HitSounds: []
   SwingSounds: []

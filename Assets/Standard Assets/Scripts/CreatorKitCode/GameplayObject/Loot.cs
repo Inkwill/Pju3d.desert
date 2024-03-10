@@ -61,7 +61,12 @@ namespace CreatorKitCode
 		}
 		public void InteractWith(CharacterData target)
 		{
-			if (target.Inventory.AddItem(Item))
+			Item addItem = Item;
+			if (addItem is EquipmentItem)
+			{
+				addItem = Instantiate(Item);
+			}
+			if (target.Inventory.AddItem(addItem))
 			{
 				SFXManager.PlayClip("picked");
 				Destroy(gameObject);

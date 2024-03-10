@@ -12,8 +12,8 @@ public class ResItem : Item
 		Water,
 	}
 	public ResType resType;
-	public List<Weapon> toolWeapon;
-	public List<ResInventoryItem> Inventorys;
+	public Weapon.WeaponType toolType;
+	public bool requireContainer;
 
 	public static ResItem GetResItemByType(ResType restype)
 	{

@@ -26,9 +26,22 @@ namespace CreatorKitCode
 			public float MaxRange;
 			public int AdditionalTargets;
 		}
+		public enum WeaponType
+		{
+			None,
+			Sword,
+			Axe,
+			Rake,
+			Mace,
+			Dagger,
+			Bow,
+			MagicWeapon,
+			ThrownWeapon
+		}
 		[Header("WeaponStats")]
 		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1, AdditionalTargets = 0 };
 		public StatSystem.DamageType damageType;
+		public WeaponType weaponType;
 		public List<EffectData> AttackEffects;
 		public Skill WeaponSkill;
 		public Bullet bulletPb;

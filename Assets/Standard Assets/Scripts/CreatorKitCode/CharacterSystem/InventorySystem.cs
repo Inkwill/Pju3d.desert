@@ -70,7 +70,7 @@ namespace CreatorKitCode
 				{
 					Item item = KeyValueData.GetValue<Item>(GameManager.Config.Item, submit.Key);
 					ResItem resitem = item as ResItem;
-					if (resitem && resitem.Inventorys.Count > 0 && submit.Value > 0)
+					if (resitem && resitem.requireContainer && submit.Value > 0)
 					{
 						DemandLeft[submit.Key] -= submit.Value;
 						inventory.ResInventories[resitem.resType].count -= submit.Value;
@@ -136,7 +136,7 @@ namespace CreatorKitCode
 			Item item = KeyValueData.GetValue<Item>(GameManager.Config.Item, ItemName);
 			ResItem resitem = item as ResItem;
 			int count = 0;
-			if (resitem && resitem.Inventorys.Count > 0)
+			if (resitem && resitem.requireContainer)
 			{
 				return ResInventories[resitem.resType].count;
 			}
@@ -158,7 +158,7 @@ namespace CreatorKitCode
 		public bool AddItem(Item item, int num = 1)
 		{
 			ResItem resi = item as ResItem;
-			if (resi && resi.Inventorys != null && resi.Inventorys.Count > 0) return AddResItem(resi, num);
+			if (resi && resi.requireContainer) return AddResItemToContainer(resi, num);
 			if (AutoUseItem(item, num)) return true;
 			else if (PutItem(item, num))
 			{
@@ -359,17 +359,15 @@ namespace CreatorKitCode
 			}
 		}
 
-		bool AddResItem(ResItem item, int num)
+		bool AddResItemToContainer(ResItem item, int num)
 		{
 			bool added = false;
-			var resInventory = ResInventories[item.resType];
-			if (resInventory == null) added = false;
-			else added = resInventory.count < resInventory.data.capacity;
-			if (!added) ItemAction?.Invoke(item, "NotEnoughSpace", num);
-			else
+			if (ResInventories.ContainsKey(item.resType))
 			{
-				resInventory.count += num;
-				ItemAction?.Invoke(item, "Add", num);
+				var resInventory = ResInventories[item.resType];
+				added = resInventory.count + num <= resInventory.data.capacity;
+				if (added) { resInventory.count += num; ItemAction?.Invoke(item, "Add", num); }
+				else ItemAction?.Invoke(item, "NotEnoughSpace", num);
 			}
 			return added;
 		}

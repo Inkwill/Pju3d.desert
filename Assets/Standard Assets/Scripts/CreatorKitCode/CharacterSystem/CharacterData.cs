@@ -214,12 +214,13 @@ public class CharacterData : HighlightableObject
 
 	public bool HoldTools(ResItem item)
 	{
-		if (item.toolWeapon == null || item.toolWeapon.Count == 0) return true;
-		foreach (var tool in item.toolWeapon)
+		if (item.toolType == Weapon.WeaponType.None) return true;
+		if (Equipment.Weapon && item.toolType == Equipment.Weapon.weaponType) return true;
+		if (Equipment.ViceWeapon && item.toolType == Equipment.ViceWeapon.weaponType) { Equipment.SwitchWeapon(); return true; }
+		foreach (var entry in Inventory.Entries)
 		{
-			if (tool == Equipment.Weapon) return true;
-			if (tool == Equipment.ViceWeapon) { Equipment.SwitchWeapon(); return true; }
-			if (Inventory.ItemCount(tool.ItemName) > 0) { Inventory.EquipItem(tool); return true; }
+			Weapon wp = entry?.Item as Weapon;
+			if (wp && wp.weaponType == item.toolType) { Inventory.EquipItem(wp); return true; }
 		}
 		return false;
 	}
