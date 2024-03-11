@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 /// This defines a character in the game. The name Character is used in a loose sense, it just means something that
 /// can be attacked and have some stats including health. It could also be an inanimate object like a breakable box.
 /// </summary>
-public class CharacterData : HighlightableObject
+public class CharacterData : HighlightableObject, IInteractable
 {
 	public enum Camp
 	{
@@ -46,6 +46,8 @@ public class CharacterData : HighlightableObject
 	public CharacterData CurrentEnemy { get { return m_Enemy; } }
 	public SkillUser SkillUser => GetComponent<SkillUser>();
 	public AIBase BaseAI => GetComponent<AIBase>();
+	public IInteractable CurrentInteractor => m_interactor;
+	protected IInteractable m_interactor;
 	float m_AttackCoolDown;
 
 	void Awake()
@@ -115,6 +117,8 @@ public class CharacterData : HighlightableObject
 
 		if (m_AttackCoolDown > 0.0f)
 			m_AttackCoolDown -= Time.deltaTime;
+
+		if (m_interactor != null && !m_interactor.CanInteract(this)) m_interactor = null;
 	}
 
 	public void SetEnemy(CharacterData enemy)
@@ -224,4 +228,13 @@ public class CharacterData : HighlightableObject
 		}
 		return false;
 	}
+
+	public bool CanInteract(IInteractable target) { return BaseAI && BaseAI.isIdle; }
+	public void OnInteractorEnter(CharacterData character) { }
+	public void InteractWith(IInteractable target)
+	{
+		m_interactor = target;
+		BaseAI?.SetState(AIBase.State.INTERACTING);
+	}
+	public string InteractAnim(CharacterData character) { return "Skill"; }
 }

@@ -46,9 +46,9 @@ public class CharacterAnimHandle : MonoBehaviour
 			m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
 		if (curState == AIBase.State.INTERACTING)
 		{
-			string anim = m_character.BaseAI.CurrentInteractor.InteractAnim(m_character);
+			string anim = m_character.CurrentInteractor.InteractAnim(m_character);
 			if (anim != "") m_Animator.SetTrigger(anim);
-			else m_character.BaseAI.CurrentInteractor.InteractWith(m_character);
+			else m_character.CurrentInteractor.InteractWith(m_character);
 		}
 	}
 
@@ -65,7 +65,7 @@ public class CharacterAnimHandle : MonoBehaviour
 		}
 		if (m_character.BaseAI.CurState == AIBase.State.INTERACTING)
 		{
-			m_character.BaseAI.CurrentInteractor.InteractWith(m_character);
+			m_character.CurrentInteractor.InteractWith(m_character);
 		}
 	}
 

@@ -37,6 +37,7 @@ public class UIInventoryWindow : UIWindow
 
 		DragCanvasScaler = GameManager.GameUI.DragCanvas.GetComponentInParent<CanvasScaler>();
 		m_ItemEntries = ItemSlots.GetComponentsInChildren<UIInventorySlot>();
+		GameManager.CurHero.Inventory.ItemAction += (item, eventName, num) => { Load(); };
 
 		// m_ItemEntries = new UIInventorySlot[ItemSlots.Length];
 

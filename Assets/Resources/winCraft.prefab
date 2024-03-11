@@ -404,7 +404,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -88.073685}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 300}
   m_SizeDelta: {x: 800, y: 680}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7484605642875426594
@@ -466,6 +466,7 @@ MonoBehaviour:
   uiFormulaRoot: {fileID: 2704931238172325666}
   product_Name: {fileID: 6353150171515420024}
   product_Desc: {fileID: 4255799740901068729}
+  bt_Craft: {fileID: 7414328362229341251}
 --- !u!1 &1549302955495208156
 GameObject:
   m_ObjectHideFlags: 0

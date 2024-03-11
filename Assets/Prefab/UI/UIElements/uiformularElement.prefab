@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 809767216928501935}
   - component: {fileID: 6152485596945858577}
   - component: {fileID: 680804078594622698}
-  - component: {fileID: 1361259920532413540}
-  - component: {fileID: 3587742765166800652}
+  - component: {fileID: 892891554060691984}
+  - component: {fileID: 4740954455708703539}
   m_Layer: 5
   m_Name: uiformularElement
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1361259920532413540
+--- !u!114 &892891554060691984
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,7 +127,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
---- !u!114 &3587742765166800652
+--- !u!114 &4740954455708703539
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,10 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12e38ab93df6be9449b550bc3501e5dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InfoRoot: {fileID: 0}
-  product_icon: {fileID: 6356900273875939668}
-  product_Name: {fileID: 0}
-  product_Desc: {fileID: 0}
+  icon: {fileID: 6356900273875939668}
+  toggle: {fileID: 892891554060691984}
 --- !u!1 &6829546871244037489
 GameObject:
   m_ObjectHideFlags: 0

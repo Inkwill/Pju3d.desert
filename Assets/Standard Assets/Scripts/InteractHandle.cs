@@ -18,7 +18,7 @@ public class InteractHandle : MonoBehaviour
 	UISliderHandle slider;
 	float m_during;
 	IInteractable m_interactor;
-	CharacterData m_monopolist;
+	IInteractable m_monopolist;
 
 	public void SetHandle(bool active)
 	{
@@ -40,22 +40,22 @@ public class InteractHandle : MonoBehaviour
 
 	void OnInterEnter(GameObject enter)
 	{
-		if (m_monopolist) return;
+		if (m_monopolist != null) return;
 		CharacterData character = enter.GetComponent<CharacterData>();
-		if (character && character.BaseAI) m_interactor.OnInteractorEnter(character);
+		if (character) m_interactor.OnInteractorEnter(character);
 	}
 
 	void OnInterExit(GameObject exiter)
 	{
-		if (m_monopolist && exiter == m_monopolist.gameObject) m_monopolist = null;
+		if (m_monopolist != null && exiter.GetComponent<IInteractable>() == m_monopolist) m_monopolist = null;
 		if (exiter == Detector.lastInner && slider) slider.SetValue(handleTime, 0);
 	}
 
 	void OnInterStay(GameObject stayer, float duration)
 	{
-		if (m_monopolist || duration < 0.5f) return;
-		CharacterData character = stayer.GetComponent<CharacterData>();
-		if (character && character.BaseAI && m_interactor.CanInteract(character))
+		if (m_monopolist != null || duration < 0.5f) return;
+		var target = stayer.GetComponent<IInteractable>();
+		if (m_interactor.CanInteract(target))
 		{
 			m_during += Time.deltaTime;
 			slider?.SetValue(handleTime, m_during, "Check...", UISliderHandle.TextType.Text);
@@ -63,9 +63,9 @@ public class InteractHandle : MonoBehaviour
 			{
 				if (exclusive && m_monopolist == null)
 				{
-					m_monopolist = character;
+					m_monopolist = target;
 				}
-				character.BaseAI.StartInteract(m_interactor);
+				target.InteractWith(m_interactor);
 				m_during = 0;
 			}
 		}

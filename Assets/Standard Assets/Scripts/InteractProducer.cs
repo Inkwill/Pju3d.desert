@@ -32,10 +32,11 @@ public class InteractProducer : MonoBehaviour, IInteractable
 		GetComponent<InteractHandle>()?.SetHandle(true);
 		if (m_count < maxCount && m_replenishTime != -1) StartCoroutine(Replenish());
 	}
-	public bool CanInteract(CharacterData character)
+	public bool CanInteract(IInteractable target)
 	{
-		if (character.BaseAI.isIdle && m_cd <= 0 && (m_count > 0 || maxCount == -1))
+		if (m_cd <= 0 && (m_count > 0 || maxCount == -1) && target is CharacterData && target.CanInteract(this))
 		{
+			var character = target as CharacterData;
 			if (!character.HoldTools(resItem))
 			{
 				character.GetComponentInChildren<UIRoleHud>().Bubble("I need a " + resItem.toolType);
@@ -64,14 +65,18 @@ public class InteractProducer : MonoBehaviour, IInteractable
 		return CollectAnim;
 	}
 
-	public void InteractWith(CharacterData character)
+	public void InteractWith(IInteractable target)
 	{
-		InteractEvent?.Invoke(gameObject, character.gameObject);
-		Helpers.Log(this, "InteractWith", character.CharacterName);
-		m_cd = m_collectCd;
-		if (maxCount != -1 && --m_count < 1 && m_replenishTime == -1) OnExhausted(character);
-		if (m_replenishTime != -1) StartCoroutine(Replenish());
-		itemGrid?.ShowItem(m_count);
+		if (target is CharacterData)
+		{
+			var character = target as CharacterData;
+			InteractEvent?.Invoke(gameObject, character.gameObject);
+			Helpers.Log(this, "InteractWith", character.CharacterName);
+			m_cd = m_collectCd;
+			if (maxCount != -1 && --m_count < 1 && m_replenishTime == -1) OnExhausted();
+			if (m_replenishTime != -1) StartCoroutine(Replenish());
+			itemGrid?.ShowItem(m_count);
+		}
 	}
 	IEnumerator Replenish()
 	{
@@ -81,7 +86,7 @@ public class InteractProducer : MonoBehaviour, IInteractable
 		if (m_count < maxCount) StartCoroutine(Replenish());
 	}
 
-	void OnExhausted(CharacterData character)
+	void OnExhausted()
 	{
 		GetComponent<InteractHandle>()?.SetHandle(false);
 		ExhaustedEvent?.Invoke(gameObject);

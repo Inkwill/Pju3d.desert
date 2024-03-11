@@ -42,21 +42,25 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		return "";
 	}
 
-	public bool CanInteract(CharacterData character)
+	public bool CanInteract(IInteractable target)
 	{
-		return character.BaseAI.isIdle && !m_Demand.Completed && m_interactable;
+		return !m_Demand.Completed && m_interactable && target.CanInteract(this);
 	}
 
-	public void InteractWith(CharacterData character)
+	public void InteractWith(IInteractable target)
 	{
-		var submitable = m_Demand.Submittable(character.Inventory);
-		if (submitable.Count > 0)
+		if (target is CharacterData)
 		{
-			m_target = character.gameObject;
-			character.Inventory.ItemAction += OnItemEvent;
-			m_Demand.Fulfill(character.Inventory);
+			var character = target as CharacterData;
+			var submitable = m_Demand.Submittable(character.Inventory);
+			if (submitable.Count > 0)
+			{
+				m_target = character.gameObject;
+				character.Inventory.ItemAction += OnItemEvent;
+				m_Demand.Fulfill(character.Inventory);
+			}
+			else { ui_demand.Fail(); m_interactable = false; }
 		}
-		else { ui_demand.Fail(); m_interactable = false; }
 	}
 
 	protected override void OnRefresh()

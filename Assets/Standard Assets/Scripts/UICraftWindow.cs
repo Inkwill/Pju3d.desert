@@ -13,6 +13,8 @@ public class UICraftWindow : UIWindow
 	TMP_Text product_Name;
 	[SerializeField]
 	Text product_Desc;
+	[SerializeField]
+	Button bt_Craft;
 	UIItemListBox[] m_requireItemBoxs;
 	FormulaData m_formula;
 
@@ -20,18 +22,19 @@ public class UICraftWindow : UIWindow
 	void Awake()
 	{
 		m_requireItemBoxs = GetComponentsInChildren<UIItemListBox>();
+		GameManager.CurHero.Inventory.ItemAction += (item, eventName, num) => { if (m_formula) UpdateInfo(m_formula); };
 	}
 	protected override void OnOpen()
 	{
-		var elements = Helpers.AdjustElements<UIFormulaElement>(uiFormulaRoot.transform, GameManager.Instance.formulas.Count, uiFormulaElement);
+		var elements = Helpers.AdjustElements<UIElementBase>(uiFormulaRoot.transform, GameManager.Instance.formulas.Count, uiFormulaElement);
 
 		for (int i = 0; i < elements.Length; i++)
 		{
-			UIFormulaElement element = elements[i].GetComponent<UIFormulaElement>();
+			UIElementBase element = elements[i].GetComponent<UIElementBase>();
 			FormulaData formula = GameManager.Instance.formulas[i];
-			element.SetFormula(formula);
-			element.GetComponent<Toggle>().group = uiFormulaRoot;
-			element.GetComponent<Toggle>().onValueChanged.AddListener((value) => { if (value) UpdateInfo(formula); });
+			element.icon.sprite = formula.product.ItemSprite;
+			element.toggle.group = uiFormulaRoot;
+			element.toggle.onValueChanged.AddListener((value) => { if (value) UpdateInfo(formula); });
 		}
 		if (m_formula != null) UpdateInfo(m_formula);
 	}
@@ -41,6 +44,7 @@ public class UICraftWindow : UIWindow
 		m_formula = formula;
 		product_Name.text = formula.product.ItemName;
 		product_Desc.text = formula.product.Description;
+		bt_Craft.interactable = formula.canCraft(GameManager.CurHero.Inventory);
 		for (int i = 0; i < m_requireItemBoxs.Length; i++)
 		{
 			if (formula.requireList.Count > i) m_requireItemBoxs[i].SetRequiredInfo(formula.requireList[i].Key, formula.requireList[i].Value);

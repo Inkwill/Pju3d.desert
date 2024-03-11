@@ -2063,7 +2063,6 @@ MonoBehaviour:
   ItemEntryPrefab: {fileID: 22014845128324227, guid: c4e01ae66d3b28b43bbee72fa1fc0314,
     type: 3}
   Tooltip: {fileID: 643716899171396487}
-  winCraft: {fileID: 0}
   HeadSlot: {fileID: 6704739524818475205}
   TorsoSlot: {fileID: 4535896278752448723}
   LegsSlot: {fileID: 2160793430832857806}
@@ -3219,7 +3218,7 @@ PrefabInstance:
     - target: {fileID: 301375897403864506, guid: 4449c4f0bc9d35747934c73a44ad8004,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 100
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 301375897403864506, guid: 4449c4f0bc9d35747934c73a44ad8004,
         type: 3}
@@ -4115,7 +4114,7 @@ PrefabInstance:
     - target: {fileID: 301375897403864506, guid: 4449c4f0bc9d35747934c73a44ad8004,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -100
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 301375897403864506, guid: 4449c4f0bc9d35747934c73a44ad8004,
         type: 3}

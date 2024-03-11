@@ -37,8 +37,7 @@ public class AIBase : MonoBehaviour
 	public CharacterData CurrentEnemy => m_character.CurrentEnemy;
 	public CharacterData Character => m_character;
 	protected CharacterData m_character;
-	public IInteractable CurrentInteractor => m_interactor;
-	protected IInteractable m_interactor;
+
 
 	void Start()
 	{
@@ -122,6 +121,8 @@ public class AIBase : MonoBehaviour
 			else m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<CharacterData>());
 			if (m_character.CurrentEnemy == null) SetState(State.IDLE);
 		}
+		//INTERACTING
+		if (m_State == State.INTERACTING && m_character.CurrentInteractor == null) SetState(State.IDLE);
 		m_character.StateUpdateAction?.Invoke(m_State);
 		OnStateUpdate(m_State);
 	}
@@ -151,7 +152,6 @@ public class AIBase : MonoBehaviour
 	protected virtual void OnStateUpdate(State state) { }
 	protected virtual void OnDeathAI() { }
 	protected virtual void OnDamageAI(Damage damage) { }
-	public virtual void StartInteract(IInteractable interactor) { }
 	protected virtual void OnEnemyEnter(GameObject enter)
 	{
 		if (m_character.CurrentEnemy == null) m_character.SetEnemy(enter.GetComponent<CharacterData>());
