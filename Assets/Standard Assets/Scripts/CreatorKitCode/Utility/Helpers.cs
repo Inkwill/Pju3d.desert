@@ -84,4 +84,19 @@ public class Helpers
 			}
 		}
 	}
+
+	public static T[] AdjustElements<T>(Transform root, int Length, GameObject element)
+	{
+		T[] result = root.GetComponentsInChildren<T>();
+		if (result.Length >= Length) return result.Take(Length).ToArray();
+		else
+		{
+			T[] concat = new T[Length - result.Length];
+			for (int i = 0; i < concat.Length; i++)
+			{
+				concat[i] = Object.Instantiate(element, root).GetComponent<T>();
+			}
+			return result.Concat(concat).ToArray();
+		}
+	}
 }

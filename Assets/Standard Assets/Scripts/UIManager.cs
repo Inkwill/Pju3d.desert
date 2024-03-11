@@ -55,20 +55,28 @@ public class UIManager : MonoBehaviour
 		return newWindow;
 	}
 
+	public void CloseAll()
+	{
+		foreach (var win in m_winList)
+		{
+			if (win.gameObject.activeSelf) win.Close();
+		}
+	}
+
 	public UIWindow GetWindow(string name)
 	{
 		UIWindow window = m_winList.Where(win => win.winName == name).FirstOrDefault();
 		return window;
 	}
 
-	public UIWindow SwitchWindow(string winName)
+	public void SwitchWindow(string winName)
 	{
-		if (win_LastOpen)
+		UIWindow win = GetWindow(winName);
+		if (win == null || !win.gameObject.activeSelf)
 		{
-			win_LastOpen.Close();
-			win_LastClose = win_LastOpen;
+			OpenWindow(winName);
 		}
-		return OpenWindow(winName);
+		else win.Close();
 	}
 
 	public void BackWindow(UIWindow curWindow)

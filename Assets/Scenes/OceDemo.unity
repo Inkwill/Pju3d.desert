@@ -62748,6 +62748,9 @@ MonoBehaviour:
   SFXManager: {fileID: 5564097810133815885}
   TerrainTool: {fileID: 1996416778}
   buildModeFollow: {fileID: 2072677016}
+  formulas:
+  - {fileID: 11400000, guid: 529e381f70b0edc439e77206e5921ac5, type: 2}
+  - {fileID: 11400000, guid: 2ce863c59206692439703d20ef0e8e77, type: 2}
   ui_trans: {fileID: 5564097808944322120}
   position_born: {fileID: 1898064877}
   baseBoundary_LB: {x: 75, y: -5}

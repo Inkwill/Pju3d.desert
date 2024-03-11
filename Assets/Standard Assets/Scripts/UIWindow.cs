@@ -8,7 +8,7 @@ using CreatorKitCodeInternal;
 public class UIWindow : MonoBehaviour
 {
 	public string winName;
-	public UIWindow Instance;
+	public static UIWindow Instance;
 	public Image winMask;
 	public AudioClip OpenClip;
 	public AudioClip CloseClip;
@@ -46,7 +46,7 @@ public class UIWindow : MonoBehaviour
 
 	public void BackToMain()
 	{
-		Close();
+		GameManager.GameUI.CloseAll();
 		GameManager.GameUI.OpenWindow("winMain");
 	}
 

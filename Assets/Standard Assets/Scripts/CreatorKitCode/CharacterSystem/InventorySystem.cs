@@ -111,7 +111,7 @@ namespace CreatorKitCode
 		CharacterData m_Owner;
 		public int SlotsNum { get { return m_baseSlots; } }
 		public int CurSlotsNum { get { return Entries.Where(en => en != null).Count(); } }
-		static int m_baseSlots = 8;
+		static int m_baseSlots = 10;
 
 		public void Init(CharacterData owner)
 		{

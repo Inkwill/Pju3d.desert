@@ -187,10 +187,12 @@ public class UIMainWindow : UIWindow
 				//UpdateWeapon(GameManager.CurHero.Equipment);
 				break;
 			case "package":
-				GameManager.GameUI.SwitchWindow("winInventory");
+				Close();
+				GameManager.GameUI.OpenWindow("winInventory");
 				break;
 			case "talk":
-				GameManager.GameUI.SwitchWindow("winTalk");
+				Close();
+				GameManager.GameUI.OpenWindow("winTalk");
 				break;
 			case "camMode":
 				GameManager.BuildMode = !GameManager.BuildMode;

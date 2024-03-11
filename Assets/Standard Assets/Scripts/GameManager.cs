@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 			Helpers.Log(Instance, "PickObject", "target= " + m_CurrentSelected.name);
 		}
 	}
+	public List<FormulaData> formulas;
 	static GameObject m_CurrentSelected;
 
 	public static bool BuildMode
