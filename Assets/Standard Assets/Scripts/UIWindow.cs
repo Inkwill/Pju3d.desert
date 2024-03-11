@@ -46,7 +46,8 @@ public class UIWindow : MonoBehaviour
 
 	public void BackToMain()
 	{
-		GameManager.GameUI.SwitchWindow("winMain");
+		Close();
+		GameManager.GameUI.OpenWindow("winMain");
 	}
 
 	public static void SetButton(Button bt, bool active)

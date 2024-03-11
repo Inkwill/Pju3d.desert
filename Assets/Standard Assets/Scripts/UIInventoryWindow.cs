@@ -17,6 +17,7 @@ public class UIInventoryWindow : UIWindow
 	public Text textStats;
 	public ItemEntryUI ItemEntryPrefab;
 	public ItemTooltip Tooltip;
+	public GameObject winCraft;
 
 	public UIInventorySlot HeadSlot;
 	public UIInventorySlot TorsoSlot;
@@ -53,6 +54,7 @@ public class UIInventoryWindow : UIWindow
 	{
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
+		winCraft.gameObject.SetActive(false);
 		EquipRoot.SetActive(GameManager.StoryListener.CurrentTeller == null);
 		GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.INVENTORY);
 		Load();
@@ -133,6 +135,9 @@ public class UIInventoryWindow : UIWindow
 					GameManager.CurHero.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
 				m_SelectedSlot.tog.isOn = false;
 				Load();
+				break;
+			case "Craft":
+				winCraft.gameObject.SetActive(!winCraft.gameObject.activeSelf);
 				break;
 			default:
 				break;

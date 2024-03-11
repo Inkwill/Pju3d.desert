@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using CreatorKitCode;
+using TMPro;
 
 namespace CreatorKitCodeInternal
 {
 	public class ItemTooltip : MonoBehaviour
 	{
-		public Text Name;
+		public TMP_Text Name;
 		public Text DescriptionText;
 		public Button btEquip;
 		public Button btUnEquip;
