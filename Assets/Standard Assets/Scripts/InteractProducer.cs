@@ -55,12 +55,7 @@ public class InteractProducer : MonoBehaviour, IInteractable
 		return false;
 	}
 
-	public void OnInteractorEnter(CharacterData character)
-	{
-
-	}
-
-	public string InteractAnim(CharacterData character)
+	public string InteractAnim(IInteractable target)
 	{
 		return CollectAnim;
 	}

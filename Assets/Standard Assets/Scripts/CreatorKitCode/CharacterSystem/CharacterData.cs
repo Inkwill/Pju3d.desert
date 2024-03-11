@@ -230,11 +230,10 @@ public class CharacterData : HighlightableObject, IInteractable
 	}
 
 	public bool CanInteract(IInteractable target) { return BaseAI && BaseAI.isIdle; }
-	public void OnInteractorEnter(CharacterData character) { }
 	public void InteractWith(IInteractable target)
 	{
 		m_interactor = target;
-		BaseAI?.SetState(AIBase.State.INTERACTING);
+		if (m_interactor != null && BaseAI) BaseAI.SetState(AIBase.State.INTERACTING);
 	}
-	public string InteractAnim(CharacterData character) { return "Skill"; }
+	public string InteractAnim(IInteractable target) { return "Skill"; }
 }

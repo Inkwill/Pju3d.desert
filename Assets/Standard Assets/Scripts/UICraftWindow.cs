@@ -54,6 +54,14 @@ public class UICraftWindow : UIWindow
 
 	public void Craft()
 	{
+		GameManager.CurHero.InteractWith(GameManager.CurHero);
+		StartCoroutine(DoCraft());
+	}
+
+	IEnumerator DoCraft()
+	{
+		yield return new WaitForSeconds(3.0f);
 		m_formula.Craft(GameManager.CurHero.Inventory);
+		GameManager.CurHero.InteractWith(null);
 	}
 }

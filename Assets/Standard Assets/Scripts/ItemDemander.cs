@@ -31,13 +31,13 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		GetComponent<InteractHandle>()?.SetHandle(true);
 	}
 
-	public void OnInteractorEnter(CharacterData enter)
+	public void OnInteractorEnter(IInteractable target)
 	{
 		ui_demand.Inter();
 		m_interactable = true;
 	}
 
-	public string InteractAnim(CharacterData character)
+	public string InteractAnim(IInteractable target)
 	{
 		return "";
 	}

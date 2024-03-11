@@ -42,7 +42,11 @@ public class InteractHandle : MonoBehaviour
 	{
 		if (m_monopolist != null) return;
 		CharacterData character = enter.GetComponent<CharacterData>();
-		if (character) m_interactor.OnInteractorEnter(character);
+		if (character && m_interactor is ItemDemander)
+		{
+			var demander = m_interactor as ItemDemander;
+			demander.OnInteractorEnter(character);
+		}
 	}
 
 	void OnInterExit(GameObject exiter)
