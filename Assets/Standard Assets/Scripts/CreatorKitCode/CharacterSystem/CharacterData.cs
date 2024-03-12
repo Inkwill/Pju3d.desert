@@ -235,5 +235,5 @@ public class CharacterData : HighlightableObject, IInteractable
 		m_interactor = target;
 		if (m_interactor != null && BaseAI) BaseAI.SetState(AIBase.State.INTERACTING);
 	}
-	public string InteractAnim(IInteractable target) { return "Skill"; }
+	public string InteractAnim(IInteractable target) { return "Hit"; }
 }

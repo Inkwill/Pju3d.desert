@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CreatorKitCode;
-using CreatorKitCodeInternal;
+
 
 public class UIWindow : MonoBehaviour
 {
@@ -12,32 +12,40 @@ public class UIWindow : MonoBehaviour
 	public Image winMask;
 	public AudioClip OpenClip;
 	public AudioClip CloseClip;
+	Animator m_anim;
 
 	void OnEnable()
 	{
+		Instance = this;
+		m_anim = GetComponent<Animator>();
 		if (OpenClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = OpenClip });
 		if (winMask) winMask.enabled = false;
-		Instance = this;
+
+		if (m_anim)
+		{
+			m_anim.SetTrigger("open");
+			GameManager.StartWaitAction(0.2f, () => { OnOpened(); if (winMask) winMask.enabled = true; });
+		}
 		OnOpen();
 	}
-
 	void OnDisable()
 	{
-		if (CloseClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = CloseClip });
-		OnClose();
+		OnClosed();
 	}
 	public void Close()
 	{
 		if (!gameObject.activeSelf) return;
 		if (winMask) winMask.enabled = false;
-		Animator anim = GetComponent<Animator>();
-		if (anim) anim.SetTrigger("close");
-		else OnClosed();
+		if (CloseClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = CloseClip });
+		OnClose();
+		if (m_anim) { m_anim.SetTrigger("close"); GameManager.StartWaitAction(0.2f, () => { gameObject.SetActive(false); }); }
+		else gameObject.SetActive(false);
 	}
 	protected virtual void OnOpen() { }
-	protected virtual void OnOpened() { if (winMask) winMask.enabled = true; }
+	protected virtual void OnOpened() { }
 	protected virtual void OnClose() { }
-	void OnClosed() { gameObject.SetActive(false); }
+	protected virtual void OnClosed() { }
+
 
 	public void Back()
 	{

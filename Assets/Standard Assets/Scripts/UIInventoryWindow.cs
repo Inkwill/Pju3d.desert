@@ -62,7 +62,6 @@ public class UIInventoryWindow : UIWindow
 	protected override void OnClose()
 	{
 		GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
-		base.OnClose();
 	}
 	public void Load()
 	{

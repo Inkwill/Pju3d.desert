@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using TMPro;
+using CreatorKitCode;
 
 public class UICraftWindow : UIWindow
 {
@@ -15,13 +16,17 @@ public class UICraftWindow : UIWindow
 	Text product_Desc;
 	[SerializeField]
 	Button bt_Craft;
+	UISliderHandle slider_crafting;
 	UIItemListBox[] m_requireItemBoxs;
 	FormulaData m_formula;
+	float m_craftingTime;
+	const float craftingDuring = 3.0f;
 
 
 	void Awake()
 	{
 		m_requireItemBoxs = GetComponentsInChildren<UIItemListBox>();
+		slider_crafting = GetComponentInChildren<UISliderHandle>();
 		GameManager.CurHero.Inventory.ItemAction += (item, eventName, num) => { if (m_formula) UpdateInfo(m_formula); };
 	}
 	protected override void OnOpen()
@@ -37,6 +42,12 @@ public class UICraftWindow : UIWindow
 			element.toggle.onValueChanged.AddListener((value) => { if (value) UpdateInfo(formula); });
 		}
 		if (m_formula != null) UpdateInfo(m_formula);
+		slider_crafting?.Init(craftingDuring, m_craftingTime, "crafting...");
+	}
+
+	protected override void OnClose()
+	{
+		base.OnClose();
 	}
 
 	public void UpdateInfo(FormulaData formula)
@@ -51,17 +62,23 @@ public class UICraftWindow : UIWindow
 			else m_requireItemBoxs[i].gameObject.SetActive(false);
 		}
 	}
-
 	public void Craft()
 	{
 		GameManager.CurHero.InteractWith(GameManager.CurHero);
-		StartCoroutine(DoCraft());
+		bt_Craft.interactable = false;
+		m_craftingTime = craftingDuring;
 	}
-
-	IEnumerator DoCraft()
+	void Update()
 	{
-		yield return new WaitForSeconds(3.0f);
-		m_formula.Craft(GameManager.CurHero.Inventory);
-		GameManager.CurHero.InteractWith(null);
+		if (m_craftingTime > 0)
+		{
+			m_craftingTime -= Time.deltaTime;
+			slider_crafting?.SetValue(craftingDuring, craftingDuring - m_craftingTime, "crafting...");
+			if (m_craftingTime <= 0)
+			{
+				GameManager.CurHero.InteractWith(null);
+				GameManager.StartWaitAction(0.1f, () => { Close(); m_formula.Craft(GameManager.CurHero.Inventory); VFXManager.PlayVFX(VFXType.SmokePoof, GameManager.CurHero.transform.position); });
+			};
+		}
 	}
 }

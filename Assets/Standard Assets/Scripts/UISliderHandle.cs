@@ -37,6 +37,7 @@ public class UISliderHandle : MonoBehaviour
 		if (value == 0 || value >= slider.maxValue)
 		{
 			gameObject.SetActive(false);
+			m_text.text = "";
 		}
 		else if (!gameObject.activeSelf) gameObject.SetActive(true);
 	}
@@ -44,6 +45,7 @@ public class UISliderHandle : MonoBehaviour
 	void HandleSlider(float value)
 	{
 		if (!m_text) return;
+		if (value == 0 || value >= slider.maxValue) { m_text.text = ""; return; }
 		switch (Type)
 		{
 			case TextType.Countdown:
