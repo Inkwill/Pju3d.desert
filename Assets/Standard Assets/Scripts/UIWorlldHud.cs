@@ -9,27 +9,11 @@ public class UIWorldHud : MonoBehaviour
 	Animator bubble_anim;
 	[SerializeField]
 	Text bubble_text;
-	[SerializeField]
-	GameObject uiPrefab;
-	GameObject m_uiHud;
 	bool m_bubble;
 	string m_storeBubble;
 	float m_bubbleDuration;
-	public void ShowUIHud()
-	{
-		if (m_uiHud == null)
-		{
-			m_uiHud = Instantiate(uiPrefab, GameManager.GameUI.transform);
-			m_uiHud.transform.position = Camera.main.WorldToScreenPoint(transform.position);
-			m_uiHud.gameObject.SetActive(true);
-		}
-		else m_uiHud.gameObject.SetActive(true);
-	}
-
 	private void Update()
 	{
-		this.transform.forward = Camera.main.transform.forward;
-		if (m_uiHud) m_uiHud.transform.position = Camera.main.WorldToScreenPoint(transform.position);
 		if (bubble_anim)
 		{
 			if (m_bubbleDuration > 0) m_bubbleDuration -= Time.deltaTime;

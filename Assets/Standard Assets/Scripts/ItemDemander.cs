@@ -9,6 +9,7 @@ using System.Linq;
 public class ItemDemander : TimerBehaviour, IInteractable
 {
 	public string demanderId;
+	public UnityEvent ReadyEvents;
 	public UnityEvent RefreshEvents;
 	[SerializeField]
 	UIItemDemand ui_demand;
@@ -34,7 +35,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 
 	public string InteractAnim(IInteractable target)
 	{
-		return "Skill";
+		return "";
 	}
 
 	public bool CanInteract(IInteractable target)
@@ -50,12 +51,24 @@ public class ItemDemander : TimerBehaviour, IInteractable
 			var submitable = m_Demand.Submittable(character.Inventory);
 			if (submitable.Values.Sum() > 0)
 			{
-				m_interactor = character;
-				character.Inventory.ItemAction += OnItemEvent;
-				m_Demand.Fulfill(character.Inventory);
+				ReadyEvents?.Invoke();
+				target.CurrentInteractor = null;
+				if (character != GameManager.CurHero)
+				{
+					m_interactor = character;
+					character.Inventory.ItemAction += OnItemEvent;
+					m_Demand.Fulfill(character.Inventory);
+				}
 			}
 			else { ui_demand.Fail(); target.CurrentInteractor = null; }
 		}
+	}
+
+	public void OnClick_Interact()
+	{
+		m_interactor = GameManager.CurHero;
+		GameManager.CurHero.Inventory.ItemAction += OnItemEvent;
+		m_Demand.Fulfill(GameManager.CurHero.Inventory);
 	}
 
 	protected override void OnRefresh()

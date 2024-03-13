@@ -23,7 +23,6 @@ public class InteractPit : TimerBehaviour
 		m_actived = true;
 		uiPlaceRoot.SetActive(false);
 		btPlace.interactable = true;
-		GetComponentInChildren<UIWorldHud>()?.ShowUIHud();
 	}
 
 	protected override void OnProcessing(float completed)

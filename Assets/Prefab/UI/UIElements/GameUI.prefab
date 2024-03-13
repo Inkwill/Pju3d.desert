@@ -1032,7 +1032,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   JoyStick: {fileID: 6654613658238103982}
   DragCanvas: {fileID: 6400451881483331260}
-  m_winList: []
   win_LastOpen: {fileID: 0}
   win_LastClose: {fileID: 0}
 --- !u!1 &3909096228786278330

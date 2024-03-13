@@ -11,37 +11,19 @@ public class UIManager : MonoBehaviour
 
 	public Canvas DragCanvas;
 
-	public UIMainWindow WinMain => GetWindow("winMain") as UIMainWindow;
-	public List<UIWindow> m_winList;
+	public UIMainWindow WinMain => m_winDic["winMain"] as UIMainWindow;
+	Dictionary<string, UIWindow> m_winDic = new Dictionary<string, UIWindow>();
 
 	public UIWindow win_LastOpen;
 	public UIWindow win_LastClose;
 	float during_check;
-
-	// void FixedUpdate()
-	// {
-	// 	if (win_LastOpen)
-	// 	{
-	// 		during_check += Time.deltaTime;
-	// 		if (during_check >= 2.0f)
-	// 		{
-	// 			if (!win_LastOpen.gameObject.activeSelf)
-	// 				win_LastOpen.gameObject.SetActive(true);
-	// 			during_check = 0;
-	// 		}
-	// 	}
-	// }
 	public UIWindow OpenWindow(string winName)
 	{
-		//Debug.Log("OpenWindow: " + winName);
-		foreach (UIWindow win in m_winList)
+		if (m_winDic.ContainsKey(winName))
 		{
-			if (win.gameObject.name == winName)
-			{
-				win.gameObject.SetActive(true);
-				win_LastOpen = win;
-				return win;
-			}
+			m_winDic[winName].gameObject.SetActive(true);
+			win_LastOpen = m_winDic[winName];
+			return m_winDic[winName];
 		}
 
 		UIWindow newWindow = Resources.Load<UIWindow>(winName);
@@ -49,7 +31,7 @@ public class UIManager : MonoBehaviour
 		{
 			newWindow = Instantiate(newWindow, transform);
 			newWindow.gameObject.name = newWindow.winName = winName;
-			m_winList.Add(newWindow);
+			m_winDic.Add(winName, newWindow);
 			win_LastOpen = newWindow;
 		}
 		return newWindow;
@@ -57,26 +39,21 @@ public class UIManager : MonoBehaviour
 
 	public void CloseAll()
 	{
-		foreach (var win in m_winList)
+		foreach (var win in m_winDic.Values)
 		{
 			if (win.gameObject.activeSelf) win.Close();
 		}
 	}
 
-	public UIWindow GetWindow(string name)
-	{
-		UIWindow window = m_winList.Where(win => win.winName == name).FirstOrDefault();
-		return window;
-	}
-
 	public void SwitchWindow(string winName)
 	{
-		UIWindow win = GetWindow(winName);
-		if (win == null || !win.gameObject.activeSelf)
+		if (m_winDic.ContainsKey(winName))
 		{
-			OpenWindow(winName);
+			if (m_winDic[winName].gameObject.activeSelf) m_winDic[winName].Close();
+			else m_winDic[winName].gameObject.SetActive(true);
 		}
-		else win.Close();
+		else OpenWindow(winName);
+
 	}
 
 	public void BackWindow(UIWindow curWindow)
