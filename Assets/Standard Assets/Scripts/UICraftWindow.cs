@@ -46,7 +46,9 @@ public class UICraftWindow : UIWindow
 
 	protected override void OnClose()
 	{
-		base.OnClose();
+		if (GameManager.CurHero.BaseAI.CurState == AIBase.State.INTERACTING) GameManager.CurHero.CurrentInteractor = null;
+		slider_crafting?.SetValue(craftingDuring, 0);
+		m_craftingTime = 0;
 	}
 
 	public void UpdateInfo(FormulaData formula)
@@ -73,11 +75,12 @@ public class UICraftWindow : UIWindow
 		{
 			m_craftingTime -= Time.deltaTime;
 			slider_crafting?.SetValue(craftingDuring, craftingDuring - m_craftingTime);
-			if (m_craftingTime <= 0)
+			if (m_craftingTime <= 0 && m_craftingTime > -1)
 			{
 				GameManager.CurHero.CurrentInteractor = null;
 				GameManager.StartWaitAction(0.1f, () => { Close(); m_formula.Craft(GameManager.CurHero.Inventory); VFXManager.PlayVFX(VFXType.SmokePoof, GameManager.CurHero.transform.position); });
-			};
+			}
+			if (GameManager.CurHero.BaseAI.CurState != AIBase.State.INTERACTING) { m_craftingTime = 0; Close(); }
 		}
 	}
 }
