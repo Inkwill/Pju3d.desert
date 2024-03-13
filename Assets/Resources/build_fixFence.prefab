@@ -208,7 +208,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Detector: {fileID: 2271781031681987671}
   handleTime: 2
-  exclusive: 0
+  maxActorCount: 1
   EnterEvent:
     m_PersistentCalls:
       m_Calls:
@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoStart: 0
-  timerDuration: 1
+  timerDuration: 10
   loopTimes: 1
   cd: 0
   behaveEvent:
@@ -260,7 +260,19 @@ MonoBehaviour:
         m_CallState: 2
   processEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5949214936658527749}
+        m_TargetAssemblyTypeName: UISliderHandle, Assembly-CSharp-firstpass
+        m_MethodName: SetValue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   demanderId: fixbuild_fence
   RefreshEvents:
     m_PersistentCalls:

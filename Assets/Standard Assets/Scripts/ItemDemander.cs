@@ -54,7 +54,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 				character.Inventory.ItemAction += OnItemEvent;
 				m_Demand.Fulfill(character.Inventory);
 			}
-			else ui_demand.Fail();
+			else { ui_demand.Fail(); target.CurrentInteractor = null; }
 		}
 	}
 

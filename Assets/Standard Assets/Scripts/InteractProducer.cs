@@ -12,8 +12,6 @@ public class InteractProducer : MonoBehaviour, IInteractable
 	[SerializeField]
 	int initCount = 10;
 	[SerializeField]
-	int m_collectCd = 1;
-	[SerializeField]
 	string CollectAnim;
 	[SerializeField]
 	float m_replenishTime = 10;
@@ -22,8 +20,6 @@ public class InteractProducer : MonoBehaviour, IInteractable
 	public UIItemGrid itemGrid;
 	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
 	protected IInteractable m_interactor;
-
-	float m_cd;
 	int m_count;
 
 	void Start()
@@ -36,7 +32,7 @@ public class InteractProducer : MonoBehaviour, IInteractable
 	}
 	public bool CanInteract(IInteractable target)
 	{
-		if (m_cd <= 0 && (m_count > 0 || maxCount == -1) && target is CharacterData && target.CanInteract(this))
+		if ((m_count > 0 || maxCount == -1) && target is CharacterData && target.CanInteract(this))
 		{
 			var character = target as CharacterData;
 			if (!character.HoldTools(resItem))
@@ -69,7 +65,6 @@ public class InteractProducer : MonoBehaviour, IInteractable
 			var character = target as CharacterData;
 			InteractEvent?.Invoke(gameObject, character.gameObject);
 			Helpers.Log(this, "InteractWith", character.CharacterName);
-			m_cd = m_collectCd;
 			if (maxCount != -1 && --m_count < 1 && m_replenishTime == -1) OnExhausted();
 			if (m_replenishTime != -1) StartCoroutine(Replenish());
 			itemGrid?.ShowItem(m_count);
@@ -87,10 +82,5 @@ public class InteractProducer : MonoBehaviour, IInteractable
 	{
 		GetComponent<InteractHandle>()?.SetHandle(false);
 		ExhaustedEvent?.Invoke(gameObject);
-	}
-
-	void Update()
-	{
-		if (m_cd > 0) m_cd -= Time.deltaTime;
 	}
 }

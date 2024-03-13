@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(IInteractable))]
 public class InteractHandle : MonoBehaviour
@@ -11,25 +12,25 @@ public class InteractHandle : MonoBehaviour
 	[SerializeField]
 	InteractOnTrigger Detector;
 	[SerializeField]
-	float handleTime = 1.0f;
-	[SerializeField]
-	bool exclusive;
+	int maxActorCount = 1;
 	public UnityEvent EnterEvent;
 	public UnityEvent ExitEvent;
-	IInteractable m_interactor;
-	IInteractable m_monopolist;
+	IInteractable m_passive;
+	List<IInteractable> m_interactived;
 
 	public void SetHandle(bool active)
 	{
 		if (active)
 		{
-			m_interactor = GetComponent<IInteractable>();
+			m_passive = GetComponent<IInteractable>();
+			m_interactived = new List<IInteractable>();
 			Detector.OnEnter.AddListener(OnInterEnter);
 			Detector.OnExit.AddListener(OnInterExit);
 			Detector.OnStay.AddListener(OnInterStay);
 		}
 		else
 		{
+			m_interactived?.Clear();
 			Detector.OnEnter.RemoveListener(OnInterEnter);
 			Detector.OnExit.RemoveListener(OnInterExit);
 			Detector.OnStay.RemoveListener(OnInterStay);
@@ -38,9 +39,9 @@ public class InteractHandle : MonoBehaviour
 
 	void OnInterEnter(GameObject enter)
 	{
-		if (m_monopolist != null) return;
+		if (m_interactived.Count >= maxActorCount) return;
 		IInteractable interactor = enter.GetComponent<IInteractable>();
-		if (interactor != null) EnterEvent?.Invoke();
+		if (interactor != null) { EnterEvent?.Invoke(); }
 	}
 
 	void OnInterExit(GameObject exiter)
@@ -49,19 +50,19 @@ public class InteractHandle : MonoBehaviour
 		if (interactor != null)
 		{
 			ExitEvent?.Invoke();
-			if (interactor == m_monopolist) m_monopolist = null;
-			if (interactor == m_interactor.CurrentInteractor) m_interactor.CurrentInteractor = null;
+			if (interactor == m_passive.CurrentInteractor) m_passive.CurrentInteractor = null;
+			if (m_interactived.Contains(interactor)) m_interactived.Remove(interactor);
 		}
 	}
 
 	void OnInterStay(GameObject stayer, float duration)
 	{
-		if (m_monopolist != null || duration < handleTime) return;
+		if (duration < 0.5f || m_interactived.Count >= maxActorCount) return;
 		IInteractable interactor = stayer.GetComponent<IInteractable>();
-		if (m_interactor.CanInteract(interactor))
+		if (m_passive.CanInteract(interactor) && !m_interactived.Contains(interactor))
 		{
-			interactor.InteractWith(m_interactor);
-			if (exclusive && m_monopolist == null) m_monopolist = interactor;
+			interactor.InteractWith(m_passive);
+			m_interactived.Add(interactor);
 		}
 	}
 }
