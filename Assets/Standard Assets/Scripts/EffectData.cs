@@ -59,7 +59,7 @@ public class EffectData : ScriptableObject
 					int deep = 1;
 					if (param != null && param.Length > 0 && int.TryParse(param[0], out deep))
 					{
-						GameManager.Instance.TerrainTool.LowerTerrain(target.transform.position, deep * 0.00025f, 5, 10);
+						GameManager.Instance.TerrainTool.LowerTerrain(target.transform.position, deep * 0.0005f, 5, 5);
 						success = true;
 					}
 				}

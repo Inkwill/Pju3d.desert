@@ -18,10 +18,6 @@ public class SpawnerSample : TimerBehaviour
 		}
 	}
 
-	protected override void OnRefresh()
-	{
-		if (autoStart) StartBehaviour();
-	}
 	// void Update()
 	// {
 	// 	if (spawnTimes <= 0) return;

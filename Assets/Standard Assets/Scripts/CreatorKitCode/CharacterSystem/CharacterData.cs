@@ -46,7 +46,7 @@ public class CharacterData : HighlightableObject, IInteractable
 	public CharacterData CurrentEnemy { get { return m_Enemy; } }
 	public SkillUser SkillUser => GetComponent<SkillUser>();
 	public AIBase BaseAI => GetComponent<AIBase>();
-	public IInteractable CurrentInteractor => m_interactor;
+	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
 	protected IInteractable m_interactor;
 	float m_AttackCoolDown;
 
@@ -232,8 +232,11 @@ public class CharacterData : HighlightableObject, IInteractable
 	public bool CanInteract(IInteractable target) { return BaseAI && BaseAI.isIdle; }
 	public void InteractWith(IInteractable target)
 	{
-		m_interactor = target;
-		if (m_interactor != null && BaseAI) BaseAI.SetState(AIBase.State.INTERACTING);
+		if (m_interactor == null)
+		{
+			m_interactor = target;
+			if (m_interactor != null && BaseAI) BaseAI.SetState(AIBase.State.INTERACTING);
+		}
 	}
 	public string InteractAnim(IInteractable target) { return "Hit"; }
 }

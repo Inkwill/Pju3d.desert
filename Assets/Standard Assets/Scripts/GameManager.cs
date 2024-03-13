@@ -171,6 +171,7 @@ public class GameManager : MonoBehaviour
 		if (Input.GetKeyDown("space"))
 		{
 			BuildMode = !m_buildMode;
+			//UIHudCanvas.Instance.button.transform.position = Camera.main.WorldToScreenPoint(CurHero.transform.position);
 		}
 
 		// if (Input.GetKeyDown(KeyCode.Return))

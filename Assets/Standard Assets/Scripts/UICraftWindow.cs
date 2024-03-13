@@ -42,7 +42,6 @@ public class UICraftWindow : UIWindow
 			element.toggle.onValueChanged.AddListener((value) => { if (value) UpdateInfo(formula); });
 		}
 		if (m_formula != null) UpdateInfo(m_formula);
-		slider_crafting?.Init(craftingDuring, m_craftingTime, "crafting...");
 	}
 
 	protected override void OnClose()
@@ -73,10 +72,10 @@ public class UICraftWindow : UIWindow
 		if (m_craftingTime > 0)
 		{
 			m_craftingTime -= Time.deltaTime;
-			slider_crafting?.SetValue(craftingDuring, craftingDuring - m_craftingTime, "crafting...");
+			slider_crafting?.SetValue(craftingDuring, craftingDuring - m_craftingTime);
 			if (m_craftingTime <= 0)
 			{
-				GameManager.CurHero.InteractWith(null);
+				GameManager.CurHero.CurrentInteractor = null;
 				GameManager.StartWaitAction(0.1f, () => { Close(); m_formula.Craft(GameManager.CurHero.Inventory); VFXManager.PlayVFX(VFXType.SmokePoof, GameManager.CurHero.transform.position); });
 			};
 		}

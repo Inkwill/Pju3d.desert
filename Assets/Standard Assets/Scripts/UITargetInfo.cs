@@ -52,6 +52,7 @@ public class UITargetInfo : MonoBehaviour
 			enemyHp.maxValue = m_curEnemy.Stats.stats.health;
 			enemyHp.value = m_curEnemy.Stats.CurrentHealth;
 			enemyHp.gameObject.SetActive(true);
+			enemyHp.transform.position = Camera.main.WorldToScreenPoint(m_curEnemy.transform.position + new Vector3(0, 3, 0));
 		}
 		else
 		{

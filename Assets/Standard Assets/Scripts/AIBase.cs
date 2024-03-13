@@ -123,6 +123,7 @@ public class AIBase : MonoBehaviour
 		}
 		//INTERACTING
 		if (m_State == State.INTERACTING && m_character.CurrentInteractor == null) SetState(State.IDLE);
+		if (m_State != State.INTERACTING && m_character.CurrentInteractor != null) m_character.CurrentInteractor = null;
 		m_character.StateUpdateAction?.Invoke(m_State);
 		OnStateUpdate(m_State);
 	}

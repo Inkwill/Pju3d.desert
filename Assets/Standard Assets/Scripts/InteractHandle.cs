@@ -14,9 +14,8 @@ public class InteractHandle : MonoBehaviour
 	float handleTime = 1.0f;
 	[SerializeField]
 	bool exclusive;
-	[SerializeField]
-	UISliderHandle slider;
-	float m_during;
+	public UnityEvent EnterEvent;
+	public UnityEvent ExitEvent;
 	IInteractable m_interactor;
 	IInteractable m_monopolist;
 
@@ -25,7 +24,6 @@ public class InteractHandle : MonoBehaviour
 		if (active)
 		{
 			m_interactor = GetComponent<IInteractable>();
-			slider?.Init(handleTime, 0, "Check...", UISliderHandle.TextType.Text);
 			Detector.OnEnter.AddListener(OnInterEnter);
 			Detector.OnExit.AddListener(OnInterExit);
 			Detector.OnStay.AddListener(OnInterStay);
@@ -41,37 +39,29 @@ public class InteractHandle : MonoBehaviour
 	void OnInterEnter(GameObject enter)
 	{
 		if (m_monopolist != null) return;
-		CharacterData character = enter.GetComponent<CharacterData>();
-		if (character && m_interactor is ItemDemander)
-		{
-			var demander = m_interactor as ItemDemander;
-			demander.OnInteractorEnter(character);
-		}
+		IInteractable interactor = enter.GetComponent<IInteractable>();
+		if (interactor != null) EnterEvent?.Invoke();
 	}
 
 	void OnInterExit(GameObject exiter)
 	{
-		if (m_monopolist != null && exiter.GetComponent<IInteractable>() == m_monopolist) m_monopolist = null;
-		if (exiter == Detector.lastInner && slider) slider.SetValue(handleTime, 0);
+		IInteractable interactor = exiter.GetComponent<IInteractable>();
+		if (interactor != null)
+		{
+			ExitEvent?.Invoke();
+			if (interactor == m_monopolist) m_monopolist = null;
+			if (interactor == m_interactor.CurrentInteractor) m_interactor.CurrentInteractor = null;
+		}
 	}
 
 	void OnInterStay(GameObject stayer, float duration)
 	{
-		if (m_monopolist != null || duration < 0.5f) return;
-		var target = stayer.GetComponent<IInteractable>();
-		if (m_interactor.CanInteract(target))
+		if (m_monopolist != null || duration < handleTime) return;
+		IInteractable interactor = stayer.GetComponent<IInteractable>();
+		if (m_interactor.CanInteract(interactor))
 		{
-			m_during += Time.deltaTime;
-			slider?.SetValue(handleTime, m_during, "Check...", UISliderHandle.TextType.Text);
-			if (m_during >= handleTime)
-			{
-				if (exclusive && m_monopolist == null)
-				{
-					m_monopolist = target;
-				}
-				target.InteractWith(m_interactor);
-				m_during = 0;
-			}
+			interactor.InteractWith(m_interactor);
+			if (exclusive && m_monopolist == null) m_monopolist = interactor;
 		}
 	}
 }

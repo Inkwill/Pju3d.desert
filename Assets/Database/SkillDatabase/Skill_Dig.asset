@@ -15,14 +15,14 @@ MonoBehaviour:
   SkillName: Dig
   SkillSprite: {fileID: 0}
   Description: 
-  Duration: 10
+  Duration: 5
   SkillAnim: Skill
   SkillClip: {fileID: 0}
   fxStep: 0
   fxOperating: 0
   fxImplement: 6
   TType: 1
-  CD: 10
+  CD: 1
   MP: 0
   IdleSkill: 1
   implementEffects:

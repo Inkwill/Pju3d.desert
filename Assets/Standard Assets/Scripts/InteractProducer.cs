@@ -20,6 +20,8 @@ public class InteractProducer : MonoBehaviour, IInteractable
 	public UnityEvent<GameObject, GameObject> InteractEvent;
 	public UnityEvent<GameObject> ExhaustedEvent;
 	public UIItemGrid itemGrid;
+	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
+	protected IInteractable m_interactor;
 
 	float m_cd;
 	int m_count;
