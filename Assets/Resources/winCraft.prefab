@@ -539,6 +539,7 @@ MonoBehaviour:
   uiFormulaElement: {fileID: 6351254998302004203, guid: 3dd14e883e9b61d4a9a4604ad0e0c09b,
     type: 3}
   uiFormulaRoot: {fileID: 2704931238172325666}
+  m_data: {fileID: 11400000, guid: 9dbc79753f9465246997065e1168a874, type: 2}
   product_Name: {fileID: 6353150171515420024}
   product_Desc: {fileID: 4255799740901068729}
   bt_Craft: {fileID: 7414328362229341251}
@@ -1327,6 +1328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 1
+  Prompt: 
 --- !u!1 &7506617108832388417
 GameObject:
   m_ObjectHideFlags: 0

@@ -51,13 +51,13 @@ public class StoryEvent : MonoBehaviour
 		if (m_completed || m_started || m_cd > 0 || !ConditionData.JudgmentList(Conditions)) return;
 		if (++m_triggerTimes < triggerTimes) return;
 		m_started = true;
-		UIWorldHud target_hud = character.GetComponentInChildren<UIWorldHud>();
-		UIWorldHud self_hud = GetComponentInChildren<UIWorldHud>();
+		UIHudBase target_hud = character.GetComponentInChildren<UIHudBase>();
+		UIHudBase self_hud = GetComponentInChildren<UIHudBase>();
 		StartCoroutine(Dialogue(self_hud, target_hud));
 		GameManager.StoryMode = storyMode;
 	}
 
-	IEnumerator Dialogue(UIWorldHud self_hud, UIWorldHud target_hud)
+	IEnumerator Dialogue(UIHudBase self_hud, UIHudBase target_hud)
 	{
 		foreach (var dialog in Dialogues)
 		{

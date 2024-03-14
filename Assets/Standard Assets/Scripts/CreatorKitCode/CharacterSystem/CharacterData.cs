@@ -48,6 +48,7 @@ public class CharacterData : HighlightableObject, IInteractable
 	public AIBase BaseAI => GetComponent<AIBase>();
 	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
 	protected IInteractable m_interactor;
+	public InteractData Data { get { return null; } }
 	float m_AttackCoolDown;
 
 	void Awake()

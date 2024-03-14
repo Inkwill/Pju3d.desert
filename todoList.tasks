@@ -32,24 +32,43 @@
 	✘	可交互道具需求 @cancelled (24-02-29 11:50)
 	✔	角色等级/升级/经验获得 @done (24-02-29 11:50)
 	✔	剧情事件添加条件判断 @done (24-03-01 10:06)
+	---- ✄ -----------------------@created(24-03-01 10:07)
 
+	---- ✄ -----------------------@created(24-03-12 11:05)
+	✔	craft过程表现 @done (24-03-12 15:49)
+	---- ✄ -----------------------@created(24-03-13 10:58)
+	✘	TimerSlider @cancelled (24-03-13 17:28)
+	✔	optimized code: IInteractable @done (24-03-13 20:5
+	✔	itemdemand 完善 @done (24-03-13 23:47)
+	---- ✄ -----------------------@created(24-03-14 14:36)
+	✔	worldhud -> uihud @critical @done (24-03-14 14:36)
+	☐	UIInteractWindow @critical
+
+
+	☐	pit建造 @critical
+	☐	前期流程：craft教学
+	☐	demo关卡：tdLevel @critical
+
+
+	✘	NPC旅店老板: 玩家阵营\固定位置\对话添加修理围栏目标(强制) @cancelled (24-03-13 11:00)
+	☐	宝箱：a. 野外刷新，需要钥匙   b.基地需要资源  c. 打图挖宝
+	☐	随机装备系统 @critical
 	☐	目标类型：防守 @critical
-	☐	基础资源的设计与实现 @critical
+	☐	基础资源：money、生命之源 @critical
 
-	☐	地基摆放功能 @critical
 	☐	slg战斗 @critical
 	☐	建筑交资源表现优化(交互区域、资源动画、音效)
-	☐	技能施放bug
+	✘	技能施放bug @cancelled (24-03-13 11:03)
 
 
 	☐	道具快捷使用栏位
 	☐	道具获取动画表现
 	☐	角色个性化标签：性格、星座、喜好道具
 	☐	new effect: 增加友好度
-	☐	NPC商品交易
-
 	☐	新建筑：钉板
 	☐	新建筑：陷阱
+	☐	NPC商品交易
+
 	☐	新建筑：箭塔
 
 	☐	优化受击表现（伤害数字、miss、调用)

@@ -6,10 +6,14 @@ using UnityEngine.UI;
 using TMPro;
 using CreatorKitCode;
 
-public class UICraftWindow : UIWindow
+public class UICraftWindow : UIWindow, IInteractable
 {
 	public GameObject uiFormulaElement;
 	public ToggleGroup uiFormulaRoot;
+
+	[SerializeField]
+	InteractData m_data;
+	public InteractData Data { get { return m_data; } }
 	[SerializeField]
 	TMP_Text product_Name;
 	[SerializeField]
@@ -21,7 +25,7 @@ public class UICraftWindow : UIWindow
 	FormulaData m_formula;
 	float m_craftingTime;
 	const float craftingDuring = 3.0f;
-
+	public IInteractable CurrentInteractor { get { return GameManager.CurHero; } set { if (value == null) Close(); } }
 
 	void Awake()
 	{
@@ -46,7 +50,6 @@ public class UICraftWindow : UIWindow
 
 	protected override void OnClose()
 	{
-		if (GameManager.CurHero.BaseAI.CurState == AIBase.State.INTERACTING) GameManager.CurHero.CurrentInteractor = null;
 		slider_crafting?.SetValue(craftingDuring, 0);
 		m_craftingTime = 0;
 	}
@@ -63,9 +66,18 @@ public class UICraftWindow : UIWindow
 			else m_requireItemBoxs[i].gameObject.SetActive(false);
 		}
 	}
+
+	public bool CanInteract(IInteractable target)
+	{
+		return gameObject.activeSelf && (CharacterData)target == GameManager.CurHero && GameManager.CurHero.BaseAI.isIdle;
+	}
+	public void InteractWith(IInteractable target)
+	{
+
+	}
 	public void Craft()
 	{
-		GameManager.CurHero.InteractWith(GameManager.CurHero);
+		GameManager.CurHero.InteractWith(this);
 		bt_Craft.interactable = false;
 		m_craftingTime = craftingDuring;
 	}
@@ -80,7 +92,7 @@ public class UICraftWindow : UIWindow
 				GameManager.CurHero.CurrentInteractor = null;
 				GameManager.StartWaitAction(0.1f, () => { Close(); m_formula.Craft(GameManager.CurHero.Inventory); VFXManager.PlayVFX(VFXType.SmokePoof, GameManager.CurHero.transform.position); });
 			}
-			if (GameManager.CurHero.BaseAI.CurState != AIBase.State.INTERACTING) { m_craftingTime = 0; Close(); }
+			if (!GameManager.CurHero.CanInteract(this)) { m_craftingTime = 0; Close(); }
 		}
 	}
 }

@@ -46,7 +46,7 @@ public class CharacterAnimHandle : MonoBehaviour
 			m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
 		if (curState == AIBase.State.INTERACTING)
 		{
-			string anim = m_character.CurrentInteractor.InteractAnim(m_character);
+			string anim = m_character.CurrentInteractor.Data.interactAnim;
 			if (anim != "") m_Animator.SetTrigger(anim);
 			else m_character.CurrentInteractor.InteractWith(m_character);
 		}

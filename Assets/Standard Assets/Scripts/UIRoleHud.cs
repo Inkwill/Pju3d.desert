@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using CreatorKitCode;
 using TMPro;
 
-public class UIRoleHud : UIWorldHud
+public class UIRoleHud : UIHudBase
 {
 	[SerializeField]
 	TMP_Text textName;

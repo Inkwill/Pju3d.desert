@@ -22,6 +22,7 @@ public class KeyValueData : ScriptableObject
 	public List<KeyValue<string, EffectData>> Effect;
 	public List<KeyValue<string, GoalData>> GameGoal;
 	public List<KeyValue<string, DropBox>> DropBox;
+	public List<KeyValue<string, InteractData>> Interactor;
 	public List<KeyValue<string, List<KeyValue<EffectData, string[]>>>> EffectGroup;
 
 	public static T GetValue<T>(List<KeyValue<string, T>> dic, string key)

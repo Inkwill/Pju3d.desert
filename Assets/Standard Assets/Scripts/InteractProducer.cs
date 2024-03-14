@@ -6,13 +6,14 @@ using UnityEngine.Events;
 public class InteractProducer : MonoBehaviour, IInteractable
 {
 	[SerializeField]
+	InteractData m_data;
+	public InteractData Data { get { return m_data; } }
+	[SerializeField]
 	ResItem resItem;
 	[SerializeField]
 	int maxCount = 10;
 	[SerializeField]
 	int initCount = 10;
-	[SerializeField]
-	string CollectAnim;
 	[SerializeField]
 	float m_replenishTime = 10;
 	public UnityEvent<GameObject, GameObject> InteractEvent;
@@ -51,11 +52,6 @@ public class InteractProducer : MonoBehaviour, IInteractable
 			return true;
 		}
 		return false;
-	}
-
-	public string InteractAnim(IInteractable target)
-	{
-		return CollectAnim;
 	}
 
 	public void InteractWith(IInteractable target)

@@ -8,14 +8,16 @@ using System.Linq;
 
 public class ItemDemander : TimerBehaviour, IInteractable
 {
-	public string demanderId;
-	public UnityEvent ReadyEvents;
-	public UnityEvent RefreshEvents;
+	[SerializeField]
+	InteractData m_data;
+	public InteractData Data { get { return m_data; } }
 	[SerializeField]
 	UIItemDemand ui_demand;
 	[SerializeField]
 	List<KeyValueData.KeyValue<Item, int>> DemandData;
 	InventorySystem.ItemDemand m_Demand;
+	public UnityEvent ReadyEvents;
+	public UnityEvent RefreshEvents;
 	[SerializeField]
 	bool autoActive;
 	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
@@ -33,11 +35,6 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		GetComponent<InteractHandle>()?.SetHandle(true);
 	}
 
-	public string InteractAnim(IInteractable target)
-	{
-		return "";
-	}
-
 	public bool CanInteract(IInteractable target)
 	{
 		return !m_Demand.Completed && !isStarted && target.CanInteract(this) && m_interactor == null;
@@ -53,7 +50,14 @@ public class ItemDemander : TimerBehaviour, IInteractable
 			{
 				ReadyEvents?.Invoke();
 				target.CurrentInteractor = null;
-				if (character != GameManager.CurHero)
+				if (character == GameManager.CurHero)
+				{
+					UIInteractWindow win = GameManager.GameUI.OpenWindow("winInteract") as UIInteractWindow;
+					win.Init(this);
+					GetComponent<InteractHandle>()?.ExitEvent.AddListener(() => win.Close());
+					win.bt_interact.onClick.AddListener(() => OnClick_Interact(win));
+				}
+				else
 				{
 					m_interactor = character;
 					character.Inventory.ItemAction += OnItemEvent;
@@ -64,11 +68,12 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		}
 	}
 
-	public void OnClick_Interact()
+	public void OnClick_Interact(UIInteractWindow win)
 	{
 		m_interactor = GameManager.CurHero;
 		GameManager.CurHero.Inventory.ItemAction += OnItemEvent;
 		m_Demand.Fulfill(GameManager.CurHero.Inventory);
+		win.Close();
 	}
 
 	protected override void OnRefresh()
@@ -84,7 +89,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 
 	protected override void OnBehaved()
 	{
-		m_target?.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, demanderId);
+		m_target?.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, m_data.Key);
 		m_target = null;
 	}
 
@@ -92,6 +97,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 	{
 		if (actionName == "Fulfill")
 		{
+			ui_demand.Show(m_Demand);
 			CharacterData character = m_interactor as CharacterData;
 			m_interactor = null;
 			if (character != null)
@@ -104,9 +110,8 @@ public class ItemDemander : TimerBehaviour, IInteractable
 					Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
 					StartCoroutine(UpdateDemand(item, itemCount));
 				}
-				else if (m_Demand.Completed) StartTimer();
+				if (m_Demand.Completed) StartTimer();
 			}
-			else ui_demand.Show(m_Demand);
 		}
 	}
 
@@ -126,8 +131,6 @@ public class ItemDemander : TimerBehaviour, IInteractable
 			{
 				Destroy(obj);
 			}
-			ui_demand.Show(m_Demand);
-			if (m_Demand.Completed) StartTimer();
 		}
 	}
 }

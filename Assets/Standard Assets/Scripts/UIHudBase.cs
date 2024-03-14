@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIWorldHud : MonoBehaviour
+public class UIHudBase : MonoBehaviour
 {
+	[SerializeField]
+	GameObject uiHudRoot;
 	[SerializeField]
 	Animator bubble_anim;
 	[SerializeField]
@@ -12,8 +14,37 @@ public class UIWorldHud : MonoBehaviour
 	bool m_bubble;
 	string m_storeBubble;
 	float m_bubbleDuration;
+	Transform m_worldRoot;
+	Vector3 m_worldScale;
+	bool m_uiShow;
+	void Start()
+	{
+		m_worldRoot = transform.parent;
+		m_worldScale = transform.localScale;
+	}
+	public void ShowWorldHud()
+	{
+		transform.SetParent(m_worldRoot);
+		transform.localScale = m_worldScale;
+		transform.forward = Camera.main.transform.forward;
+		transform.localPosition = Vector3.zero;
+		gameObject.SetActive(true);
+		m_uiShow = false;
+	}
+	public void ShowUIHud()
+	{
+		transform.SetParent(GameManager.GameUI.transform);
+		transform.position = Camera.main.WorldToScreenPoint(m_worldRoot.position);
+		transform.rotation = Quaternion.identity;
+		transform.localScale = Vector3.one;
+		gameObject.SetActive(true);
+		m_uiShow = true;
+	}
 	private void Update()
 	{
+		if (m_uiShow) transform.position = Camera.main.WorldToScreenPoint(m_worldRoot.position);
+		else transform.forward = Camera.main.transform.forward;
+
 		if (bubble_anim)
 		{
 			if (m_bubbleDuration > 0) m_bubbleDuration -= Time.deltaTime;
