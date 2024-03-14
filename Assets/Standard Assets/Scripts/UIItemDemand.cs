@@ -9,12 +9,13 @@ public class UIItemDemand : MonoBehaviour
 {
 	public enum ShowType
 	{
-		List,
-		OnlyOne
+		Demand,
+		OnlyOne,
+		Require
 	}
-	public ShowType Type = ShowType.List;
+	public ShowType Type = ShowType.Demand;
 
-	[ConditionalField(nameof(Type), false, ShowType.List)]
+	[ConditionalField(nameof(Type), false, ShowType.Demand)]
 	[SerializeField]
 	GameObject uiElement;
 	List<UIItemListBox> uiList;
@@ -30,17 +31,17 @@ public class UIItemDemand : MonoBehaviour
 	public void Show(InventorySystem.ItemDemand demand)
 	{
 		m_Demand = demand;
+		UIItemListBox[] uiList = GetComponentsInChildren<UIItemListBox>();
+		int index = 0;
+		UIItemListBox uiItem;
 		switch (Type)
 		{
-			case ShowType.List:
-				UIItemListBox[] uiList = GetComponentsInChildren<UIItemListBox>();
-				int index = 0;
-				UIItemListBox uiItem;
-				foreach (var item in m_Demand.Demand)
+			case ShowType.Demand:
+				foreach (var de in m_Demand.Demand)
 				{
 					if (uiList.Length > index) uiItem = uiList[index];
 					else uiItem = Instantiate(uiElement, transform, false).GetComponent<UIItemListBox>();
-					uiItem.SetDemandInfo(item, m_Demand.DemandLeft[item.Key]);
+					uiItem.SetDemandInfo(de, m_Demand.DemandLeft[de.Key]);
 					index++;
 				}
 				break;
@@ -49,6 +50,15 @@ public class UIItemDemand : MonoBehaviour
 				Item it = KeyValueData.GetValue<Item>(GameManager.Config.Item, itemKey);
 				m_itemIcon.sprite = it.ItemSprite;
 				m_demandSlider.value = m_Demand.GetProgress(itemKey);
+				break;
+			case ShowType.Require:
+				foreach (var de in m_Demand.Demand)
+				{
+					if (uiList.Length > index) uiItem = uiList[index];
+					else uiItem = Instantiate(uiElement, transform, false).GetComponent<UIItemListBox>();
+					uiItem.SetRequiredInfo(de.Key, m_Demand.Demand[de.Key]);
+					index++;
+				}
 				break;
 			default:
 				break;

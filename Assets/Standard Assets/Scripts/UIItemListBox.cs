@@ -23,9 +23,15 @@ public class UIItemListBox : MonoBehaviour
 	public void SetRequiredInfo(Item item, int requireCount)
 	{
 		_image.sprite = item.ItemSprite;
-		_num.text = requireCount.ToString();
 		int owned = GameManager.CurHero.Inventory.ItemCount(item.ItemName);
+		_num.text = $"{owned}/ {requireCount}";
 		_num.color = owned >= requireCount ? Color.green : Color.red;
 		gameObject.SetActive(true);
+	}
+
+	public void SetRequiredInfo(string itemKey, int requireCount)
+	{
+		Item it = KeyValueData.GetValue<Item>(GameManager.Config.Item, itemKey);
+		SetRequiredInfo(it, requireCount);
 	}
 }
