@@ -25,6 +25,7 @@ public class UIMainWindow : UIWindow
 	public UIGoalInfo uiGoalInfo;
 	public Image iconExp;
 	public Slider sliderWater;
+	public Animator bottomRoot;
 	Button[] m_buttons;
 	UISkillButton[] m_skillButtons;
 

@@ -13,6 +13,16 @@ public class UIInteractWindow : UIWindow
 	public UIItemDemand uiDemand;
 	IInteractable m_interactTarget;
 
+	protected override void OnOpen()
+	{
+		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("down");
+	}
+
+	protected override void OnClose()
+	{
+		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("up");
+	}
+
 	public void Init(IInteractable target, InventorySystem.ItemDemand demand)
 	{
 		m_interactTarget = target;
