@@ -11,18 +11,16 @@ public class InteractHandle : MonoBehaviour
 {
 	[SerializeField]
 	InteractOnTrigger Detector;
-	[SerializeField]
-	int maxActorCount = 1;
 	public UnityEvent EnterEvent;
 	public UnityEvent ExitEvent;
-	IInteractable m_passive;
+	IInteractable m_host;
 	List<IInteractable> m_interactived;
 
 	public void SetHandle(bool active)
 	{
 		if (active)
 		{
-			m_passive = GetComponent<IInteractable>();
+			m_host = GetComponent<IInteractable>();
 			m_interactived = new List<IInteractable>();
 			Detector.OnEnter.AddListener(OnInterEnter);
 			Detector.OnExit.AddListener(OnInterExit);
@@ -39,7 +37,7 @@ public class InteractHandle : MonoBehaviour
 
 	void OnInterEnter(GameObject enter)
 	{
-		if (m_interactived.Count >= maxActorCount) return;
+		if (m_interactived.Count >= m_host.Data.maxActorCount) return;
 		IInteractable interactor = enter.GetComponent<IInteractable>();
 		if (interactor != null) { EnterEvent?.Invoke(); }
 	}
@@ -50,18 +48,18 @@ public class InteractHandle : MonoBehaviour
 		if (interactor != null)
 		{
 			ExitEvent?.Invoke();
-			if (interactor == m_passive.CurrentInteractor) m_passive.CurrentInteractor = null;
+			if (interactor == m_host.CurrentInteractor) m_host.CurrentInteractor = null;
 			if (m_interactived.Contains(interactor)) m_interactived.Remove(interactor);
 		}
 	}
 
 	void OnInterStay(GameObject stayer, float duration)
 	{
-		if (duration < 0.5f || m_interactived.Count >= maxActorCount) return;
+		if (duration < 0.5f || m_interactived.Count >= m_host.Data.maxActorCount) return;
 		IInteractable interactor = stayer.GetComponent<IInteractable>();
-		if (m_passive.CanInteract(interactor) && !m_interactived.Contains(interactor))
+		if (m_host.CanInteract(interactor) && !m_interactived.Contains(interactor))
 		{
-			interactor.InteractWith(m_passive);
+			interactor.InteractWith(m_host);
 			m_interactived.Add(interactor);
 		}
 	}

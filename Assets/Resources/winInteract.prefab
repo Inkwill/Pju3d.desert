@@ -164,6 +164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6424002779094465337}
   - component: {fileID: 1138271198443161458}
+  - component: {fileID: 6404569651227790568}
   m_Layer: 5
   m_Name: itemGridList
   m_TagString: Untagged
@@ -214,6 +215,19 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &6404569651227790568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4846929759598150716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!1 &5562609230852930702
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,7 +745,8 @@ MonoBehaviour:
   uiDemand: {fileID: 7077381532581738910}
   m_uiGridBox: {fileID: 1038643921288610700, guid: b22a3192069ee0e44b21eb3661507dd0,
     type: 3}
-  m_uiGridRoot: {fileID: 6424002779094465337}
+  m_uiGridRoot: {fileID: 6404569651227790568}
+  bt_Confirm: {fileID: 1850136908774279218}
 --- !u!1 &7757456097823172655
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,12 +17,11 @@ public class UIManager : MonoBehaviour
 	public UIWindow win_LastOpen;
 	public UIWindow win_LastClose;
 	float during_check;
-	public UIWindow OpenWindow(string winName)
+
+	public UIWindow GetWindow(string winName)
 	{
 		if (m_winDic.ContainsKey(winName))
 		{
-			m_winDic[winName].gameObject.SetActive(true);
-			win_LastOpen = m_winDic[winName];
 			return m_winDic[winName];
 		}
 
@@ -30,11 +29,16 @@ public class UIManager : MonoBehaviour
 		if (newWindow)
 		{
 			newWindow = Instantiate(newWindow, transform);
-			newWindow.gameObject.name = newWindow.winName = winName;
 			m_winDic.Add(winName, newWindow);
-			win_LastOpen = newWindow;
+			newWindow.gameObject.SetActive(false);
 		}
 		return newWindow;
+	}
+	public UIWindow OpenWindow(string winName)
+	{
+		win_LastOpen = GetWindow(winName);
+		win_LastOpen.Open();
+		return win_LastOpen;
 	}
 
 	public void CloseAll()
@@ -50,7 +54,7 @@ public class UIManager : MonoBehaviour
 		if (m_winDic.ContainsKey(winName))
 		{
 			if (m_winDic[winName].gameObject.activeSelf) m_winDic[winName].Close();
-			else m_winDic[winName].gameObject.SetActive(true);
+			else m_winDic[winName].Open();
 		}
 		else OpenWindow(winName);
 

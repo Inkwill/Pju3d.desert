@@ -13,15 +13,14 @@ public class ItemDemander : TimerBehaviour, IInteractable
 	public InteractData Data { get { return m_data; } }
 	[SerializeField]
 	UIItemDemand ui_demand;
-	[SerializeField]
-	List<KeyValueData.KeyValue<Item, int>> DemandData;
-	InventorySystem.ItemDemand m_Demand;
 	public UnityEvent ReadyEvents;
 	public UnityEvent RefreshEvents;
 	[SerializeField]
 	bool autoActive;
 	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
 	protected IInteractable m_interactor;
+	Item m_curSelected;
+	InventorySystem.ItemDemand m_curDemand;
 	void Start()
 	{
 		ui_demand.gameObject.SetActive(false);
@@ -30,14 +29,14 @@ public class ItemDemander : TimerBehaviour, IInteractable
 
 	public void ActiveInteract()
 	{
-		m_Demand = new InventorySystem.ItemDemand(KeyValueData.ToDic(DemandData));
-		ui_demand.Show(m_Demand);
+		if (m_data.demands.Count > 0) m_curDemand = m_data.demands[0].Instance();
+		ui_demand.Show(m_curDemand);
 		GetComponent<InteractHandle>()?.SetHandle(true);
 	}
 
 	public bool CanInteract(IInteractable target)
 	{
-		return !m_Demand.Completed && !isStarted && target.CanInteract(this) && m_interactor == null;
+		return !m_curDemand.Completed && !isStarted && target.CanInteract(this) && m_interactor == null;
 	}
 
 	public void InteractWith(IInteractable target)
@@ -45,15 +44,16 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		if (m_interactor == null && target is Character)
 		{
 			var character = target as Character;
-			var submitable = m_Demand.Submittable(character.Inventory);
+			var submitable = m_curDemand.Submittable(character.Inventory);
 			if (submitable.Values.Sum() > 0)
 			{
 				ReadyEvents?.Invoke();
 				target.CurrentInteractor = null;
 				if (character == GameManager.CurHero)
 				{
-					UIInteractWindow win = GameManager.GameUI.OpenWindow("winInteract") as UIInteractWindow;
-					win.Init(this, m_Demand);
+					UIInteractWindow win = GameManager.GameUI.GetWindow("winInteract") as UIInteractWindow;
+					win.Init(this);
+					win.Open();
 					GetComponent<InteractHandle>()?.ExitEvent.AddListener(() => win.Close());
 					win.bt_interact.onClick.AddListener(() => OnClick_Interact(win));
 				}
@@ -61,7 +61,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 				{
 					m_interactor = character;
 					character.Inventory.ItemAction += OnItemEvent;
-					m_Demand.Fulfill(character.Inventory);
+					m_curDemand.Fulfill(character.Inventory);
 				}
 			}
 			else { ui_demand.Fail(); target.CurrentInteractor = null; }
@@ -72,7 +72,8 @@ public class ItemDemander : TimerBehaviour, IInteractable
 	{
 		m_interactor = GameManager.CurHero;
 		GameManager.CurHero.Inventory.ItemAction += OnItemEvent;
-		m_Demand.Fulfill(GameManager.CurHero.Inventory);
+		m_curDemand.Fulfill(GameManager.CurHero.Inventory);
+		m_curSelected = win.SelectedItem;
 		win.Close();
 	}
 
@@ -87,17 +88,27 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		//if (m_character) m_character.ChangeState(CharacterControl.State.WORKING, true);
 	}
 
+	protected override void OnEnd()
+	{
+		Destroy(gameObject);
+	}
+
 	protected override void OnBehaved()
 	{
-		m_target?.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, m_data.Key);
-		m_target = null;
+		m_data.InteractBehave(transform, m_curSelected);
+		Character character = m_interactor as Character;
+		if (character)
+		{
+			character.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, m_data.Key);
+		}
+		m_interactor = null;
 	}
 
 	void OnItemEvent(Item item, string actionName, int itemCount)
 	{
 		if (actionName == "Fulfill")
 		{
-			ui_demand.Show(m_Demand);
+			ui_demand.Show(m_curDemand);
 			Character character = m_interactor as Character;
 			m_interactor = null;
 			if (character != null)
@@ -110,7 +121,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 					Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
 					StartCoroutine(UpdateDemand(item, itemCount));
 				}
-				if (m_Demand.Completed) StartTimer();
+				if (m_curDemand.Completed) StartTimer();
 			}
 		}
 	}

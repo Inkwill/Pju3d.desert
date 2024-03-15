@@ -72,6 +72,8 @@ MonoBehaviour:
     Value: {fileID: 0}
   - Key: DropEffect
     Value: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
+  - Key: summon
+    Value: {fileID: 11400000, guid: 5a5deaa6e62beb846b029334991f1576, type: 2}
   GameGoal:
   - Key: main00
     Value: {fileID: 11400000, guid: c9d1571e6754c2b48971139a25d8d22f, type: 2}
@@ -92,6 +94,7 @@ MonoBehaviour:
     Value: {fileID: 11400000, guid: a1f74af427f009e48b6994d04c0e6703, type: 2}
   - Key: drop_water
     Value: {fileID: 11400000, guid: 6cc6fd01ff8e9a0478713b77d07a0c10, type: 2}
+  Interactor: []
   EffectGroup:
   - Key: treeOnDamageDrop
     Value:

@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27382125d9f513c4fa1ee922dd71b4f7, type: 3}
   m_Name: interact_defence
   m_EditorClassIdentifier: 
+  Type: 0
   Key: Damaged fence
-  interactAnim: Skill
-  icon: {fileID: 21300000, guid: 0c6de69acca756c409be4810a8510ac5, type: 3}
-  Description: Damaged fence
+  interactAnim: 
+  maxActorCount: 1
+  devices:
+  - {fileID: 11400000, guid: 93773d270f0e28144a3227c068edd713, type: 2}
+  demands:
+  - {fileID: 11400000, guid: ac4f547b15baa674dad0a12aaa78092e, type: 2}

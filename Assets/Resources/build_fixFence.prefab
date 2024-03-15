@@ -93,7 +93,6 @@ GameObject:
   - component: {fileID: 6431526496688449692}
   - component: {fileID: 4424487881375952332}
   - component: {fileID: 5317684676727575447}
-  - component: {fileID: 8934997105747031285}
   m_Layer: 8
   m_Name: build_fixFence
   m_TagString: building
@@ -132,7 +131,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Detector: {fileID: 2271781031681987671}
-  maxActorCount: 1
   EnterEvent:
     m_PersistentCalls:
       m_Calls:
@@ -169,19 +167,7 @@ MonoBehaviour:
   cd: 0
   behaveEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8934997105747031285}
-        m_TargetAssemblyTypeName: EffectTrigger, Assembly-CSharp-firstpass
-        m_MethodName: TakEffects
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   processEvent:
     m_PersistentCalls:
       m_Calls:
@@ -198,36 +184,14 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_data: {fileID: 11400000, guid: f2fc9e8d26e10b2458333379942bd199, type: 2}
+  ui_demand: {fileID: 6821318282727165373}
   ReadyEvents:
     m_PersistentCalls:
       m_Calls: []
   RefreshEvents:
     m_PersistentCalls:
       m_Calls: []
-  ui_demand: {fileID: 6821318282727165373}
-  DemandData:
-  - Key: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
-    Value: 2
   autoActive: 1
---- !u!114 &8934997105747031285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2295467714160992369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79dceb943f782ea4cb697a562b4ccdfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Effects:
-  - Key: {fileID: 11400000, guid: 5a5deaa6e62beb846b029334991f1576, type: 2}
-    Value:
-    - building_fence
-    - self
-  - Key: {fileID: 11400000, guid: 08a26aedc7f9d2d4786984f013ed2005, type: 2}
-    Value: []
 --- !u!1 &5779703747271497825
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,7 +596,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8022162547644222930, guid: 426b00da28da05c42951410582a493c1, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 426b00da28da05c42951410582a493c1, type: 3}

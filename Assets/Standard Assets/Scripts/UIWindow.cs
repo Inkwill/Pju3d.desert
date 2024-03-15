@@ -14,9 +14,10 @@ public class UIWindow : MonoBehaviour
 	public AudioClip CloseClip;
 	Animator m_anim;
 
-	void OnEnable()
+	public void Open()
 	{
 		Instance = this;
+		gameObject.SetActive(true);
 		m_anim = GetComponent<Animator>();
 		if (OpenClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = OpenClip });
 		if (winMask) winMask.enabled = false;

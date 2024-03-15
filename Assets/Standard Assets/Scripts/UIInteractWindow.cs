@@ -15,25 +15,41 @@ public class UIInteractWindow : UIWindow
 	[SerializeField]
 	GameObject m_uiGridBox;
 	[SerializeField]
-	Transform m_uiGridRoot;
-	IInteractable m_interactTarget;
+	ToggleGroup m_uiGridRoot;
+	[SerializeField]
+	Button bt_Confirm;
+	IInteractable m_interactor;
+	public Item SelectedItem { get { return m_selected; } }
+	Item m_selected;
 
 	protected override void OnOpen()
 	{
 		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("down");
-		if (m_interactTarget is InteractPit)
+		if (m_interactor.Data.Type == InteractData.InteractType.DeviceCreater)
 		{
-			var udgdEntries = GameManager.CurHero.Inventory.Entries.Where(en => en != null && en.Item is UndergroundItem).ToArray();
-			var elements = Helpers.AdjustElements<UIElementBase>(m_uiGridRoot, udgdEntries.Length, m_uiGridBox);
+			var dvEntries = GameManager.CurHero.Inventory.Entries.Where(en => en != null && en.Item is DeviceItem).ToArray();
+			var elements = Helpers.AdjustElements<UIElementBase>(m_uiGridRoot.transform, dvEntries.Length, m_uiGridBox);
 			for (int i = 0; i < elements.Length; i++)
 			{
 				UIElementBase element = elements[i].GetComponent<UIElementBase>();
-				UndergroundItem udgdItem = udgdEntries[i].Item as UndergroundItem;
-				element.icon.sprite = udgdItem.ItemSprite;
-				element.count.text = udgdEntries[i].Count.ToString();
+				DeviceItem device = dvEntries[i].Item as DeviceItem;
+				element.icon.sprite = device.ItemSprite;
+				element.count.text = dvEntries[i].Count.ToString();
+				element.toggle.group = m_uiGridRoot;
+				element.toggle.onValueChanged.AddListener((value) => { if (value) UpdateInfo(device, m_interactor.Data.demands[0].Instance()); });
 				element.GetComponent<Button>()?.onClick.AddListener(() => Close());
 			}
 		}
+	}
+
+	public void UpdateInfo(DeviceItem device, InventorySystem.ItemDemand demand)
+	{
+		m_selected = device;
+		Name.text = m_selected.ItemName;
+		icon.sprite = m_selected.ItemSprite;
+		Desc.text = m_selected.Description;
+		bt_Confirm.interactable = true;
+		uiDemand.Show(demand);
 	}
 
 	protected override void OnClose()
@@ -41,13 +57,9 @@ public class UIInteractWindow : UIWindow
 		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("up");
 	}
 
-	public void Init(IInteractable target, InventorySystem.ItemDemand demand = null)
+	public void Init(IInteractable interactor)
 	{
-		m_interactTarget = target;
-		Name.text = target.Data.Key;
-		icon.sprite = target.Data.icon;
-		Desc.text = target.Data.Description;
-		if (demand != null) uiDemand?.Show(demand);
+		m_interactor = interactor;
 	}
 
 }

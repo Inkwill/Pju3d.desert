@@ -44,7 +44,6 @@ namespace CreatorKitCode
 				Demand = demand;
 				DemandLeft = new Dictionary<string, int>(demand);
 			}
-
 			public bool Completed
 			{
 				get { return DemandLeft.Values.Sum() < 1; }
