@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27382125d9f513c4fa1ee922dd71b4f7, type: 3}
   m_Name: interact_craft
   m_EditorClassIdentifier: 
+  Type: 0
   Key: craft
+  BehavePrompt: Craft
   interactAnim: Respawn
-  icon: {fileID: 21300000, guid: 37665b2ddd98b1849afa610bb8214b9e, type: 3}
-  Description: 
+  maxActorCount: 1
+  devices: []
+  demands: []

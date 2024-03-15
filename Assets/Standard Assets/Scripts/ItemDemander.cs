@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using CreatorKitCode;
 using DG.Tweening;
 using System.Linq;
+using Unity.VisualScripting.Dependencies.Sqlite;
 
 public class ItemDemander : TimerBehaviour, IInteractable
 {
@@ -19,8 +20,8 @@ public class ItemDemander : TimerBehaviour, IInteractable
 	bool autoActive;
 	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
 	protected IInteractable m_interactor;
-	Item m_curSelected;
-	InventorySystem.ItemDemand m_curDemand;
+	int m_curSelected;
+	List<InventorySystem.ItemDemand> m_demands;
 	void Start()
 	{
 		ui_demand.gameObject.SetActive(false);
@@ -29,14 +30,18 @@ public class ItemDemander : TimerBehaviour, IInteractable
 
 	public void ActiveInteract()
 	{
-		if (m_data.demands.Count > 0) m_curDemand = m_data.demands[0].Instance();
-		ui_demand.Show(m_curDemand);
+		m_demands = new List<InventorySystem.ItemDemand>();
+		foreach (var data in m_data.demands)
+		{
+			m_demands.Add(data.CreatItemDemand());
+		}
+		if (m_demands.Count > 0) ui_demand.Show(m_demands[0]);
 		GetComponent<InteractHandle>()?.SetHandle(true);
 	}
 
 	public bool CanInteract(IInteractable target)
 	{
-		return !m_curDemand.Completed && !isStarted && target.CanInteract(this) && m_interactor == null;
+		return !m_demands[m_curSelected].Completed && !isStarted && target.CanInteract(this) && m_interactor == null;
 	}
 
 	public void InteractWith(IInteractable target)
@@ -44,7 +49,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		if (m_interactor == null && target is Character)
 		{
 			var character = target as Character;
-			var submitable = m_curDemand.Submittable(character.Inventory);
+			var submitable = m_demands[m_curSelected].Submittable(character.Inventory);
 			if (submitable.Values.Sum() > 0)
 			{
 				ReadyEvents?.Invoke();
@@ -52,7 +57,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 				if (character == GameManager.CurHero)
 				{
 					UIInteractWindow win = GameManager.GameUI.GetWindow("winInteract") as UIInteractWindow;
-					win.Init(this);
+					win.Init(this, m_demands);
 					win.Open();
 					GetComponent<InteractHandle>()?.ExitEvent.AddListener(() => win.Close());
 					win.bt_interact.onClick.AddListener(() => OnClick_Interact(win));
@@ -61,7 +66,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 				{
 					m_interactor = character;
 					character.Inventory.ItemAction += OnItemEvent;
-					m_curDemand.Fulfill(character.Inventory);
+					m_demands[m_curSelected].Fulfill(character.Inventory);
 				}
 			}
 			else { ui_demand.Fail(); target.CurrentInteractor = null; }
@@ -72,8 +77,10 @@ public class ItemDemander : TimerBehaviour, IInteractable
 	{
 		m_interactor = GameManager.CurHero;
 		GameManager.CurHero.Inventory.ItemAction += OnItemEvent;
-		m_curDemand.Fulfill(GameManager.CurHero.Inventory);
-		m_curSelected = win.SelectedItem;
+		m_demands[m_curSelected].Fulfill(GameManager.CurHero.Inventory);
+		m_curSelected = win.SelectedIndex;
+		win.bt_interact.onClick.RemoveAllListeners();
+		win.bt_interact.interactable = false;
 		win.Close();
 	}
 
@@ -108,7 +115,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 	{
 		if (actionName == "Fulfill")
 		{
-			ui_demand.Show(m_curDemand);
+			ui_demand.Show(m_demands[m_curSelected]);
 			Character character = m_interactor as Character;
 			m_interactor = null;
 			if (character != null)
@@ -121,7 +128,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 					Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
 					StartCoroutine(UpdateDemand(item, itemCount));
 				}
-				if (m_curDemand.Completed) StartTimer();
+				if (m_demands[m_curSelected].Completed) StartTimer();
 			}
 		}
 	}

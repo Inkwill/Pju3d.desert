@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MyBox;
 using UnityEngine;
 using CreatorKitCode;
+using UnityEngine.iOS;
 
 [CreateAssetMenu(fileName = "InteractData", menuName = "Data/InteractData", order = 200)]
 public class InteractData : ScriptableObject
@@ -13,6 +14,7 @@ public class InteractData : ScriptableObject
 	}
 	public InteractType Type;
 	public string Key;
+	public string BehavePrompt;
 	public string interactAnim;
 	public int maxActorCount = 1;
 
@@ -21,12 +23,12 @@ public class InteractData : ScriptableObject
 	[ConditionalField(nameof(Type), false, InteractType.DeviceCreater)]
 	public List<DemandData> demands;
 
-	public void InteractBehave(Transform trans, Item item)
+	public void InteractBehave(Transform trans, int index)
 	{
 		switch (Type)
 		{
 			case InteractType.DeviceCreater:
-				DeviceItem device = item as DeviceItem;
+				DeviceItem device = devices[index];
 				if (device != null && device.prefab != null)
 					Instantiate(device.prefab, trans.position, trans.rotation);
 				break;

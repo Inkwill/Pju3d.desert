@@ -56,7 +56,7 @@ public class UIItemDemand : MonoBehaviour
 				{
 					if (uiList.Length > index) uiItem = uiList[index];
 					else uiItem = Instantiate(uiElement, transform, false).GetComponent<UIItemListBox>();
-					uiItem.SetRequiredInfo(de.Key, m_Demand.Demand[de.Key]);
+					uiItem.SetRequiredInfo(de.Key, m_Demand.DemandLeft[de.Key]);
 					index++;
 				}
 				break;

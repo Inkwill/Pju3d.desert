@@ -6,11 +6,9 @@ using UnityEngine;
 public class DemandData : ScriptableObject
 {
 	public List<KeyValueData.KeyValue<Item, int>> itemDemand;
-	InventorySystem.ItemDemand m_instance;
 
-	public InventorySystem.ItemDemand Instance()
+	public InventorySystem.ItemDemand CreatItemDemand()
 	{
-		if (m_instance != null) return m_instance;
-		else return new InventorySystem.ItemDemand(KeyValueData.ToDic(itemDemand));
+		return new InventorySystem.ItemDemand(KeyValueData.ToDic(itemDemand));
 	}
 }

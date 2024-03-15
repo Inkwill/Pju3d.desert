@@ -49,6 +49,13 @@ namespace CreatorKitCode
 				get { return DemandLeft.Values.Sum() < 1; }
 				set { }
 			}
+
+			public bool canCompleted(InventorySystem inventory)
+			{
+				var submits = Submittable(inventory);
+				return submits.Values.Sum() == DemandLeft.Values.Sum();
+			}
+
 			public Dictionary<string, int> Demand;
 			public Dictionary<string, int> DemandLeft;
 			public Dictionary<string, int> Submittable(InventorySystem inventory)

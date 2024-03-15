@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27382125d9f513c4fa1ee922dd71b4f7, type: 3}
   m_Name: interact_pit
   m_EditorClassIdentifier: 
+  Type: 0
   Key: Pit
+  BehavePrompt: Install
   interactAnim: Skill
-  icon: {fileID: 21300000, guid: f571e85886790c64cb408ce3b6e18a17, type: 3}
-  Description: Pit
+  maxActorCount: 1
+  devices: []
+  demands: []

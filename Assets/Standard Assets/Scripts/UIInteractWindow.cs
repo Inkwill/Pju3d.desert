@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using System.Linq;
 using CreatorKitCode;
 using UnityEngine;
@@ -18,10 +18,19 @@ public class UIInteractWindow : UIWindow
 	ToggleGroup m_uiGridRoot;
 	[SerializeField]
 	Button bt_Confirm;
+	[SerializeField]
+	TMP_Text promptText;
 	IInteractable m_interactor;
-	public Item SelectedItem { get { return m_selected; } }
-	Item m_selected;
+	List<InventorySystem.ItemDemand> m_demands;
 
+	public int SelectedIndex { get { return m_selectedIndex; } }
+	int m_selectedIndex;
+
+	public void Init(IInteractable interactor, List<InventorySystem.ItemDemand> demands)
+	{
+		m_interactor = interactor;
+		m_demands = demands;
+	}
 	protected override void OnOpen()
 	{
 		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("down");
@@ -36,19 +45,22 @@ public class UIInteractWindow : UIWindow
 				element.icon.sprite = device.ItemSprite;
 				element.count.text = dvEntries[i].Count.ToString();
 				element.toggle.group = m_uiGridRoot;
-				element.toggle.onValueChanged.AddListener((value) => { if (value) UpdateInfo(device, m_interactor.Data.demands[0].Instance()); });
-				element.GetComponent<Button>()?.onClick.AddListener(() => Close());
+				element.toggle.onValueChanged.AddListener((value) => { if (value) UpdateInfo(i); });
 			}
+			if (elements.Length > 0) UpdateInfo(0);
 		}
 	}
 
-	public void UpdateInfo(DeviceItem device, InventorySystem.ItemDemand demand)
+	public void UpdateInfo(int selected)
 	{
-		m_selected = device;
-		Name.text = m_selected.ItemName;
-		icon.sprite = m_selected.ItemSprite;
-		Desc.text = m_selected.Description;
-		bt_Confirm.interactable = true;
+		m_selectedIndex = selected;
+		var item = m_interactor.Data.devices[selected];
+		var demand = m_demands[selected];
+		Name.text = item.ItemName;
+		icon.sprite = item.ItemSprite;
+		Desc.text = item.Description;
+		promptText.text = demand.canCompleted(GameManager.CurHero.Inventory) ? m_interactor.Data.BehavePrompt : "Submit";
+		bt_Confirm.interactable = demand.Submittable(GameManager.CurHero.Inventory).Values.Sum() > 0;
 		uiDemand.Show(demand);
 	}
 
@@ -56,10 +68,4 @@ public class UIInteractWindow : UIWindow
 	{
 		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("up");
 	}
-
-	public void Init(IInteractable interactor)
-	{
-		m_interactor = interactor;
-	}
-
 }

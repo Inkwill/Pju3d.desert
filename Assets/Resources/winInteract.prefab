@@ -747,6 +747,7 @@ MonoBehaviour:
     type: 3}
   m_uiGridRoot: {fileID: 6404569651227790568}
   bt_Confirm: {fileID: 1850136908774279218}
+  promptText: {fileID: 2999757516305506647}
 --- !u!1 &7757456097823172655
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,7 +28,7 @@ public class InteractPit : TimerBehaviour, IInteractable
 			if (character == GameManager.CurHero)
 			{
 				UIInteractWindow win = GameManager.GameUI.OpenWindow("winInteract") as UIInteractWindow;
-				win.Init(this);
+				//win.Init(this);
 				GetComponent<InteractHandle>()?.ExitEvent.AddListener(() => win.Close());
 				win.bt_interact.onClick.AddListener(() => OnClick_Interact(win));
 			}
