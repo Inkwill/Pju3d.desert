@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class UIHudBase : MonoBehaviour
 {
 	[SerializeField]
-	GameObject uiHudRoot;
-	[SerializeField]
 	Animator bubble_anim;
 	[SerializeField]
 	Text bubble_text;
@@ -17,7 +15,7 @@ public class UIHudBase : MonoBehaviour
 	Transform m_worldRoot;
 	Vector3 m_worldScale;
 	bool m_uiShow;
-	void Start()
+	void Awake()
 	{
 		m_worldRoot = transform.parent;
 		m_worldScale = transform.localScale;

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
+using System;
 
 public class UIInventoryWindow : UIWindow
 {
@@ -133,6 +134,12 @@ public class UIInventoryWindow : UIWindow
 					GameManager.CurHero.Inventory.MinusItem(m_SelectedSlot.InventoryID, 1);
 				m_SelectedSlot.tog.isOn = false;
 				Load();
+				break;
+			case "Place":
+				DeviceItem device = m_SelectedSlot.item as DeviceItem;
+				PlaceHandle handle = GameManager.CurHero.gameObject.AddComponent<PlaceHandle>();
+				handle.SetDevice(device);
+				BackToMain();
 				break;
 			case "Craft":
 				GameManager.GameUI.SwitchWindow("winCraft");

@@ -14,6 +14,8 @@ public class UIRoleHud : UIHudBase
 	Animator story_anim;
 	[SerializeField]
 	Slider sliderInteract;
+	[SerializeField]
+	Button btPlace;
 	Character m_character;
 
 	void Start()
@@ -28,6 +30,7 @@ public class UIRoleHud : UIHudBase
 		{
 			sliderPg?.gameObject.SetActive(false);
 		});
+		btPlace.gameObject.SetActive(false);
 	}
 
 	void OnCharacterStating(AIBase.State curState)
@@ -70,5 +73,18 @@ public class UIRoleHud : UIHudBase
 			default:
 				break;
 		}
+	}
+
+	public void ShowPlaceButton()
+	{
+		btPlace.gameObject.SetActive(true);
+		ShowUIHud();
+	}
+
+	public void OnClick_Place()
+	{
+		m_character.GetComponent<PlaceHandle>()?.PlaceDevice();
+		btPlace.gameObject.SetActive(false);
+		ShowWorldHud();
 	}
 }

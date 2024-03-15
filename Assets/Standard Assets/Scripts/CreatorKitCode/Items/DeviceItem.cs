@@ -7,5 +7,6 @@ using CreatorKitCode;
 public class DeviceItem : Item
 {
 	public GameObject prefab;
+	public GameObject modle;
 	public bool undergroud;
 }

@@ -14,6 +14,7 @@ namespace CreatorKitCodeInternal
 		public Button btDrop;
 		public Button btUse;
 		public Button btGive;
+		public Button btPlace;
 
 
 		void Start()
@@ -31,12 +32,14 @@ namespace CreatorKitCodeInternal
 				DescriptionText.text = slot.item.GetDescription();
 				EquipmentItem equItem = slot.item as EquipmentItem;
 				UsableItem useItem = slot.item as UsableItem;
+				DeviceItem device = slot.item as DeviceItem;
 				if (GameManager.StoryListener.CurrentTeller != null)
 				{
 					btEquip.gameObject.SetActive(false);
 					btUnEquip.gameObject.SetActive(false);
 					btDrop.gameObject.SetActive(false);
 					btUse.gameObject.SetActive(false);
+					btPlace.gameObject.SetActive(false);
 					btGive.gameObject.SetActive(!slot.equipment);
 				}
 				else
@@ -44,8 +47,9 @@ namespace CreatorKitCodeInternal
 					btGive.gameObject.SetActive(false);
 					btEquip.gameObject.SetActive(!slot.equipment && equItem);
 					btUnEquip.gameObject.SetActive(slot.equipment);
-					btDrop.gameObject.SetActive(!slot.equipment);
+					btDrop.gameObject.SetActive(!slot.equipment && !device);
 					btUse.gameObject.SetActive(useItem);
+					btPlace.gameObject.SetActive(device && !device.undergroud);
 				}
 				btUnEquip.interactable = GameManager.CurHero.BaseAI.isIdle;
 			}

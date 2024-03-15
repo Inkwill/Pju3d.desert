@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using MyBox;
 using UnityEngine;
 using CreatorKitCode;
-using UnityEngine.iOS;
 
 [CreateAssetMenu(fileName = "InteractData", menuName = "Data/InteractData", order = 200)]
 public class InteractData : ScriptableObject
