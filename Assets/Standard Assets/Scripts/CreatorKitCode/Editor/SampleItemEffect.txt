@@ -5,7 +5,7 @@ using CreatorKitCode;
 
 public class {EFFECTNAME} : UsableItem.UsageEffect
 {
-    public override bool Use(CharacterData user)
+    public override bool Use(Character user)
     {
         return false;
     }

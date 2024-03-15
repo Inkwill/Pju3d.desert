@@ -6,23 +6,49 @@ using TMPro;
 using MyBox;
 
 
-public class InteractPit : TimerBehaviour
+public class InteractPit : TimerBehaviour, IInteractable
 {
 	[SerializeField]
-	GameObject uiPlaceRoot;
-	[SerializeField]
-	Button btPlace;
+	InteractData m_data;
+	public InteractData Data { get { return m_data; } }
 	float m_initHeight;
 	bool m_actived;
 	float m_step = 0.1f;
+	public IInteractable CurrentInteractor { get; set; }
+	IInteractable m_interactor;
+	public bool CanInteract(IInteractable target)
+	{
+		return m_actived && target.CanInteract(this) && m_interactor == null;
+	}
+	public void InteractWith(IInteractable target)
+	{
+		if (m_interactor == null && target is Character)
+		{
+			var character = target as Character;
+			if (character == GameManager.CurHero)
+			{
+				UIInteractWindow win = GameManager.GameUI.OpenWindow("winInteract") as UIInteractWindow;
+				win.Init(this);
+				GetComponent<InteractHandle>()?.ExitEvent.AddListener(() => win.Close());
+				win.bt_interact.onClick.AddListener(() => OnClick_Interact(win));
+			}
+		}
+		else { target.CurrentInteractor = null; }
+	}
+
+	public void OnClick_Interact(UIInteractWindow win)
+	{
+		m_interactor = GameManager.CurHero;
+		win.Close();
+	}
 
 	protected override void OnStart()
 	{
 		base.OnStart();
+		GetComponent<InteractHandle>()?.SetHandle(true);
 		m_initHeight = Terrain.activeTerrain.SampleHeight(transform.position);
 		m_actived = true;
-		uiPlaceRoot.SetActive(false);
-		btPlace.interactable = true;
+
 	}
 
 	protected override void OnProcessing(float completed)
@@ -41,7 +67,6 @@ public class InteractPit : TimerBehaviour
 	void DisActived()
 	{
 		m_actived = false;
-		btPlace.interactable = false;
 	}
 
 	void OnDestroy()
@@ -51,6 +76,6 @@ public class InteractPit : TimerBehaviour
 
 	public void Place()
 	{
-		uiPlaceRoot.gameObject.SetActive(true);
+
 	}
 }

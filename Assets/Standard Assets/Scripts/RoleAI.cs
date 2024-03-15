@@ -54,7 +54,7 @@ public class RoleAI : AIBase
 			if (CurrentEnemy != null) { SetState(State.PURSUING); return; }
 			else if (EnemyDetector.Inners.Count > 0)
 			{
-				m_character.SetEnemy(EnemyDetector.GetNearest().GetComponent<CharacterData>());
+				m_character.SetEnemy(EnemyDetector.GetNearest().GetComponent<Character>());
 				SetState(State.PURSUING);
 				return;
 			}

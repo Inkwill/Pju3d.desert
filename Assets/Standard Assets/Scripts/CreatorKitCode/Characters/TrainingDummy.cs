@@ -7,14 +7,14 @@ namespace CreatorKitCodeInternal
 {
 	public class TrainingDummy : MonoBehaviour
 	{
-		CharacterData m_CharData;
+		Character m_CharData;
 
 		float m_HealTimer = 0.0f;
 
 		// Start is called before the first frame update
 		void Start()
 		{
-			m_CharData = GetComponent<CharacterData>();
+			m_CharData = GetComponent<Character>();
 
 			m_CharData.DamageEvent.AddListener((damage) =>
 			{

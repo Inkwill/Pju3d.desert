@@ -8,15 +8,15 @@ using System;
 public class StatisticsHandle : MonoBehaviour
 {
 	public Action<GameGoalSystem.GoalType, Dictionary<string, int>> UpdateAction;
-	public CharacterData Owner { get { return m_owner; } }
+	public Character Owner { get { return m_owner; } }
 	Dictionary<string, int> m_AddItemCount;
 	Dictionary<string, int> m_ItemDemandCount;
 	Dictionary<string, int> m_KillEnemyCount;
-	CharacterData m_owner;
+	Character m_owner;
 
 	void Start()
 	{
-		m_owner = GetComponent<CharacterData>();
+		m_owner = GetComponent<Character>();
 		m_AddItemCount = new Dictionary<string, int>();
 		m_ItemDemandCount = new Dictionary<string, int>();
 		m_KillEnemyCount = new Dictionary<string, int>();
@@ -51,7 +51,7 @@ public class StatisticsHandle : MonoBehaviour
 		}
 	}
 
-	void OnKillEnemyCount(CharacterData enemy)
+	void OnKillEnemyCount(Character enemy)
 	{
 		Record(m_KillEnemyCount, enemy.CharacterName, 1);
 		UpdateAction?.Invoke(GameGoalSystem.GoalType.KillEnemy, new Dictionary<string, int> { { enemy.CharacterName, 1 } });

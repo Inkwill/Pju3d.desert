@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
 {
 	public float speed = 8f;
 	public Damage damage;
-	public CharacterData target;
+	public Character target;
 
 	void Update()
 	{

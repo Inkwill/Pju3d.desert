@@ -108,12 +108,12 @@ namespace CreatorKitCode
 		public InventoryEntry[] Entries = new InventoryEntry[m_baseSlots];
 		public Action<Item, string, int> ItemAction;
 		public Dictionary<ResItem.ResType, ResInventory> ResInventories;
-		CharacterData m_Owner;
+		Character m_Owner;
 		public int SlotsNum { get { return m_baseSlots; } }
 		public int CurSlotsNum { get { return Entries.Where(en => en != null).Count(); } }
 		static int m_baseSlots = 10;
 
-		public void Init(CharacterData owner)
+		public void Init(Character owner)
 		{
 			m_Owner = owner;
 			ResInventories = new Dictionary<ResItem.ResType, ResInventory>();
@@ -152,6 +152,19 @@ namespace CreatorKitCode
 			}
 			return count;
 		}
+		public int ItemCount<T>()
+		{
+			int count = 0;
+			for (int i = 0; i < SlotsNum; ++i)
+			{
+				if (Entries[i] != null)
+				{
+					if (Entries[i].Item is T) count += Entries[i].Count;
+				}
+			}
+			return count;
+		}
+
 		/// <summary>
 		/// Add an item to the inventory. This will look if this item already exist in one of the slot and increment the
 		/// stack counter there instead of using another slot.

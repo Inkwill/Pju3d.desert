@@ -21,7 +21,7 @@ namespace CreatorKitCode
 		public List<KeyValueData.KeyValue<EffectData, string[]>> UsageEffects;
 		public bool autoUse;
 
-		public override bool UsedBy(CharacterData user, int count = 1)
+		public override bool UsedBy(Character user, int count = 1)
 		{
 			bool wasUsed = false;
 			for (int n = 0; n < count; n++)

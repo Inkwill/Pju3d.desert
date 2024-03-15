@@ -33,9 +33,9 @@ public class InteractProducer : MonoBehaviour, IInteractable
 	}
 	public bool CanInteract(IInteractable target)
 	{
-		if ((m_count > 0 || maxCount == -1) && target is CharacterData && target.CanInteract(this))
+		if ((m_count > 0 || maxCount == -1) && target is Character && target.CanInteract(this))
 		{
-			var character = target as CharacterData;
+			var character = target as Character;
 			if (!character.HoldTools(resItem))
 			{
 				character.GetComponentInChildren<UIRoleHud>().Bubble("I need a " + resItem.toolType);
@@ -56,9 +56,9 @@ public class InteractProducer : MonoBehaviour, IInteractable
 
 	public void InteractWith(IInteractable target)
 	{
-		if (target is CharacterData)
+		if (target is Character)
 		{
-			var character = target as CharacterData;
+			var character = target as Character;
 			InteractEvent?.Invoke(gameObject, character.gameObject);
 			Helpers.Log(this, "InteractWith", character.CharacterName);
 			if (maxCount != -1 && --m_count < 1 && m_replenishTime == -1) OnExhausted();

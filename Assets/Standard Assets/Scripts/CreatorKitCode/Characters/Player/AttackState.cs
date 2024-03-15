@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CreatorKitCodeInternal
 {
-	public class AttackState : SceneLinkedSMB<CharacterData>
+	public class AttackState : SceneLinkedSMB<Character>
 	{
 		CharacterAudio m_Audio;
 

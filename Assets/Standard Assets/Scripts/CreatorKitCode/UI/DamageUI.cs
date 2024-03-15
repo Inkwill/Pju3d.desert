@@ -84,7 +84,7 @@ public class DamageUI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Called by the CharacterData system when a new damage is made. This will take care of grabbing a text from
+	/// Called by the Character system when a new damage is made. This will take care of grabbing a text from
 	/// the pool and place it properly, then register it as an active text so its position and opacity is updated by
 	/// the system.
 	/// </summary>

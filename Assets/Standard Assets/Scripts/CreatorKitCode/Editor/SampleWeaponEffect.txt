@@ -5,12 +5,12 @@ using CreatorKitCode;
 
 public class {EFFECTNAME} : Weapon.WeaponAttackEffect
 {
-    public override void OnAttack(CharacterData target, CharacterData user, ref Weapon.AttackData attackData)
+    public override void OnAttack(Character target, Character user, ref Weapon.AttackData attackData)
     {
         
     }
     
-    public override void OnPostAttack(CharacterData target, CharacterData user, Weapon.AttackData data)
+    public override void OnPostAttack(Character target, Character user, Weapon.AttackData data)
     {
         
     }

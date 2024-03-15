@@ -4,7 +4,7 @@ using UnityEngine;
 using CreatorKitCode;
 
 
-[RequireComponent(typeof(CharacterData))]
+[RequireComponent(typeof(Character))]
 public class AIBase : MonoBehaviour
 {
 	public enum State
@@ -34,14 +34,14 @@ public class AIBase : MonoBehaviour
 	public string SceneBox { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, false); } }
 	public string SceneBoxName { get { return GameManager.SceneBoxInfo(SceneDetector.lastInner, true); } }
 	public virtual float SpeedScale { get { return 1; } }
-	public CharacterData CurrentEnemy => m_character.CurrentEnemy;
-	public CharacterData Character => m_character;
-	protected CharacterData m_character;
+	public Character CurrentEnemy => m_character.CurrentEnemy;
+	public Character Character => m_character;
+	protected Character m_character;
 
 
 	void Start()
 	{
-		m_character = GetComponent<CharacterData>();
+		m_character = GetComponent<Character>();
 		m_character.DamageEvent.AddListener(OnDamageAI);
 		m_character.DeathEvent.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
 
@@ -65,23 +65,23 @@ public class AIBase : MonoBehaviour
 		}
 		switch (m_character.camp)
 		{
-			case CharacterData.Camp.PLAYER:
+			case Character.Camp.PLAYER:
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
 				InteractDetector.layers = LayerMask.GetMask("Interactable", "Player", "Neutral");
 				break;
-			case CharacterData.Camp.ENEMY:
+			case Character.Camp.ENEMY:
 				EnemyDetector.layers = LayerMask.GetMask("Player", "Building");
 				InteractDetector.layers = LayerMask.GetMask("Interactable");
 				break;
-			case CharacterData.Camp.ALLY:
+			case Character.Camp.ALLY:
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
 				InteractDetector.layers = LayerMask.GetMask("Player");
 				break;
-			case CharacterData.Camp.NEUTRAL:
+			case Character.Camp.NEUTRAL:
 				EnemyDetector.layers = LayerMask.GetMask("Noting");
 				InteractDetector.layers = LayerMask.GetMask("Player");
 				break;
-			case CharacterData.Camp.BUILDING:
+			case Character.Camp.BUILDING:
 				EnemyDetector.layers = LayerMask.GetMask("Enemy");
 				InteractDetector.layers = LayerMask.GetMask("Noting");
 				break;
@@ -118,7 +118,7 @@ public class AIBase : MonoBehaviour
 				}
 			}
 			if (m_character.CurrentEnemy && m_character.CanAttackReach()) SetState(State.ATTACKING);
-			else m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<CharacterData>());
+			else m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<Character>());
 			if (m_character.CurrentEnemy == null) SetState(State.IDLE);
 		}
 		//INTERACTING
@@ -155,7 +155,7 @@ public class AIBase : MonoBehaviour
 	protected virtual void OnDamageAI(Damage damage) { }
 	protected virtual void OnEnemyEnter(GameObject enter)
 	{
-		if (m_character.CurrentEnemy == null) m_character.SetEnemy(enter.GetComponent<CharacterData>());
+		if (m_character.CurrentEnemy == null) m_character.SetEnemy(enter.GetComponent<Character>());
 	}
 	protected virtual void OnEnemyExit(GameObject exiter)
 	{

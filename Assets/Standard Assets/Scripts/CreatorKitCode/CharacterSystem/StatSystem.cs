@@ -11,7 +11,7 @@ using UnityEditor;
 namespace CreatorKitCode
 {
 	/// <summary>
-	/// Handles the stats of a CharacterData. It stores the health and strength/agility/defense stats.
+	/// Handles the stats of a Character. It stores the health and strength/agility/defense stats.
 	/// This class contains various functions for interacting with stats, by adding stat modifications, elemental
 	/// effects or damage.
 	/// </summary>
@@ -153,13 +153,13 @@ namespace CreatorKitCode
 		public List<BaseElementalEffect> ElementalEffects => m_ElementalEffects;
 		public List<TimedStatModifier> TimedModifierStack => m_TimedModifierStack;
 
-		CharacterData m_Owner;
+		Character m_Owner;
 
 		List<StatModifier> m_ModifiersStack = new List<StatModifier>();
 		List<TimedStatModifier> m_TimedModifierStack = new List<TimedStatModifier>();
 		List<BaseElementalEffect> m_ElementalEffects = new List<BaseElementalEffect>();
 
-		public void Init(CharacterData owner)
+		public void Init(Character owner)
 		{
 			stats.Copy(baseStats);
 			CurrentHealth = stats.health;
@@ -247,7 +247,7 @@ namespace CreatorKitCode
 				m_ElementalEffects.Add(effect);
 		}
 
-		public void Death(CharacterData attacker)
+		public void Death(Character attacker)
 		{
 			foreach (var e in ElementalEffects)
 				e.Removed();
@@ -301,7 +301,7 @@ namespace CreatorKitCode
 		/// take care of clamping the value in the range [0...MaxHealth]
 		/// </summary>
 		/// <param name="amount"></param>
-		public void ChangeHealth(int amount, CharacterData attacker)
+		public void ChangeHealth(int amount, Character attacker)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, stats.health);
 			if (CurrentHealth <= 0) Death(attacker);

@@ -11,7 +11,7 @@ public class CharacterAnimHandle : MonoBehaviour
 {
 	public UnityEvent FootStep;
 	public UnityEvent SkillStep;
-	CharacterData m_character;
+	Character m_character;
 	Animator m_Animator;
 
 	[SerializeField]
@@ -28,7 +28,7 @@ public class CharacterAnimHandle : MonoBehaviour
 	string FaintTrigger = "Faint";
 	void Start()
 	{
-		m_character = GetComponentInParent<CharacterData>();
+		m_character = GetComponentInParent<Character>();
 		m_character.DamageEvent.AddListener((damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); });
 		m_character.DeathEvent.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
 		m_character.AttackEvent.AddListener((attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); });

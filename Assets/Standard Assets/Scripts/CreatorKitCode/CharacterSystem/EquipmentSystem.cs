@@ -6,7 +6,7 @@ using UnityEngine;
 namespace CreatorKitCode
 {
 	/// <summary>
-	/// Handles the equipment stored inside an instance of CharacterData. Will take care of unequipping the previous
+	/// Handles the equipment stored inside an instance of Character. Will take care of unequipping the previous
 	/// item when equipping a new one in the same slot.
 	/// </summary>
 	public class EquipmentSystem
@@ -17,7 +17,7 @@ namespace CreatorKitCode
 		public Action<EquipmentItem> OnEquipViceWeapon { get; set; }
 		public Action<EquipmentItem> OnUnequip { get; set; }
 
-		CharacterData m_Owner;
+		Character m_Owner;
 
 		EquipmentItem m_HeadSlot;
 		EquipmentItem m_TorsoSlot;
@@ -26,7 +26,7 @@ namespace CreatorKitCode
 		EquipmentItem m_AccessorySlot;
 		Weapon m_DefaultWeapon;
 
-		public void Init(CharacterData owner)
+		public void Init(Character owner)
 		{
 			m_Owner = owner;
 		}

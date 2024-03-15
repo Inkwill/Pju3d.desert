@@ -3,16 +3,16 @@ using CreatorKitCode;
 using System;
 using System.Collections;
 
-[RequireComponent(typeof(CharacterData))]
+[RequireComponent(typeof(Character))]
 public class ResCollector : MonoBehaviour
 {
 	public ResItem.ResType ResType;
 	public Transform root;
 	int m_Count;
-	CharacterData m_character;
+	Character m_character;
 	void Start()
 	{
-		m_character = GetComponent<CharacterData>();
+		m_character = GetComponent<Character>();
 		//Debug.Log("m_Inventory = " + m_Inventory);
 		m_character.Inventory.ItemAction += OnItemEvent;
 		m_Count = 0;

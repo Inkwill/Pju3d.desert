@@ -59,7 +59,7 @@ namespace CreatorKitCode
 
 			Debug.DrawLine(m_TargetPoint, m_TargetPoint + Vector3.up, Color.magenta);
 		}
-		public void InteractWith(CharacterData target)
+		public void InteractWith(Character target)
 		{
 			Item addItem = Item;
 			if (addItem is EquipmentItem)

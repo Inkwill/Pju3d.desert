@@ -26,7 +26,7 @@ namespace CreatorKitCode
 		/// </summary>
 		/// <param name="user">The CharacterDate that used that item</param>
 		/// <returns>If it was actually used (allow the inventory to know if it can remove the object or not)</returns>
-		public virtual bool UsedBy(CharacterData user, int count = 1)
+		public virtual bool UsedBy(Character user, int count = 1)
 		{
 			return false;
 		}

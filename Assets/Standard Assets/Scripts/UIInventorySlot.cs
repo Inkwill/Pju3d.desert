@@ -19,7 +19,7 @@ public class UIInventorySlot : MonoBehaviour, IPointerClickHandler
 
 	public Toggle tog;
 	Item m_item;
-	CharacterData m_CharacterData;
+	Character m_Character;
 
 	UIInventoryWindow winInventory;
 
@@ -39,10 +39,10 @@ public class UIInventorySlot : MonoBehaviour, IPointerClickHandler
 		tog.onValueChanged.AddListener(OnToggled);
 		winInventory = tog.group.GetComponent<UIInventoryWindow>();
 	}
-	public void UpdateEntry(CharacterData data)
+	public void UpdateEntry(Character data)
 	{
-		m_CharacterData = data;
-		var entry = m_CharacterData.Inventory.Entries[InventoryID];
+		m_Character = data;
+		var entry = m_Character.Inventory.Entries[InventoryID];
 
 		//gameObject.SetActive(isEnabled);
 		item = entry?.Item;

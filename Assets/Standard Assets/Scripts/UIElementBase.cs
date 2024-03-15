@@ -7,5 +7,6 @@ public class UIElementBase : MonoBehaviour
 {
 	public Image icon;
 	public Toggle toggle;
+	public Text count;
 
 }

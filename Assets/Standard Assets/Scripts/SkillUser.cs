@@ -17,14 +17,14 @@ public class SkillUser : MonoBehaviour
 	public SkillEntry CurSkill => m_UseEntry;
 	SkillEntry m_UseEntry;
 	List<SkillEntry> m_SkillEntries;
-	CharacterData m_character;
+	Character m_character;
 	Animator m_Animator;
 	float m_During;
 
 	void Start()
 	{
 		m_SkillEntries = new List<SkillEntry>();
-		m_character = GetComponent<CharacterData>();
+		m_character = GetComponent<Character>();
 		CharacterAnimHandle animHandle = GetComponentInChildren<CharacterAnimHandle>();
 		if (animHandle) { animHandle.SkillStep.AddListener(SkillStep); m_Animator = animHandle.GetComponent<Animator>(); }
 		else m_Animator = GetComponentInChildren<Animator>();

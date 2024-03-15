@@ -7,13 +7,13 @@ public class Shooter : TimerBehaviour
 {
 	// GameObject m_CurrentTarget;
 	// InteractOnTrigger m_Detector;
-	// public CharacterData m_CharacterData;
+	// public Character m_Character;
 	// void Start()
 	// {
 	// 	m_Detector = GetComponentInChildren<InteractOnTrigger>();
 	// 	m_Detector.OnEnter.AddListener(OnEnter);
 	// 	m_Detector.OnExit.AddListener(OnExit);
-	// 	m_CharacterData.Init();
+	// 	m_Character.Init();
 	// }
 
 	// protected override void OnTimer()
@@ -26,7 +26,7 @@ public class Shooter : TimerBehaviour
 	// 		if (bullet)
 	// 		{
 	// 			bullet.target = m_CurrentTarget.transform;
-	// 			bullet.shooter = m_CharacterData;
+	// 			bullet.shooter = m_Character;
 	// 			bullet.active = true;
 	// 		}
 	// 	}

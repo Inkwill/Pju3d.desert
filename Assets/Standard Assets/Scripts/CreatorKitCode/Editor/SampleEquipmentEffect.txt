@@ -5,12 +5,12 @@ using CreatorKitCode;
 
 public class {EFFECTNAME} : EquipmentItem.EquippedEffect
 {
-     public override void Equipped(CharacterData user)
+     public override void Equipped(Character user)
      {
      
      }
      
-     public override void Removed(CharacterData user)
+     public override void Removed(Character user)
      {
      
      }

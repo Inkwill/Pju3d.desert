@@ -21,7 +21,7 @@ public class UITargetInfo : MonoBehaviour
 	GameObject lootElement;
 	[SerializeField]
 	Animator btTalk;
-	CharacterData m_curEnemy;
+	Character m_curEnemy;
 
 	UILootElement[] uilootList = new UILootElement[maxUILoot];
 	public void Init()

@@ -62,12 +62,12 @@ namespace CreatorKitCode
 			// }
 			return desc;
 		}
-		public void EquippedBy(CharacterData user)
+		public void EquippedBy(Character user)
 		{
 			user.Stats.AddModifier(EquippedStat);
 		}
 
-		public void UnequippedBy(CharacterData user)
+		public void UnequippedBy(Character user)
 		{
 			user.Stats.RemoveModifier(EquippedStat);
 		}

@@ -46,24 +46,24 @@ public class Skill : ScriptableObject
 	public LayerMask layers;
 
 
-	// public virtual bool CanUsedBy(CharacterData user)
+	// public virtual bool CanUsedBy(Character user)
 	// {
 	// 	if (IdleSkill) return user.isIdle;
 	// 	else return user.isStandBy;
 	// }
 
-	public virtual void Implement(CharacterData user, List<GameObject> targets = null)
+	public virtual void Implement(Character user, List<GameObject> targets = null)
 	{
 		if (implementEffects.Count > 0) EffectData.TakeEffects(implementEffects, user.gameObject, targets);
 		Helpers.Log(this, "SkillImplement", $"{user.CharacterName}->{SkillName}-Targets={targets.Count}");
 	}
 
-	public virtual void Operating(CharacterData user, List<GameObject> targets = null)
+	public virtual void Operating(Character user, List<GameObject> targets = null)
 	{
 		if (operatEffects.Count > 0) EffectData.TakeEffects(operatEffects, user.gameObject, targets);
 	}
 
-	public virtual void StepEffect(CharacterData user, List<GameObject> targets = null)
+	public virtual void StepEffect(Character user, List<GameObject> targets = null)
 	{
 		if (stepEffects.Count > 0) EffectData.TakeEffects(stepEffects, user.gameObject, targets);
 		var Effectpos = (targets != null && targets.Count > 0) ? targets[0].transform.position : user.transform.position;

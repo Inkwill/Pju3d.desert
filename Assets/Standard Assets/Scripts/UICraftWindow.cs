@@ -69,7 +69,7 @@ public class UICraftWindow : UIWindow, IInteractable
 
 	public bool CanInteract(IInteractable target)
 	{
-		return gameObject.activeSelf && (CharacterData)target == GameManager.CurHero && GameManager.CurHero.BaseAI.isIdle;
+		return gameObject.activeSelf && (Character)target == GameManager.CurHero && GameManager.CurHero.BaseAI.isIdle;
 	}
 	public void InteractWith(IInteractable target)
 	{

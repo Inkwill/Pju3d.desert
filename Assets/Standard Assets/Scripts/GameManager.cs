@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
 	public static LordData Lord => Instance.GetComponent<LordData>();
-	public static CharacterData CurHero;
+	public static Character CurHero;
 	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
 	public static GameGoalSystem GameGoal => Instance.GetComponent<GameGoalSystem>();
 	public static UIManager GameUI;
@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
 	{
 		Instance = this;
 		Lord.Init();
-		CurHero = Instantiate(prefab_character, position_born.position, Quaternion.Euler(0, 180, 0)).GetComponent<CharacterData>();
+		CurHero = Instantiate(prefab_character, position_born.position, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
 		GameGoal.Init();
 		SFXManager.ListenerTarget = CurHero.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();

@@ -51,7 +51,7 @@ namespace CreatorKitCode
 		public AudioClip[] HitSounds;
 		public AudioClip[] SwingSounds;
 
-		public void Attack(CharacterData attacker, CharacterData target)
+		public void Attack(Character attacker, Character target)
 		{
 			Damage damage = new Damage(target, attacker);
 			int damageNum = Random.Range(Stats.MinimumDamage, Stats.MaximumDamage + 1);
@@ -73,7 +73,7 @@ namespace CreatorKitCode
 			//wae.OnPostAttack(target, attacker, attackEffect);
 		}
 
-		public bool CanHit(CharacterData attacker, CharacterData target)
+		public bool CanHit(Character attacker, Character target)
 		{
 			if (Vector3.SqrMagnitude(attacker.transform.position - target.transform.position) < Stats.MaxRange * Stats.MaxRange)
 			{

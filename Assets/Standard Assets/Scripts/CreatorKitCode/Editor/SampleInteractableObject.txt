@@ -13,7 +13,7 @@ public class {EFFECTNAME} : InteractableObject
         }
     }
 
-    public override void InteractWith(CharacterData target)
+    public override void InteractWith(Character target)
     {
        
     }

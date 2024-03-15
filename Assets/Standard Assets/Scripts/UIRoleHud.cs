@@ -14,11 +14,11 @@ public class UIRoleHud : UIHudBase
 	Animator story_anim;
 	[SerializeField]
 	Slider sliderInteract;
-	CharacterData m_character;
+	Character m_character;
 
 	void Start()
 	{
-		m_character = GetComponentInParent<CharacterData>();
+		m_character = GetComponentInParent<Character>();
 		if (m_character.BaseAI != null) m_character.StateUpdateAction += OnCharacterStating;
 		m_character.Inventory.ItemAction += OnItemAction;
 		m_character.SkillAction += OnSkillAction;

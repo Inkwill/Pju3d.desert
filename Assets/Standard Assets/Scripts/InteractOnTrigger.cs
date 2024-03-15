@@ -63,7 +63,7 @@ public class InteractOnTrigger : MonoBehaviour
 		if (!interObjects.Contains(lastInner))
 		{
 			interObjects.Add(lastInner);
-			var character = enter.GetComponent<CharacterData>();
+			var character = enter.GetComponent<Character>();
 			if (character) character.DeathEvent.AddListener((c) => { RemoveTarget(c.gameObject); });
 			lastInner.GetComponent<EventSender>()?.events.AddListener(OnInterEvent);
 		}

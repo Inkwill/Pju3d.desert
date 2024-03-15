@@ -41,7 +41,7 @@ public class NPCAI : RoleAI
 	protected override void OnDamageAI(Damage damage)
 	{
 		if (!m_Offensive) m_Offensive = true;
-		if (!CurrentEnemy) m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<CharacterData>());
+		if (!CurrentEnemy) m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<Character>());
 		if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
 	}
 

@@ -13,10 +13,10 @@ public class CharacterAudio : MonoBehaviour
 	public AudioClip[] HitClip;
 	public AudioClip[] DeathClips;
 	public SFXManager.Use UseType;
-	CharacterData m_Character;
+	Character m_Character;
 	void Start()
 	{
-		m_Character = GetComponent<CharacterData>();
+		m_Character = GetComponent<Character>();
 		m_Character.DamageEvent.AddListener((damage) => { Hit(damage.Target.gameObject.transform.position); });
 		m_Character.DeathEvent.AddListener((character) => { Death(character.transform.position); });
 		m_Character.AttackEvent.AddListener((attacker) => { Attack(attacker.transform.position); });

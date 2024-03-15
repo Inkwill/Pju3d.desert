@@ -5,19 +5,19 @@ using CreatorKitCode;
 using CreatorKitCodeInternal;
 public class Damage
 {
-	public CharacterData Target => m_Target;
-	public CharacterData Source => m_Source;
-	CharacterData m_Target;
-	CharacterData m_Source;
+	public Character Target => m_Target;
+	public Character Source => m_Source;
+	Character m_Target;
+	Character m_Source;
 	int[] m_Damages = new int[System.Enum.GetValues(typeof(StatSystem.DamageType)).Length];
 
-	public Damage(CharacterData target, CharacterData sourcer = null)
+	public Damage(Character target, Character sourcer = null)
 	{
 		m_Target = target;
 		m_Source = sourcer;
 	}
 
-	public void TakeDamage(CharacterData attacker, CharacterData target)
+	public void TakeDamage(Character attacker, Character target)
 	{
 		int totalDamage = GetFullDamage();
 		target.Stats.ChangeHealth(-totalDamage, attacker);

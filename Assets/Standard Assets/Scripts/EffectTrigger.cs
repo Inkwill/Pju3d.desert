@@ -16,7 +16,7 @@ public class EffectTrigger : MonoBehaviour
 	{
 		EffectData.TakeEffects(Effects, user, user);
 	}
-	public void TakeEffects(CharacterData character)
+	public void TakeEffects(Character character)
 	{
 		TakeEffects(character.gameObject);
 	}

@@ -38,15 +38,15 @@ public class StoryEvent : MonoBehaviour
 	public void OnEnter(GameObject enter)
 	{
 		m_target = enter;
-		StartEvent(enter.GetComponent<CharacterData>());
+		StartEvent(enter.GetComponent<Character>());
 	}
 
 	public void OnStay(GameObject enter, float during)
 	{
-		if (during >= stayTimes) { StartEvent(enter.GetComponent<CharacterData>()); m_target = enter; }
+		if (during >= stayTimes) { StartEvent(enter.GetComponent<Character>()); m_target = enter; }
 	}
 
-	public void StartEvent(CharacterData character)
+	public void StartEvent(Character character)
 	{
 		if (m_completed || m_started || m_cd > 0 || !ConditionData.JudgmentList(Conditions)) return;
 		if (++m_triggerTimes < triggerTimes) return;
@@ -78,7 +78,7 @@ public class StoryEvent : MonoBehaviour
 		else m_cd = cdTimes;
 	}
 
-	public void StopDialogue(CharacterData character)
+	public void StopDialogue(Character character)
 	{
 		m_completed = true;
 		if (storyMode) GameManager.StoryMode = false;

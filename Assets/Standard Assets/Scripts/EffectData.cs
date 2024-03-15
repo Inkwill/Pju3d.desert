@@ -50,8 +50,8 @@ public class EffectData : ScriptableObject
 			case EffectType.HPCHANGE:
 				int addMount = 0;
 				if (param != null && param.Length > 0 && int.TryParse(param[0], out addMount))
-					success = ChangeHealth(user.GetComponent<CharacterData>(), target.GetComponent<CharacterData>(), EffectAmount + addMount);
-				else success = ChangeHealth(user.GetComponent<CharacterData>(), target.GetComponent<CharacterData>(), EffectAmount);
+					success = ChangeHealth(user.GetComponent<Character>(), target.GetComponent<Character>(), EffectAmount + addMount);
+				else success = ChangeHealth(user.GetComponent<Character>(), target.GetComponent<Character>(), EffectAmount);
 				break;
 			case EffectType.DIG:
 				if (target != null)
@@ -134,12 +134,12 @@ public class EffectData : ScriptableObject
 		}
 
 		if (TakeVFX != VFXType.NONE && success) VFXManager.PlayVFX(TakeVFX, user.transform.position);
-		var character = user.GetComponent<CharacterData>();
+		var character = user.GetComponent<Character>();
 		if (success && character) character.EffectAction?.Invoke(this);
 		return success;
 	}
 
-	bool ChangeHealth(CharacterData attacker, CharacterData target, int value)
+	bool ChangeHealth(Character attacker, Character target, int value)
 	{
 		if (EffectMode == StatSystem.StatModifier.Mode.Absolute)
 		{
@@ -205,7 +205,7 @@ public class EffectData : ScriptableObject
 			return $"Convert {PercentageHealthStolen}% of physical damage into Health";
 		}
 
-		public void OnPostAttack(CharacterData target, CharacterData attacker, Damage damage)
+		public void OnPostAttack(Character target, Character attacker, Damage damage)
 		{
 			int amount = Mathf.FloorToInt(damage.GetDamage(StatSystem.DamageType.Physical) * (PercentageHealthStolen / 100.0f));
 			target.Stats.ChangeHealth(amount, attacker);
@@ -217,7 +217,7 @@ public class EffectData : ScriptableObject
 	// 	//[FormerlySerializedAs("HealthPurcentageAmount")]
 	// 	public int HealthPercentageAmount = 20;
 
-	// 	public bool OnUse(CharacterData user)
+	// 	public bool OnUse(Character user)
 	// 	{
 	// 		if (user.Stats.CurrentHealth == user.Stats.stats.health)
 	// 			return false;
@@ -236,7 +236,7 @@ public class EffectData : ScriptableObject
 		public int StrengthChange = 5;
 		public Sprite EffectSprite;
 
-		public bool OnUse(CharacterData user)
+		public bool OnUse(Character user)
 		{
 			StatSystem.StatModifier modifier = new StatSystem.StatModifier();
 			modifier.ModifierMode = StatSystem.StatModifier.Mode.Absolute;
@@ -256,7 +256,7 @@ public class EffectData : ScriptableObject
 		public int Damage;
 		public float Time;
 
-		public void OnAttack(CharacterData target, CharacterData user, ref Damage damage)
+		public void OnAttack(Character target, Character user, ref Damage damage)
 		{
 			if (UnityEngine.Random.value < (PercentageChance / 100.0f))
 			{

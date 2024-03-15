@@ -5,7 +5,7 @@ using CreatorKitCode;
 [RequireComponent(typeof(Slider))]
 public class UICharacterHealth : MonoBehaviour
 {
-	// public CharacterData data;
+	// public Character data;
 
 	// Slider slider;
 	// private void Start()

@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class UICharacterHp : MonoBehaviour
 {
 	Slider m_slider;
-	CharacterData m_character;
+	Character m_character;
 	void Start()
 	{
-		m_character = GetComponentInParent<CharacterData>();
+		m_character = GetComponentInParent<Character>();
 		m_slider = GetComponent<Slider>();
 		m_slider.maxValue = m_character.Stats.stats.health;
 		m_slider.value = m_character.Stats.CurrentHealth;

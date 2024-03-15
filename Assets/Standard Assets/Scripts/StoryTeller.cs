@@ -14,13 +14,13 @@ public class StoryTeller : MonoBehaviour
 	public List<Entrustment> entrustments;
 	StoryNode m_currentNode;
 	InteractHandle m_interactHandle;
-	CharacterData m_character;
+	Character m_character;
 
 
 	void Start()
 	{
 		GameManager.StoryListener.storyListenerEvents.AddListener(OnListenEvent);
-		m_character = GetComponent<CharacterData>();
+		m_character = GetComponent<Character>();
 		m_interactHandle = GetComponent<InteractHandle>();
 		entrustments = new List<Entrustment>();
 		AddEntrustment();
@@ -28,7 +28,7 @@ public class StoryTeller : MonoBehaviour
 
 	public void OnInteractEvent(GameObject actor, string eventName)
 	{
-		// var character = actor.GetComponent<CharacterData>();
+		// var character = actor.GetComponent<Character>();
 		// if (eventName == "Completed" && character != null)
 		// {
 		// 	if (character.BaseAI.isIdle)

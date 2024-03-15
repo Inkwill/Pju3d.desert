@@ -14,7 +14,7 @@ namespace CreatorKitCodeInternal
 		public static UISystem Instance { get; private set; }
 
 		[Header("Player")]
-		public CharacterData PlayerCharacter;
+		public Character PlayerCharacter;
 		public Slider PlayerHealthSlider;
 		public Text MaxHealth;
 		public Text CurrentHealth;
@@ -66,7 +66,7 @@ namespace CreatorKitCodeInternal
 
 		void UpdatePlayerUI()
 		{
-			CharacterData data = PlayerCharacter;
+			Character data = PlayerCharacter;
 
 			PlayerHealthSlider.value = PlayerCharacter.Stats.CurrentHealth / (float)PlayerCharacter.Stats.stats.health;
 			MaxHealth.text = PlayerCharacter.Stats.stats.health.ToString();
@@ -101,7 +101,7 @@ namespace CreatorKitCodeInternal
 			StatsText.text = $"Str : {stats.strength} Def : {stats.defense} Agi : {stats.agility}";
 		}
 
-		void UpdateEnemyUI(CharacterData enemy)
+		void UpdateEnemyUI(Character enemy)
 		{
 			EnemyHealthSlider.gameObject.SetActive(true);
 			EnemyHealthSlider.value = enemy.Stats.CurrentHealth / (float)enemy.Stats.stats.health;

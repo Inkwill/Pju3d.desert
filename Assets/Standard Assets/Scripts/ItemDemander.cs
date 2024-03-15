@@ -42,9 +42,9 @@ public class ItemDemander : TimerBehaviour, IInteractable
 
 	public void InteractWith(IInteractable target)
 	{
-		if (m_interactor == null && target is CharacterData)
+		if (m_interactor == null && target is Character)
 		{
-			var character = target as CharacterData;
+			var character = target as Character;
 			var submitable = m_Demand.Submittable(character.Inventory);
 			if (submitable.Values.Sum() > 0)
 			{
@@ -98,7 +98,7 @@ public class ItemDemander : TimerBehaviour, IInteractable
 		if (actionName == "Fulfill")
 		{
 			ui_demand.Show(m_Demand);
-			CharacterData character = m_interactor as CharacterData;
+			Character character = m_interactor as Character;
 			m_interactor = null;
 			if (character != null)
 			{
