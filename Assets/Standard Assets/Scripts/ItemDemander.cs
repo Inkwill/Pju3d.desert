@@ -46,7 +46,7 @@ public class ItemDemander : MonoBehaviour, IInteractable
 	public void ActiveInteract()
 	{
 		m_demands = new List<InventorySystem.ItemDemand>();
-		foreach (var data in m_data.demands)
+		foreach (var data in m_data.demands.Value)
 		{
 			m_demands.Add(data.CreatItemDemand());
 		}

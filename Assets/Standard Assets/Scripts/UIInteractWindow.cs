@@ -52,7 +52,7 @@ public class UIInteractWindow : UIWindow
 	public void UpdateInfo(int selected)
 	{
 		m_selectedIndex = selected;
-		var item = m_interactor.Data.devices[selected];
+		var item = m_interactor.Data.devices.Value[selected];
 		var demand = m_demands[selected];
 		Name.text = item.ItemName;
 		icon.sprite = item.ItemSprite;
