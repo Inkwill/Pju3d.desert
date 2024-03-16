@@ -8,6 +8,7 @@ public class InteractData : ScriptableObject
 {
 	public enum InteractType
 	{
+		DeviceFixer,
 		DeviceCreater,
 		DropBox
 	}
@@ -16,19 +17,23 @@ public class InteractData : ScriptableObject
 	public string BehavePrompt;
 	public string interactAnim;
 	public int maxActorCount = 1;
+	[ConditionalField(nameof(Type), false, InteractType.DropBox)]
 	public int actTimes = 1;
+	[ConditionalField(nameof(actTimes), true, 1)]
 	public float actCd;
 	public float BehaveDuring;
-	public bool autoDestroy;
-	public DeviceItem[] devices;
-	public DemandData[] demands;
+	[ConditionalField(nameof(Type), false, InteractType.DropBox)]
+	public bool autoDestroy = true;
+	[ConditionalField(nameof(Type), false, InteractType.DropBox)]
+	public CollectionWrapper<DeviceItem> devices;
+	public CollectionWrapper<DemandData> demands;
 
 	public void InteractBehave(Transform trans, int index)
 	{
 		switch (Type)
 		{
 			case InteractType.DeviceCreater:
-				DeviceItem device = devices[index];
+				DeviceItem device = devices.Value[index];
 				if (device != null && device.prefab != null)
 					Instantiate(device.prefab, trans.position, trans.rotation);
 				break;
