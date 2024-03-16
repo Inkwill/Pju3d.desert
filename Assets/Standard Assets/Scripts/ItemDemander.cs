@@ -6,25 +6,41 @@ using CreatorKitCode;
 using DG.Tweening;
 using System.Linq;
 
-public class ItemDemander : TimerBehaviour, IInteractable
+public class ItemDemander : MonoBehaviour, IInteractable
 {
 	[SerializeField]
 	InteractData m_data;
 	public InteractData Data { get { return m_data; } }
 	[SerializeField]
 	UIItemDemand ui_demand;
-	public UnityEvent ReadyEvents;
-	public UnityEvent RefreshEvents;
 	[SerializeField]
 	bool autoActive;
 	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
 	protected IInteractable m_interactor;
 	int m_curSelected;
 	List<InventorySystem.ItemDemand> m_demands;
+	Timer m_timer;
+	GameObject m_target;
+
+	void Awake()
+	{
+		if (m_data.BehaveDuring > 0 || m_data.actTimes > 1)
+			m_timer = gameObject.AddComponent<Timer>();
+
+	}
 	void Start()
 	{
 		ui_demand.gameObject.SetActive(false);
 		if (autoActive) ActiveInteract();
+		if (m_timer)
+		{
+			m_timer.timerDuration = m_data.BehaveDuring;
+			m_timer.loopTimes = m_data.actTimes;
+			m_timer.cd = m_data.actCd;
+			m_timer.refreshEvent += ActiveInteract;
+			m_timer.behaveEvent += OnBehaved;
+			if (m_data.autoDestroy) m_timer.endEvent += () => Destroy(gameObject);
+		}
 	}
 
 	public void ActiveInteract()
@@ -40,66 +56,46 @@ public class ItemDemander : TimerBehaviour, IInteractable
 
 	public bool CanInteract(IInteractable target)
 	{
-		return !m_demands[m_curSelected].Completed && !isStarted && target.CanInteract(this) && m_interactor == null;
+		return !m_demands[m_curSelected].Completed && target.CanInteract(this) && m_interactor == null;
 	}
 
 	public void InteractWith(IInteractable target)
 	{
 		if (m_interactor == null && target is Character)
 		{
+			target.CurrentInteractor = null;
 			var character = target as Character;
 			var submitable = m_demands[m_curSelected].Submittable(character.Inventory);
 			if (submitable.Values.Sum() > 0)
 			{
-				ReadyEvents?.Invoke();
-				target.CurrentInteractor = null;
+				m_interactor = character;
 				if (character == GameManager.CurHero)
 				{
 					UIInteractWindow win = GameManager.GameUI.GetWindow("winInteract") as UIInteractWindow;
 					win.Init(this, m_demands);
 					win.Open();
 					GetComponent<InteractHandle>()?.ExitEvent.AddListener(() => win.Close());
-					win.bt_interact.onClick.AddListener(() => OnClick_Interact(win));
+					win.bt_Confirm.onClick.AddListener(() => OnClick_Interact(win));
 				}
 				else
 				{
-					m_interactor = character;
 					character.Inventory.ItemAction += OnItemEvent;
 					m_demands[m_curSelected].Fulfill(character.Inventory);
 				}
 			}
-			else { ui_demand.Fail(); target.CurrentInteractor = null; }
+			else ui_demand.Fail();
 		}
 	}
 
 	public void OnClick_Interact(UIInteractWindow win)
 	{
-		m_interactor = GameManager.CurHero;
 		GameManager.CurHero.Inventory.ItemAction += OnItemEvent;
 		m_demands[m_curSelected].Fulfill(GameManager.CurHero.Inventory);
 		m_curSelected = win.SelectedIndex;
-		win.bt_interact.onClick.RemoveAllListeners();
-		win.bt_interact.interactable = false;
 		win.Close();
 	}
 
-	protected override void OnRefresh()
-	{
-		ActiveInteract();
-		RefreshEvents?.Invoke();
-	}
-	protected override void OnStart()
-	{
-		ui_demand.gameObject.SetActive(false);
-		//if (m_character) m_character.ChangeState(CharacterControl.State.WORKING, true);
-	}
-
-	protected override void OnEnd()
-	{
-		Destroy(gameObject);
-	}
-
-	protected override void OnBehaved()
+	void OnBehaved()
 	{
 		m_data.InteractBehave(transform, m_curSelected);
 		Character character = m_interactor as Character;
@@ -120,6 +116,12 @@ public class ItemDemander : TimerBehaviour, IInteractable
 			if (character != null)
 			{
 				character.Inventory.ItemAction -= OnItemEvent;
+				if (m_demands[m_curSelected].Completed)
+				{
+					if (m_timer) m_timer.StartTimer();
+					else OnBehaved();
+					ui_demand.gameObject.SetActive(false);
+				}
 				ResCollector collector = character.GetComponent<ResCollector>();
 				if (collector)
 				{
@@ -127,7 +129,6 @@ public class ItemDemander : TimerBehaviour, IInteractable
 					Helpers.Log(this, "Fulfill", $"{item.ItemName}x{itemCount}");
 					StartCoroutine(UpdateDemand(item, itemCount));
 				}
-				if (m_demands[m_curSelected].Completed) StartTimer();
 			}
 		}
 	}

@@ -7,17 +7,15 @@ using UnityEngine.UI;
 
 public class UIInteractWindow : UIWindow
 {
-	public Button bt_interact;
 	public Text Name;
 	public Image icon;
 	public Text Desc;
+	public Button bt_Confirm;
 	public UIItemDemand uiDemand;
 	[SerializeField]
 	GameObject m_uiGridBox;
 	[SerializeField]
 	ToggleGroup m_uiGridRoot;
-	[SerializeField]
-	Button bt_Confirm;
 	[SerializeField]
 	TMP_Text promptText;
 	IInteractable m_interactor;
@@ -66,6 +64,7 @@ public class UIInteractWindow : UIWindow
 
 	protected override void OnClose()
 	{
+		bt_Confirm.onClick.RemoveAllListeners();
 		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("up");
 	}
 }

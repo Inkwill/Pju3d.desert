@@ -161,36 +161,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03aa0f4915897fd45af92c979df190ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoStart: 0
-  timerDuration: 10
-  loopTimes: 1
-  cd: 0
-  behaveEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  processEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7042677413377077198}
-        m_TargetAssemblyTypeName: UISliderHandle, Assembly-CSharp-firstpass
-        m_MethodName: SetValue
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   m_data: {fileID: 11400000, guid: f2fc9e8d26e10b2458333379942bd199, type: 2}
   ui_demand: {fileID: 6821318282727165373}
-  ReadyEvents:
-    m_PersistentCalls:
-      m_Calls: []
-  RefreshEvents:
-    m_PersistentCalls:
-      m_Calls: []
   autoActive: 1
 --- !u!1 &5779703747271497825
 GameObject:
@@ -617,18 +589,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2e1b4ada0e2d814c8f166cef955cf6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7042677413377077198 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6592131302693464164, guid: 426b00da28da05c42951410582a493c1,
-    type: 3}
-  m_PrefabInstance: {fileID: 4235470202651215786}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6e82b183ffdb9e41bf36d4490765e6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!95 &9039626078348597739 stripped

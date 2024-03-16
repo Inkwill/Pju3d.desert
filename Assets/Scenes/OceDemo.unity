@@ -28301,6 +28301,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 457428260}
     m_Modifications:
+    - target: {fileID: 756959573374755029, guid: 1af4771a0eff8cf48a9f8ac95a9deacd,
+        type: 3}
+      propertyPath: autoDestroy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 756959573374755029, guid: 1af4771a0eff8cf48a9f8ac95a9deacd,
+        type: 3}
+      propertyPath: processEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 756959573374755029, guid: 1af4771a0eff8cf48a9f8ac95a9deacd,
+        type: 3}
+      propertyPath: processEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 756959573374755029, guid: 1af4771a0eff8cf48a9f8ac95a9deacd,
+        type: 3}
+      propertyPath: processEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2295467714160992369, guid: 1af4771a0eff8cf48a9f8ac95a9deacd,
         type: 3}
       propertyPath: m_Name
@@ -62003,6 +62023,7 @@ GameObject:
   - component: {fileID: 4439525594261324930}
   - component: {fileID: 4439525594261324931}
   - component: {fileID: 4439525594261324932}
+  - component: {fileID: 4439525594261324933}
   m_Layer: 8
   m_Name: Npc_Prophet
   m_TagString: Untagged
@@ -62456,24 +62477,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03aa0f4915897fd45af92c979df190ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoStart: 0
-  timerDuration: 1
-  loopTimes: 1
-  cd: 0
-  behaveEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  processEvent:
-    m_PersistentCalls:
-      m_Calls: []
   m_data: {fileID: 0}
   ui_demand: {fileID: 894525694}
-  ReadyEvents:
-    m_PersistentCalls:
-      m_Calls: []
-  RefreshEvents:
-    m_PersistentCalls:
-      m_Calls: []
   autoActive: 0
 --- !u!114 &4439525594261324931
 MonoBehaviour:
@@ -62510,6 +62515,38 @@ MonoBehaviour:
   - Key: {fileID: 11400000, guid: 914632a637ca46447acc281c33ff3c12, type: 2}
     Value:
     - main02
+--- !u!114 &4439525594261324933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1682603241632952151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1f0743e08cc05a40b7ac567298c5f37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoStart: 0
+  autoDestroy: 0
+  timerDuration: 10
+  loopTimes: 1
+  cd: 0
+  waitingEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  processEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  behaveEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  endEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  refreshEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &4831030346167003206 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8953153724527336651, guid: 90e77cc43c04c224eae100e83492eaf5,
@@ -64033,7 +64070,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0e3b045ce83494d8fe8acb850e18b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiHudRoot: {fileID: 0}
   bubble_anim: {fileID: 2342112312543927934}
   bubble_text: {fileID: 8418750570946507095}
 --- !u!222 &8962274926063406019

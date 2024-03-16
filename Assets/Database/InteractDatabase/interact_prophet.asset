@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27382125d9f513c4fa1ee922dd71b4f7, type: 3}
-  m_Name: interact_fixfence
+  m_Name: interact_prophet
   m_EditorClassIdentifier: 
   Type: 0
   Key: Damaged fence

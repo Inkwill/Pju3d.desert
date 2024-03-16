@@ -16,11 +16,12 @@ public class InteractData : ScriptableObject
 	public string BehavePrompt;
 	public string interactAnim;
 	public int maxActorCount = 1;
-
-	[ConditionalField(nameof(Type), false, InteractType.DeviceCreater)]
-	public List<DeviceItem> devices;
-	[ConditionalField(nameof(Type), false, InteractType.DeviceCreater)]
-	public List<DemandData> demands;
+	public int actTimes = 1;
+	public float actCd;
+	public float BehaveDuring;
+	public bool autoDestroy;
+	public DeviceItem[] devices;
+	public DemandData[] demands;
 
 	public void InteractBehave(Transform trans, int index)
 	{
