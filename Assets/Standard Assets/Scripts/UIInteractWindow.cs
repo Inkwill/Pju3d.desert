@@ -32,16 +32,14 @@ public class UIInteractWindow : UIWindow
 	protected override void OnOpen()
 	{
 		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("down");
-		if (m_interactor.Data.Type == InteractData.InteractType.DeviceCreater)
+		if (m_interactor.Data.Type == InteractData.InteractType.DeviceFixer || m_interactor.Data.Type == InteractData.InteractType.DeviceCreater)
 		{
-			var dvEntries = GameManager.CurHero.Inventory.Entries.Where(en => en != null && en.Item is DeviceItem).ToArray();
-			var elements = Helpers.AdjustElements<UIElementBase>(m_uiGridRoot.transform, dvEntries.Length, m_uiGridBox);
+			var devices = m_interactor.Data.devices.Value;
+			var elements = Helpers.AdjustElements<UIElementBase>(m_uiGridRoot.transform, devices.Length, m_uiGridBox);
 			for (int i = 0; i < elements.Length; i++)
 			{
 				UIElementBase element = elements[i].GetComponent<UIElementBase>();
-				DeviceItem device = dvEntries[i].Item as DeviceItem;
-				element.icon.sprite = device.ItemSprite;
-				element.count.text = dvEntries[i].Count.ToString();
+				element.icon.sprite = devices[i].ItemSprite;
 				element.toggle.group = m_uiGridRoot;
 				element.toggle.onValueChanged.AddListener((value) => { if (value) UpdateInfo(i); });
 			}

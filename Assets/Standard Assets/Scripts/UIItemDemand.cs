@@ -28,6 +28,20 @@ public class UIItemDemand : MonoBehaviour
 	[SerializeField]
 	Image m_itemIcon;
 
+	void Start()
+	{
+		ItemDemander demander = GetComponentInParent<ItemDemander>();
+		if (demander != null)
+		{
+			demander.demandEvent += (demand, eventName) =>
+			{
+				if (eventName == "Fail") GetComponent<Animator>()?.SetTrigger("fail");
+				else if (eventName == "Complete") gameObject.SetActive(false);
+				else Show(demand);
+			};
+			demander.GetComponent<InteractHandle>()?.EnterEvent.AddListener(() => GetComponent<Animator>()?.SetTrigger("inter"));
+		}
+	}
 	public void Show(InventorySystem.ItemDemand demand)
 	{
 		m_Demand = demand;
@@ -63,12 +77,6 @@ public class UIItemDemand : MonoBehaviour
 			default:
 				break;
 		}
-
 		gameObject.SetActive(true);
-	}
-
-	public void Fail()
-	{
-		GetComponent<Animator>()?.SetTrigger("fail");
 	}
 }

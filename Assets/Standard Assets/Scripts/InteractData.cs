@@ -24,7 +24,6 @@ public class InteractData : ScriptableObject
 	public float BehaveDuring;
 	[ConditionalField(nameof(Type), false, InteractType.DropBox)]
 	public bool autoDestroy = true;
-	[ConditionalField(nameof(Type), false, InteractType.DropBox)]
 	public CollectionWrapper<DeviceItem> devices;
 	public CollectionWrapper<DemandData> demands;
 
@@ -32,7 +31,7 @@ public class InteractData : ScriptableObject
 	{
 		switch (Type)
 		{
-			case InteractType.DeviceCreater:
+			case InteractType.DeviceFixer:
 				DeviceItem device = devices.Value[index];
 				if (device != null && device.prefab != null)
 					Instantiate(device.prefab, trans.position, trans.rotation);
