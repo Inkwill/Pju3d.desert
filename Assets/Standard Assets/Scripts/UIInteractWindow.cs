@@ -41,7 +41,8 @@ public class UIInteractWindow : UIWindow
 				UIElementBase element = elements[i].GetComponent<UIElementBase>();
 				element.icon.sprite = devices[i].ItemSprite;
 				element.toggle.group = m_uiGridRoot;
-				element.toggle.onValueChanged.AddListener((value) => { if (value) UpdateInfo(i); });
+				element.index = i;
+				element.toggle.onValueChanged.AddListener((value) => { if (value) UpdateInfo(element.index); });
 			}
 			if (elements.Length > 0) UpdateInfo(0);
 		}
@@ -63,6 +64,7 @@ public class UIInteractWindow : UIWindow
 	protected override void OnClose()
 	{
 		bt_Confirm.onClick.RemoveAllListeners();
+		m_uiGridRoot.transform.GetComponentsInChildren<UIElementBase>().ToList().ForEach(element => element.toggle.onValueChanged.RemoveAllListeners());
 		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("up");
 	}
 }

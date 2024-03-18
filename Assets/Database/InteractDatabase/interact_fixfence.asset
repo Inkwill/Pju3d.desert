@@ -17,9 +17,13 @@ MonoBehaviour:
   BehavePrompt: Fix
   interactAnim: 
   maxActorCount: 1
-  BehaveDuring: 0
+  actTimes: 1
+  actCd: 0
+  BehaveDuring: 2
   autoDestroy: 1
   devices:
-  - {fileID: 11400000, guid: 93773d270f0e28144a3227c068edd713, type: 2}
+    Value:
+    - {fileID: 11400000, guid: 93773d270f0e28144a3227c068edd713, type: 2}
   demands:
-  - {fileID: 11400000, guid: ac4f547b15baa674dad0a12aaa78092e, type: 2}
+    Value:
+    - {fileID: 11400000, guid: ac4f547b15baa674dad0a12aaa78092e, type: 2}
