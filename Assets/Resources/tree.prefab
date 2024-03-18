@@ -321,9 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_data: {fileID: 11400000, guid: 8f836243b8a86414985184106dce9c4d, type: 2}
-  InteractEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  autoActive: 1
   ExhaustedEvent:
     m_PersistentCalls:
       m_Calls:

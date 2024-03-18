@@ -117,6 +117,7 @@ public class InteractOnTrigger : MonoBehaviour
 		if (interObjects.Count == 0) return null;
 
 		GameObject nearest = interObjects[0];
+		if (nearest == null) return null;
 		float nearestDistance = Vector3.Distance(transform.position, nearest.transform.position);
 
 		for (int i = 1; i < interObjects.Count; i++)

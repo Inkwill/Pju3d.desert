@@ -49,21 +49,6 @@ public class RoleAI : AIBase
 
 	protected override void OnStateUpdate(State curState)
 	{
-		if (curState == State.IDLE || curState == State.INTERACTING)
-		{
-			if (CurrentEnemy != null) { SetState(State.PURSUING); return; }
-			else if (EnemyDetector.Inners.Count > 0)
-			{
-				m_character.SetEnemy(EnemyDetector.GetNearest().GetComponent<Character>());
-				SetState(State.PURSUING);
-				return;
-			}
-		}
-		if (curState == State.PURSUING)
-		{
-			if (CurrentEnemy) LookAt(CurrentEnemy.transform);
-			else { SetState(State.IDLE); return; }
-		}
 		if (curState == State.MOVE)
 		{
 			if (m_Destination != Vector3.zero && Vector3.SqrMagnitude(m_Destination - transform.position) <= 1)

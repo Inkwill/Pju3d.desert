@@ -15,9 +15,9 @@ MonoBehaviour:
   Type: 2
   Key: tree
   BehavePrompt: Cut
-  interactAnim: 
+  interactAnim: Skill
   maxActorCount: 3
-  maxActTimes: 1
+  maxActTimes: 10
   actCd: 0
   BehaveDuring: 0
   autoDestroy: 1
@@ -26,5 +26,3 @@ MonoBehaviour:
   demands:
     Value: []
   resItem: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
-  initCount: 0
-  replenishTime: 0

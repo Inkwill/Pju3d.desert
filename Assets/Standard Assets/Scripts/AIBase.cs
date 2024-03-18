@@ -98,6 +98,16 @@ public class AIBase : MonoBehaviour
 		m_StateDuring += Time.deltaTime;
 		//Dead or Inactive
 		if (m_State == State.DEAD || m_State == State.INACTIVE) return;
+		if (m_State == State.IDLE || m_State == State.INTERACTING)
+		{
+			if (CurrentEnemy != null) { SetState(State.PURSUING); return; }
+			else if (EnemyDetector.Inners.Count > 0)
+			{
+				m_character.SetEnemy(EnemyDetector.GetNearest().GetComponent<Character>());
+				SetState(State.PURSUING);
+				return;
+			}
+		}
 		//Skill
 		if (m_character.SkillUser && m_State != State.SKILLING && m_character.SkillUser.CurSkill != null) { SetState(State.SKILLING); }
 		if (m_character.SkillUser && m_State == State.SKILLING && m_character.SkillUser.CurSkill == null) { SetState(State.IDLE); }
@@ -119,8 +129,9 @@ public class AIBase : MonoBehaviour
 				}
 			}
 			if (m_character.CurrentEnemy && m_character.CanAttackReach()) SetState(State.ATTACKING);
-			else m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<Character>());
-			if (m_character.CurrentEnemy == null) SetState(State.IDLE);
+			else if (m_character.CurrentEnemy == null && EnemyDetector.Inners.Count > 0) m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<Character>());
+			if (CurrentEnemy) LookAt(CurrentEnemy.transform);
+			else { SetState(State.IDLE); return; }
 		}
 		//INTERACTING
 		if (m_State == State.INTERACTING && m_character.CurrentInteractor == null) SetState(State.IDLE);

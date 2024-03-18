@@ -126,7 +126,7 @@ namespace CreatorKitCode
 			{
 				Weapon = wp;
 				Weapon.EquippedBy(m_Owner);
-				if (wp != m_DefaultWeapon) OnEquiped?.Invoke(wp);
+				OnEquiped?.Invoke(wp);
 			}
 			else
 			{

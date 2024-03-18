@@ -9,5 +9,6 @@ public enum VFXType
 	SmokePoof,
 	Death,
 	Water,
+	CannonFire,
 	NONE
 }
