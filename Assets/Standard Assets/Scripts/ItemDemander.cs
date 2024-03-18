@@ -14,7 +14,6 @@ public class ItemDemander : MonoBehaviour, IInteractable
 	InteractData m_data;
 	[SerializeField]
 	bool autoActive;
-
 	public Action<InventorySystem.ItemDemand, string> demandEvent;
 
 	List<InventorySystem.ItemDemand> m_demands;
@@ -24,17 +23,21 @@ public class ItemDemander : MonoBehaviour, IInteractable
 
 	void Awake()
 	{
-		if (m_data.BehaveDuring > 0 || m_data.actTimes > 1)
+		if (m_data.BehaveDuring > 0 || m_data.maxActTimes > 1)
 			m_timer = gameObject.AddComponent<Timer>();
 
 	}
 	void Start()
 	{
-		if (autoActive) ActiveInteract();
+		if (autoActive)
+		{
+			GetComponent<InteractHandle>()?.SetHandle(true);
+			ActiveInteract();
+		}
 		if (m_timer)
 		{
 			m_timer.timerDuration = m_data.BehaveDuring;
-			m_timer.loopTimes = m_data.actTimes;
+			m_timer.loopTimes = m_data.maxActTimes;
 			m_timer.cd = m_data.actCd;
 			m_timer.refreshEvent += ActiveInteract;
 			m_timer.behaveEvent += () => m_data.InteractBehave(transform, m_curDemandIndex);
@@ -49,8 +52,6 @@ public class ItemDemander : MonoBehaviour, IInteractable
 		{
 			m_demands.Add(data.CreatItemDemand());
 		}
-		GetComponent<InteractHandle>()?.SetHandle(true);
-
 		if (m_data.Type == InteractData.InteractType.DeviceFixer && m_demands.Count > 0)
 		{
 			m_curDemandIndex = 0;

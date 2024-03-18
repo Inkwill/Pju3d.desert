@@ -156,7 +156,7 @@ public class EffectData : ScriptableObject
 		return false;
 	}
 
-	void DropItem(Vector3 pos, Item item, int num)
+	public static void DropItem(Vector3 pos, Item item, int num)
 	{
 		GameObject lootObj = Resources.Load("Loot") as GameObject;
 		Vector3 direction = Quaternion.Euler(0, Random.Range(0, 360), 0) * Vector3.right;

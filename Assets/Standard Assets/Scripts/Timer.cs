@@ -8,6 +8,8 @@ public class Timer : MonoBehaviour
 	public float timerDuration = 10.0f;
 	public int loopTimes = 1;  //loopTimes <= 0  means infinity
 	public float cd;
+	public float CurCd { get { return m_curCd; } }
+	public int TotalBehaved { get { return m_behavedTimes; } }
 	public UnityEvent<float> waitingEvent;
 	public UnityEvent<float, float> processEvent;
 	public Action behaveEvent;
@@ -17,6 +19,7 @@ public class Timer : MonoBehaviour
 	float m_passedTime;
 	float m_curCd;
 	bool m_started = false;
+	int m_behavedTimes;
 	public bool isStarted
 	{
 		get { return m_started; }
@@ -50,6 +53,7 @@ public class Timer : MonoBehaviour
 				m_started = false;
 				m_passedTime = 0f;
 				loopTimes--;
+				m_behavedTimes++;
 				behaveEvent?.Invoke();
 				if (loopTimes == 0)
 				{

@@ -35,6 +35,7 @@ public class Character : HighlightableObject, IInteractable
 	public UnityEvent<Damage> DamageEvent;
 	public UnityEvent<Character> DeathEvent;
 	public UnityEvent<Character> AttackEvent;
+	public UnityEvent<IInteractable> InteractEvent;
 	public Action<Character> KillEnemyAction { get; set; }
 	public Action<Skill, string> SkillAction { get; set; }
 	public Action<AIBase.State> StateUpdateAction { get; set; }
@@ -233,11 +234,12 @@ public class Character : HighlightableObject, IInteractable
 	public bool CanInteract(IInteractable target) { return BaseAI && BaseAI.isIdle; }
 	public void InteractWith(IInteractable target)
 	{
-		if (m_interactor == null)
+		m_interactor = target;
+		if (m_interactor != null && BaseAI)
 		{
-			m_interactor = target;
-			if (m_interactor != null && BaseAI) BaseAI.SetState(AIBase.State.INTERACTING);
+			string anim = target.Data.interactAnim;
+			if (anim != "") InteractEvent?.Invoke(target);
+			else target.InteractWith(this);
 		}
 	}
-	public string InteractAnim(IInteractable target) { return "Hit"; }
 }

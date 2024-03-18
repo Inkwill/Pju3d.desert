@@ -32,6 +32,7 @@ public class CharacterAnimHandle : MonoBehaviour
 		m_character.DamageEvent.AddListener((damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); });
 		m_character.DeathEvent.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
 		m_character.AttackEvent.AddListener((attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); });
+		m_character.InteractEvent.AddListener((interactor) => { if (interactor.Data.interactAnim != "") m_Animator.SetTrigger(interactor.Data.interactAnim); });
 		if (m_character.BaseAI != null)
 		{
 			m_character.StateUpdateAction += OnCharacterStating;
@@ -44,12 +45,10 @@ public class CharacterAnimHandle : MonoBehaviour
 		if (SpeedTrigger == "") return;
 		if (curState != AIBase.State.DEAD && curState != AIBase.State.INACTIVE)
 			m_Animator.SetFloat(SpeedTrigger, m_character.BaseAI.SpeedScale);
-		if (curState == AIBase.State.INTERACTING)
-		{
-			string anim = m_character.CurrentInteractor.Data.interactAnim;
-			if (anim != "") m_Animator.SetTrigger(anim);
-			else m_character.CurrentInteractor.InteractWith(m_character);
-		}
+		// if (curState == AIBase.State.INTERACTING)
+		// {
+		// 	m_Animator.SetTrigger(m_character.CurrentInteractor.Data.interactAnim);
+		// }
 	}
 
 	void StepEvent()
@@ -66,6 +65,7 @@ public class CharacterAnimHandle : MonoBehaviour
 		if (m_character.BaseAI.CurState == AIBase.State.INTERACTING)
 		{
 			m_character.CurrentInteractor.InteractWith(m_character);
+
 		}
 	}
 

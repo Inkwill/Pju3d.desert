@@ -1199,6 +1199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 1
+  Prompt: 
 --- !u!1 &8184757580538591925
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,9 +1273,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Detector: {fileID: 5421448909845822347}
-  handleTime: 0.1
-  exclusive: 1
-  slider: {fileID: 4054404088259388929}
+  EnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1788767501413717586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1287,27 +1291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: decd7e7cf04a1474fb9c781f6e463fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resItem: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70, type: 2}
-  maxCount: 3
-  initCount: 1
-  m_collectCd: 10
-  CollectAnim: 
-  m_replenishTime: 60
-  InteractEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 178500374408198783}
-        m_TargetAssemblyTypeName: EffectTrigger, Assembly-CSharp-firstpass
-        m_MethodName: TakEffects
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_data: {fileID: 11400000, guid: 827456dc259ef714f80710abbdf5b1ce, type: 2}
   ExhaustedEvent:
     m_PersistentCalls:
       m_Calls: []

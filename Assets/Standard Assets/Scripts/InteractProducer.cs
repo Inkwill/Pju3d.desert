@@ -7,45 +7,66 @@ public class InteractProducer : MonoBehaviour, IInteractable
 {
 	[SerializeField]
 	InteractData m_data;
+	[SerializeField]
+	bool autoActive;
 	public InteractData Data { get { return m_data; } }
-	[SerializeField]
-	ResItem resItem;
-	[SerializeField]
-	int maxCount = 10;
-	[SerializeField]
-	int initCount = 10;
-	[SerializeField]
-	float m_replenishTime = 10;
-	public UnityEvent<GameObject, GameObject> InteractEvent;
 	public UnityEvent<GameObject> ExhaustedEvent;
 	public UIItemGrid itemGrid;
 	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
 	protected IInteractable m_interactor;
-	int m_count;
-
+	Timer m_timer;
+	void Awake()
+	{
+		m_timer = gameObject.AddComponent<Timer>();
+	}
 	void Start()
 	{
-		m_count = initCount;
-		itemGrid?.Init(maxCount);
-		itemGrid?.ShowItem(m_count);
-		GetComponent<InteractHandle>()?.SetHandle(true);
-		if (m_count < maxCount && m_replenishTime != -1) StartCoroutine(Replenish());
+		if (autoActive) ActiveInteract();
+		if (m_timer)
+		{
+			m_timer.timerDuration = m_data.BehaveDuring;
+			m_timer.loopTimes = m_data.maxActTimes;
+			m_timer.cd = m_data.actCd;
+			m_timer.refreshEvent += ActiveInteract;
+			m_timer.behaveEvent += () =>
+			{
+				GetComponent<InteractHandle>()?.SetHandle(false);
+				m_data.InteractBehave(transform);
+				itemGrid?.ShowItem(m_timer.loopTimes);
+			};
+
+			m_timer.endEvent += () =>
+			{
+				if (m_data.maxActTimes != -1)
+					OnExhausted();
+			};
+		}
+
+		itemGrid?.Init(m_data.maxActTimes);
+		itemGrid?.ShowItem(m_timer.loopTimes);
 	}
+
+	void ActiveInteract()
+	{
+		GetComponent<InteractHandle>()?.SetHandle(true);
+	}
+
+
 	public bool CanInteract(IInteractable target)
 	{
-		if ((m_count > 0 || maxCount == -1) && target is Character && target.CanInteract(this))
+		if ((m_timer.CurCd <= 0) && (m_timer.loopTimes > 0 || m_data.maxActTimes == -1) && target is Character && target.CanInteract(this))
 		{
 			var character = target as Character;
-			if (!character.HoldTools(resItem))
+			if (!character.HoldTools(m_data.resItem))
 			{
-				character.GetComponentInChildren<UIRoleHud>().Bubble("I need a " + resItem.toolType);
+				character.GetComponentInChildren<UIRoleHud>().Bubble("I need a " + m_data.resItem.toolType);
 				return false;
 			}
-			if (resItem.requireContainer)
+			if (m_data.resItem.requireContainer)
 			{
-				if (!character.Inventory.ResInventories.ContainsKey(resItem.resType))
+				if (!character.Inventory.ResInventories.ContainsKey(m_data.resItem.resType))
 				{
-					character.GetComponentInChildren<UIRoleHud>().Bubble("I need a container of " + resItem.ItemName);
+					character.GetComponentInChildren<UIRoleHud>().Bubble("I need a container of " + m_data.resItem.ItemName);
 					return false;
 				}
 			}
@@ -56,27 +77,13 @@ public class InteractProducer : MonoBehaviour, IInteractable
 
 	public void InteractWith(IInteractable target)
 	{
-		if (target is Character)
-		{
-			var character = target as Character;
-			InteractEvent?.Invoke(gameObject, character.gameObject);
-			Helpers.Log(this, "InteractWith", character.CharacterName);
-			if (maxCount != -1 && --m_count < 1 && m_replenishTime == -1) OnExhausted();
-			if (m_replenishTime != -1) StartCoroutine(Replenish());
-			itemGrid?.ShowItem(m_count);
-		}
-	}
-	IEnumerator Replenish()
-	{
-		yield return new WaitForSeconds(m_replenishTime);
-		m_count++;
-		itemGrid?.ShowItem(m_count);
-		if (m_count < maxCount) StartCoroutine(Replenish());
+		m_timer.StartTimer();
 	}
 
 	void OnExhausted()
 	{
 		GetComponent<InteractHandle>()?.SetHandle(false);
 		ExhaustedEvent?.Invoke(gameObject);
+		if (m_data.autoDestroy) Destroy(gameObject);
 	}
 }

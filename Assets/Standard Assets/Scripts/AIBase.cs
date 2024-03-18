@@ -43,6 +43,7 @@ public class AIBase : MonoBehaviour
 	{
 		m_character = GetComponent<Character>();
 		m_character.DamageEvent.AddListener(OnDamageAI);
+		m_character.InteractEvent.AddListener((interactor) => { SetState(State.INTERACTING); });
 		m_character.DeathEvent.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
 
 		if (EnemyDetector)

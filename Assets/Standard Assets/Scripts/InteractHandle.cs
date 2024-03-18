@@ -57,10 +57,10 @@ public class InteractHandle : MonoBehaviour
 	{
 		if (duration < 0.5f || m_interactived.Count >= m_host.Data.maxActorCount) return;
 		IInteractable interactor = stayer.GetComponent<IInteractable>();
-		if (m_host.CanInteract(interactor) && !m_interactived.Contains(interactor))
+		if (m_host.CanInteract(interactor))
 		{
 			interactor.InteractWith(m_host);
-			m_interactived.Add(interactor);
+			if (!m_interactived.Contains(interactor)) m_interactived.Add(interactor);
 		}
 	}
 }
