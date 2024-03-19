@@ -99,8 +99,9 @@ MonoBehaviour:
   camp: 2
   CharacterName: Cactus Nails
   DefaultWeapon: {fileID: 0}
-  WeaponLocator: {fileID: 0}
   MoveSpeed: 3
+  CorpseChance: 0
+  m_CorpseRetention: 0
   Stats:
     baseStats:
       health: 5
@@ -110,7 +111,16 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  OnDeath:
+  DamageEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  DeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AttackEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  InteractEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1956787967552379151
@@ -208,10 +218,9 @@ MonoBehaviour:
   InteractDetector: {fileID: 3517083912815299978}
   EnemyDetector: {fileID: 53202347197689032}
   SkillDetector: {fileID: 1286696725350355693}
-  dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
-  CorpseChance: 0
-  m_CorpseRetention: 0
   m_Offensive: 1
+  m_guarder: 0
+  m_itemPick: 0
   m_WanderRadius: 5
   m_WanderBeat: 3
 --- !u!1001 &1838993880767983941

@@ -23,7 +23,7 @@ public class ItemDemander : MonoBehaviour, IInteractable
 
 	void Awake()
 	{
-		if (m_data.BehaveDuring > 0 || m_data.maxActTimes > 1)
+		if (m_data.BehaveDuring > 0 || m_data.maxActTimes > 1 || m_data.autoDestroy)
 			m_timer = gameObject.AddComponent<Timer>();
 
 	}
@@ -37,11 +37,12 @@ public class ItemDemander : MonoBehaviour, IInteractable
 		if (m_timer)
 		{
 			m_timer.timerDuration = m_data.BehaveDuring;
-			m_timer.loopTimes = m_data.maxActTimes;
+			m_timer.MaxTimes = m_data.maxActTimes;
 			m_timer.cd = m_data.actCd;
-			m_timer.refreshEvent += ActiveInteract;
-			m_timer.behaveEvent += () => m_data.InteractBehave(transform, m_curDemandIndex);
-			if (m_data.autoDestroy) m_timer.endEvent += () => Destroy(gameObject);
+			m_timer.refreshAction += ActiveInteract;
+			m_timer.behaveAction += () => m_data.InteractBehave(transform, m_curDemandIndex);
+			m_timer.processAction += (max, passed) => { VFXManager.PlayVFX(m_data.behavingVFX, transform.position); };
+			if (m_data.autoDestroy) m_timer.endAction += () => Destroy(gameObject);
 		}
 	}
 

@@ -24,6 +24,8 @@ public class InteractData : ScriptableObject
 	public float actCd;
 	[ConditionalField(nameof(interactAnim), false, "")]
 	public float BehaveDuring;
+	public VFXType behavingVFX;
+	public VFXType behaveVFX;
 	[ConditionalField(nameof(Type), false, InteractType.DropBox)]
 	public bool autoDestroy = true;
 	[ConditionalField(nameof(Type), false, InteractType.DeviceFixer, InteractType.DeviceCreater)]
@@ -52,6 +54,7 @@ public class InteractData : ScriptableObject
 			default:
 				break;
 		}
+		VFXManager.PlayVFX(behaveVFX, trans.position);
 	}
 
 	public static InteractData GetInteractDataByKey(string key)

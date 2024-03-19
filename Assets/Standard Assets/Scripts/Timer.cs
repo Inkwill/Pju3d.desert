@@ -6,15 +6,17 @@ public class Timer : MonoBehaviour
 {
 	public bool autoStart;
 	public float timerDuration = 10.0f;
-	public int loopTimes = 1;  //loopTimes <= 0  means infinity
+	public int MaxTimes = 1;//maxTimes <= 0  means infinity
+	public int LeftTimes { get { return m_leftTimes; } set { m_leftTimes = value; } }
+	int m_leftTimes;
 	public float cd;
 	public float CurCd { get { return m_curCd; } }
 	public int TotalBehaved { get { return m_behavedTimes; } }
-	public UnityEvent<float> waitingEvent;
-	public UnityEvent<float, float> processEvent;
-	public Action behaveEvent;
-	public Action endEvent;
-	public Action refreshEvent;
+	public Action<float> waitingAction;
+	public Action<float, float> processAction;
+	public Action behaveAction;
+	public Action endAction;
+	public Action refreshAction;
 	UISliderHandle m_slider;
 	float m_passedTime;
 	float m_curCd;
@@ -28,15 +30,22 @@ public class Timer : MonoBehaviour
 	void Awake()
 	{
 		m_slider = GetComponentInChildren<UISliderHandle>();
+		m_leftTimes = MaxTimes;
 	}
 	void Start()
 	{
-		if (autoStart) StartTimer();
+		if (autoStart) m_started = true;
 	}
 
-	public void StartTimer()
+	public void StartTimer(bool auto = false)
 	{
+		StartTimer(MaxTimes, auto);
+	}
+	public void StartTimer(int times, bool auto = false)
+	{
+		m_leftTimes = MaxTimes = times;
 		m_started = true;
+		autoStart = auto;
 	}
 	void Update()
 	{
@@ -46,18 +55,18 @@ public class Timer : MonoBehaviour
 			m_slider?.SetValue(timerDuration, m_passedTime);
 			if (m_passedTime <= timerDuration)
 			{
-				processEvent?.Invoke(timerDuration, m_passedTime);
+				processAction?.Invoke(timerDuration, m_passedTime);
 			}
 			if (m_passedTime >= timerDuration)
 			{
 				m_started = false;
 				m_passedTime = 0f;
-				loopTimes--;
+				m_leftTimes--;
 				m_behavedTimes++;
-				behaveEvent?.Invoke();
-				if (loopTimes == 0)
+				behaveAction?.Invoke();
+				if (m_leftTimes == 0)
 				{
-					endEvent?.Invoke();
+					endAction?.Invoke();
 				}
 				else if (cd > 0)
 				{
@@ -65,18 +74,18 @@ public class Timer : MonoBehaviour
 				}
 				else if (cd == 0)
 				{
-					refreshEvent?.Invoke();
-					if (autoStart) StartTimer();
+					refreshAction?.Invoke();
+					if (autoStart) m_started = true;
 				}
 			}
 		}
 		else
 		{
-			waitingEvent?.Invoke(m_curCd);
+			waitingAction?.Invoke(m_curCd);
 			if (m_curCd > 0)
 			{
 				m_curCd -= Time.deltaTime;
-				if (m_curCd <= 0 && loopTimes > 0) refreshEvent?.Invoke();
+				if (m_curCd <= 0 && m_leftTimes > 0) { refreshAction?.Invoke(); if (autoStart) m_started = true; }
 			}
 		}
 	}

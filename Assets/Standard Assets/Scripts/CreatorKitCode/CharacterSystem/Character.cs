@@ -25,7 +25,8 @@ public class Character : HighlightableObject, IInteractable
 	public Camp camp;
 	public string CharacterName;
 	public Weapon DefaultWeapon;
-	public Transform WeaponLocator;
+	WeaponRoot m_weaponRoot;
+	public WeaponRoot WeaponRoot { get { return m_weaponRoot; } }
 	public float MoveSpeed = 3.0f;
 	public int CorpseChance;
 	[SerializeField] float m_CorpseRetention;
@@ -84,16 +85,15 @@ public class Character : HighlightableObject, IInteractable
 				break;
 		}
 
+		m_weaponRoot = GetComponentInChildren<WeaponRoot>();
 		Equipment.OnEquiped += item =>
 		{
 			if (item.Slot == EquipmentItem.EquipmentSlot.Weapon)
 			{
 				Weapon wp = item as Weapon;
 				BaseAI.EnemyDetector.Radius = System.Math.Max(wp.Stats.MaxRange, BaseAI.EnemyDetector.Radius);
-				wp.bulletTrans = WeaponLocator;
-				if (WeaponLocator && item.WorldObjectPrefab)
-					Instantiate(item.WorldObjectPrefab, WeaponLocator, false);
-				//Helpers.RecursiveLayerChange(obj.transform, LayerMask.NameToLayer("PlayerEquipment"));
+				if (m_weaponRoot && item.WorldObjectPrefab)
+					Instantiate(item.WorldObjectPrefab, m_weaponRoot.transform, false);
 			}
 		};
 
@@ -101,7 +101,7 @@ public class Character : HighlightableObject, IInteractable
 		{
 			if (item.Slot == EquipmentItem.EquipmentSlot.Weapon)
 			{
-				foreach (Transform t in WeaponLocator)
+				foreach (Transform t in m_weaponRoot.transform)
 					Destroy(t.gameObject);
 			}
 		};

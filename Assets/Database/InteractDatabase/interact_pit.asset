@@ -12,10 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27382125d9f513c4fa1ee922dd71b4f7, type: 3}
   m_Name: interact_pit
   m_EditorClassIdentifier: 
-  Type: 0
+  Type: 1
   Key: Pit
   BehavePrompt: Install
-  interactAnim: Skill
+  interactAnim: 
   maxActorCount: 1
-  devices: []
-  demands: []
+  maxActTimes: 1
+  actCd: 0
+  BehaveDuring: 10
+  behaveVFX: 6
+  autoDestroy: 1
+  devices:
+    Value:
+    - {fileID: 11400000, guid: 93773d270f0e28144a3227c068edd713, type: 2}
+  demands:
+    Value:
+    - {fileID: 11400000, guid: ac4f547b15baa674dad0a12aaa78092e, type: 2}
+  resItem: {fileID: 0}

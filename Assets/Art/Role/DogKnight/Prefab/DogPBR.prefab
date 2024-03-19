@@ -540,7 +540,6 @@ Transform:
   - {fileID: 8422892626600249480}
   - {fileID: 8422892626600249478}
   - {fileID: 8422892626600249476}
-  - {fileID: 8422892626600249714}
   m_Father: {fileID: 8422892626600249502}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8422892626600285348
@@ -959,6 +958,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8422892626600249714}
   - {fileID: 8422892626600249558}
   - {fileID: 8422892626600249512}
   - {fileID: 8422892626600249472}
@@ -1262,6 +1262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8422892626600249584}
   - component: {fileID: 8422892626592999198}
+  - component: {fileID: 7740426607128132715}
   m_Layer: 0
   m_Name: DogPBR
   m_TagString: Untagged
@@ -1296,7 +1297,7 @@ Animator:
   m_GameObject: {fileID: 8422892626600285392}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d9a1483b77bf10e4e851678ab6c2e54e, type: 3}
-  m_Controller: {fileID: 9100000, guid: b60dc9aa529b314489f628aa3b57c470, type: 2}
+  m_Controller: {fileID: 9100000, guid: a7a8ceb95c95a6a4195a63dae3772eda, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1307,6 +1308,30 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7740426607128132715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8422892626600285392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3d267ff6fabdc4e8b9a091ba04c8df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FootStep:
+    m_PersistentCalls:
+      m_Calls: []
+  SkillStep:
+    m_PersistentCalls:
+      m_Calls: []
+  DeathTrigger: Death
+  SpeedTrigger: Speed
+  AttackTrigger: Attack
+  HitTrigger: Hit
+  RespawnTrigger: Respawn
+  FaintTrigger: Faint
 --- !u!1 &8422892626600285394
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,8 +1684,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8422892626600249714}
+  - component: {fileID: 651347237351450794}
   m_Layer: 0
-  m_Name: Weapon
+  m_Name: WeaponRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1674,14 +1700,27 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8422892626600285522}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.70710415, y: -0.0019436182, z: 0.70710415, w: 0.0019436182}
-  m_LocalPosition: {x: -0.41078886, y: 0.022665657, z: 0.756554}
+  m_LocalRotation: {x: 0.7058099, y: -0.0022091465, z: 0.0003184524, w: 0.7083978}
+  m_LocalPosition: {x: 0.104853556, y: -0.009751981, z: 0.004107195}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 512311172252703038}
-  m_Father: {fileID: 8422892626600249538}
+  m_Father: {fileID: 8422892626600249564}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &651347237351450794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8422892626600285522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3fb5a799d828749abe388d0392857e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletTrans: {fileID: 0}
 --- !u!1 &8422892626600285524
 GameObject:
   m_ObjectHideFlags: 0

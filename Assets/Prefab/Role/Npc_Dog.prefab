@@ -126,7 +126,6 @@ MonoBehaviour:
   camp: 1
   CharacterName: DogKnight
   DefaultWeapon: {fileID: 0}
-  WeaponLocator: {fileID: 3506814719559824095}
   MoveSpeed: 3
   CorpseChance: 0
   m_CorpseRetention: 0
@@ -160,6 +159,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  InteractEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2134693030728375183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,14 +229,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5116674e42294924098b3eb22e4670d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventType: 0
+  storyMode: 0
   triggerTimes: 5
   loopTimes: 10
+  stayTimes: 1
+  cdTimes: 30
   Conditions: []
   Dialogues:
   - Key: Help!
     Value: 2
-  TriggerEffects: []
+  StoryEndEvents:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &2688779954868180939
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -365,11 +371,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4349176422864021648}
     m_Modifications:
-    - target: {fileID: 8422892626592999198, guid: 214e08cd5e5d74c458e2a81b7ec2c84c,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: a7a8ceb95c95a6a4195a63dae3772eda, type: 2}
     - target: {fileID: 8422892626600249584, guid: 214e08cd5e5d74c458e2a81b7ec2c84c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -428,54 +429,14 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8422892626600285392, guid: 214e08cd5e5d74c458e2a81b7ec2c84c,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8018296538341076226}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 214e08cd5e5d74c458e2a81b7ec2c84c, type: 3}
---- !u!4 &3506814719559824095 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8422892626600249714, guid: 214e08cd5e5d74c458e2a81b7ec2c84c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4922035682206727085}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3506814719559824221 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8422892626600249584, guid: 214e08cd5e5d74c458e2a81b7ec2c84c,
     type: 3}
   m_PrefabInstance: {fileID: 4922035682206727085}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &3506814719560183677 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8422892626600285392, guid: 214e08cd5e5d74c458e2a81b7ec2c84c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4922035682206727085}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8018296538341076226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3506814719560183677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa3d267ff6fabdc4e8b9a091ba04c8df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FootStep:
-    m_PersistentCalls:
-      m_Calls: []
-  SkillStep:
-    m_PersistentCalls:
-      m_Calls: []
-  DeathTrigger: Death
-  SpeedTrigger: Speed
-  AttackTrigger: Attack
-  HitTrigger: Hit
-  RespawnTrigger: Respawn
-  FaintTrigger: Faint
 --- !u!1001 &8897094925192330381
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -127,7 +127,6 @@ MonoBehaviour:
   camp: 2
   CharacterName: Cactus Nails
   DefaultWeapon: {fileID: 0}
-  WeaponLocator: {fileID: 0}
   MoveSpeed: 3
   CorpseChance: 0
   m_CorpseRetention: 0
@@ -159,6 +158,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   AttackEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  InteractEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1219315396725883836
@@ -762,7 +764,30 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 122732777931493978}
+    - targetCorrespondingSourceObject: {fileID: 9099060057272577458, guid: d3aea247b6976ac4298d5d2e8c0a681b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8961417194438708862}
   m_SourcePrefab: {fileID: 100100000, guid: d3aea247b6976ac4298d5d2e8c0a681b, type: 3}
+--- !u!1 &1625802533437726560 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9099060057272577458, guid: d3aea247b6976ac4298d5d2e8c0a681b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7554322334854755026}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8961417194438708862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1625802533437726560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3fb5a799d828749abe388d0392857e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletTrans: {fileID: 0}
 --- !u!1 &2015278601701583835 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: d3aea247b6976ac4298d5d2e8c0a681b,

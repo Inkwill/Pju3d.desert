@@ -45,7 +45,6 @@ namespace CreatorKitCode
 		public List<EffectData> AttackEffects;
 		public Skill WeaponSkill;
 		public Bullet bulletPb;
-		public Transform bulletTrans;
 
 		[Header("Sounds")]
 		public AudioClip[] HitSounds;
@@ -58,7 +57,7 @@ namespace CreatorKitCode
 			damage.AddDamage(damageType, damageNum);
 			if (bulletPb != null)
 			{
-				Vector3 bulletPos = attacker.WeaponLocator.position;
+				Vector3 bulletPos = attacker.WeaponRoot.bulletPos;
 				Bullet bullet = Instantiate(bulletPb, bulletPos, Quaternion.Euler(0, 180, 0));
 				bullet.damage = damage;
 				bullet.target = target;

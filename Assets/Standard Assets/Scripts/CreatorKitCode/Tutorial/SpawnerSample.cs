@@ -1,16 +1,28 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using CreatorKitCode;
 
-public class SpawnerSample : TimerBehaviour
+public class SpawnerSample : MonoBehaviour
 {
 	public GameObject ObjectToSpawn;
-
+	public Action<Character> spawnEvent;
 	public Transform pathRoot;
 	public int radius = 5;
 	public int angleStep = 15;
 	public int spawnNum = 5;
+	Timer m_timer;
 
-	protected override void OnBehaved()
+	void Awake()
+	{
+		m_timer = GetComponent<Timer>();
+		if (m_timer) m_timer.behaveAction += ActSpawn;
+	}
+	public void StartSpawn()
+	{
+		m_timer?.StartTimer(true);
+	}
+
+	void ActSpawn()
 	{
 		for (int i = 0; i < spawnNum; i++)
 		{
@@ -59,6 +71,7 @@ public class SpawnerSample : TimerBehaviour
 		Vector3 spawnPosition = transform.position + direction * radius;
 		Character enemy = Instantiate(ObjectToSpawn, spawnPosition, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
 		if (pathRoot) enemy.gameObject.AddComponent<AiPathMove>().SetPath(pathRoot);
+		spawnEvent?.Invoke(enemy);
 	}
 }
 

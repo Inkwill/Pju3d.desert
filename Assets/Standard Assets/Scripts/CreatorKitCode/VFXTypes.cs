@@ -10,5 +10,6 @@ public enum VFXType
 	Death,
 	Water,
 	CannonFire,
+	Working,
 	NONE
 }

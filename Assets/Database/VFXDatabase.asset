@@ -47,3 +47,7 @@ MonoBehaviour:
     Prefab: {fileID: 1211639657851661640, guid: 25bbae2c2b140544b9bf86635d13103f,
       type: 3}
     PoolSize: 6
+  - Name: CannonFire
+    Prefab: {fileID: 6377083524818173826, guid: 3539d51b3f55e434fb84e325bbe87270,
+      type: 3}
+    PoolSize: 6

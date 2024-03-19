@@ -99,8 +99,9 @@ MonoBehaviour:
   camp: 2
   CharacterName: Cactus Nails
   DefaultWeapon: {fileID: 0}
-  WeaponLocator: {fileID: 0}
   MoveSpeed: 3
+  CorpseChance: 0
+  m_CorpseRetention: 0
   Stats:
     baseStats:
       health: 10
@@ -110,7 +111,16 @@ MonoBehaviour:
       spirit: 0
       damProtection: 00000000000000000000000000000000
       damBoosts: 00000000000000000000000000000000
-  OnDeath:
+  DamageEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  DeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AttackEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  InteractEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &465574281672476321
@@ -208,10 +218,9 @@ MonoBehaviour:
   InteractDetector: {fileID: 0}
   EnemyDetector: {fileID: 0}
   SkillDetector: {fileID: 0}
-  dropEffect: {fileID: 11400000, guid: c3b2128e56762b646a6b032b78ffe68c, type: 2}
-  CorpseChance: 100
-  m_CorpseRetention: 120
   m_Offensive: 1
+  m_guarder: 0
+  m_itemPick: 0
   m_WanderRadius: 5
   m_WanderBeat: 3
 --- !u!1001 &4601448470541522448
@@ -460,6 +469,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7184001621413427612}
+    - targetCorrespondingSourceObject: {fileID: -6142240774719710125, guid: 51ed1a96caabdfb43a94013d75c97f28,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4182069825514931988}
   m_SourcePrefab: {fileID: 100100000, guid: 51ed1a96caabdfb43a94013d75c97f28, type: 3}
 --- !u!4 &438605500606232866 stripped
 Transform:
@@ -485,9 +498,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3d267ff6fabdc4e8b9a091ba04c8df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackStep:
-    m_PersistentCalls:
-      m_Calls: []
   FootStep:
     m_PersistentCalls:
       m_Calls: []
@@ -500,6 +510,25 @@ MonoBehaviour:
   HitTrigger: Hit
   RespawnTrigger: Respawn
   FaintTrigger: Faint
+--- !u!1 &7615280349825355371 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6142240774719710125, guid: 51ed1a96caabdfb43a94013d75c97f28,
+    type: 3}
+  m_PrefabInstance: {fileID: 4858409484981310008}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4182069825514931988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7615280349825355371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3fb5a799d828749abe388d0392857e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletTrans: {fileID: 0}
 --- !u!1001 &8491726804373824084
 PrefabInstance:
   m_ObjectHideFlags: 0

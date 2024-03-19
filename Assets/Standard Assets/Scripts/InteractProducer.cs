@@ -25,17 +25,17 @@ public class InteractProducer : MonoBehaviour, IInteractable
 		if (m_timer)
 		{
 			m_timer.timerDuration = m_data.BehaveDuring;
-			m_timer.loopTimes = m_data.maxActTimes;
+			m_timer.MaxTimes = m_data.maxActTimes;
 			m_timer.cd = m_data.actCd;
-			m_timer.refreshEvent += ActiveInteract;
-			m_timer.behaveEvent += () =>
+			m_timer.refreshAction += ActiveInteract;
+			m_timer.behaveAction += () =>
 			{
 				GetComponent<InteractHandle>()?.SetHandle(false);
 				m_data.InteractBehave(transform);
-				itemGrid?.ShowItem(m_timer.loopTimes);
+				itemGrid?.ShowItem(m_timer.LeftTimes);
 			};
 
-			m_timer.endEvent += () =>
+			m_timer.endAction += () =>
 			{
 				if (m_data.maxActTimes != -1)
 					OnExhausted();
@@ -43,7 +43,7 @@ public class InteractProducer : MonoBehaviour, IInteractable
 		}
 
 		itemGrid?.Init(m_data.maxActTimes);
-		itemGrid?.ShowItem(m_timer.loopTimes);
+		itemGrid?.ShowItem(m_timer.LeftTimes);
 	}
 
 	void ActiveInteract()
@@ -54,7 +54,7 @@ public class InteractProducer : MonoBehaviour, IInteractable
 
 	public bool CanInteract(IInteractable target)
 	{
-		if ((m_timer.CurCd <= 0) && (m_timer.loopTimes > 0 || m_data.maxActTimes == -1) && target is Character && target.CanInteract(this))
+		if ((m_timer.CurCd <= 0) && (m_timer.LeftTimes > 0 || m_data.maxActTimes == -1) && target is Character && target.CanInteract(this))
 		{
 			var character = target as Character;
 			if (!character.HoldTools(m_data.resItem))
