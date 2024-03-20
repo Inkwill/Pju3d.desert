@@ -77,4 +77,10 @@ public class UIWindow : MonoBehaviour
 	}
 
 	public virtual void OnButtonClick(string eventName) { }
+
+	public void Switch()
+	{
+		if (gameObject.activeSelf) Close();
+		else Open();
+	}
 }

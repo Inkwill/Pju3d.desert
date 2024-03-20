@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
-using System;
+using DG.Tweening;
 
 public class UIInventoryWindow : UIWindow
 {
@@ -56,13 +56,20 @@ public class UIInventoryWindow : UIWindow
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
 		EquipRoot.SetActive(GameManager.StoryListener.CurrentTeller == null);
-		GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.INVENTORY);
+		GameManager.GameUI.WinMain.bottomRoot.DOMove(GameManager.GameUI.WinMain.bottomRoot.position + new Vector3(0, 150, 0), 0.2f);
+		//GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.INVENTORY);
 		Load();
 	}
 
 	protected override void OnClose()
 	{
-		GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
+		GameManager.GameUI.WinMain.bottomRoot.DOMove(GameManager.GameUI.WinMain.bottomRoot.position - new Vector3(0, 150, 0), 0.2f);
+		//GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
+	}
+
+	void Update()
+	{
+		if (m_SelectedSlot != null && !GameManager.CurHero.BaseAI.isIdle) m_SelectedSlot.GetComponent<Toggle>().isOn = false;
 	}
 	public void Load()
 	{
@@ -140,9 +147,6 @@ public class UIInventoryWindow : UIWindow
 				PlaceHandle handle = GameManager.CurHero.gameObject.AddComponent<PlaceHandle>();
 				handle.SetDevice(device);
 				BackToMain();
-				break;
-			case "Craft":
-				GameManager.GameUI.SwitchWindow("winCraft");
 				break;
 			default:
 				break;

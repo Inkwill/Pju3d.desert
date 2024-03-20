@@ -31,7 +31,6 @@ public class UIInteractWindow : UIWindow
 	}
 	protected override void OnOpen()
 	{
-		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("down");
 		if (m_interactor.Data.Type == InteractData.InteractType.DeviceFixer || m_interactor.Data.Type == InteractData.InteractType.DeviceCreater)
 		{
 			var devices = m_interactor.Data.devices.Value;
@@ -65,6 +64,5 @@ public class UIInteractWindow : UIWindow
 	{
 		bt_Confirm.onClick.RemoveAllListeners();
 		m_uiGridRoot.transform.GetComponentsInChildren<UIElementBase>().ToList().ForEach(element => element.toggle.onValueChanged.RemoveAllListeners());
-		GameManager.GameUI.WinMain.bottomRoot.SetTrigger("up");
 	}
 }

@@ -94,5 +94,6 @@ public class UICraftWindow : UIWindow, IInteractable
 			}
 			if (!GameManager.CurHero.CanInteract(this)) { m_craftingTime = 0; Close(); }
 		}
+		if (!GameManager.CurHero.BaseAI.isIdle) Close();
 	}
 }

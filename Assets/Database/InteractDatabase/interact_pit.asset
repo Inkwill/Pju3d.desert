@@ -20,7 +20,8 @@ MonoBehaviour:
   maxActTimes: 1
   actCd: 0
   BehaveDuring: 10
-  behaveVFX: 6
+  behavingVFX: 0
+  behaveVFX: 10
   autoDestroy: 1
   devices:
     Value:

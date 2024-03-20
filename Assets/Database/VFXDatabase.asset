@@ -51,3 +51,6 @@ MonoBehaviour:
     Prefab: {fileID: 6377083524818173826, guid: 3539d51b3f55e434fb84e325bbe87270,
       type: 3}
     PoolSize: 6
+  - Name: FightGround
+    Prefab: {fileID: 100008, guid: 4d76632d4004ac84ca64507f5abf4bd3, type: 3}
+    PoolSize: 6

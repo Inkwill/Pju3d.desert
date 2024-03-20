@@ -1,9 +1,9 @@
-using System.Collections;
 using UnityEngine;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
 using UnityEngine.UI;
 using System.Linq;
+using DG.Tweening;
 
 public class UIMainWindow : UIWindow
 {
@@ -25,7 +25,7 @@ public class UIMainWindow : UIWindow
 	public UIGoalInfo uiGoalInfo;
 	public Image iconExp;
 	public Slider sliderWater;
-	public Animator bottomRoot;
+	public Transform bottomRoot;
 	Button[] m_buttons;
 	UISkillButton[] m_skillButtons;
 
@@ -186,10 +186,6 @@ public class UIMainWindow : UIWindow
 			case "SwitchWeapon":
 				GameManager.CurHero.Equipment.SwitchWeapon();
 				//UpdateWeapon(GameManager.CurHero.Equipment);
-				break;
-			case "package":
-				Close();
-				GameManager.GameUI.OpenWindow("winInventory");
 				break;
 			case "talk":
 				Close();
