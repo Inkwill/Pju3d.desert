@@ -9,6 +9,7 @@ namespace CreatorKitCodeInternal
 	{
 		public TMP_Text Name;
 		public Text DescriptionText;
+		public Image icon;
 		public Button btEquip;
 		public Button btUnEquip;
 		public Button btDrop;
@@ -22,13 +23,39 @@ namespace CreatorKitCodeInternal
 			// btEquip.gameObject.SetActive(false);
 			// btUnEquip.gameObject.SetActive(false);
 		}
+		void Update()
+		{
+			if (!GameManager.CurHero.BaseAI.isIdle) gameObject.SetActive(false);
+		}
+		public void SetEquip(UIEquipSlot slot)
+		{
+			if (slot && slot.EquipItem)
+			{
+				Name.text = slot.EquipItem.ItemName;
+				icon.sprite = slot.EquipItem.ItemSprite;
+				DescriptionText.text = slot.EquipItem.GetDescription();
+				btUnEquip.gameObject.SetActive(true);
+
+				btGive.gameObject.SetActive(false);
+				btEquip.gameObject.SetActive(false);
+				btDrop.gameObject.SetActive(false);
+				btUse.gameObject.SetActive(false);
+				btPlace.gameObject.SetActive(false);
+
+				gameObject.SetActive(true);
+			}
+			else
+			{
+				gameObject.SetActive(false);
+			}
+		}
 
 		public void SetItem(UIInventorySlot slot)
 		{
 			if (slot && slot.item)
 			{
-				gameObject.SetActive(true);
 				Name.text = slot.item.ItemName;
+				icon.sprite = slot.item.ItemSprite;
 				DescriptionText.text = slot.item.GetDescription();
 				EquipmentItem equItem = slot.item as EquipmentItem;
 				UsableItem useItem = slot.item as UsableItem;
@@ -51,7 +78,7 @@ namespace CreatorKitCodeInternal
 					btUse.gameObject.SetActive(useItem);
 					btPlace.gameObject.SetActive(device && !device.undergroud);
 				}
-				btUnEquip.interactable = GameManager.CurHero.BaseAI.isIdle;
+				gameObject.SetActive(true);
 			}
 			else
 			{

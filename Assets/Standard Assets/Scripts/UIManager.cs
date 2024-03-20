@@ -4,6 +4,7 @@ using UnityEngine;
 using CreatorKitCodeInternal;
 using UnityEngine.UI;
 using System.Linq;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class UIManager : MonoBehaviour
 
 	public UIMainWindow WinMain => m_winDic["winMain"] as UIMainWindow;
 	Dictionary<string, UIWindow> m_winDic = new Dictionary<string, UIWindow>();
+
+	public Action<UIWindow> winOpenAction;
+	public Action<UIWindow> winCloseAction;
 
 	public UIWindow win_LastOpen;
 	public UIWindow win_LastClose;

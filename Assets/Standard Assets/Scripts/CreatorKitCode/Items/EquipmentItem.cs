@@ -24,7 +24,8 @@ namespace CreatorKitCode
 			Legs,
 			Feet,
 			Accessory,
-			Weapon
+			Weapon,
+			ViceWeapon
 		}
 
 		public EquipmentSlot Slot;

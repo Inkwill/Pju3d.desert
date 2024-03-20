@@ -8,11 +8,6 @@ using DG.Tweening;
 
 public class UIInventoryWindow : UIWindow
 {
-	// public class DragData
-	// {
-	// 	public UIInventorySlot DraggedEntry;
-	// 	public RectTransform OriginalParent;
-	// }
 	public GameObject EquipRoot;
 	public RectTransform ItemSlots;
 	public Text textStats;
@@ -39,6 +34,9 @@ public class UIInventoryWindow : UIWindow
 		DragCanvasScaler = GameManager.GameUI.DragCanvas.GetComponentInParent<CanvasScaler>();
 		m_ItemEntries = ItemSlots.GetComponentsInChildren<UIInventorySlot>();
 		GameManager.CurHero.Inventory.ItemAction += (item, eventName, num) => { Load(); };
+		GameManager.CurHero.Equipment.OnEquiped += (eq) => { Load(); };
+		GameManager.CurHero.Equipment.OnEquipViceWeapon += (eq) => { Load(); };
+		GameManager.CurHero.Equipment.OnUnequip += (eq) => { Load(); };
 
 		// m_ItemEntries = new UIInventorySlot[ItemSlots.Length];
 
@@ -55,7 +53,7 @@ public class UIInventoryWindow : UIWindow
 	{
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
-		EquipRoot.SetActive(GameManager.StoryListener.CurrentTeller == null);
+		EquipRoot.SetActive(false);
 		GameManager.GameUI.WinMain.bottomRoot.DOMove(GameManager.GameUI.WinMain.bottomRoot.position + new Vector3(0, 150, 0), 0.2f);
 		//GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.INVENTORY);
 		Load();
@@ -90,6 +88,12 @@ public class UIInventoryWindow : UIWindow
 		// Item itemUsed = m_HoveredItem.InventoryID != -1 ? m_Data.Inventory.Entries[m_HoveredItem.InventoryID].Item : m_HoveredItem.EquipmentItem;
 	}
 
+	public void OnEquipSelected(UIEquipSlot slot)
+	{
+		if (!gameObject.activeSelf) GameManager.GameUI.OpenWindow(winName);
+		Tooltip.SetEquip(slot);
+	}
+
 	public override void OnButtonClick(string eventName)
 	{
 		EquipmentItem equip = m_SelectedSlot?.item as EquipmentItem;
@@ -100,7 +104,7 @@ public class UIInventoryWindow : UIWindow
 				{
 					GameManager.CurHero.Inventory.EquipItem(equip);
 					m_SelectedSlot.tog.isOn = false;
-					Load();
+					//Load();
 
 				}
 				break;
@@ -109,7 +113,7 @@ public class UIInventoryWindow : UIWindow
 				{
 					GameManager.CurHero.Inventory.UnEquipItem(equip);
 					m_SelectedSlot.tog.isOn = false;
-					Load();
+					//Load();
 				}
 				break;
 			case "Drop":

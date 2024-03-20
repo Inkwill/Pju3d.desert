@@ -340,10 +340,10 @@ namespace CreatorKitCode
 
 		public void EquipItem(EquipmentItem equip)
 		{
+			MinusItem(equip.ItemName);
 			Weapon wp = equip as Weapon;
 			if (wp) m_Owner.Equipment.EquipWeapon(wp);
 			else m_Owner.Equipment.Equip(equip);
-			MinusItem(equip.ItemName);
 			//SFXManager.PlayClip("equiped");
 		}
 
