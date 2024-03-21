@@ -7,7 +7,7 @@ using DG.Tweening;
 
 public class UIMainWindow : UIWindow
 {
-	public Button btPackage;
+	public Button btConfirm;
 	public UISkillButton btWeapon;
 	public Button btSwitchWeapon;
 	public UITalkButton[] btTalks = new UITalkButton[2];
@@ -29,7 +29,7 @@ public class UIMainWindow : UIWindow
 	Button[] m_buttons;
 	UISkillButton[] m_skillButtons;
 
-	void Start()
+	void Awake()
 	{
 		targetUI.Init();
 		m_buttons = GetComponentsInChildren<Button>();
@@ -46,6 +46,7 @@ public class UIMainWindow : UIWindow
 		UpdateWeapon(GameManager.CurHero.Equipment);
 		CloseTalkButton();
 		tellContent.SetActive(false);
+		btConfirm.gameObject.SetActive(false);
 		uiGoalInfo.SetGoal(GameManager.GameGoal.CurrentGoal);
 		sliderWater.gameObject.SetActive(GameManager.CurHero.Inventory.ResInventories.Keys.Contains(ResItem.ResType.Water));
 	}
@@ -81,10 +82,6 @@ public class UIMainWindow : UIWindow
 		{
 			GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.STORY);
 			GameManager.StoryListener.CurrentTeller.tellerEvent.AddListener(OnStoryTellerEvent);
-			foreach (var bt in m_buttons)
-			{
-				if (bt != btPackage) bt.interactable = false;
-			}
 			foreach (var bt in m_skillButtons)
 			{
 				bt.gameObject.SetActive(false);

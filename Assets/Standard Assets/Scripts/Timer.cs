@@ -5,23 +5,25 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
 	public bool autoStart;
-	public float timerDuration = 10.0f;
-	public int MaxTimes = 1;//maxTimes <= 0  means infinity
+	public int MaxTimes { get { return m_maxTimes; } }
+	int m_maxTimes = 1; //maxTimes <= 0  means infinity
 	public int LeftTimes { get { return m_leftTimes; } set { m_leftTimes = value; } }
 	int m_leftTimes;
-	public float cd;
 	public float CurCd { get { return m_curCd; } }
+	float m_cd;
 	public int TotalBehaved { get { return m_behavedTimes; } }
+	int m_behavedTimes;
 	public Action<float> waitingAction;
 	public Action<float, float> processAction;
 	public Action behaveAction;
 	public Action endAction;
 	public Action refreshAction;
 	UISliderHandle m_slider;
+	float m_timerDuration;
 	float m_passedTime;
 	float m_curCd;
 	bool m_started = false;
-	int m_behavedTimes;
+
 	public bool isStarted
 	{
 		get { return m_started; }
@@ -30,20 +32,26 @@ public class Timer : MonoBehaviour
 	void Awake()
 	{
 		m_slider = GetComponentInChildren<UISliderHandle>();
-		m_leftTimes = MaxTimes;
 	}
 	void Start()
 	{
 		if (autoStart) m_started = true;
 	}
 
+	public void SetTimer(float during = 0, int maxTimes = 1, float cd = 0)
+	{
+		m_leftTimes = m_maxTimes = maxTimes;
+		m_timerDuration = during;
+		m_cd = cd;
+	}
+	static public Timer SetTimer(GameObject obj, float during = 0, int maxTimes = 1, float cd = 0)
+	{
+		Timer timer = obj.AddComponent<Timer>();
+		timer.SetTimer(during, maxTimes, cd);
+		return timer;
+	}
 	public void StartTimer(bool auto = false)
 	{
-		StartTimer(MaxTimes, auto);
-	}
-	public void StartTimer(int times, bool auto = false)
-	{
-		m_leftTimes = MaxTimes = times;
 		m_started = true;
 		autoStart = auto;
 	}
@@ -52,12 +60,12 @@ public class Timer : MonoBehaviour
 		if (m_started)
 		{
 			m_passedTime += Time.deltaTime;
-			m_slider?.SetValue(timerDuration, m_passedTime);
-			if (m_passedTime <= timerDuration)
+			m_slider?.SetValue(m_timerDuration, m_passedTime);
+			if (m_passedTime <= m_timerDuration)
 			{
-				processAction?.Invoke(timerDuration, m_passedTime);
+				processAction?.Invoke(m_timerDuration, m_passedTime);
 			}
-			if (m_passedTime >= timerDuration)
+			if (m_passedTime >= m_timerDuration)
 			{
 				m_started = false;
 				m_passedTime = 0f;
@@ -68,11 +76,11 @@ public class Timer : MonoBehaviour
 				{
 					endAction?.Invoke();
 				}
-				else if (cd > 0)
+				else if (m_cd > 0)
 				{
-					m_curCd = cd;
+					m_curCd = m_cd;
 				}
-				else if (cd == 0)
+				else if (m_cd == 0)
 				{
 					refreshAction?.Invoke();
 					if (autoStart) m_started = true;

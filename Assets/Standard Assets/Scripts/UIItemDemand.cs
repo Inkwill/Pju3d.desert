@@ -28,7 +28,7 @@ public class UIItemDemand : MonoBehaviour
 	[SerializeField]
 	Image m_itemIcon;
 
-	void Start()
+	void Awake()
 	{
 		ItemDemander demander = GetComponentInParent<ItemDemander>();
 		if (demander != null)

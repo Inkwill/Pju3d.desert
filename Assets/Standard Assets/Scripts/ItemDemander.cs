@@ -15,7 +15,6 @@ public class ItemDemander : MonoBehaviour, IInteractable
 	[SerializeField]
 	bool autoActive;
 	public Action<InventorySystem.ItemDemand, string> demandEvent;
-
 	List<InventorySystem.ItemDemand> m_demands;
 	int m_curDemandIndex;
 	Timer m_timer;
@@ -36,11 +35,14 @@ public class ItemDemander : MonoBehaviour, IInteractable
 		}
 		if (m_timer)
 		{
-			m_timer.timerDuration = m_data.BehaveDuring;
-			m_timer.MaxTimes = m_data.maxActTimes;
-			m_timer.cd = m_data.actCd;
-			m_timer.refreshAction += ActiveInteract;
-			m_timer.behaveAction += () => m_data.InteractBehave(transform, m_curDemandIndex);
+			m_timer.SetTimer(m_data.BehaveDuring, m_data.maxActTimes, m_data.actCd);
+			m_timer.refreshAction += () =>
+			{
+				ActiveInteract();
+				var anim = GetComponentInChildren<Animator>();
+				if (anim && m_data.onRefreshAnim != "") anim.SetTrigger(m_data.onRefreshAnim);
+			};
+			m_timer.behaveAction += () => m_data.InteractBehave(gameObject, m_curDemandIndex);
 			m_timer.processAction += (max, passed) => { VFXManager.PlayVFX(m_data.behavingVFX, transform.position); };
 			if (m_data.autoDestroy) m_timer.endAction += () => Destroy(gameObject);
 		}
@@ -53,7 +55,7 @@ public class ItemDemander : MonoBehaviour, IInteractable
 		{
 			m_demands.Add(data.CreatItemDemand());
 		}
-		if (m_data.Type == InteractData.InteractType.DeviceFixer && m_demands.Count > 0)
+		if (m_demands.Count > 0)
 		{
 			m_curDemandIndex = 0;
 			demandEvent?.Invoke(m_demands[m_curDemandIndex], "Active");
@@ -75,7 +77,7 @@ public class ItemDemander : MonoBehaviour, IInteractable
 			if (submitable.Values.Sum() > 0)
 			{
 				m_submitter = character;
-				if (character == GameManager.CurHero)
+				if (character == GameManager.CurHero && m_data.Type == InteractData.InteractType.DeviceFixer || m_data.Type == InteractData.InteractType.DeviceCreater)
 				{
 					UIInteractWindow win = GameManager.GameUI.GetWindow("winInteract") as UIInteractWindow;
 					win.Init(this, m_demands);
@@ -100,7 +102,7 @@ public class ItemDemander : MonoBehaviour, IInteractable
 		{
 			demandEvent?.Invoke(demand, "Complete");
 			if (m_timer) m_timer.StartTimer();
-			else m_data.InteractBehave(transform, m_curDemandIndex);
+			else m_data.InteractBehave(gameObject, m_curDemandIndex);
 			m_submitter?.GetComponent<EventSender>()?.Count(EventSender.EventType.DemandComplete, m_data.Key);
 		}
 		m_submitter = null;

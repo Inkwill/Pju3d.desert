@@ -97,16 +97,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camp: 2
-  CharacterName: Cactus Nails
+  CharacterName: spider
   DefaultWeapon: {fileID: 0}
-  MoveSpeed: 3
+  MoveSpeed: 2
   CorpseChance: 0
   m_CorpseRetention: 0
   Stats:
     baseStats:
       health: 5
-      strength: 2
-      defense: 1
+      strength: 0
+      defense: 0
       agility: 0
       spirit: 0
       damProtection: 00000000000000000000000000000000

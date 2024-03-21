@@ -97,7 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camp: 2
   CharacterName: Beholder
-  DefaultWeapon: {fileID: 0}
+  DefaultWeapon: {fileID: 11400000, guid: a0f1009dd1b60b042b73a0d95ba45443, type: 2}
   MoveSpeed: 3
   CorpseChance: 0
   m_CorpseRetention: 0

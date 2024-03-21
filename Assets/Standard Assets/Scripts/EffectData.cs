@@ -20,6 +20,7 @@ public class EffectData : ScriptableObject
 		LORDEXP,
 		LORDEWARTER,
 		DESTROYSELF,
+		OPENWINDOW
 	}
 	public EffectType Type;
 	public VFXType TakeVFX = VFXType.NONE;
@@ -127,6 +128,13 @@ public class EffectData : ScriptableObject
 			case EffectType.DESTROYSELF:
 				GameManager.StartWaitAction(0.1f, () => Destroy(user));
 				success = true;
+				break;
+			case EffectType.OPENWINDOW:
+				if (param != null && param.Length > 0)
+				{
+					var win = GameManager.GameUI.OpenWindow(param[0]);
+					success = win != null;
+				}
 				break;
 			default:
 				Debug.LogError("Take a illegal Effect:" + this);

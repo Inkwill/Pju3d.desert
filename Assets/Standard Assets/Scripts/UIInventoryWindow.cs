@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using CreatorKitCode;
 using CreatorKitCodeInternal;
 using DG.Tweening;
+using System;
 
 public class UIInventoryWindow : UIWindow
 {
@@ -20,12 +21,13 @@ public class UIInventoryWindow : UIWindow
 	public UIInventorySlot FeetSlot;
 	public UIInventorySlot WeaponSlot_1;
 	public UIInventorySlot WeaponSlot_2;
-
-	//public DragData CurrentlyDragged { get; set; }
 	public CanvasScaler DragCanvasScaler { get; private set; }
 
 	UIInventorySlot[] m_ItemEntries;
 	UIInventorySlot m_SelectedSlot;
+	UIEquipSlot m_SelectedEquipSlot;
+	UIInventorySlot m_curDeviceSlot;
+	GameObject m_deviceModle;
 
 	void Awake()
 	{
@@ -62,7 +64,10 @@ public class UIInventoryWindow : UIWindow
 	protected override void OnClose()
 	{
 		GameManager.GameUI.WinMain.bottomRoot.DOMove(GameManager.GameUI.WinMain.bottomRoot.position - new Vector3(0, 150, 0), 0.2f);
-		//GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
+		if (m_curDeviceSlot != null)
+		{
+			CanclePlace();
+		}
 	}
 
 	void Update()
@@ -73,6 +78,7 @@ public class UIInventoryWindow : UIWindow
 	{
 		UpdateEquipment(GameManager.CurHero.Equipment, GameManager.CurHero.Stats);
 		UpdateWeapon(GameManager.CurHero.Equipment);
+		Tooltip.gameObject.SetActive(false);
 		for (int i = 0; i < m_ItemEntries.Length; ++i)
 		{
 			m_ItemEntries[i].UpdateEntry(GameManager.CurHero);
@@ -85,25 +91,32 @@ public class UIInventoryWindow : UIWindow
 	{
 		m_SelectedSlot = selected ? slot : null;
 		Tooltip.SetItem(m_SelectedSlot);
+		if (m_curDeviceSlot != null && slot != m_curDeviceSlot && selected)
+		{
+			CanclePlace();
+		}
 		// Item itemUsed = m_HoveredItem.InventoryID != -1 ? m_Data.Inventory.Entries[m_HoveredItem.InventoryID].Item : m_HoveredItem.EquipmentItem;
 	}
 
 	public void OnEquipSelected(UIEquipSlot slot)
 	{
 		if (!gameObject.activeSelf) GameManager.GameUI.OpenWindow(winName);
+		m_SelectedEquipSlot = slot;
 		Tooltip.SetEquip(slot);
 	}
 
 	public override void OnButtonClick(string eventName)
 	{
-		EquipmentItem equip = m_SelectedSlot?.item as EquipmentItem;
+		EquipmentItem equip = null;
+		if (m_SelectedEquipSlot) equip = m_SelectedEquipSlot.EquipItem;
+		if (equip == null && m_SelectedSlot != null) equip = m_SelectedSlot?.item as EquipmentItem;
 		switch (eventName)
 		{
 			case "Equip":
 				if (equip)
 				{
 					GameManager.CurHero.Inventory.EquipItem(equip);
-					m_SelectedSlot.tog.isOn = false;
+					if (m_SelectedSlot) m_SelectedSlot.tog.isOn = false;
 					//Load();
 
 				}
@@ -112,7 +125,7 @@ public class UIInventoryWindow : UIWindow
 				if (equip)
 				{
 					GameManager.CurHero.Inventory.UnEquipItem(equip);
-					m_SelectedSlot.tog.isOn = false;
+					if (m_SelectedSlot) m_SelectedSlot.tog.isOn = false;
 					//Load();
 				}
 				break;
@@ -147,15 +160,38 @@ public class UIInventoryWindow : UIWindow
 				Load();
 				break;
 			case "Place":
-				DeviceItem device = m_SelectedSlot.item as DeviceItem;
-				PlaceHandle handle = GameManager.CurHero.gameObject.AddComponent<PlaceHandle>();
-				handle.SetDevice(device);
-				BackToMain();
+				m_curDeviceSlot = m_SelectedSlot;
+				DeviceItem device = m_curDeviceSlot.item as DeviceItem;
+				GameManager.GameUI.WinMain.btConfirm.gameObject.SetActive(true);
+				GameManager.GameUI.WinMain.btConfirm.onClick.AddListener(PlaceDevice);
+				if (GameManager.CurHero.BaseAI.SceneDetector && device.prefab)
+				{
+					m_deviceModle = Instantiate(device.modle, GameManager.CurHero.BaseAI.SceneDetector.transform, false);
+					m_deviceModle.transform.localPosition = Vector3.zero;
+				}
+				Tooltip.gameObject.SetActive(false);
 				break;
 			default:
 				break;
 		}
 
+	}
+
+	void PlaceDevice()
+	{
+		DeviceItem device = m_curDeviceSlot.item as DeviceItem;
+		Instantiate(device.prefab, GameManager.CurHero.BaseAI.SceneDetector.transform.position, GameManager.CurHero.BaseAI.SceneDetector.transform.rotation);
+		GameManager.CurHero.Inventory.MinusItem(m_curDeviceSlot.InventoryID, 1);
+		CanclePlace();
+		Load();
+	}
+
+	public void CanclePlace()
+	{
+		GameManager.GameUI.WinMain.btConfirm.gameObject.SetActive(false);
+		GameManager.GameUI.WinMain.btConfirm.onClick.RemoveListener(PlaceDevice);
+		Destroy(m_deviceModle);
+		m_curDeviceSlot = null;
 	}
 
 	public void ObjectHoverExited(ItemEntryUI exited)

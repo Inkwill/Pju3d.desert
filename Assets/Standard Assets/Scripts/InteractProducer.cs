@@ -24,14 +24,12 @@ public class InteractProducer : MonoBehaviour, IInteractable
 		if (autoActive) ActiveInteract();
 		if (m_timer)
 		{
-			m_timer.timerDuration = m_data.BehaveDuring;
-			m_timer.MaxTimes = m_data.maxActTimes;
-			m_timer.cd = m_data.actCd;
+			m_timer.SetTimer(m_data.BehaveDuring, m_data.maxActTimes, m_data.actCd);
 			m_timer.refreshAction += ActiveInteract;
 			m_timer.behaveAction += () =>
 			{
 				GetComponent<InteractHandle>()?.SetHandle(false);
-				m_data.InteractBehave(transform);
+				m_data.InteractBehave(gameObject);
 				itemGrid?.ShowItem(m_timer.LeftTimes);
 			};
 

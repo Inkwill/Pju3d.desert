@@ -20,6 +20,6 @@ MonoBehaviour:
   WorldObjectPrefab: {fileID: 1445713085222514512, guid: c739483f9de27494da7af47be65325b3,
     type: 3}
   SpawnClip: {fileID: 0}
-  prefab: {fileID: 1445713085222514512, guid: c739483f9de27494da7af47be65325b3, type: 3}
+  prefab: {fileID: 8109088689324393933, guid: 0988f43b9bd58794aaff818b868d7acb, type: 3}
   modle: {fileID: -927199367670048503, guid: 4d4ca7ee5f8d07d46b3bf9e68e328526, type: 3}
   undergroud: 0

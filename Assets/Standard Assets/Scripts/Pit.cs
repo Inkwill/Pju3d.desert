@@ -18,11 +18,10 @@ public class Pit : MonoBehaviour
 	{
 		m_initHeight = Terrain.activeTerrain.SampleHeight(transform.position);
 		m_actived = true;
-		m_timer = gameObject.AddComponent<Timer>();
-		m_timer.timerDuration = survival_time;
+		m_timer = Timer.SetTimer(gameObject, survival_time);
 		m_timer.processAction += OnProcessing;
 		m_timer.behaveAction += () => Destroy(gameObject);
-		m_timer.StartTimer(1);
+		m_timer.StartTimer();
 	}
 
 	void OnProcessing(float max, float passed)

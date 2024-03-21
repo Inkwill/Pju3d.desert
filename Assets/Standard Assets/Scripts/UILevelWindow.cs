@@ -25,7 +25,8 @@ public class UILevelWindow : MonoBehaviour
 		mainGoalInfo.text = "";
 		countDown.text = "";
 		m_timer.behaveAction += StartWave;
-		m_timer.StartTimer(m_spawners.Count, true);
+		m_timer.SetTimer(m_spawners.Count);
+		m_timer.autoStart = true;
 		m_timer.processAction += (max, passed) =>
 		{
 			if (passed < max)
