@@ -25,6 +25,9 @@ public class AIBase : MonoBehaviour
 	public bool isIdle { get { return m_State == State.IDLE || m_State == State.INTERACTING; } }
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 	public bool isActive { get { return m_State != State.INACTIVE && m_State != State.DEAD; } }
+	public AiData Data { get { return m_data; } set { m_data = value; } }
+	protected AiData m_data;
+
 
 	[Header("Detector")]
 	public InteractOnTrigger SceneDetector;
@@ -41,9 +44,10 @@ public class AIBase : MonoBehaviour
 
 	void Start()
 	{
+		if (m_data == null) m_data = AiData.GetAiDataByKey("default");
 		m_character = GetComponent<Character>();
 		m_character.DamageEvent.AddListener(OnDamageAI);
-		m_character.InteractEvent.AddListener((interactor) => { SetState(State.INTERACTING); });
+		m_character.InteractAction += (interactor) => { SetState(State.INTERACTING); };
 		m_character.DeathEvent.AddListener((character) => { SetState(State.DEAD); OnDeathAI(); });
 
 		if (EnemyDetector)

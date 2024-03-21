@@ -12,14 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6181ee0b866f43d4980896bcc1f13572, type: 3}
   m_Name: DemoData
   m_EditorClassIdentifier: 
-  StringConfig:
-  - Key: log
-    Value:
-    - AddSkill
-    - AddGoal
-    - UpdateGoal
-    - AttackMiss
-    - ApplicationQuit
+  PrefabConfig:
+  - Key: Enemy_RedSpider_small
+    Value: role/Enemy_RedSpider_small
+  - Key: build_fixFence
+    Value: build_fixFence
   LogConfig:
   - Key: AddSkill
     Value: 1

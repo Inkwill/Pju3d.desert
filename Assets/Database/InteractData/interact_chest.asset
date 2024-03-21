@@ -15,11 +15,13 @@ MonoBehaviour:
   Type: 3
   Key: Chest
   BehavePrompt: Open
-  interactAnim: 
+  interactAnim: Skill
+  onInteractAnim: Open
+  onRefreshAnim: Close
   maxActorCount: 1
-  maxActTimes: 1
-  actCd: 0
-  BehaveDuring: 2
+  maxActTimes: 2
+  actCd: 5
+  BehaveDuring: 0
   behavingVFX: 10
   behaveVFX: 8
   autoDestroy: 0

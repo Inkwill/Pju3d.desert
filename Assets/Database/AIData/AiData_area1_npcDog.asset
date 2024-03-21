@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32ae7062557e98048b2720cf418fd35b, type: 3}
+  m_Name: AiData_area1_npcDog
+  m_EditorClassIdentifier: 
+  Offensive: 1
+  guarder: 1
+  itemPick: 0
+  WanderRadius: 0
+  WanderBeat: 0

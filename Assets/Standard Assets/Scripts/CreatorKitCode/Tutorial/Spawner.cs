@@ -1,33 +1,43 @@
 ﻿using System;
 using UnityEngine;
 using CreatorKitCode;
+using System.Collections.Generic;
 
-public class SpawnerSample : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
-	public GameObject ObjectToSpawn;
-	public Action<Character> spawnEvent;
+	public SpawnData data;
 	public Transform pathRoot;
-	public int radius = 5;
-	public int angleStep = 15;
-	public int spawnNum = 5;
+	public Action<Character> spawnEvent;
 	Timer m_timer;
+	List<GameObject> m_members;
 
 	void Awake()
 	{
-		m_timer = GetComponent<Timer>();
-		if (m_timer) m_timer.behaveAction += ActSpawn;
+		m_timer = Timer.SetTimer(gameObject, data.spawnWaitTime, data.spawnTimes, data.spawnCd);
+		m_timer.autoStart = true;
+		m_timer.behaveAction += ActSpawn;
 	}
 	public void StartSpawn()
 	{
-		m_timer?.StartTimer(true);
+		m_timer.StartTimer();
 	}
 
 	void ActSpawn()
 	{
-		for (int i = 0; i < spawnNum; i++)
+		for (int i = 0; i < data.spawnCount; i++)
 		{
-			Spawn(angleStep * (i + 1), radius);
+			Spawn(data.angleStep * (i + 1), data.radius);
 		}
+	}
+
+	void Spawn(int angle, int radius)
+	{
+		Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.right;
+		Vector3 spawnPosition = transform.position + direction * radius;
+		Character enemy = Instantiate(data.ObjectToSpawn, spawnPosition, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
+		if (pathRoot) enemy.gameObject.AddComponent<AiPathMove>().SetPath(pathRoot);
+		if (data.aiData) enemy.BaseAI.Data = data.aiData;
+		spawnEvent?.Invoke(enemy);
 	}
 
 	// void Update()
@@ -65,13 +75,6 @@ public class SpawnerSample : MonoBehaviour
 	*/
 	// }
 
-	void Spawn(int angle, int radius)
-	{
-		Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.right;
-		Vector3 spawnPosition = transform.position + direction * radius;
-		Character enemy = Instantiate(ObjectToSpawn, spawnPosition, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
-		if (pathRoot) enemy.gameObject.AddComponent<AiPathMove>().SetPath(pathRoot);
-		spawnEvent?.Invoke(enemy);
-	}
+
 }
 

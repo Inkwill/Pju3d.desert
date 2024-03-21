@@ -67,11 +67,14 @@ public class EffectData : ScriptableObject
 				break;
 			case EffectType.SUMMON:
 				Transform trans = (target != null) ? target.transform : user.transform;
+				string prefabPath = "";
+				if (param != null && param.Length > 0) prefabPath = KeyValueData.GetValue<string>(GameManager.Config.PrefabConfig, param[0]);
+				GameObject pbObj = Resources.Load(prefabPath) as GameObject;
 				if (param != null && param.Length > 1 && param[1] == "self") trans = user.transform;
-				if (param != null && param.Length > 0)
+				if (pbObj != null)
 				{
-					GameObject pbObj = Resources.Load(param[0]) as GameObject;
-					if (pbObj != null) { Instantiate(pbObj, trans.position, trans.rotation); success = true; }
+					Instantiate(pbObj, trans.position, trans.rotation);
+					success = true;
 				}
 				break;
 			case EffectType.DROPBOX:

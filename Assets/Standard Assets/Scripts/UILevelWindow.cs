@@ -11,7 +11,7 @@ public class UILevelWindow : MonoBehaviour
 	public Text countDown;
 	public int CurWave { get { return m_timer.MaxTimes - m_timer.LeftTimes; } }
 	Timer m_timer;
-	List<SpawnerSample> m_spawners;
+	List<Spawner> m_spawners;
 	List<Character> m_enemies;
 
 	void Awake()

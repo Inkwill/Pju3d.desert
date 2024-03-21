@@ -32,7 +32,7 @@ public class CharacterAnimHandle : MonoBehaviour
 		m_character.DamageEvent.AddListener((damage) => { if (HitTrigger != "" && damage.GetFullDamage() > 0) m_Animator.SetTrigger(HitTrigger); });
 		m_character.DeathEvent.AddListener((character) => { if (DeathTrigger != "") m_Animator.SetTrigger(DeathTrigger); });
 		m_character.AttackEvent.AddListener((attacker) => { if (AttackTrigger != "") m_Animator.SetTrigger(AttackTrigger); });
-		m_character.InteractEvent.AddListener((interactor) => { if (interactor.Data.interactAnim != "") m_Animator.SetTrigger(interactor.Data.interactAnim); });
+		m_character.InteractAction += (interactor) => { if (interactor.Data.interactAnim != "") m_Animator.SetTrigger(interactor.Data.interactAnim); };
 		if (m_character.BaseAI != null)
 		{
 			m_character.StateUpdateAction += OnCharacterStating;
