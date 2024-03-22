@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77f4e1e8647791b4ea7bf564fb510670, type: 3}
+  m_Name: Spawn_test_1
+  m_EditorClassIdentifier: 
+  ObjectToSpawn: {fileID: 7778956338015736396, guid: 1d699b0cddb8e0a4da27f89f3d61c013,
+    type: 3}
+  spawnerPos: {x: 20, y: 10, z: 35}
+  aiData: {fileID: 11400000, guid: 10cd91412837a924ebe0f10697f13a95, type: 2}
+  spawnCount: 1
+  spawnTimes: 5
+  spawnWaitTime: 10
+  spawnCd: 10
+  radius: 5
+  angleStep: 15
+  paths:
+  - Value:
+    - {x: 20, y: 10, z: 30}
+    - {x: 10, y: 10, z: 30}
+    - {x: 16, y: 10, z: 18}
+    - {x: 8, y: 10, z: 10}
+    - {x: 5, y: 10, z: -3}
+    - {x: 15, y: 10, z: -10}
+  - Value:
+    - {x: 20, y: 10, z: 30}
+    - {x: 30, y: 10, z: 30}
+    - {x: 30, y: 10, z: 20}
+    - {x: 35, y: 10, z: 10}
+    - {x: 35, y: 10, z: -5}
+    - {x: 25, y: 10, z: -10}

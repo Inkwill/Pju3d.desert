@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 	public static Character CurHero;
 	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
 	public static GameGoalSystem GameGoal => Instance.GetComponent<GameGoalSystem>();
+	public static LevelSystem GameLevel => Instance.m_levelSystem;
 	public static UIManager GameUI;
 	public static KeyValueData Config => Instance.DemoData;
 	public LightManager DayNight;
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
 	public SFXManager SFXManager;
 	public TerrainTool TerrainTool;
 	public Transform buildModeFollow;
+	LevelSystem m_levelSystem;
 	public static GameObject CurrentSlected
 	{
 		get { return m_CurrentSelected; }
@@ -37,7 +39,7 @@ public class GameManager : MonoBehaviour
 	}
 	public List<FormulaData> formulas;
 	public List<Spawner> spawners;
-	public List<LevelSystem> levels;
+	public List<LevelData> levels;
 	static GameObject m_CurrentSelected;
 
 	public static bool BuildMode
@@ -112,6 +114,8 @@ public class GameManager : MonoBehaviour
 		VCamera.Follow = CurHero.gameObject.transform;
 		VCamera.LookAt = CurHero.gameObject.transform;
 
+		m_levelSystem = new LevelSystem();
+
 
 		// 注册应用退出事件
 		Application.quitting += OnApplicationQuit;
@@ -122,6 +126,7 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		GameUI.OpenWindow("winMain");
+		m_levelSystem.StartLevel(levels[1], GameManager.CurHero);
 	}
 
 	void OnApplicationQuit()

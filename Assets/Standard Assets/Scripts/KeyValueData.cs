@@ -14,7 +14,18 @@ public class KeyValueData : ScriptableObject
 	{
 		public TKey Key;
 		public TValue Value;
+		public TValue this[TKey key]
+		{
+			get { return Value; }
+			set { }
+		}
 	}
+	[Serializable]
+	public class KArray<T>
+	{
+		public T[] Value;
+	}
+
 	public List<KeyValue<string, string>> PrefabConfig;
 	public List<KeyValue<string, bool>> LogConfig;
 	public List<KeyValue<string, AudioClip>> AudioDic;
@@ -29,6 +40,16 @@ public class KeyValueData : ScriptableObject
 	public static T GetValue<T>(List<KeyValue<string, T>> dic, string key)
 	{
 		foreach (KeyValue<string, T> data in dic)
+		{
+			if (data.Key == key)
+				return data.Value;
+		}
+		return default(T);
+	}
+
+	public static T GetValue<T>(List<KeyValue<int, T>> dic, int key)
+	{
+		foreach (KeyValue<int, T> data in dic)
 		{
 			if (data.Key == key)
 				return data.Value;

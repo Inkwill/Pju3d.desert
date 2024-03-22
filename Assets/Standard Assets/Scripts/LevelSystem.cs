@@ -3,60 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class LevelSystem : MonoBehaviour
+public class LevelSystem
 {
-	public class LevelStage
+	public class Level
 	{
 		LevelData m_data;
 		Character m_character;
-		public LevelStage(LevelData data, Character character)
+		public int Step { get { return m_step; } }
+		int m_step;
+		public Level(LevelData data, Character character)
 		{
 			m_data = data;
 			m_character = character;
 		}
-		public void Start()
+		public void Start(Character character)
 		{
-			m_data.StartStage(m_character);
+			if (m_data.teleportPos != Vector3.zero) m_data.Teleport(character);
+			GameManager.GameGoal.GameGoalAction += OnGoalAction;
+			StartStage(1);
+		}
+		void OnGoalAction(GameGoalSystem.GameGoal goal, string actionName)
+		{
+			if (actionName == "AchieveGoal" && m_data.GetfinishGoal(m_step) == goal.data) FinishStage();
+		}
+
+		void StartStage(int step)
+		{
+			m_step = step;
+			if (m_data.GetSpawners(m_step) != null) m_data.ActiveSpawner(m_step);
+		}
+		void FinishStage()
+		{
+			if (m_step < m_data.maxStageNum) StartStage(++m_step);
+			else Finish();
+		}
+
+		void Finish()
+		{
+			GameManager.GameGoal.GameGoalAction -= OnGoalAction;
 		}
 	}
-	int m_step;
-	[SerializeField]
-	LevelData[] datas;
 
-	void Start()
+	Level m_curLevel;
+
+	public void StartLevel(LevelData levelData, Character character)
 	{
-		//GameManager.GameGoal.GameGoalAction += OnGoalAction;
-		var state = new LevelStage(datas[0], GameManager.CurHero);
-		state.Start();
+		var level = new Level(levelData, character);
+		level.Start(character);
+		m_curLevel = level;
 	}
-	// void OnGoalAction(GameGoalSystem.GameGoal goal, string actionName)
-	// {
-	// 	if (actionName == "AchieveGoal")
-	// 	{
-	// 		for (int i = 0; i < data.goals.Length; i++)
-	// 		{
-	// 			if (data.goals[i] == goal.data) StartLevel(i++);
-	// 		}
-	// 	}
-	// }
-	// public void EnterLevel()
-	// {
-	// 	data.TeleportStart(GameManager.CurHero.GetComponent<NavMeshAgent>());
-	// }
-
-	// public void StartLevel()
-	// {
-	// 	StartLevel(0);
-	// }
-	// public void StartLevel(int step)
-	// {
-	// 	if (step > data.goals.Length) EndLevel();
-	// 	else m_step = step;
-	// }
-
-	// void EndLevel()
-	// {
-
-	// }
-
 }

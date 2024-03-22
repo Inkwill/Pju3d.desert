@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77f4e1e8647791b4ea7bf564fb510670, type: 3}
-  m_Name: Spawn_area1
+  m_Name: Spawn_test_2
   m_EditorClassIdentifier: 
   ObjectToSpawn: {fileID: 7778956338015736396, guid: 1d699b0cddb8e0a4da27f89f3d61c013,
     type: 3}
+  spawnerPos: {x: 20, y: 10, z: 35}
   aiData: {fileID: 11400000, guid: 10cd91412837a924ebe0f10697f13a95, type: 2}
   spawnCount: 1
-  spawnTimes: 3
+  spawnTimes: 10
   spawnWaitTime: 10
   spawnCd: 10
   radius: 5

@@ -34,7 +34,8 @@ public class Spawner : MonoBehaviour
 		Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.right;
 		Vector3 spawnPosition = transform.position + direction * radius;
 		Character enemy = Instantiate(m_data.ObjectToSpawn, spawnPosition, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
-		if (m_data.paths.Length > 0) enemy.gameObject.AddComponent<AiPathMove>().SetPath(m_data.paths);
+		var path = m_data.GetPath();
+		if (path != null) enemy.gameObject.AddComponent<AiPathMove>().SetPath(path);
 		if (m_data.aiData) enemy.BaseAI.Data = m_data.aiData;
 		spawnEvent?.Invoke(enemy);
 	}
