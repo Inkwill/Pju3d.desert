@@ -1,14 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyBox;
 
 [CreateAssetMenu(fileName = "GameGoalData", menuName = "Data/GoalData", order = 15)]
 public class GoalData : ScriptableObject
 {
+	public enum GoalScope
+	{
+		Main,
+		Level
+	}
+	public GoalScope scope;
 	public string goalId;
+	[ConditionalField(nameof(scope), false, GoalScope.Main)]
 	public string describe;
+	[ConditionalField(nameof(scope), false, GoalScope.Main)]
 	public string summary;
+	[ConditionalField(nameof(scope), false, GoalScope.Main)]
 	public bool forcedToAdd;
+	[ConditionalField(nameof(scope), false, GoalScope.Main)]
 	public int LordExp;
 	public GameGoalSystem.GoalType type;
 	public List<KeyValueData.KeyValue<string, string[]>> param;

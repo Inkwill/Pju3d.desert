@@ -92,6 +92,9 @@ MonoBehaviour:
   - Key: drop_water
     Value: {fileID: 11400000, guid: 6cc6fd01ff8e9a0478713b77d07a0c10, type: 2}
   Interactor: []
+  NpcAi:
+  - Key: default
+    Value: {fileID: 11400000, guid: 4f3a0b01d7535c1418d970ef92ebd20f, type: 2}
   EffectGroup:
   - Key: treeOnDamageDrop
     Value:

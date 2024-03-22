@@ -4515,7 +4515,6 @@ Transform:
   m_Children:
   - {fileID: 1479225091}
   - {fileID: 4831030346167003206}
-  - {fileID: 1157170178}
   - {fileID: 1380531267}
   - {fileID: 1227950720}
   - {fileID: 1483239283}
@@ -5005,21 +5004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5116674e42294924098b3eb22e4670d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storyMode: 1
-  triggerTimes: 1
-  loopTimes: 1
-  stayTimes: 1
-  cdTimes: 30
-  Conditions: []
-  Dialogues:
-  - Key: target
-    Value: "\u9E8B\u9E7F\u9E8B\u9E7F\u8FF7\u4E86\u8DEF"
-  - Key: target
-    Value: "\u56F0\u5728\u8FD9\u4E2A\u5C71\u8C37\u5904"
-  - Key: target
-    Value: "\u5730\u4E0A\u6563\u843D\u5C0F\u6742\u7269"
-  - Key: target
-    Value: "\u6361\u8D77\u6742\u7269\u5BFB\u51FA\u8DEF"
+  data: {fileID: 11400000, guid: a1464b5a443b97f48a03a77032615cfe, type: 2}
   StoryEndEvents:
     m_PersistentCalls:
       m_Calls:
@@ -5052,7 +5037,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 10, y: 2, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
@@ -5245,8 +5230,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 457428260}
+  - component: {fileID: 457428261}
   m_Layer: 0
-  m_Name: Area0
+  m_Name: Level0_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5273,6 +5259,20 @@ Transform:
   - {fileID: 752848676}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &457428261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457428259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdd2d938364f7ca429f7c696c464ae49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  datas:
+  - {fileID: 11400000, guid: 6e1605f4627ce774fabd63c571434b15, type: 2}
 --- !u!1001 &458415257
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5590,24 +5590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5116674e42294924098b3eb22e4670d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storyMode: 1
-  triggerTimes: 3
-  loopTimes: 3
-  stayTimes: 1
-  cdTimes: 10
-  Conditions:
-  - Key: {fileID: 11400000, guid: 6858cc19a3485ed4c83ea244055c5cd2, type: 2}
-    Value:
-    - Stick_lv1
-  Dialogues:
-  - Key: target
-    Value: "\u8FD9\u4E2A\u56F4\u680F\u5F88\u575A\u56FA"
-  - Key: target
-    Value: "\u9E8B\u9E7F\u8E44\u5B50\u62DB\u4E0D\u4F4F"
-  - Key: target
-    Value: "\u5468\u56F4\u770B\u770B\u65EE\u65EF\u5904"
-  - Key: target
-    Value: "\u627E\u4EF6\u5DE5\u5177\u628A\u529B\u52A9"
+  data: {fileID: 11400000, guid: 87b47925b3c510841990604d4a1a3daf, type: 2}
   StoryEndEvents:
     m_PersistentCalls:
       m_Calls:
@@ -5671,8 +5654,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
-  pathRoot: {fileID: 0}
 --- !u!135 &481848064
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -10695,8 +10676,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
-  pathRoot: {fileID: 722333086}
 --- !u!135 &761310710
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -15727,8 +15706,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
-  pathRoot: {fileID: 722333086}
 --- !u!135 &1132818159
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -16214,7 +16191,7 @@ GameObject:
   - component: {fileID: 1157170181}
   - component: {fileID: 1157170180}
   m_Layer: 9
-  m_Name: StoryEvent_main02
+  m_Name: StoryEvent_main01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16228,12 +16205,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1157170177}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.4475839, z: -0, w: 0.8942419}
-  m_LocalPosition: {x: 26.09, y: 0.4300003, z: -10.77}
+  m_LocalRotation: {x: -0, y: -0.17364822, z: -0, w: 0.9848077}
+  m_LocalPosition: {x: 3.1030502, y: 0.4300003, z: -16.241634}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 427273653}
+  m_Father: {fileID: 1579194458}
   m_LocalEulerAnglesHint: {x: 0, y: -20, z: 0}
 --- !u!114 &1157170180
 MonoBehaviour:
@@ -16287,21 +16264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5116674e42294924098b3eb22e4670d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storyMode: 0
-  triggerTimes: 1
-  loopTimes: 1
-  stayTimes: 1
-  cdTimes: 30
-  Conditions: []
-  Dialogues:
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
+  data: {fileID: 11400000, guid: 322aa4d036510be40bc58195f1887aef, type: 2}
   StoryEndEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -17961,17 +17924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5116674e42294924098b3eb22e4670d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storyMode: 0
-  triggerTimes: 1
-  loopTimes: 10
-  stayTimes: 3
-  cdTimes: 10
-  Conditions: []
-  Dialogues:
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
+  data: {fileID: 0}
   StoryEndEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -22455,8 +22408,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
-  pathRoot: {fileID: 2056123598}
 --- !u!135 &1483239280
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -23686,7 +23637,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1579194458}
   m_Layer: 0
-  m_Name: Area1
+  m_Name: Level0_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23706,6 +23657,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 377786658}
+  - {fileID: 1157170178}
   - {fileID: 481848067}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -25540,8 +25492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
-  pathRoot: {fileID: 313045580}
 --- !u!135 &1711097183
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -27121,8 +27071,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
-  pathRoot: {fileID: 313045580}
 --- !u!135 &1775711729
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -31085,7 +31033,7 @@ PrefabInstance:
     - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
         type: 3}
       propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
         type: 3}
@@ -31104,6 +31052,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
         type: 3}
+      propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
+        type: 3}
       propertyPath: OnDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 479813860}
@@ -31117,6 +31070,11 @@ PrefabInstance:
       propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 479813860}
+    - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
+        type: 3}
+      propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
         type: 3}
       propertyPath: DamageEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -31139,6 +31097,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
         type: 3}
+      propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
+        type: 3}
       propertyPath: DamageEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -31146,6 +31109,11 @@ PrefabInstance:
         type: 3}
       propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: StopDialogue
+      objectReference: {fileID: 0}
+    - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
+        type: 3}
+      propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: StartSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
         type: 3}
@@ -31164,6 +31132,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
         type: 3}
+      propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: LevelSystem, Assembly-CSharp-firstpass
+      objectReference: {fileID: 0}
+    - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
+        type: 3}
       propertyPath: DamageEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: StoryEvent, Assembly-CSharp-firstpass
       objectReference: {fileID: 0}
@@ -31175,6 +31148,11 @@ PrefabInstance:
     - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
         type: 3}
       propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
+        type: 3}
+      propertyPath: DeathEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5794499560094676238, guid: a779624c34bbb1f4eb63ec9598870037,
@@ -32045,8 +32023,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb046109e85bd4bbe06eb5361fd8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
-  pathRoot: {fileID: 313045580}
 --- !u!135 &2129195467
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -32131,6 +32107,12 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2881519305364047670, guid: fe3f8fd1409e5fc4dae54b8b3cf225b3,
+        type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 5867014de57a3a04fb5674a862a38227,
+        type: 2}
     - target: {fileID: 3760768263704641119, guid: fe3f8fd1409e5fc4dae54b8b3cf225b3,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -34045,8 +34027,10 @@ MonoBehaviour:
   - {fileID: 2129195466}
   - {fileID: 1132818158}
   - {fileID: 1775711728}
+  levels:
+  - {fileID: 457428261}
   ui_trans: {fileID: 5564097808944322120}
-  position_born: {fileID: 1898064877}
+  position_born: {fileID: 1153917962}
   baseBoundary_LB: {x: 75, y: -5}
   baseBoundary_RT: {x: 90, y: 20}
   prefab_character: {fileID: 8112423057566066908, guid: 13412434e049bcc419706b33d84a668e,

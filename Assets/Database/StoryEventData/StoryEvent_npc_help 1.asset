@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03190fb5026155742b5839db131ae295, type: 3}
+  m_Name: StoryEvent_npc_help 1
+  m_EditorClassIdentifier: 
+  storyMode: 1
+  triggerTimes: 1
+  loopTimes: -1
+  stayTime: 1
+  cd: 30
+  Conditions: []
+  Dialogues:
+  - Key: self
+    Value: "\u6C34...\u6C34..."
+  - Key: target
+    Value: "\u6709\u4EBA\u9047\u96BE\u5012\u5728\u5730"
+  - Key: target
+    Value: "\u773C\u770B\u5C31\u8981\u88AB\u6E34\u6B7B"
+  - Key: target
+    Value: "\u9E8B\u9E7F\u90FD\u662F\u597D\u5FC3\u80A0"
+  - Key: target
+    Value: "\u8BA9\u6211\u5E2E\u4ED6\u627E\u70B9\u6C34"

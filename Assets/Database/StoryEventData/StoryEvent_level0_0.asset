@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03190fb5026155742b5839db131ae295, type: 3}
+  m_Name: StoryEvent_level0_0
+  m_EditorClassIdentifier: 
+  storyMode: 1
+  triggerTimes: 1
+  loopTimes: 1
+  stayTimes: 1
+  cdTimes: 30
+  Conditions: []
+  Dialogues:
+  - Key: target
+    Value: "\u9E8B\u9E7F\u9E8B\u9E7F\u8FF7\u4E86\u8DEF"
+  - Key: target
+    Value: "\u56F0\u5728\u8FD9\u4E2A\u5C71\u8C37\u5904"
+  - Key: target
+    Value: "\u5730\u4E0A\u6563\u843D\u5C0F\u6742\u7269"
+  - Key: target
+    Value: "\u6361\u8D77\u6742\u7269\u5BFB\u51FA\u8DEF"

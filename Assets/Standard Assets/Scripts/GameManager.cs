@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
 	}
 	public List<FormulaData> formulas;
 	public List<Spawner> spawners;
+	public List<LevelSystem> levels;
 	static GameObject m_CurrentSelected;
 
 	public static bool BuildMode

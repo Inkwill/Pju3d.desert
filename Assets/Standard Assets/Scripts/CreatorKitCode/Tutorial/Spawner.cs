@@ -5,28 +5,27 @@ using System.Collections.Generic;
 
 public class Spawner : MonoBehaviour
 {
-	public SpawnData data;
-	public Transform pathRoot;
+	SpawnData m_data;
 	public Action<Character> spawnEvent;
 	Timer m_timer;
 	List<GameObject> m_members;
 
-	void Awake()
+	public void Init(SpawnData data)
 	{
-		m_timer = Timer.SetTimer(gameObject, data.spawnWaitTime, data.spawnTimes, data.spawnCd);
-		m_timer.autoStart = true;
+		m_data = data;
+		m_timer = Timer.SetTimer(gameObject, m_data.spawnWaitTime, m_data.spawnTimes, m_data.spawnCd);
 		m_timer.behaveAction += ActSpawn;
 	}
 	public void StartSpawn()
 	{
-		m_timer.StartTimer();
+		m_timer?.StartTimer(true);
 	}
 
 	void ActSpawn()
 	{
-		for (int i = 0; i < data.spawnCount; i++)
+		for (int i = 0; i < m_data.spawnCount; i++)
 		{
-			Spawn(data.angleStep * (i + 1), data.radius);
+			Spawn(m_data.angleStep * (i + 1), m_data.radius);
 		}
 	}
 
@@ -34,9 +33,9 @@ public class Spawner : MonoBehaviour
 	{
 		Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.right;
 		Vector3 spawnPosition = transform.position + direction * radius;
-		Character enemy = Instantiate(data.ObjectToSpawn, spawnPosition, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
-		if (pathRoot) enemy.gameObject.AddComponent<AiPathMove>().SetPath(pathRoot);
-		if (data.aiData) enemy.BaseAI.Data = data.aiData;
+		Character enemy = Instantiate(m_data.ObjectToSpawn, spawnPosition, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
+		if (m_data.paths.Length > 0) enemy.gameObject.AddComponent<AiPathMove>().SetPath(m_data.paths);
+		if (m_data.aiData) enemy.BaseAI.Data = m_data.aiData;
 		spawnEvent?.Invoke(enemy);
 	}
 

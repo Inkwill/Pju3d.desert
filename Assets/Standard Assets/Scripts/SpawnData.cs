@@ -13,4 +13,12 @@ public class SpawnData : ScriptableObject
 	public float spawnCd = 10.0f;
 	public int radius = 5;
 	public int angleStep = 15;
+	public Vector3[] paths;
+	public Spawner Instantiate(Vector3 pos)
+	{
+		Spawner spawner = GameObject.Instantiate(new GameObject()).AddComponent<Spawner>();
+		spawner.transform.position = pos;
+		spawner.Init(this);
+		return spawner;
+	}
 }

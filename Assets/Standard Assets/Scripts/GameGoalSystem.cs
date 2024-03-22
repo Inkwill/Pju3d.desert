@@ -169,7 +169,6 @@ public class GameGoalSystem : MonoBehaviour
 		m_FailedGoals.Add(goal.data.goalId);
 		if (goal == m_curGoal) m_curGoal = null;
 	}
-
 	// public bool IsAchievedGoal(string goalId)
 	// {
 	// 	return m_AchievedGoals.Contains(goalId);

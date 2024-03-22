@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(RoleAI))]
 public class AiPathMove : MonoBehaviour
 {
-	Transform[] m_paths;
+	Vector3[] m_paths;
 	int m_curPathIndex;
 	bool m_Offensive;
 	RoleAI m_roleAi;
@@ -29,7 +29,7 @@ public class AiPathMove : MonoBehaviour
 		{
 			if (m_paths.Length > m_curPathIndex)
 			{
-				m_roleAi.MoveTo(m_paths[m_curPathIndex].position);
+				m_roleAi.MoveTo(m_paths[m_curPathIndex]);
 			}
 		}
 		if (curState == AIBase.State.MOVE)
@@ -38,9 +38,9 @@ public class AiPathMove : MonoBehaviour
 		}
 
 	}
-	public void SetPath(Transform pathRoot, bool offensive = true)
+	public void SetPath(Vector3[] paths, bool offensive = true)
 	{
-		m_paths = pathRoot.GetComponentsInChildren<Transform>();
+		m_paths = paths;
 		m_curPathIndex = 0;
 		m_Offensive = offensive;
 	}

@@ -6,19 +6,7 @@ using UnityEngine.Events;
 public class StoryEvent : MonoBehaviour
 {
 	[SerializeField]
-	bool storyMode;
-	[SerializeField]
-	int triggerTimes = 1;
-	[SerializeField]
-	int loopTimes = 1;
-	[SerializeField]
-	int stayTimes = 1;
-	[SerializeField]
-	int cdTimes = 30;
-	[SerializeField]
-	List<KeyValueData.KeyValue<ConditionData, string[]>> Conditions;
-	[SerializeField]
-	List<KeyValueData.KeyValue<string, string>> Dialogues;
+	StoryEventData data;
 	public UnityEvent<GameObject, GameObject> StoryEndEvents;
 	GameObject m_target;
 	bool m_started;
@@ -43,23 +31,23 @@ public class StoryEvent : MonoBehaviour
 
 	public void OnStay(GameObject enter, float during)
 	{
-		if (during >= stayTimes) { StartEvent(enter.GetComponent<Character>()); m_target = enter; }
+		if (during >= data.stayTime) { StartEvent(enter.GetComponent<Character>()); m_target = enter; }
 	}
 
 	public void StartEvent(Character character)
 	{
-		if (m_completed || m_started || m_cd > 0 || !ConditionData.JudgmentList(Conditions)) return;
-		if (++m_triggerTimes < triggerTimes) return;
+		if (m_completed || m_started || m_cd > 0 || !ConditionData.JudgmentList(data.Conditions)) return;
+		if (++m_triggerTimes < data.triggerTimes) return;
 		m_started = true;
 		UIHudBase target_hud = character.GetComponentInChildren<UIHudBase>();
 		UIHudBase self_hud = GetComponentInChildren<UIHudBase>();
 		StartCoroutine(Dialogue(self_hud, target_hud));
-		GameManager.StoryMode = storyMode;
+		GameManager.StoryMode = data.storyMode;
 	}
 
 	IEnumerator Dialogue(UIHudBase self_hud, UIHudBase target_hud)
 	{
-		foreach (var dialog in Dialogues)
+		foreach (var dialog in data.Dialogues)
 		{
 			var hud = (dialog.Key == "target") ? target_hud : self_hud;
 			hud?.Bubble(dialog.Value);
@@ -71,16 +59,16 @@ public class StoryEvent : MonoBehaviour
 	void EndDialogue()
 	{
 		m_started = false;
-		if (storyMode) GameManager.StoryMode = false;
+		if (data.storyMode) GameManager.StoryMode = false;
 		StoryEndEvents?.Invoke(gameObject, m_target);
 		m_target = null;
-		if (--loopTimes < 1) m_completed = true;
-		else m_cd = cdTimes;
+		if (--data.loopTimes < 1) m_completed = true;
+		else m_cd = data.cd;
 	}
 
 	public void StopDialogue(Character character)
 	{
 		m_completed = true;
-		if (storyMode) GameManager.StoryMode = false;
+		if (data.storyMode) GameManager.StoryMode = false;
 	}
 }

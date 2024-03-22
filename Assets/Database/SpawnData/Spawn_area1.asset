@@ -16,7 +16,7 @@ MonoBehaviour:
     type: 3}
   aiData: {fileID: 11400000, guid: 10cd91412837a924ebe0f10697f13a95, type: 2}
   spawnCount: 1
-  spawnTimes: 5
+  spawnTimes: 3
   spawnWaitTime: 10
   spawnCd: 10
   radius: 5
