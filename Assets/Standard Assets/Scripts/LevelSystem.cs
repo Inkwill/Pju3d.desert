@@ -31,6 +31,7 @@ public class LevelSystem
 		{
 			m_step = step;
 			if (m_data.GetSpawners(m_step) != null) m_data.ActiveSpawner(m_step);
+			if (m_data.GetstoryEvent(m_step) != null) m_data.AddStoryEvent(m_step, m_character);
 		}
 		void FinishStage()
 		{

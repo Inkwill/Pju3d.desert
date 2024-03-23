@@ -6,69 +6,104 @@ using UnityEngine.Events;
 public class StoryEvent : MonoBehaviour
 {
 	[SerializeField]
-	StoryEventData data;
-	public UnityEvent<GameObject, GameObject> StoryEndEvents;
+	StoryEventData m_data;
+	public UnityEvent<GameObject, GameObject> endEvent;
 	GameObject m_target;
 	bool m_started;
-	bool m_completed;
 	int m_triggerTimes;
+	int m_loopTimes;
 	float m_cd;
+
+	public void Init(StoryEventData data)
+	{
+		m_data = data;
+	}
+	void Start()
+	{
+		switch (m_data.triggerType)
+		{
+			case StoryEventData.TriggerType.AutoStart:
+				StartEvent(gameObject);
+				break;
+			case StoryEventData.TriggerType.EnterArea:
+				AddAreaTrigger().OnEnter.AddListener(enter => StartEvent(enter));
+				break;
+			case StoryEventData.TriggerType.StayArea:
+				AddAreaTrigger().OnStay.AddListener((stayer, during) => { if (during >= m_data.stayTime) StartEvent(stayer); });
+				break;
+			case StoryEventData.TriggerType.Damaged:
+				Character character = GetComponent<Character>();
+				if (character) character.DamageEvent.AddListener(damage => StartEvent(damage.Source.gameObject));
+				break;
+			default:
+				break;
+		}
+		m_loopTimes = m_data.loopTimes;
+	}
+
+	InteractOnTrigger AddAreaTrigger()
+	{
+		var collier = gameObject.AddComponent<BoxCollider>();
+		collier.isTrigger = true;
+		collier.size = new Vector3(m_data.areaRadius, 1, m_data.areaRadius);
+		var trigger = gameObject.AddComponent<InteractOnTrigger>();
+		trigger.layers = LayerMask.GetMask("Player");
+		trigger.once = m_data.loopTimes == 1;
+		trigger.OnEnter = new UnityEvent<GameObject>();
+		trigger.OnStay = new UnityEvent<GameObject, float>();
+		return trigger;
+	}
 
 	void Update()
 	{
 		if (m_cd > 0) m_cd -= Time.deltaTime;
 	}
-	public void OnDamageEvent(Damage damage)
-	{
-		m_target = damage.Source.gameObject;
-		StartEvent(damage.Source);
-	}
-	public void OnEnter(GameObject enter)
-	{
-		m_target = enter;
-		StartEvent(enter.GetComponent<Character>());
-	}
 
-	public void OnStay(GameObject enter, float during)
+	public void StartEvent(GameObject target)
 	{
-		if (during >= data.stayTime) { StartEvent(enter.GetComponent<Character>()); m_target = enter; }
-	}
+		m_target = target;
+		if (m_started || m_cd > 0) return;
 
-	public void StartEvent(Character character)
-	{
-		if (m_completed || m_started || m_cd > 0 || !ConditionData.JudgmentList(data.Conditions)) return;
-		if (++m_triggerTimes < data.triggerTimes) return;
+		Character character = target.GetComponent<Character>();
+		if (character && !ConditionData.JudgmentList(character, m_data.Conditions)) return;
+
+		if (++m_triggerTimes < m_data.triggerTimes) return;
+
 		m_started = true;
-		UIHudBase target_hud = character.GetComponentInChildren<UIHudBase>();
-		UIHudBase self_hud = GetComponentInChildren<UIHudBase>();
-		StartCoroutine(Dialogue(self_hud, target_hud));
-		GameManager.StoryMode = data.storyMode;
+		m_triggerTimes = 0;
+
+		if (m_data.storyType == StoryEventData.StoryType.Dialogue)
+		{
+			UIHudBase target_hud = character.GetComponentInChildren<UIHudBase>();
+			UIHudBase self_hud = GetComponentInChildren<UIHudBase>();
+			StartCoroutine(Dialogue(self_hud, target_hud));
+			GameManager.StoryMode = m_data.storyMode;
+		}
 	}
 
 	IEnumerator Dialogue(UIHudBase self_hud, UIHudBase target_hud)
 	{
-		foreach (var dialog in data.Dialogues)
+		foreach (var dialog in m_data.Dialogues)
 		{
 			var hud = (dialog.Key == "target") ? target_hud : self_hud;
 			hud?.Bubble(dialog.Value);
 			yield return new WaitForSeconds(1.5f);
 		}
-		EndDialogue();
+		EndStoryEvent();
 	}
 
-	void EndDialogue()
+	void EndStoryEvent()
 	{
 		m_started = false;
-		if (data.storyMode) GameManager.StoryMode = false;
-		StoryEndEvents?.Invoke(gameObject, m_target);
+		endEvent?.Invoke(gameObject, m_target);
+		EffectData.TakeEffects(m_data.Effects, gameObject, m_target);
+		if (m_data.storyMode) GameManager.StoryMode = false;
+		if (--m_loopTimes >= 1)
+		{
+			m_cd = m_data.cd;
+			return;
+		}
 		m_target = null;
-		if (--data.loopTimes < 1) m_completed = true;
-		else m_cd = data.cd;
-	}
-
-	public void StopDialogue(Character character)
-	{
-		m_completed = true;
-		if (data.storyMode) GameManager.StoryMode = false;
+		Destroy(this);
 	}
 }

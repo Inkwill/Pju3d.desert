@@ -28,9 +28,7 @@ public class InteractOnTrigger : MonoBehaviour
 	public GameObject lastInner { get; private set; }
 	public GameObject lastExiter { get; private set; }
 	public GameObject curStayer { get; private set; }
-
-	[SerializeField]
-	bool once;
+	public bool once;
 
 	List<GameObject> interObjects;
 	CapsuleCollider m_capCollider;

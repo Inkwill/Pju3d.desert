@@ -13,7 +13,7 @@ public class ConditionData : ScriptableObject
 	}
 	public ConditionType type;
 
-	public bool Judgment(string[] param)
+	public bool Judgment(Character character, string[] param)
 	{
 		bool result = true;
 		switch (type)
@@ -21,15 +21,15 @@ public class ConditionData : ScriptableObject
 			case ConditionType.INCLUDE_ITEM:
 				foreach (var itemId in param)
 				{
-					result &= (GameManager.CurHero.Inventory.ItemCount(itemId) > 0);
-					result &= GameManager.CurHero.Equipment.IsEquiped(itemId);
+					result &= (character.Inventory.ItemCount(itemId) > 0);
+					result &= character.Equipment.IsEquiped(itemId);
 				}
 				break;
 			case ConditionType.EXCLUDE_ITEM:
 				foreach (var itemId in param)
 				{
-					result &= (GameManager.CurHero.Inventory.ItemCount(itemId) == 0);
-					result &= !GameManager.CurHero.Equipment.IsEquiped(itemId);
+					result &= (character.Inventory.ItemCount(itemId) == 0);
+					result &= !character.Equipment.IsEquiped(itemId);
 				}
 				break;
 			default:
@@ -38,14 +38,14 @@ public class ConditionData : ScriptableObject
 		return result;
 	}
 
-	public static bool JudgmentList(List<KeyValueData.KeyValue<ConditionData, string[]>> conditions)
+	public static bool JudgmentList(Character character, List<KeyValueData.KeyValue<ConditionData, string[]>> conditions)
 	{
 		bool result = true;
 		if (conditions != null && conditions.Count > 0)
 		{
 			foreach (KeyValueData.KeyValue<ConditionData, string[]> condition in conditions)
 			{
-				result &= condition.Key.Judgment(condition.Value);
+				result &= condition.Key.Judgment(character, condition.Value);
 			}
 		}
 		return result;

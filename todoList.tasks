@@ -51,15 +51,22 @@
 	✔	新建筑：箭塔 @done (24-03-21 15:46)
 
 	---- ✄ -----------------------@created(24-03-21 19:30)
-	☐	NPC委托 @critical
 	✔	AIData @done (24-03-21 19:29)
 	✔	SpawnData @done (24-03-21 19:30)
+	---- ✄ -----------------------@created(24-03-23 15:55)
+	✔	LevelSystem @critical @done (24-03-23 15:56)
+	☐	新手关蜘蛛掉落:生命元素
+	☐	新手关GameGoal
+	☐	采集物：石头
+	☐	storyEvent: 面板类型 @critical
+	☐	ai优化：朝向问题
 
 
 	☐ device:钉板
 	☐ device:陷阱
 	☐	前期流程：craft教学
 	☐	demo关卡：tdLevel @critical
+	☐	NPC委托 @critical
 
 
 	✘	NPC旅店老板: 玩家阵营\固定位置\对话添加修理围栏目标(强制) @cancelled (24-03-13 11:00)

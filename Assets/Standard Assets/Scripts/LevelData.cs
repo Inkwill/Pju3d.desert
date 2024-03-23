@@ -12,6 +12,7 @@ public class LevelData : ScriptableObject
 	public Vector3 teleportPos;
 	public int maxStageNum;
 	public List<KeyValueData.KeyValue<int, SpawnData>> spawners;
+	public List<KeyValueData.KeyValue<int, StoryEventData>> storyEvents;
 	public List<KeyValueData.KeyValue<int, GoalData>> finishGoals;
 
 	public List<SpawnData> GetSpawners(int step)
@@ -24,12 +25,21 @@ public class LevelData : ScriptableObject
 		return KeyValueData.GetValue<GoalData>(finishGoals, step);
 	}
 
+	public StoryEventData GetstoryEvent(int step)
+	{
+		return KeyValueData.GetValue<StoryEventData>(storyEvents, step);
+	}
+
 	public void ActiveSpawner(int step)
 	{
 		foreach (var spawner in GetSpawners(step))
 		{
 			spawner.Instantiate().StartSpawn();
 		}
+	}
+	public void AddStoryEvent(int step, Character character)
+	{
+		GetstoryEvent(step).Instantiate(character.gameObject);
 	}
 	public void Teleport(Character character)
 	{
