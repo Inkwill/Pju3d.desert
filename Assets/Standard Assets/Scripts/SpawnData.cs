@@ -14,11 +14,17 @@ public class SpawnData : ScriptableObject
 	public int maxCount = 1; // currentObj max count, < 0  means infinity
 	public int spawnTimes = 1; // total max times, < 0  means infinity
 	[ConditionalField(nameof(spawnTimes), true, -1)]
-	public bool autoDestroy;
 	public float spawnWaitTime = 10.0f;
 	public float spawnCd = 10.0f;
 	public int radius = 5;
 	public int angleStep = 15;
+	public enum LifeCategory
+	{
+		Individual,
+		LevelLocal,
+		StageLocal
+	}
+	public LifeCategory lifeCategory;
 	public List<KeyValueData.KArray<Vector3>> paths;
 
 	public Spawner Instantiate()

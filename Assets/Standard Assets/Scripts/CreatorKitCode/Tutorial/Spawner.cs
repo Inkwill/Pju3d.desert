@@ -20,7 +20,7 @@ public class Spawner : MonoBehaviour
 	public void StartSpawn()
 	{
 		m_timer.StartTimer(true);
-		if (m_data.autoDestroy) m_timer.endAction += () => { Destroy(gameObject); };
+		if (m_data.lifeCategory == SpawnData.LifeCategory.Individual) m_timer.endAction += () => { Destroy(gameObject); };
 	}
 
 	void ActSpawn()
@@ -46,6 +46,12 @@ public class Spawner : MonoBehaviour
 			enemy.DeathEvent.AddListener((character) => m_members.Remove(character.gameObject));
 			Helpers.Log(this, "Spawn", $"{m_members.Count}/{m_data.maxCount},(spawnTimes={m_data.spawnTimes})");
 		}
+	}
+
+	public void OnStageAction(LevelSystem.Level stage)
+	{
+		if (m_data.lifeCategory == SpawnData.LifeCategory.StageLocal) Destroy(gameObject);
+		else if (m_data.lifeCategory == SpawnData.LifeCategory.LevelLocal && stage.isFinally) Destroy(gameObject);
 	}
 
 	// void Update()

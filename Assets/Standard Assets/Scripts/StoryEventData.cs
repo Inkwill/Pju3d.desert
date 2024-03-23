@@ -1,11 +1,13 @@
 using MyBox;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
 
 [CreateAssetMenu(fileName = "StoryEventData", menuName = "Data/StoryEventData", order = 15)]
 public class StoryEventData : ScriptableObject
 {
+	public string storyEventId;
 	public enum StoryType
 	{
 		Dialogue,
@@ -30,6 +32,8 @@ public class StoryEventData : ScriptableObject
 	[ConditionalField(nameof(triggerType), false, TriggerType.StayArea)]
 	public float stayTime = 1;
 	[ConditionalField(nameof(triggerType), false, TriggerType.EnterArea, TriggerType.StayArea)]
+	public Vector3 areaPostion;
+	[ConditionalField(nameof(triggerType), false, TriggerType.EnterArea, TriggerType.StayArea)]
 	public float areaRadius = 1;
 
 	[ConditionalField(nameof(storyType), false, StoryType.Dialogue)]
@@ -37,10 +41,22 @@ public class StoryEventData : ScriptableObject
 	public List<KeyValueData.KeyValue<ConditionData, string[]>> Conditions;
 	public List<KeyValueData.KeyValue<EffectData, string[]>> Effects;
 
-	public StoryEvent Instantiate(GameObject target)
+	public StoryEvent Instantiate(GameObject owner)
 	{
-		StoryEvent storyEvent = target.AddComponent<StoryEvent>();
-		storyEvent.Init(this);
-		return storyEvent;
+		if (triggerType == TriggerType.AutoStart || triggerType == TriggerType.Damaged)
+		{
+			StoryEvent storyEvent = owner.AddComponent<StoryEvent>();
+			storyEvent.Init(this);
+			return storyEvent;
+		}
+		else if (triggerType == TriggerType.EnterArea || triggerType == TriggerType.StayArea)
+		{
+			StoryEvent storyEvent = GameObject.Instantiate(new GameObject()).AddComponent<StoryEvent>();
+			storyEvent.transform.position = areaPostion;
+			storyEvent.name = storyEventId;
+			storyEvent.Init(this);
+			return storyEvent;
+		}
+		return null;
 	}
 }

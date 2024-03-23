@@ -104,6 +104,9 @@ public class StoryEvent : MonoBehaviour
 			return;
 		}
 		m_target = null;
-		Destroy(this);
+		if (m_data.triggerType == StoryEventData.TriggerType.AutoStart || m_data.triggerType == StoryEventData.TriggerType.Damaged)
+			Destroy(this);
+		else if (m_data.triggerType == StoryEventData.TriggerType.EnterArea || m_data.triggerType == StoryEventData.TriggerType.StayArea)
+			Destroy(gameObject);
 	}
 }

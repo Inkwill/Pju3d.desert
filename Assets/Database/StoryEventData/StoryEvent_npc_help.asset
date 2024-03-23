@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03190fb5026155742b5839db131ae295, type: 3}
   m_Name: StoryEvent_npc_help
   m_EditorClassIdentifier: 
+  storyEventId: StoryEvent_npc_help
+  storyType: 0
+  triggerType: 0
   storyMode: 0
   triggerTimes: 5
   loopTimes: 1
-  stayTime: 1
   cd: 30
-  Conditions: []
+  stayTime: 1
+  areaPostion: {x: 0, y: 0, z: 0}
+  areaRadius: 1
   Dialogues:
   - Key: self
     Value: Help!
+  Conditions: []
+  Effects: []

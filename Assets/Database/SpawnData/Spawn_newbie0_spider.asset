@@ -20,11 +20,11 @@ MonoBehaviour:
   spawnCount: 1
   maxCount: 3
   spawnTimes: -1
-  autoDestroy: 0
   spawnWaitTime: 20
   spawnCd: 20
   radius: 5
   angleStep: 15
+  lifeCategory: 2
   paths:
   - Value:
     - {x: 84, y: 10, z: 10}
