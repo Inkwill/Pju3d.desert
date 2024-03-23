@@ -15,10 +15,12 @@ public class Spawner : MonoBehaviour
 		m_data = data;
 		m_timer = Timer.SetTimer(gameObject, m_data.spawnWaitTime, m_data.spawnTimes, m_data.spawnCd);
 		m_timer.behaveAction += ActSpawn;
+		m_members = new List<GameObject>();
 	}
 	public void StartSpawn()
 	{
-		m_timer?.StartTimer(true);
+		m_timer.StartTimer(true);
+		if (m_data.autoDestroy) m_timer.endAction += () => { Destroy(gameObject); };
 	}
 
 	void ActSpawn()
@@ -31,13 +33,19 @@ public class Spawner : MonoBehaviour
 
 	void Spawn(int angle, int radius)
 	{
-		Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.right;
-		Vector3 spawnPosition = transform.position + direction * radius;
-		Character enemy = Instantiate(m_data.ObjectToSpawn, spawnPosition, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
-		var path = m_data.GetPath();
-		if (path != null) enemy.gameObject.AddComponent<AiPathMove>().SetPath(path);
-		if (m_data.aiData) enemy.BaseAI.Data = m_data.aiData;
-		spawnEvent?.Invoke(enemy);
+		if (m_members.Count < m_data.maxCount)
+		{
+			Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.right;
+			Vector3 spawnPosition = transform.position + direction * radius;
+			Character enemy = Instantiate(m_data.ObjectToSpawn, spawnPosition, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
+			var path = m_data.GetPath();
+			if (path != null) enemy.gameObject.AddComponent<AiPathMove>().SetPath(path);
+			if (m_data.aiData) enemy.BaseAI.Data = m_data.aiData;
+			m_members.Add(enemy.gameObject);
+			spawnEvent?.Invoke(enemy);
+			enemy.DeathEvent.AddListener((character) => m_members.Remove(character.gameObject));
+			Helpers.Log(this, "Spawn", $"{m_members.Count}/{m_data.maxCount},(spawnTimes={m_data.spawnTimes})");
+		}
 	}
 
 	// void Update()

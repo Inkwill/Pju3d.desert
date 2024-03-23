@@ -11,12 +11,12 @@ public class LevelData : ScriptableObject
 	public string Desc;
 	public Vector3 teleportPos;
 	public int maxStageNum;
-	public List<KeyValueData.KeyValue<int, List<SpawnData>>> spawners;
+	public List<KeyValueData.KeyValue<int, SpawnData>> spawners;
 	public List<KeyValueData.KeyValue<int, GoalData>> finishGoals;
 
 	public List<SpawnData> GetSpawners(int step)
 	{
-		return KeyValueData.GetValue<List<SpawnData>>(spawners, step);
+		return KeyValueData.GetValues<SpawnData>(spawners, step);
 	}
 
 	public GoalData GetfinishGoal(int step)

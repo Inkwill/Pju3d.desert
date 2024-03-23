@@ -28,11 +28,7 @@ public class ItemDemander : MonoBehaviour, IInteractable
 	}
 	void Start()
 	{
-		if (autoActive)
-		{
-			GetComponent<InteractHandle>()?.SetHandle(true);
-			ActiveInteract();
-		}
+		if (autoActive) ActiveInteract();
 		if (m_timer)
 		{
 			m_timer.SetTimer(m_data.BehaveDuring, m_data.maxActTimes, m_data.actCd);
@@ -45,11 +41,19 @@ public class ItemDemander : MonoBehaviour, IInteractable
 			m_timer.behaveAction += () => m_data.InteractBehave(gameObject, m_curDemandIndex);
 			m_timer.processAction += (max, passed) => { VFXManager.PlayVFX(m_data.behavingVFX, transform.position); };
 			if (m_data.autoDestroy) m_timer.endAction += () => Destroy(gameObject);
+			m_timer.enabled = false;
 		}
 	}
 
 	void ActiveInteract()
 	{
+		var InteractHandle = GetComponent<InteractHandle>();
+		if (InteractHandle)
+		{
+			InteractHandle.SetHandle(true);
+			InteractHandle.EnterEvent.AddListener(() => { if (!m_timer.enabled) m_timer.enabled = true; });
+		}
+
 		m_demands = new List<InventorySystem.ItemDemand>();
 		foreach (var data in m_data.demands.Value)
 		{

@@ -57,6 +57,28 @@ public class KeyValueData : ScriptableObject
 		return default(T);
 	}
 
+	public static List<T> GetValues<T>(List<KeyValue<int, T>> dic, int key)
+	{
+		var result = new List<T>();
+		foreach (KeyValue<int, T> data in dic)
+		{
+			if (data.Key == key)
+				result.Add(data.Value);
+		}
+		return result;
+	}
+
+	public static List<T> GetValues<T>(List<KeyValue<string, T>> dic, string key)
+	{
+		var result = new List<T>();
+		foreach (KeyValue<string, T> data in dic)
+		{
+			if (data.Key == key)
+				result.Add(data.Value);
+		}
+		return result;
+	}
+
 	public static Dictionary<string, int> ToDic(List<KeyValue<Item, int>> data)
 	{
 		Dictionary<string, int> result = new Dictionary<string, int>();

@@ -23,7 +23,7 @@ MonoBehaviour:
   - Key: AddGoal
     Value: 1
   - Key: UpdateGoal
-    Value: 1
+    Value: 0
   - Key: AttackMiss
     Value: 1
   - Key: ApplicationQuit
@@ -39,6 +39,8 @@ MonoBehaviour:
   - Key: InteractWith
     Value: 1
   - Key: StartInteract
+    Value: 1
+  - Key: Spawn
     Value: 1
   AudioDic:
   - Key: cancle

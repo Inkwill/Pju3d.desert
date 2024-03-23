@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		GameUI.OpenWindow("winMain");
-		m_levelSystem.StartLevel(levels[1], GameManager.CurHero);
+		m_levelSystem.StartLevel(levels[0], GameManager.CurHero);
 	}
 
 	void OnApplicationQuit()

@@ -40,7 +40,8 @@ public class Timer : MonoBehaviour
 
 	public void SetTimer(float during = 0, int maxTimes = 1, float cd = 0)
 	{
-		m_leftTimes = m_maxTimes = maxTimes;
+		m_maxTimes = maxTimes;
+		m_leftTimes = Math.Max(1, m_maxTimes);
 		m_timerDuration = during;
 		m_cd = cd;
 	}
@@ -69,7 +70,7 @@ public class Timer : MonoBehaviour
 			{
 				m_started = false;
 				m_passedTime = 0f;
-				m_leftTimes--;
+				if (m_maxTimes > -1) m_leftTimes--;
 				m_behavedTimes++;
 				behaveAction?.Invoke();
 				if (m_leftTimes == 0)

@@ -11,13 +11,13 @@ public class NPCAI : RoleAI
 		base.OnStateUpdate(curState);
 		if (curState == State.IDLE)
 		{
-			if (m_data.guarder && Vector3.SqrMagnitude(m_character.BirthPos - transform.position) >= 1)
+			if (Data.guarder && Vector3.SqrMagnitude(m_character.BirthPos - transform.position) >= 1)
 			{
 				MoveTo(m_character.BirthPos);
 				SetState(State.MOVE);
 			}
 			m_IdleDuring += Time.deltaTime;
-			if (m_IdleDuring > m_data.WanderBeat && m_data.WanderRadius > 0)
+			if (m_IdleDuring > Data.WanderBeat && Data.WanderRadius > 0)
 			{
 				Agent.isStopped = false;
 				Wandering();
@@ -26,7 +26,7 @@ public class NPCAI : RoleAI
 		}
 		if (curState == State.PURSUING)
 		{
-			if (CurrentEnemy && m_data.Offensive && m_character.MoveSpeed > 0)
+			if (CurrentEnemy && Data.Offensive && m_character.MoveSpeed > 0)
 			{
 				Agent.isStopped = false;
 				Agent.SetDestination(CurrentEnemy.gameObject.transform.position);
@@ -35,15 +35,15 @@ public class NPCAI : RoleAI
 	}
 	protected override void OnDamageAI(Damage damage)
 	{
-		if (!m_data.Offensive) m_data.Offensive = true;
+		if (!Data.Offensive) Data.Offensive = true;
 		if (!CurrentEnemy) m_character.SetEnemy(EnemyDetector.GetNearest()?.GetComponent<Character>());
 		if (EnemyDetector.Radius < 10) EnemyDetector.Radius = 10;
 	}
 
 	void Wandering()
 	{
-		float randomX = Random.Range(0f, m_data.WanderRadius);
-		float randomZ = Random.Range(0f, m_data.WanderRadius);
+		float randomX = Random.Range(0f, Data.WanderRadius);
+		float randomZ = Random.Range(0f, Data.WanderRadius);
 
 		Vector3 randomPos = new Vector3(m_character.BirthPos.x + randomX, m_character.BirthPos.y, m_character.BirthPos.z + randomZ);
 		MoveTo(randomPos);
@@ -51,7 +51,7 @@ public class NPCAI : RoleAI
 
 	void OnItemEnter(Loot loot)
 	{
-		if (m_data.itemPick) loot.InteractWith(m_character);
+		if (Data.itemPick) loot.InteractWith(m_character);
 	}
 
 }

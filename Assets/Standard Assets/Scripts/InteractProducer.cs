@@ -42,13 +42,18 @@ public class InteractProducer : MonoBehaviour, IInteractable
 
 		itemGrid?.Init(m_data.maxActTimes);
 		itemGrid?.ShowItem(m_timer.LeftTimes);
+		m_timer.enabled = false;
 	}
 
 	void ActiveInteract()
 	{
-		GetComponent<InteractHandle>()?.SetHandle(true);
+		var InteractHandle = GetComponent<InteractHandle>();
+		if (InteractHandle)
+		{
+			InteractHandle.SetHandle(true);
+			InteractHandle.EnterEvent.AddListener(() => { if (!m_timer.enabled) m_timer.enabled = true; });
+		}
 	}
-
 
 	public bool CanInteract(IInteractable target)
 	{

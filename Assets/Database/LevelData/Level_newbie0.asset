@@ -17,9 +17,6 @@ MonoBehaviour:
   teleportPos: {x: 92, y: 5, z: -17}
   maxStageNum: 2
   spawners:
-  - Key: 2
-    Value:
-    - {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
-  finishGoals:
   - Key: 1
-    Value: {fileID: 11400000, guid: dc8f35e677826f84d9098c32e19a702c, type: 2}
+    Value: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
+  finishGoals: []

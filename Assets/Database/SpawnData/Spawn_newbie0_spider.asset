@@ -10,15 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77f4e1e8647791b4ea7bf564fb510670, type: 3}
-  m_Name: Spawn_newbie0_2_spider
+  m_Name: Spawn_newbie0_spider
   m_EditorClassIdentifier: 
+  SpawnId: Spawn_newbie0_spider
   ObjectToSpawn: {fileID: 7778956338015736396, guid: 1d699b0cddb8e0a4da27f89f3d61c013,
     type: 3}
   spawnerPos: {x: 75, y: 10, z: 0}
   aiData: {fileID: 11400000, guid: 10cd91412837a924ebe0f10697f13a95, type: 2}
   spawnCount: 1
-  spawnTimes: 3
-  spawnWaitTime: 10
-  spawnCd: 10
+  maxCount: 3
+  spawnTimes: -1
+  autoDestroy: 0
+  spawnWaitTime: 20
+  spawnCd: 20
   radius: 5
   angleStep: 15
+  paths:
+  - Value:
+    - {x: 84, y: 10, z: 10}
+    - {x: 84, y: 13, z: 20}
+    - {x: 84, y: 10, z: 25}
+  - Value:
+    - {x: 84, y: 13, z: 22}
+    - {x: 74, y: 10, z: 28}

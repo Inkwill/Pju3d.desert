@@ -6,20 +6,26 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpawnData", menuName = "Data/SpawnData", order = 600)]
 public class SpawnData : ScriptableObject
 {
+	public string SpawnId;
 	public GameObject ObjectToSpawn;
 	public Vector3 spawnerPos;
 	public AiData aiData;
 	public int spawnCount = 1;
-	public int spawnTimes = 1;
+	public int maxCount = 1; // currentObj max count, < 0  means infinity
+	public int spawnTimes = 1; // total max times, < 0  means infinity
+	[ConditionalField(nameof(spawnTimes), true, -1)]
+	public bool autoDestroy;
 	public float spawnWaitTime = 10.0f;
 	public float spawnCd = 10.0f;
 	public int radius = 5;
 	public int angleStep = 15;
 	public List<KeyValueData.KArray<Vector3>> paths;
+
 	public Spawner Instantiate()
 	{
 		Spawner spawner = GameObject.Instantiate(new GameObject()).AddComponent<Spawner>();
 		spawner.transform.position = spawnerPos;
+		spawner.name = SpawnId;
 		spawner.Init(this);
 		return spawner;
 	}

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   storyMode: 0
   triggerTimes: 5
-  loopTimes: 10
-  stayTimes: 1
-  cdTimes: 30
+  loopTimes: 1
+  stayTime: 1
+  cd: 30
   Conditions: []
   Dialogues:
-  - Key: Help!
-    Value: 2
+  - Key: self
+    Value: Help!
