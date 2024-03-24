@@ -42,9 +42,16 @@ public class RoleAI : AIBase
 	}
 	public override void Stop()
 	{
+		m_Destination = Vector3.zero;
 		Agent.velocity = Vector3.zero;
 		Agent.isStopped = true;
 		Agent.ResetPath();
+	}
+
+	public override void Back(float distance)
+	{
+		Vector3 pos = CurrentEnemy ? CurrentEnemy.transform.position : transform.position;
+		MoveTo(pos + transform.forward * -1 * distance);
 	}
 
 	protected override void OnStateUpdate(State curState)
@@ -53,6 +60,7 @@ public class RoleAI : AIBase
 		{
 			if (m_Destination != Vector3.zero && Vector3.SqrMagnitude(m_Destination - transform.position) <= 1)
 			{
+				Stop();
 				MoveEndAction?.Invoke();
 				if (m_character.CurrentEnemy) SetState(State.PURSUING);
 				else SetState(State.IDLE);

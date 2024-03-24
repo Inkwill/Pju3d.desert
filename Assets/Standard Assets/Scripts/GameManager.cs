@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
 		// }
 		if (Input.GetKeyDown(KeyCode.Return))
 		{
-			//EffectAction("Test", new string[] { "EffectAcion Test!" });
+			CurHero.BaseAI.Back(5.0f);
 		}
 
 		float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
@@ -210,6 +210,16 @@ public class GameManager : MonoBehaviour
 	IEnumerator WaitAction(float waitTime, Action action)
 	{
 		yield return new WaitForSeconds(waitTime);
+		action?.Invoke();
+	}
+
+	public static void StartNextFrameAction(Action action)
+	{
+		Instance.StartCoroutine(Instance.NextFrameAction(action));
+	}
+	IEnumerator NextFrameAction(Action action)
+	{
+		yield return new WaitForNextFrameUnit();
 		action?.Invoke();
 	}
 

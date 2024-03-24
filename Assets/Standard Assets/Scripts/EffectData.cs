@@ -20,7 +20,8 @@ public class EffectData : ScriptableObject
 		LORDEXP,
 		LORDEWARTER,
 		DESTROYSELF,
-		OPENWINDOW
+		OPENWINDOW,
+		MOVEBACK
 	}
 	public EffectType Type;
 	public VFXType TakeVFX = VFXType.NONE;
@@ -137,6 +138,19 @@ public class EffectData : ScriptableObject
 				{
 					var win = GameManager.GameUI.OpenWindow(param[0]);
 					success = win != null;
+				}
+				break;
+			case EffectType.MOVEBACK:
+				if (param != null && param.Length > 1)
+				{
+					var mover = param[0] == "self" ? user.GetComponent<Character>() : target.GetComponent<Character>();
+					float dis = 0;
+					if (mover && float.TryParse(param[1], out dis))
+					{
+						//GameManager.StartNextFrameAction(() => mover.BaseAI.Back(dis));
+						mover.BaseAI.Back(dis);
+						success = true;
+					}
 				}
 				break;
 			default:

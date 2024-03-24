@@ -95,9 +95,10 @@ public class StoryEvent : MonoBehaviour
 	void EndStoryEvent()
 	{
 		m_started = false;
+		if (m_data.storyMode) GameManager.StoryMode = false;
 		endEvent?.Invoke(gameObject, m_target);
 		EffectData.TakeEffects(m_data.Effects, gameObject, m_target);
-		if (m_data.storyMode) GameManager.StoryMode = false;
+
 		if (--m_loopTimes >= 1)
 		{
 			m_cd = m_data.cd;

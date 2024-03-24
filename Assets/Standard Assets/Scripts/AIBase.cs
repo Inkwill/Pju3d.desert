@@ -22,7 +22,7 @@ public class AIBase : MonoBehaviour
 	protected State m_State = State.INACTIVE;
 	public float CurStateDuring => m_StateDuring;
 	float m_StateDuring;
-	public bool isIdle { get { return m_State == State.IDLE || m_State == State.INTERACTING; } }
+	public bool isIdle { get { return m_State == State.IDLE || m_State == State.INTERACTING || m_State == State.PURSUING; } }
 	public bool isStandBy { get { return (m_State != State.DEAD && m_State != State.SKILLING); } }
 	public bool isActive { get { return m_State != State.INACTIVE && m_State != State.DEAD; } }
 	public AiData Data;
@@ -166,6 +166,7 @@ public class AIBase : MonoBehaviour
 
 	protected virtual void OnStart() { }
 	public virtual void Stop() { }
+	public virtual void Back(float distance) { }
 	protected virtual void OnStateUpdate(State state) { }
 	protected virtual void OnDeathAI() { }
 	protected virtual void OnDamageAI(Damage damage) { }
