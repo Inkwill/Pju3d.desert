@@ -16,14 +16,13 @@ MonoBehaviour:
   Desc: 
   teleportPos: {x: 92, y: 5, z: -17}
   maxStageNum: 2
+  openingRemark: 'This is a true story... '
   spawners:
   - Key: 1
     Value: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}
   storyEvents:
   - Key: 1
     Value: {fileID: 11400000, guid: a1464b5a443b97f48a03a77032615cfe, type: 2}
-  - Key: 1
-    Value: {fileID: 11400000, guid: 322aa4d036510be40bc58195f1887aef, type: 2}
   finishGoals:
   - Key: 1
     Value: {fileID: 11400000, guid: dc8f35e677826f84d9098c32e19a702c, type: 2}

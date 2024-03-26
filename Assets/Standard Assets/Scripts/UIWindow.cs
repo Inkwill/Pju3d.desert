@@ -11,22 +11,21 @@ public class UIWindow : MonoBehaviour
 	public Image winMask;
 	public AudioClip OpenClip;
 	public AudioClip CloseClip;
+	public float openDuring = 0.2f;
+	public float closeDuring = 0.2f;
 	Animator m_anim;
-
+	void Awake()
+	{
+		m_anim = GetComponent<Animator>();
+	}
 	public void Open()
 	{
 		gameObject.SetActive(true);
-		m_anim = GetComponent<Animator>();
 		if (OpenClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = OpenClip });
 		if (winMask) winMask.enabled = false;
-
-		if (m_anim)
-		{
-			m_anim.SetTrigger("open");
-			GameManager.StartWaitAction(0.2f, () => { OnOpened(); if (winMask) winMask.enabled = true; });
-		}
 		OnOpen();
 		GameManager.GameUI.winOpenAction?.Invoke(this);
+		GameManager.StartWaitAction(openDuring, () => { OnOpened(); if (winMask) winMask.enabled = true; });
 	}
 	void OnDisable()
 	{
@@ -39,8 +38,8 @@ public class UIWindow : MonoBehaviour
 		if (CloseClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = CloseClip });
 		OnClose();
 		GameManager.GameUI.winCloseAction?.Invoke(this);
-		if (m_anim) { m_anim.SetTrigger("close"); GameManager.StartWaitAction(0.2f, () => { gameObject.SetActive(false); }); }
-		else gameObject.SetActive(false);
+		m_anim?.SetTrigger("close");
+		GameManager.StartWaitAction(closeDuring, () => { gameObject.SetActive(false); });
 	}
 	protected virtual void OnOpen() { }
 	protected virtual void OnOpened() { }

@@ -9,5 +9,7 @@ public class UIElementBase : MonoBehaviour
 	public Toggle toggle;
 	public Text count;
 	public int index;
+	public Image currencyIcon;
+	public Text currencyCount;
 
 }

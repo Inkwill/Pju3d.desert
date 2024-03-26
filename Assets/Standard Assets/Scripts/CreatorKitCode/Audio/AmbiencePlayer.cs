@@ -2,24 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CreatorKitCodeInternal 
+
+public class AmbiencePlayer : MonoBehaviour
 {
-    public class AmbiencePlayer : MonoBehaviour
-    {
-        static AmbiencePlayer s_Instance;
-    
-        public AudioSource FarAudioSource;
-        public AudioSource CloseAudioSource;
+	static AmbiencePlayer s_Instance;
 
-        void Awake()
-        {
-            s_Instance = this;
-        }
+	public AudioSource FarAudioSource;
+	public AudioSource CloseAudioSource;
 
-        public static void UpdateVolume(float zoomRatio)
-        {
-            s_Instance.CloseAudioSource.volume = 1.0f - zoomRatio;
-            s_Instance.FarAudioSource.volume = zoomRatio;
-        }
-    }
+	void Awake()
+	{
+		s_Instance = this;
+	}
+
+	public static void UpdateVolume(float zoomRatio)
+	{
+		s_Instance.CloseAudioSource.volume = 1.0f - zoomRatio;
+		s_Instance.FarAudioSource.volume = zoomRatio;
+	}
 }

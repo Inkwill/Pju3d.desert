@@ -44,10 +44,10 @@ public class GameManager : MonoBehaviour
 
 	public static bool BuildMode
 	{
-		get { return m_buildMode; }
+		get { return buildMode; }
 		set
 		{
-			m_buildMode = value;
+			buildMode = value;
 			GameManager.GameUI.JoyStick.enabled = !value;
 			Instance.buildModeFollow.position = CurHero.transform.position;
 			if (value)
@@ -62,27 +62,25 @@ public class GameManager : MonoBehaviour
 			}
 		}
 	}
-	public static bool m_buildMode;
-	public static bool StoryMode
+	public static bool buildMode;
+
+	public static void SetStoryModel(bool active, Action action = null)
 	{
-		get { return m_storyMode; }
-		set
+		if (storyMode == active) { action?.Invoke(); return; }
+		storyMode = active;
+		GameUI.JoyStick.enabled = !active;
+		if (active)
 		{
-			m_storyMode = value;
-			GameManager.GameUI.JoyStick.enabled = !value;
-			if (value)
-			{
-				Instance.CameraCtrl.SetMode(CameraController.Mode.STORY);
-				GameManager.CurHero.BaseAI.SetState(AIBase.State.INACTIVE);
-			}
-			else
-			{
-				Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
-				GameManager.CurHero.BaseAI.SetState(AIBase.State.IDLE);
-			}
+			Instance.CameraCtrl.SetMode(CameraController.Mode.STORY, action);
+			CurHero.BaseAI.SetState(AIBase.State.INACTIVE);
+		}
+		else
+		{
+			Instance.CameraCtrl.SetMode(CameraController.Mode.RPG, action);
+			CurHero.BaseAI.SetState(AIBase.State.IDLE);
 		}
 	}
-	public static bool m_storyMode;
+	public static bool storyMode { get; private set; }
 
 	[SerializeField]
 	Transform ui_trans;
@@ -125,6 +123,8 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
+		ResInventoryItem moneyInventory = KeyValueData.GetValue<Item>(GameManager.Config.Item, "ResInventory_Money") as ResInventoryItem;
+		if (moneyInventory) GameManager.CurHero.Inventory.ResInventories.Add(ResItem.ResType.Money, new InventorySystem.ResInventory(moneyInventory));
 		GameUI.OpenWindow("winMain");
 		m_levelSystem.StartLevel(levels[0], GameManager.CurHero);
 	}
@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
 
 	private void Update()
 	{
-		if (m_buildMode)
+		if (buildMode)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
 
 		if (Input.GetKeyDown("space"))
 		{
-			BuildMode = !m_buildMode;
+			BuildMode = !buildMode;
 			//UIHudCanvas.Instance.button.transform.position = Camera.main.WorldToScreenPoint(CurHero.transform.position);
 		}
 

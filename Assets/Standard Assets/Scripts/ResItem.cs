@@ -10,6 +10,7 @@ public class ResItem : Item
 	{
 		Wood,
 		Water,
+		Money
 	}
 	public ResType resType;
 	public Weapon.WeaponType toolType;

@@ -16,6 +16,7 @@ MonoBehaviour:
   storyType: 0
   triggerType: 0
   storyMode: 1
+  nextStory: {fileID: 11400000, guid: 322aa4d036510be40bc58195f1887aef, type: 2}
   triggerTimes: 1
   loopTimes: 1
   cd: 30

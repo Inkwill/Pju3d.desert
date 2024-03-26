@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,10 +9,10 @@ public class StoryEvent : MonoBehaviour
 	StoryEventData m_data;
 	public UnityEvent<GameObject, GameObject> endEvent;
 	GameObject m_target;
-	bool m_started;
 	int m_triggerTimes;
 	int m_loopTimes;
 	float m_cd;
+	UIStoryWindow m_winStory;
 
 	public void Init(StoryEventData data)
 	{
@@ -62,22 +62,19 @@ public class StoryEvent : MonoBehaviour
 	public void StartEvent(GameObject target)
 	{
 		m_target = target;
-		if (m_started || m_cd > 0) return;
+		if (m_cd > 0) return;
 
 		Character character = target.GetComponent<Character>();
 		if (character && !ConditionData.JudgmentList(character, m_data.Conditions)) return;
 
 		if (++m_triggerTimes < m_data.triggerTimes) return;
-
-		m_started = true;
 		m_triggerTimes = 0;
 
 		if (m_data.storyType == StoryEventData.StoryType.Dialogue)
 		{
 			UIHudBase target_hud = character.GetComponentInChildren<UIHudBase>();
 			UIHudBase self_hud = GetComponentInChildren<UIHudBase>();
-			StartCoroutine(Dialogue(self_hud, target_hud));
-			GameManager.StoryMode = m_data.storyMode;
+			GameManager.SetStoryModel(m_data.storyMode, () => StartCoroutine(Dialogue(self_hud, target_hud)));
 		}
 	}
 
@@ -89,13 +86,11 @@ public class StoryEvent : MonoBehaviour
 			hud?.Bubble(dialog.Value);
 			yield return new WaitForSeconds(1.5f);
 		}
-		EndStoryEvent();
+		if (m_data.storyMode) GameManager.SetStoryModel(false, () => EndStoryEvent());
 	}
 
 	void EndStoryEvent()
 	{
-		m_started = false;
-		if (m_data.storyMode) GameManager.StoryMode = false;
 		endEvent?.Invoke(gameObject, m_target);
 		EffectData.TakeEffects(m_data.Effects, gameObject, m_target);
 

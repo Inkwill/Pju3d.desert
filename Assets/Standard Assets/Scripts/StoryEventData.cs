@@ -23,12 +23,13 @@ public class StoryEventData : ScriptableObject
 	}
 	public TriggerType triggerType;
 	public bool storyMode;
+
 	[ConditionalField(nameof(triggerType), true, TriggerType.AutoStart)]
 	public int triggerTimes = 1;
 	[ConditionalField(nameof(triggerType), true, TriggerType.AutoStart)]
 	public int loopTimes = 1;
 	[ConditionalField(nameof(loopTimes), true, 1)]
-	public float cd = 30;
+	public float cd = 30.0f;
 	[ConditionalField(nameof(triggerType), false, TriggerType.StayArea)]
 	public float stayTime = 1;
 	[ConditionalField(nameof(triggerType), false, TriggerType.EnterArea, TriggerType.StayArea)]

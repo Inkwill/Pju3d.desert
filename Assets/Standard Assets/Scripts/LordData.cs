@@ -11,7 +11,7 @@ public class LordData : MonoBehaviour
 	public int Exp => m_exp;
 	public float ExpPercent => 1.0f * m_exp / expTemplate[m_level - 1];
 	int m_exp;
-	public int Money => m_money;
+	public int Money { get { return GameManager.CurHero.Inventory.ItemCount("Money"); } }
 	int m_money;
 	public WaterContainer waterBottle => m_bottle;
 	WaterContainer m_bottle;

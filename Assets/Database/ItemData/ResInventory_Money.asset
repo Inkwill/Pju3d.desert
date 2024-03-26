@@ -9,17 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 328cd29feea7c9e448f98552a0eebdd2, type: 3}
-  m_Name: ChestKey
+  m_Script: {fileID: 11500000, guid: 77efebc043fe8b940ba68c0a6ebfe29e, type: 3}
+  m_Name: ResInventory_Money
   m_EditorClassIdentifier: 
-  ItemName: ChestKey
-  value: 1
-  onlyOne: 0
+  ItemName: ResInventory_Money
+  onlyOne: 1
   stackNum: 0
-  ItemSprite: {fileID: 21300000, guid: 68fba0368e8dc8842ad10756647eee14, type: 3}
+  ItemSprite: {fileID: 21300000, guid: 7b4d15d1b586c5143a58314171c26213, type: 3}
   Description: 
-  WorldObjectPrefab: {fileID: 3613217881743831505, guid: 916d205a860f50a408084e75d5221c73,
+  WorldObjectPrefab: {fileID: 1926261722200423199, guid: 265ed1fd071eee145b7fbdba2f5cb978,
     type: 3}
   SpawnClip: {fileID: 0}
-  UsageEffects: []
-  autoUse: 0
+  resType: 2
+  capacity: 99999

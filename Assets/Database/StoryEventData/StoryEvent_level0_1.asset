@@ -39,3 +39,7 @@ MonoBehaviour:
   - Key: {fileID: 11400000, guid: 914632a637ca46447acc281c33ff3c12, type: 2}
     Value:
     - main02
+  - Key: {fileID: 11400000, guid: f3e05045bdb0a6844ae28bea13fb7b7b, type: 2}
+    Value:
+    - target
+    - 5

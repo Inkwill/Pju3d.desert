@@ -11,6 +11,7 @@ public class LevelData : ScriptableObject
 	public string Desc;
 	public Vector3 teleportPos;
 	public int maxStageNum;
+	public string openingRemark;
 	public List<KeyValueData.KeyValue<int, SpawnData>> spawners;
 	public List<KeyValueData.KeyValue<int, StoryEventData>> storyEvents;
 	public List<KeyValueData.KeyValue<int, GoalData>> finishGoals;

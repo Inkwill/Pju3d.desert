@@ -20,9 +20,12 @@ public class LevelSystem
 		}
 		public void Start(Character character)
 		{
+			UIStoryWindow winStory = GameManager.GameUI.GetWindow("winStory") as UIStoryWindow;
+			winStory.story.text = m_data.openingRemark;
+			GameManager.GameUI.OpenWindow(winStory);
+			GameManager.GameUI.winCloseAction += (win) => { if (win == winStory) StartStage(1); };
 			if (m_data.teleportPos != Vector3.zero) m_data.Teleport(character);
 			GameManager.GameGoal.GameGoalAction += OnGoalAction;
-			StartStage(1);
 		}
 		void OnGoalAction(GameGoalSystem.GameGoal goal, string actionName)
 		{

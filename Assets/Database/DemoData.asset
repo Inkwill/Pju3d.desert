@@ -61,13 +61,15 @@ MonoBehaviour:
   - Key: Wood
     Value: {fileID: 11400000, guid: 191d4284c251f7f4b9c58a2b040b22a1, type: 2}
   - Key: Money
-    Value: {fileID: 11400000, guid: a0d631c24b3e80c4893034ac481dd1bd, type: 2}
+    Value: {fileID: 11400000, guid: c9fbb12d59cd89647b9eaddece27d110, type: 2}
   - Key: wp_unarmed
     Value: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
   - Key: ChestKey
     Value: {fileID: 11400000, guid: 1d5ec5573c8307744a74d8eb6783a08b, type: 2}
   - Key: Water
     Value: {fileID: 11400000, guid: 2ec9e2f582aff554c95d13709e52aa70, type: 2}
+  - Key: ResInventory_Money
+    Value: {fileID: 11400000, guid: 5f531d11d8097bb4db9e932db6f1b2ba, type: 2}
   Effect:
   - Key: WeaponDamage
     Value: {fileID: 0}

@@ -44,6 +44,12 @@ public class UIManager : MonoBehaviour
 		win_LastOpen.Open();
 		return win_LastOpen;
 	}
+	public UIWindow OpenWindow(UIWindow win)
+	{
+		win_LastOpen = win;
+		win_LastOpen.Open();
+		return win_LastOpen;
+	}
 
 	public void CloseAll()
 	{
