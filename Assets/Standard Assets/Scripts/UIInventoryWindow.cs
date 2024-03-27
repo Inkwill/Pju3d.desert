@@ -22,6 +22,7 @@ public class UIInventoryWindow : UIWindow
 	public UIInventorySlot WeaponSlot_1;
 	public UIInventorySlot WeaponSlot_2;
 	public CanvasScaler DragCanvasScaler { get; private set; }
+	public Button btConfirm;
 
 	UIInventorySlot[] m_ItemEntries;
 	UIInventorySlot m_SelectedSlot;
@@ -56,14 +57,15 @@ public class UIInventoryWindow : UIWindow
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
 		EquipRoot.SetActive(false);
-		GameManager.GameUI.WinMain.bottomRoot.DOMove(GameManager.GameUI.WinMain.bottomRoot.position + new Vector3(0, 150, 0), 0.2f);
+		btConfirm.gameObject.SetActive(false);
+		GameManager.GameUI.winRpg.bottomRoot.DOMove(GameManager.GameUI.winRpg.bottomRoot.position + new Vector3(0, 150, 0), 0.2f);
 		//GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.INVENTORY);
 		Load();
 	}
 
 	protected override void OnClose()
 	{
-		GameManager.GameUI.WinMain.bottomRoot.DOMove(GameManager.GameUI.WinMain.bottomRoot.position - new Vector3(0, 150, 0), 0.2f);
+		GameManager.GameUI.winRpg.bottomRoot.DOMove(GameManager.GameUI.winRpg.bottomRoot.position - new Vector3(0, 150, 0), 0.2f);
 		if (m_curDeviceSlot != null)
 		{
 			CanclePlace();
@@ -162,8 +164,8 @@ public class UIInventoryWindow : UIWindow
 			case "Place":
 				m_curDeviceSlot = m_SelectedSlot;
 				DeviceItem device = m_curDeviceSlot.item as DeviceItem;
-				GameManager.GameUI.WinMain.btConfirm.gameObject.SetActive(true);
-				GameManager.GameUI.WinMain.btConfirm.onClick.AddListener(PlaceDevice);
+				btConfirm.gameObject.SetActive(true);
+				btConfirm.onClick.AddListener(PlaceDevice);
 				if (GameManager.CurHero.BaseAI.SceneDetector && device.prefab)
 				{
 					m_deviceModle = Instantiate(device.modle, GameManager.CurHero.BaseAI.SceneDetector.transform, false);
@@ -188,8 +190,8 @@ public class UIInventoryWindow : UIWindow
 
 	public void CanclePlace()
 	{
-		GameManager.GameUI.WinMain.btConfirm.gameObject.SetActive(false);
-		GameManager.GameUI.WinMain.btConfirm.onClick.RemoveListener(PlaceDevice);
+		btConfirm.gameObject.SetActive(false);
+		btConfirm.onClick.RemoveListener(PlaceDevice);
 		Destroy(m_deviceModle);
 		m_curDeviceSlot = null;
 	}

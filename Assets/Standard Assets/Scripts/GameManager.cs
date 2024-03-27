@@ -24,45 +24,10 @@ public class GameManager : MonoBehaviour
 	public CameraController CameraCtrl;
 	public SFXManager SFXManager;
 	public TerrainTool TerrainTool;
-	public Transform buildModeFollow;
 	LevelSystem m_levelSystem;
-	public static GameObject CurrentSlected
-	{
-		get { return m_CurrentSelected; }
-		set
-		{
-			m_CurrentSelected?.GetComponent<HighlightableObject>()?.Dehighlight();
-			m_CurrentSelected = value;
-			m_CurrentSelected?.GetComponent<HighlightableObject>()?.Highlight();
-			Helpers.Log(Instance, "PickObject", "target= " + m_CurrentSelected.name);
-		}
-	}
 	public List<FormulaData> formulas;
 	public List<Spawner> spawners;
-	public List<LevelData> levels;
-	static GameObject m_CurrentSelected;
-
-	public static bool BuildMode
-	{
-		get { return buildMode; }
-		set
-		{
-			buildMode = value;
-			GameManager.GameUI.JoyStick.enabled = !value;
-			Instance.buildModeFollow.position = CurHero.transform.position;
-			if (value)
-			{
-				Instance.CameraCtrl.SetMode(CameraController.Mode.BUILD);
-				GameManager.CurHero.BaseAI.SetState(AIBase.State.INACTIVE);
-			}
-			else
-			{
-				Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
-				GameManager.CurHero.BaseAI.SetState(AIBase.State.IDLE);
-			}
-		}
-	}
-	public static bool buildMode;
+	public LevelData startLevel;
 
 	public static void SetStoryModel(bool active, Action action = null)
 	{
@@ -98,8 +63,6 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	KeyValueData DemoData;
 	InventorySystem.ItemDemand testDemand;
-	Vector3 m_dragMousePos = Vector3.zero;
-	Vector3 m_revisCampos = Vector3.zero;
 	private void Awake()
 	{
 		Instance = this;
@@ -125,8 +88,8 @@ public class GameManager : MonoBehaviour
 	{
 		ResInventoryItem moneyInventory = KeyValueData.GetValue<Item>(GameManager.Config.Item, "ResInventory_Money") as ResInventoryItem;
 		if (moneyInventory) GameManager.CurHero.Inventory.ResInventories.Add(ResItem.ResType.Money, new InventorySystem.ResInventory(moneyInventory));
-		GameUI.OpenWindow("winMain");
-		m_levelSystem.StartLevel(levels[0], GameManager.CurHero);
+		GameUI.OpenWindow("winRpg");
+		GameUI.OpenWindow("winLevelSelect");
 	}
 
 	void OnApplicationQuit()
@@ -137,47 +100,10 @@ public class GameManager : MonoBehaviour
 
 	private void Update()
 	{
-		if (buildMode)
-		{
-			if (Input.GetMouseButtonDown(0))
-			{
-				m_dragMousePos = Input.mousePosition;
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit hit;
-
-				// 如果射线与物体碰撞
-				if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask(new string[] { "CurHero", "Enemy", "Neutral", "Interactable" })))
-				{
-					CurrentSlected = hit.collider.gameObject;
-				}
-			}
-			else if (Input.GetMouseButtonUp(0))
-			{
-				m_dragMousePos = Vector3.zero;
-			}
-			else if (Input.GetMouseButton(0))
-			{
-				Vector3 direction = Input.mousePosition - m_dragMousePos;
-				if (direction.magnitude > 0)
-				{
-					Vector3 transPos = buildModeFollow.transform.position - new Vector3(direction.x, 0, direction.y) * 1.0f * Time.deltaTime;
-					if (!InBaseBoundary(transPos)) transPos = buildModeFollow.transform.position - new Vector3(direction.x, 0, direction.y) * 0.1f * Time.deltaTime;
-					buildModeFollow.transform.position = transPos;
-					m_dragMousePos = Input.mousePosition;
-					//Helpers.Log(this, "MouseDrag", $"from{m_dragMousePos}To{Input.mousePosition}->{direction.magnitude}");
-				}
-			}
-			else if (!InBaseBoundary(buildModeFollow.transform.position))
-			{
-				buildModeFollow.transform.position = Vector3.Lerp(buildModeFollow.transform.position, ConstraintPos(buildModeFollow.transform.position), 3.0f);
-				if (InBaseBoundary(buildModeFollow.transform.position)) m_revisCampos = Vector3.zero;
-			}
-
-		}
-
 		if (Input.GetKeyDown("space"))
 		{
-			BuildMode = !buildMode;
+			if (CameraCtrl.CurMode != CameraController.Mode.BUILD) CameraCtrl.SetMode(CameraController.Mode.BUILD);
+			else CameraCtrl.SetMode(CameraController.Mode.RPG);
 			//UIHudCanvas.Instance.button.transform.position = Camera.main.WorldToScreenPoint(CurHero.transform.position);
 		}
 
@@ -221,22 +147,6 @@ public class GameManager : MonoBehaviour
 	{
 		yield return new WaitForNextFrameUnit();
 		action?.Invoke();
-	}
-
-	bool InBaseBoundary(Vector3 pos)
-	{
-		return pos.x > baseBoundary_LB.x && pos.x < baseBoundary_RT.x
-				&& pos.z > baseBoundary_LB.y && pos.z < baseBoundary_RT.y;
-	}
-
-	Vector3 ConstraintPos(Vector3 sourcePos)
-	{
-		Vector3 pos = sourcePos;
-		if (pos.x < baseBoundary_LB.x) pos.x = baseBoundary_LB.x;
-		if (pos.x > baseBoundary_RT.x) pos.x = baseBoundary_RT.x;
-		if (pos.z < baseBoundary_LB.y) pos.z = baseBoundary_LB.y;
-		if (pos.z > baseBoundary_RT.y) pos.z = baseBoundary_RT.y;
-		return pos;
 	}
 	public static string SceneBoxInfo(GameObject sceneBox, bool display)
 	{

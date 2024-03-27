@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77f4e1e8647791b4ea7bf564fb510670, type: 3}
+  m_Name: Spawn_slg_player0_2
+  m_EditorClassIdentifier: 
+  SpawnId: 
+  ObjectToSpawn: {fileID: 7187396258787047546, guid: a1b36455d2c0f674ebae8b5c19b00aef,
+    type: 3}
+  spawnerPos: {x: -23, y: 10, z: -17}
+  aiData: {fileID: 11400000, guid: 57c94879472734e47bf96b828769f758, type: 2}
+  spawnCount: 5
+  maxCount: 15
+  spawnTimes: 3
+  spawnWaitTime: 10
+  spawnCd: 30
+  radius: 3
+  angleStep: 60
+  lifeCategory: 0
+  paths:
+  - Value:
+    - {x: -13, y: 10, z: 25}

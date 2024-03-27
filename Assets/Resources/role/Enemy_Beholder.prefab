@@ -119,9 +119,6 @@ MonoBehaviour:
   AttackEvent:
     m_PersistentCalls:
       m_Calls: []
-  InteractEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &5227243799845401904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,15 +192,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f00961a87b9fe45997a66de5089fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Data: {fileID: 0}
   SceneDetector: {fileID: 8686177504629337041}
   InteractDetector: {fileID: 6591241889224724912}
   EnemyDetector: {fileID: 7713252172596359410}
   SkillDetector: {fileID: 8821629619986255575}
-  m_Offensive: 1
-  m_guarder: 0
-  m_itemPick: 0
-  m_WanderRadius: 20
-  m_WanderBeat: 3
 --- !u!1001 &7004147645579896727
 PrefabInstance:
   m_ObjectHideFlags: 0

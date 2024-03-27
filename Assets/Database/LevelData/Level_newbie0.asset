@@ -15,8 +15,12 @@ MonoBehaviour:
   LevelId: newbie_0
   Desc: 
   teleportPos: {x: 92, y: 5, z: -17}
+  baseBoundary_LB: {x: 0, y: -15}
+  baseBoundary_RT: {x: 90, y: 100}
+  cameraMode: 0
   maxStageNum: 2
   openingRemark: 'This is a true story... '
+  stageDuring: 0
   spawners:
   - Key: 1
     Value: {fileID: 11400000, guid: fdd81867ee2930c4b9d8279a001201a5, type: 2}

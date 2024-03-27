@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fe203850cd33c542946beda39132cfe, type: 3}
+  m_Name: Level_slgText
+  m_EditorClassIdentifier: 
+  LevelId: slgTest
+  Desc: 
+  teleportPos: {x: -14, y: 10, z: -14}
+  baseBoundary_LB: {x: -20, y: -13}
+  baseBoundary_RT: {x: -10, y: 10}
+  cameraMode: 3
+  maxStageNum: 3
+  openingRemark: SLG Battle Demo
+  stageDuring: 30
+  spawners:
+  - Key: 1
+    Value: {fileID: 11400000, guid: d8c8235dcdaf32e4187ad64c3e14f353, type: 2}
+  - Key: 1
+    Value: {fileID: 11400000, guid: 009e9f55b735d3141bee32e34c11dc6e, type: 2}
+  - Key: 1
+    Value: {fileID: 11400000, guid: f730cb2910df4e64fb5b17e4e5e33e89, type: 2}
+  - Key: 1
+    Value: {fileID: 11400000, guid: a313999b35831f84c801d4be8420812e, type: 2}
+  - Key: 1
+    Value: {fileID: 11400000, guid: b5c32836e6485234587e9e057f8b9184, type: 2}
+  - Key: 1
+    Value: {fileID: 11400000, guid: 79ba4486a5236a147a068bd4eeb0351c, type: 2}
+  storyEvents: []
+  finishGoals: []

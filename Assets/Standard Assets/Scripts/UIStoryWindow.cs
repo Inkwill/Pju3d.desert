@@ -8,7 +8,6 @@ public class UIStoryWindow : UIWindow
 	public TMP_Text story;
 	protected override void OnOpen()
 	{
-		GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.RPG);
 		StartCoroutine(ShowText(story.text));
 	}
 

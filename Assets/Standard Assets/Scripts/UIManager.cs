@@ -9,10 +9,8 @@ using System;
 public class UIManager : MonoBehaviour
 {
 	public VariableJoystick JoyStick;
-
 	public Canvas DragCanvas;
-
-	public UIMainWindow WinMain => m_winDic["winMain"] as UIMainWindow;
+	public UIRpgWindow winRpg => m_winDic["winRpg"] as UIRpgWindow;
 	Dictionary<string, UIWindow> m_winDic = new Dictionary<string, UIWindow>();
 
 	public Action<UIWindow> winOpenAction;
@@ -48,6 +46,7 @@ public class UIManager : MonoBehaviour
 	{
 		win_LastOpen = win;
 		win_LastOpen.Open();
+		if (!m_winDic.ContainsKey(win.winName)) m_winDic.Add(win.winName, win);
 		return win_LastOpen;
 	}
 

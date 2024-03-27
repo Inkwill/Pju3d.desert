@@ -40,7 +40,7 @@ public class UIGoalInfo : UIEventSender
 		{
 			gameObject.GetComponent<Animator>()?.SetBool("show", false);
 			var expIcon = Instantiate(iconExp.gameObject, iconExp.transform);
-			expIcon.transform.DOMove(GameManager.GameUI.WinMain.iconExp.transform.position, 1.0f);
+			expIcon.transform.DOMove(GameManager.GameUI.winRpg.iconExp.transform.position, 1.0f);
 			Destroy(expIcon, 1.0f);
 			GameManager.StartWaitAction(1.0f, () => m_gameGoal.Acheve());
 		}

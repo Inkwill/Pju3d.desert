@@ -16,13 +16,8 @@ namespace CreatorKitCodeInternal
 		public Button btUse;
 		public Button btGive;
 		public Button btPlace;
+		Toggle m_toggle;
 
-
-		void Start()
-		{
-			// btEquip.gameObject.SetActive(false);
-			// btUnEquip.gameObject.SetActive(false);
-		}
 		void Update()
 		{
 			if (!GameManager.CurHero.BaseAI.isIdle) gameObject.SetActive(false);
@@ -43,6 +38,7 @@ namespace CreatorKitCodeInternal
 				btPlace.gameObject.SetActive(false);
 
 				gameObject.SetActive(true);
+				m_toggle = slot.GetComponent<Toggle>();
 			}
 			else
 			{
@@ -79,11 +75,17 @@ namespace CreatorKitCodeInternal
 					btPlace.gameObject.SetActive(device && !device.undergroud);
 				}
 				gameObject.SetActive(true);
+				m_toggle = slot.GetComponent<Toggle>();
 			}
 			else
 			{
 				gameObject.SetActive(false);
 			}
+		}
+
+		void OnDisable()
+		{
+			if (m_toggle) m_toggle.isOn = false;
 		}
 	}
 }

@@ -7,25 +7,29 @@ using UnityEngine.UI;
 public class UIEquipSlot : MonoBehaviour
 {
 	public EquipmentItem.EquipmentSlot slotType;
-	public Sprite defaultSprite;
+	Sprite m_defaultSprite;
 	public Image icon;
 	public EquipmentItem EquipItem { get { return m_equipItem; } }
 	EquipmentItem m_equipItem;
-	Button m_button;
+	Toggle m_toggle;
 
 	void Awake()
 	{
-		m_button = GetComponent<Button>();
+		m_toggle = GetComponent<Toggle>();
+		m_defaultSprite = icon.sprite;
 	}
 	void Start()
 	{
 		GameManager.CurHero.Equipment.OnEquiped += (eq) => { UpdateInfo(); };
 		GameManager.CurHero.Equipment.OnUnequip += (eq) => { UpdateInfo(); };
 		GameManager.CurHero.Equipment.OnEquipViceWeapon += (eq) => { UpdateInfo(); };
-		m_button.onClick.AddListener(() =>
+		m_toggle.onValueChanged.AddListener((value) =>
 		{
-			UIInventoryWindow win = GameManager.GameUI.GetWindow("winInventory") as UIInventoryWindow;
-			win.OnEquipSelected(this);
+			if (value)
+			{
+				UIInventoryWindow win = GameManager.GameUI.GetWindow("winInventory") as UIInventoryWindow;
+				win.OnEquipSelected(this);
+			}
 		});
 		UpdateInfo();
 	}
@@ -35,7 +39,7 @@ public class UIEquipSlot : MonoBehaviour
 		if (slotType == EquipmentItem.EquipmentSlot.ViceWeapon) m_equipItem = GameManager.CurHero.Equipment.ViceWeapon;
 		else if (slotType == EquipmentItem.EquipmentSlot.Weapon) m_equipItem = GameManager.CurHero.Equipment.Weapon;
 		else m_equipItem = GameManager.CurHero.Equipment.GetItem(slotType);
-		icon.sprite = m_equipItem != null ? m_equipItem.ItemSprite : defaultSprite;
-		m_button.interactable = m_equipItem != null;
+		icon.sprite = m_equipItem != null ? m_equipItem.ItemSprite : m_defaultSprite;
+		m_toggle.interactable = m_equipItem != null;
 	}
 }

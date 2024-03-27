@@ -25,7 +25,7 @@ public class PlaceHandle : MonoBehaviour
 
 	public void PlaceDevice()
 	{
-		GameManager.GameUI.WinMain.btConfirm.gameObject.SetActive(false);
+		winInventory.btConfirm.gameObject.SetActive(false);
 		Destroy(m_deviceModle);
 		Instantiate(m_device.prefab, m_character.BaseAI.SceneDetector.transform.position, m_character.BaseAI.SceneDetector.transform.rotation);
 		OnPlaced?.Invoke(m_device);
@@ -33,7 +33,7 @@ public class PlaceHandle : MonoBehaviour
 
 	public void CanclePlace()
 	{
-		GameManager.GameUI.WinMain.btConfirm.gameObject.SetActive(false);
+		winInventory.btConfirm.gameObject.SetActive(false);
 		Destroy(m_deviceModle);
 		OnPlaced?.Invoke(null);
 	}
