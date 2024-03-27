@@ -12,8 +12,8 @@ using Unity.VisualScripting;
 public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
-	public static LordData Lord => Instance.GetComponent<LordData>();
-	public static Character CurHero;
+	public static LordSystem.Lord Lord => Instance.m_lord;
+	public static Character CurHero => Instance.m_lord.rpgTroop.leader;
 	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
 	public static GameGoalSystem GameGoal => Instance.GetComponent<GameGoalSystem>();
 	public static LevelSystem GameLevel => Instance.m_levelSystem;
@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 	public List<FormulaData> formulas;
 	public List<Spawner> spawners;
 	public LevelData startLevel;
+	LordSystem.Lord m_lord;
 
 	public static void SetStoryModel(bool active, Action action = null)
 	{
@@ -66,8 +67,8 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
-		Lord.Init();
-		CurHero = Instantiate(prefab_character, position_born.position, Quaternion.Euler(0, 180, 0)).GetComponent<Character>();
+		m_lord = new LordSystem.Lord(new int[3] { 1, 2, 3 });
+		m_lord.SetRpgTroop(m_lord.AddTroop(Instantiate(prefab_character, position_born.position, Quaternion.Euler(0, 180, 0)).GetComponent<Character>()));
 		GameGoal.Init();
 		SFXManager.ListenerTarget = CurHero.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();
@@ -88,7 +89,6 @@ public class GameManager : MonoBehaviour
 	{
 		ResInventoryItem moneyInventory = KeyValueData.GetValue<Item>(GameManager.Config.Item, "ResInventory_Money") as ResInventoryItem;
 		if (moneyInventory) GameManager.CurHero.Inventory.ResInventories.Add(ResItem.ResType.Money, new InventorySystem.ResInventory(moneyInventory));
-		GameUI.OpenWindow("winRpg");
 		GameUI.OpenWindow("winLevelSelect");
 	}
 

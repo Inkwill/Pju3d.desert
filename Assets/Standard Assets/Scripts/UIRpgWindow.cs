@@ -1,6 +1,6 @@
 using UnityEngine;
 using CreatorKitCode;
-using CreatorKitCodeInternal;
+using TMPro;
 using UnityEngine.UI;
 using System.Linq;
 using DG.Tweening;
@@ -25,6 +25,7 @@ public class UIRpgWindow : UIWindow
 	public Image iconExp;
 	public Slider sliderWater;
 	public Transform bottomRoot;
+	public TMP_Text chatInfo;
 	Button[] m_buttons;
 	UISkillButton[] m_skillButtons;
 
@@ -47,6 +48,17 @@ public class UIRpgWindow : UIWindow
 		tellContent.SetActive(false);
 		uiGoalInfo.SetGoal(GameManager.GameGoal.CurrentGoal);
 		sliderWater.gameObject.SetActive(GameManager.CurHero.Inventory.ResInventories.Keys.Contains(ResItem.ResType.Water));
+	}
+
+	protected override void OnOpened()
+	{
+		GameManager.GameUI.OpenWindow("winInventory");
+		GameManager.GameUI.OpenWindow("winTeam");
+	}
+	protected override void OnClose()
+	{
+		GameManager.GameUI.CloseWindow("winInventory");
+		GameManager.GameUI.CloseWindow("winTeam");
 	}
 
 	void OnItemAction(Item item, string eventName, int num)
@@ -167,7 +179,7 @@ public class UIRpgWindow : UIWindow
 	{
 		lordExp.value = GameManager.Lord.ExpPercent;
 		lordLv.text = $"Lv.{GameManager.Lord.Lv}";
-		lordMoney.text = GameManager.Lord.Money.ToString();
+		//lordMoney.text = GameManager.Lord.Money.ToString();
 		infoPos.text = GameManager.CurHero.gameObject.transform.position.ToString();
 		infoTerrian.text = GameManager.CurHero.BaseAI.SceneBoxName;
 		infoTime.text = GameManager.Instance.DayNight.TimeInfo;

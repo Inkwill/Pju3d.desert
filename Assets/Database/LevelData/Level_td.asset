@@ -18,6 +18,7 @@ MonoBehaviour:
   baseBoundary_LB: {x: 0, y: 0}
   baseBoundary_RT: {x: 0, y: 0}
   cameraMode: 0
+  initWindow: winRpg
   maxStageNum: 3
   openingRemark: TD Battle Demo
   stageDuring: 30

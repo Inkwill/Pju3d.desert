@@ -55,6 +55,31 @@
 	✔	SpawnData @done (24-03-21 19:30)
 	---- ✄ -----------------------@created(24-03-23 15:55)
 	✔	LevelSystem @critical @done (24-03-23 15:56)
+	✔	优化: storyEvent -> 读取Data @done (24-03-23 21:48)
+	✔	优化： levelSysterm @done (24-03-23 21:48)
+	---- ✄ -----------------------@created(24-03-26 10:58)
+	✔	基础商店 @done (24-03-26 10:59)
+	✔	关卡开场剧情 @done (24-03-26 10:59)
+	✔	关卡选择界面 @done (24-03-26 20:53)
+	✔	slg战斗摄像机控制 @done (24-03-27 11:08)
+	---- ✄ -----------------------@created(24-03-27 11:08)
+	☐	UI完善及逻辑整理 @critical 
+		✔	小队界面位置确定 @done (24-03-27 15:43)
+		✔	聊天信息界面位置确定 @done (24-03-27 15:44)
+		✔	winMain -> winRpg @done (24-03-27 15:44)
+		✔	itemToolTips界面位置调整 @done (24-03-27 15:44)
+		☐	rpg、build共用内容单独抽离为一个window
+		☐	城建界面布局确定
+		☐	rpg-> build切换
+		☐	slg界面布局确定
+		☐	td界面布局确定
+
+	☐	TroopSystem 基础框架 @critical
+		☐	LordSystem 调整
+		☐	TroopWindow
+
+
+  ☐	CharacterData @critical
 	☐	新手关蜘蛛掉落:生命元素
 	☐	新手关GameGoal
 	☐	采集物：石头
@@ -85,9 +110,6 @@
 	☐	角色个性化标签：性格、星座、喜好道具
 	☐	new effect: 增加友好度
 
-	☐	NPC商品交易
-
-	
 
 	☐	优化受击表现（伤害数字、miss、调用)
 

@@ -8,54 +8,53 @@ using System.Linq;
 using UnityEditor;
 #endif
 
-namespace CreatorKitCode
+
+/// <summary>
+/// Describe an usable item. A usable item is an item that can be used in the inventory by double clicking on it.
+/// When it is used, all the stored UsageEffects will be run, allowing to specify what that item does.
+/// (e.g. a AddHealth effect will give health point back to the user)
+/// </summary>
+[CreateAssetMenu(fileName = "UsableItem", menuName = "Data/Usable Item", order = -999)]
+public class UsableItem : Item
 {
-	/// <summary>
-	/// Describe an usable item. A usable item is an item that can be used in the inventory by double clicking on it.
-	/// When it is used, all the stored UsageEffects will be run, allowing to specify what that item does.
-	/// (e.g. a AddHealth effect will give health point back to the user)
-	/// </summary>
-	[CreateAssetMenu(fileName = "UsableItem", menuName = "Data/Usable Item", order = -999)]
-	public class UsableItem : Item
+	public List<KeyValueData.KeyValue<EffectData, string[]>> UsageEffects;
+	public bool autoUse;
+
+	public override bool UsedBy(Character user, int count = 1)
 	{
-		public List<KeyValueData.KeyValue<EffectData, string[]>> UsageEffects;
-		public bool autoUse;
-
-		public override bool UsedBy(Character user, int count = 1)
+		bool wasUsed = false;
+		for (int n = 0; n < count; n++)
 		{
-			bool wasUsed = false;
-			for (int n = 0; n < count; n++)
-			{
-				for (int i = 0; i < UsageEffects.Count; i++)
-				{
-					wasUsed |= UsageEffects[i].Key.TakeEffect(user.gameObject, user.gameObject, UsageEffects[i].Value);
-				}
-			}
-			return wasUsed;
-		}
-
-		public override string GetDescription()
-		{
-			string description = base.GetDescription();
-
-			if (!string.IsNullOrWhiteSpace(description))
-				description += "\n";
-			else
-				description = "";
-
 			for (int i = 0; i < UsageEffects.Count; i++)
 			{
-				description += UsageEffects[i].Key.Description + "\n";
+				wasUsed |= UsageEffects[i].Key.TakeEffect(user.gameObject, user.gameObject, UsageEffects[i].Value);
 			}
-			// foreach (var effect in UsageEffects)
-			// {
-			// 	description += effect.Description + "\n";
-			// }
-
-			return description;
 		}
+		return wasUsed;
+	}
+
+	public override string GetDescription()
+	{
+		string description = base.GetDescription();
+
+		if (!string.IsNullOrWhiteSpace(description))
+			description += "\n";
+		else
+			description = "";
+
+		for (int i = 0; i < UsageEffects.Count; i++)
+		{
+			description += UsageEffects[i].Key.Description + "\n";
+		}
+		// foreach (var effect in UsageEffects)
+		// {
+		// 	description += effect.Description + "\n";
+		// }
+
+		return description;
 	}
 }
+
 
 // #if UNITY_EDITOR
 // [CustomEditor(typeof(UsableItem))]

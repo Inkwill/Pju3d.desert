@@ -6,21 +6,21 @@ using UnityEngine.UI;
 public class UIWindowToggle : MonoBehaviour
 {
 	public string winName;
-	public Sprite sprite_isOpen;
-	public Sprite sprite_isClose;
+	public Image iconOpen;
+	public Image iconClose;
 	Button m_button;
-	Image m_image;
 
 	void Awake()
 	{
 		m_button = GetComponent<Button>();
-		m_image = GetComponent<Image>();
+		iconOpen.enabled = false;
+		iconClose.enabled = true;
 	}
 
 	void Start()
 	{
-		GameManager.GameUI.winOpenAction += (win) => { if (win.winName == winName) m_image.sprite = sprite_isOpen; };
-		GameManager.GameUI.winCloseAction += (win) => { if (win.winName == winName) m_image.sprite = sprite_isClose; };
+		GameManager.GameUI.winOpenAction += (win) => { if (win.winName == winName) { iconOpen.enabled = true; iconClose.enabled = false; } };
+		GameManager.GameUI.winCloseAction += (win) => { if (win.winName == winName) { iconClose.enabled = true; iconOpen.enabled = false; } };
 
 		m_button.onClick.AddListener(() =>
 		{

@@ -16,7 +16,6 @@ MonoBehaviour:
   storyType: 0
   triggerType: 0
   storyMode: 1
-  nextStory: {fileID: 11400000, guid: 322aa4d036510be40bc58195f1887aef, type: 2}
   triggerTimes: 1
   loopTimes: 1
   cd: 30
@@ -37,6 +36,3 @@ MonoBehaviour:
   - Key: {fileID: 11400000, guid: 914632a637ca46447acc281c33ff3c12, type: 2}
     Value:
     - main00
-  - Key: {fileID: 11400000, guid: d11ee16cb17e2c54aa5c56afd6c86214, type: 2}
-    Value:
-    - winInventory

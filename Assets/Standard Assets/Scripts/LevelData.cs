@@ -15,6 +15,7 @@ public class LevelData : ScriptableObject
 	[SerializeField]
 	Vector2 baseBoundary_RT;
 	public CameraController.Mode cameraMode;
+	public string initWindow;
 	public int maxStageNum;
 	public string openingRemark;
 	public float stageDuring;

@@ -178,7 +178,7 @@ public class CameraController : MonoBehaviour
 				GameManager.CurHero.BaseAI.SetState(AIBase.State.INACTIVE);
 				break;
 			case Mode.SLG:
-				m_setDistance = 0.75f;
+				m_setDistance = 0.8f;
 				m_switchSpeed = 5;
 				GameManager.GameUI.JoyStick.enabled = false;
 				GameManager.CurHero.BaseAI.SetState(AIBase.State.INACTIVE);

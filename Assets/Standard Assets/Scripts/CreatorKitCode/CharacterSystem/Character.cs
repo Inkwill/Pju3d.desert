@@ -57,7 +57,6 @@ public class Character : HighlightableObject, IInteractable
 	{
 		InitHighlight();
 		Stats.Init(this);
-		Inventory.Init(this);
 		Equipment.Init(this);
 		m_BirthPos = transform.position;
 

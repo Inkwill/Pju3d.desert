@@ -18,6 +18,7 @@ MonoBehaviour:
   baseBoundary_LB: {x: 0, y: -15}
   baseBoundary_RT: {x: 90, y: 100}
   cameraMode: 0
+  initWindow: winRpg
   maxStageNum: 2
   openingRemark: 'This is a true story... '
   stageDuring: 0

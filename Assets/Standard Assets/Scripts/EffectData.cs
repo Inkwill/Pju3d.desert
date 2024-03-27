@@ -113,14 +113,6 @@ public class EffectData : ScriptableObject
 					success = true;
 				}
 				break;
-			case EffectType.LORDMONEY:
-				int money = 0;
-				if (param != null && param.Length > 0 && int.TryParse(param[0], out money))
-				{
-					GameManager.Lord.AddMoney(money);
-					success = true;
-				}
-				break;
 			case EffectType.LORDEXP:
 				int exp = 0;
 				if (param != null && param.Length > 0 && int.TryParse(param[0], out exp))

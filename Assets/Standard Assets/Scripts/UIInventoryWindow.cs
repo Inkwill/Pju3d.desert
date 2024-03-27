@@ -9,18 +9,10 @@ using System;
 
 public class UIInventoryWindow : UIWindow
 {
-	public GameObject EquipRoot;
 	public RectTransform ItemSlots;
 	public Text textStats;
 	public ItemEntryUI ItemEntryPrefab;
 	public ItemTooltip Tooltip;
-
-	public UIInventorySlot HeadSlot;
-	public UIInventorySlot TorsoSlot;
-	public UIInventorySlot LegsSlot;
-	public UIInventorySlot FeetSlot;
-	public UIInventorySlot WeaponSlot_1;
-	public UIInventorySlot WeaponSlot_2;
 	public CanvasScaler DragCanvasScaler { get; private set; }
 	public Button btConfirm;
 
@@ -56,7 +48,6 @@ public class UIInventoryWindow : UIWindow
 	{
 		m_SelectedSlot = null;
 		Tooltip.gameObject.SetActive(false);
-		EquipRoot.SetActive(false);
 		btConfirm.gameObject.SetActive(false);
 		GameManager.GameUI.winRpg.bottomRoot.DOMove(GameManager.GameUI.winRpg.bottomRoot.position + new Vector3(0, 150, 0), 0.2f);
 		//GameManager.Instance.CameraCtrl.SetMode(CameraController.Mode.INVENTORY);
@@ -78,8 +69,6 @@ public class UIInventoryWindow : UIWindow
 	}
 	public void Load()
 	{
-		UpdateEquipment(GameManager.CurHero.Equipment, GameManager.CurHero.Stats);
-		UpdateWeapon(GameManager.CurHero.Equipment);
 		Tooltip.gameObject.SetActive(false);
 		for (int i = 0; i < m_ItemEntries.Length; ++i)
 		{
@@ -224,20 +213,6 @@ public class UIInventoryWindow : UIWindow
 		// 		}
 		// 	}
 		// }
-	}
-
-	public void UpdateEquipment(EquipmentSystem equipment, StatSystem system)
-	{
-		HeadSlot.item = equipment.GetItem(EquipmentItem.EquipmentSlot.Head);
-		TorsoSlot.item = equipment.GetItem(EquipmentItem.EquipmentSlot.Torso);
-		LegsSlot.item = equipment.GetItem(EquipmentItem.EquipmentSlot.Legs);
-		FeetSlot.item = equipment.GetItem(EquipmentItem.EquipmentSlot.Feet);
-	}
-
-	public void UpdateWeapon(EquipmentSystem equipment)
-	{
-		WeaponSlot_1.item = equipment.Weapon;
-		WeaponSlot_2.item = equipment.ViceWeapon;
 	}
 }
 

@@ -7,90 +7,89 @@ using System.Linq;
 using UnityEditor;
 #endif
 
-namespace CreatorKitCode
+
+/// <summary>
+/// Special Item than can be equipped. They can have a minimum stats value needed to equip them, and you can add
+/// EquippedEffect which will be executed when the object is equipped and unequipped, allowing to code special
+/// behaviour when the player equipped those object, like raising stats.
+/// </summary>
+[CreateAssetMenu(fileName = "EquipmentItem", menuName = "Data/Equipment Item", order = -999)]
+public class EquipmentItem : Item
 {
-	/// <summary>
-	/// Special Item than can be equipped. They can have a minimum stats value needed to equip them, and you can add
-	/// EquippedEffect which will be executed when the object is equipped and unequipped, allowing to code special
-	/// behaviour when the player equipped those object, like raising stats.
-	/// </summary>
-	[CreateAssetMenu(fileName = "EquipmentItem", menuName = "Data/Equipment Item", order = -999)]
-	public class EquipmentItem : Item
+	public enum EquipmentSlot
 	{
-		public enum EquipmentSlot
-		{
-			Head,
-			Torso,
-			Legs,
-			Feet,
-			Accessory,
-			Weapon,
-			ViceWeapon
-		}
+		Head,
+		Torso,
+		Legs,
+		Feet,
+		Accessory,
+		Weapon,
+		ViceWeapon
+	}
 
-		public EquipmentSlot Slot;
-		public StatSystem.StatModifier EquippedStat;
+	public EquipmentSlot Slot;
+	public StatSystem.StatModifier EquippedStat;
 
-		public override string GetDescription()
-		{
-			string desc = base.GetDescription();
-			desc += StatsDescription();
-			// foreach (var effect in EquippedEffects)
-			// 	desc += "\n" + effect.GetDescription();
+	public override string GetDescription()
+	{
+		string desc = base.GetDescription();
+		desc += StatsDescription();
+		// foreach (var effect in EquippedEffects)
+		// 	desc += "\n" + effect.GetDescription();
 
-			// bool requireStrength = MinimumStrength > 0;
-			// bool requireDefense = MinimumDefense > 0;
-			// bool requireAgility = MinimumAgility > 0;
+		// bool requireStrength = MinimumStrength > 0;
+		// bool requireDefense = MinimumDefense > 0;
+		// bool requireAgility = MinimumAgility > 0;
 
-			// if (requireStrength || requireAgility || requireDefense)
-			// {
-			// 	desc += "\nRequire : \n";
+		// if (requireStrength || requireAgility || requireDefense)
+		// {
+		// 	desc += "\nRequire : \n";
 
-			// 	if (requireStrength)
-			// 		desc += $"Strength : {MinimumStrength}";
+		// 	if (requireStrength)
+		// 		desc += $"Strength : {MinimumStrength}";
 
-			// 	if (requireAgility)
-			// 	{
-			// 		if (requireStrength) desc += " & ";
-			// 		desc += $"Defense : {MinimumDefense}";
-			// 	}
+		// 	if (requireAgility)
+		// 	{
+		// 		if (requireStrength) desc += " & ";
+		// 		desc += $"Defense : {MinimumDefense}";
+		// 	}
 
-			// 	if (requireDefense)
-			// 	{
-			// 		if (requireStrength || requireAgility) desc += " & ";
-			// 		desc += $"Agility : {MinimumAgility}";
-			// 	}
-			// }
-			return desc;
-		}
-		public void EquippedBy(Character user)
-		{
-			user.Stats.AddModifier(EquippedStat);
-		}
+		// 	if (requireDefense)
+		// 	{
+		// 		if (requireStrength || requireAgility) desc += " & ";
+		// 		desc += $"Agility : {MinimumAgility}";
+		// 	}
+		// }
+		return desc;
+	}
+	public void EquippedBy(Character user)
+	{
+		user.Stats.AddModifier(EquippedStat);
+	}
 
-		public void UnequippedBy(Character user)
-		{
-			user.Stats.RemoveModifier(EquippedStat);
-		}
+	public void UnequippedBy(Character user)
+	{
+		user.Stats.RemoveModifier(EquippedStat);
+	}
 
-		string StatsDescription()
-		{
-			string desc = "\n";
-			string unit = EquippedStat.ModifierMode == StatSystem.StatModifier.Mode.Percentage ? "%" : "";
+	string StatsDescription()
+	{
+		string desc = "\n";
+		string unit = EquippedStat.ModifierMode == StatSystem.StatModifier.Mode.Percentage ? "%" : "";
 
-			if (EquippedStat.Stats.strength != 0)
-				desc += $"Str : {EquippedStat.Stats.strength:+0;-#}{unit}\n"; //format specifier to force the + sign to appear
-			if (EquippedStat.Stats.agility != 0)
-				desc += $"Agi : {EquippedStat.Stats.agility:+0;-#}{unit}\n";
-			if (EquippedStat.Stats.defense != 0)
-				desc += $"Def : {EquippedStat.Stats.defense:+0;-#}{unit}\n";
-			if (EquippedStat.Stats.health != 0)
-				desc += $"HP : {EquippedStat.Stats.health:+0;-#}{unit}\n";
+		if (EquippedStat.Stats.strength != 0)
+			desc += $"Str : {EquippedStat.Stats.strength:+0;-#}{unit}\n"; //format specifier to force the + sign to appear
+		if (EquippedStat.Stats.agility != 0)
+			desc += $"Agi : {EquippedStat.Stats.agility:+0;-#}{unit}\n";
+		if (EquippedStat.Stats.defense != 0)
+			desc += $"Def : {EquippedStat.Stats.defense:+0;-#}{unit}\n";
+		if (EquippedStat.Stats.health != 0)
+			desc += $"HP : {EquippedStat.Stats.health:+0;-#}{unit}\n";
 
-			return desc;
-		}
+		return desc;
 	}
 }
+
 
 // #if UNITY_EDITOR
 // [CustomEditor(typeof(EquipmentItem))]

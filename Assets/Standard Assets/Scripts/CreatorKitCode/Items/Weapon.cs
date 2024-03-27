@@ -7,114 +7,113 @@ using UnityEditor;
 using System.Linq;
 #endif
 
-namespace CreatorKitCode
+
+/// <summary>
+/// Special case of EquipmentItem for weapon, as they have a whole attack system in addition. Like Equipment they
+/// can have minimum stats and equipped effect, but also have a list of WeaponAttackEffect that will have their
+/// OnAttack function called during a hit, and their OnPostAttack function called after all OnAttack of all effects
+/// are called.
+/// </summary>
+public class Weapon : EquipmentItem
 {
-	/// <summary>
-	/// Special case of EquipmentItem for weapon, as they have a whole attack system in addition. Like Equipment they
-	/// can have minimum stats and equipped effect, but also have a list of WeaponAttackEffect that will have their
-	/// OnAttack function called during a hit, and their OnPostAttack function called after all OnAttack of all effects
-	/// are called.
-	/// </summary>
-	public class Weapon : EquipmentItem
+	[System.Serializable]
+	public struct Stat
 	{
-		[System.Serializable]
-		public struct Stat
+		public float Speed;
+		public int MinimumDamage;
+		public int MaximumDamage;
+		public float MaxRange;
+		public int AdditionalTargets;
+	}
+	public enum WeaponType
+	{
+		None,
+		Sword,
+		Axe,
+		Rake,
+		Mace,
+		Dagger,
+		Bow,
+		MagicWeapon,
+		ThrownWeapon
+	}
+	[Header("WeaponStats")]
+	public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1, AdditionalTargets = 0 };
+	public StatSystem.DamageType damageType;
+	public WeaponType weaponType;
+	public List<EffectData> AttackEffects;
+	public Skill WeaponSkill;
+	public Bullet bulletPb;
+
+	[Header("Sounds")]
+	public AudioClip[] HitSounds;
+	public AudioClip[] SwingSounds;
+
+	public void Attack(Character attacker, Character target)
+	{
+		Damage damage = new Damage(target, attacker);
+		int damageNum = Random.Range(Stats.MinimumDamage, Stats.MaximumDamage + 1);
+		damage.AddDamage(damageType, damageNum);
+		if (bulletPb != null)
 		{
-			public float Speed;
-			public int MinimumDamage;
-			public int MaximumDamage;
-			public float MaxRange;
-			public int AdditionalTargets;
+			Vector3 bulletPos = attacker.WeaponRoot.bulletPos;
+			Bullet bullet = Instantiate(bulletPb, bulletPos, Quaternion.Euler(0, 180, 0));
+			bullet.damage = damage;
+			bullet.target = target;
 		}
-		public enum WeaponType
+		else damage.TakeDamage();
+		//foreach (var wae in AttackEffects)
+		//wae.OnAttack(target, attacker, ref attackEffect);
+
+		//target.TakeEffect(attackEffect);
+
+		//foreach (var wae in AttackEffects)
+		//wae.OnPostAttack(target, attacker, attackEffect);
+	}
+
+	public bool CanHit(Character attacker, Character target)
+	{
+		if (Vector3.SqrMagnitude(attacker.transform.position - target.transform.position) < Stats.MaxRange * Stats.MaxRange)
 		{
-			None,
-			Sword,
-			Axe,
-			Rake,
-			Mace,
-			Dagger,
-			Bow,
-			MagicWeapon,
-			ThrownWeapon
-		}
-		[Header("WeaponStats")]
-		public Stat Stats = new Stat() { Speed = 1.0f, MaximumDamage = 1, MinimumDamage = 1, MaxRange = 1, AdditionalTargets = 0 };
-		public StatSystem.DamageType damageType;
-		public WeaponType weaponType;
-		public List<EffectData> AttackEffects;
-		public Skill WeaponSkill;
-		public Bullet bulletPb;
-
-		[Header("Sounds")]
-		public AudioClip[] HitSounds;
-		public AudioClip[] SwingSounds;
-
-		public void Attack(Character attacker, Character target)
-		{
-			Damage damage = new Damage(target, attacker);
-			int damageNum = Random.Range(Stats.MinimumDamage, Stats.MaximumDamage + 1);
-			damage.AddDamage(damageType, damageNum);
-			if (bulletPb != null)
-			{
-				Vector3 bulletPos = attacker.WeaponRoot.bulletPos;
-				Bullet bullet = Instantiate(bulletPb, bulletPos, Quaternion.Euler(0, 180, 0));
-				bullet.damage = damage;
-				bullet.target = target;
-			}
-			else damage.TakeDamage();
-			//foreach (var wae in AttackEffects)
-			//wae.OnAttack(target, attacker, ref attackEffect);
-
-			//target.TakeEffect(attackEffect);
-
-			//foreach (var wae in AttackEffects)
-			//wae.OnPostAttack(target, attacker, attackEffect);
-		}
-
-		public bool CanHit(Character attacker, Character target)
-		{
-			if (Vector3.SqrMagnitude(attacker.transform.position - target.transform.position) < Stats.MaxRange * Stats.MaxRange)
-			{
-				return true;
-			}
-
-			return false;
+			return true;
 		}
 
-		public override string GetDescription()
-		{
-			string desc = base.GetDescription();
+		return false;
+	}
 
-			int minimumDPS = Mathf.RoundToInt(Stats.MinimumDamage / Stats.Speed);
-			int maximumDPS = Mathf.RoundToInt(Stats.MaximumDamage / Stats.Speed);
+	public override string GetDescription()
+	{
+		string desc = base.GetDescription();
 
-			desc += "\n";
-			desc += $"Damage: {Stats.MinimumDamage} - {Stats.MaximumDamage}\n";
-			desc += $"DPS: {minimumDPS} - {maximumDPS}\n";
-			desc += $"Attack Speed : {Stats.Speed}s\n";
-			desc += $"Range : {Stats.MaxRange}m\n";
+		int minimumDPS = Mathf.RoundToInt(Stats.MinimumDamage / Stats.Speed);
+		int maximumDPS = Mathf.RoundToInt(Stats.MaximumDamage / Stats.Speed);
 
-			return desc;
-		}
+		desc += "\n";
+		desc += $"Damage: {Stats.MinimumDamage} - {Stats.MaximumDamage}\n";
+		desc += $"DPS: {minimumDPS} - {maximumDPS}\n";
+		desc += $"Attack Speed : {Stats.Speed}s\n";
+		desc += $"Range : {Stats.MaxRange}m\n";
 
-		public AudioClip GetHitSound()
-		{
-			if (HitSounds == null || HitSounds.Length == 0)
-				return SFXManager.GetDefaultHit();
+		return desc;
+	}
 
-			return HitSounds[Random.Range(0, HitSounds.Length)];
-		}
+	public AudioClip GetHitSound()
+	{
+		if (HitSounds == null || HitSounds.Length == 0)
+			return SFXManager.GetDefaultHit();
 
-		public AudioClip GetSwingSound()
-		{
-			if (SwingSounds == null || SwingSounds.Length == 0)
-				return SFXManager.GetDefaultSwingSound();
+		return HitSounds[Random.Range(0, HitSounds.Length)];
+	}
 
-			return SwingSounds[Random.Range(0, SwingSounds.Length)];
-		}
+	public AudioClip GetSwingSound()
+	{
+		if (SwingSounds == null || SwingSounds.Length == 0)
+			return SFXManager.GetDefaultSwingSound();
+
+		return SwingSounds[Random.Range(0, SwingSounds.Length)];
 	}
 }
+
 
 // #if UNITY_EDITOR
 // [CustomEditor(typeof(Weapon))]

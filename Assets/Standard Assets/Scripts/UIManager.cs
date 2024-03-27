@@ -50,6 +50,12 @@ public class UIManager : MonoBehaviour
 		return win_LastOpen;
 	}
 
+	public void CloseWindow(string winName)
+	{
+		if (m_winDic.ContainsKey(winName) && m_winDic[winName].gameObject.activeSelf)
+			m_winDic[winName].Close();
+	}
+
 	public void CloseAll()
 	{
 		foreach (var win in m_winDic.Values)
