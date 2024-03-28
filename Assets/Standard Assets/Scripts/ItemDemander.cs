@@ -83,9 +83,11 @@ public class ItemDemander : MonoBehaviour, IInteractable
 				m_submitter = character;
 				if (character == GameManager.CurHero && m_data.Type == InteractData.InteractType.DeviceFixer || m_data.Type == InteractData.InteractType.DeviceCreater)
 				{
-					UIInteractWindow win = GameManager.GameUI.GetWindow<UIInteractWindow>("winInteract", true, w => w.Init(this, m_demands));
+					UIInteractWindow win = GameManager.GameUI.GetWindow<UIInteractWindow>("winInteract");
 					GetComponent<InteractHandle>()?.ExitEvent.AddListener(() => win.Close());
 					win.bt_Confirm.onClick.AddListener(() => OnClick_Interact(win));
+					win.Init(this, m_demands);
+					win.Open();
 				}
 				else
 				{

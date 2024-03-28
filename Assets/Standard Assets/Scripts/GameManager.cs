@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
 	{
 		ResInventoryItem moneyInventory = KeyValueData.GetValue<Item>(GameManager.Config.Item, "ResInventory_Money") as ResInventoryItem;
 		if (moneyInventory) GameManager.CurHero.Inventory.ResInventories.Add(ResItem.ResType.Money, new InventorySystem.ResInventory(moneyInventory));
-		GameUI.GetWindow<UILevelSelect>("winLevelSelect", true);
+		GameUI.OpenWindow("winLevelSelect");
 	}
 
 	void OnApplicationQuit()

@@ -14,6 +14,7 @@ public class UICharacterHp : MonoBehaviour
 	void Awake()
 	{
 		m_slider = GetComponent<Slider>();
+		m_slider.interactable = false;
 	}
 	void Start()
 	{

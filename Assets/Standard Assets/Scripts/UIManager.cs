@@ -11,48 +11,54 @@ public class UIManager : MonoBehaviour
 {
 	public VariableJoystick JoyStick;
 	public Canvas DragCanvas;
-	public UIRpgWindow winRpg => GetWindow<UIRpgWindow>();
+	public UIRpgWindow winRpg => GetWindow<UIRpgWindow>("winRpg");
 	public Action<UIWindow> winOpenAction;
 	public Action<UIWindow> winCloseAction;
+	Dictionary<string, UIWindow> m_winDIc = new Dictionary<string, UIWindow>();
 	float during_check;
 
-	public T GetWindow<T>(string winName = "", bool open = false, Action<T> action = null)
+	public T GetWindow<T>(string winName)
 	{
-		T w = GetComponentInChildren<T>(true);
-		if (w == null && winName != "")
+		if (m_winDIc.ContainsKey(winName)) return m_winDIc[winName].GetComponent<T>();
+		else
 		{
-			UIWindow window = GetWindow(winName);
-			if (window != null) w = window.GetComponent<T>();
+			T win = GetWindow<T>();
+			if (win == null) return AddWindow<T>(winName);
+			else return win;
 		}
-		if (w != null)
-		{
-			if (action != null) action.Invoke(w);
-			if (open)
-			{
-				UIWindow window = w as UIWindow;
-				window?.Open();
-			}
-		}
-		return w;
 	}
 
-	public UIWindow GetWindow(string winName)
+	public T GetWindow<T>()
 	{
-		var wins = GetComponentsInChildren<UIWindow>(true);
-		UIWindow win = wins.Where(w => w.winName == winName).FirstOrDefault();
-		if (win == null)
+		return GetComponentInChildren<T>(true);
+	}
+
+	T AddWindow<T>(string winName)
+	{
+		GameObject winPrefab = Resources.Load(winName) as GameObject;
+		winPrefab.SetActive(false);
+		if (winPrefab == null) { Helpers.LogError(this, "AddWindow", "missing resource path: " + winName); return default(T); }
+		else
 		{
-			GameObject winPrefab = Resources.Load(winName) as GameObject;
-			if (winPrefab == null) Helpers.LogError(this, "GetWindow", "missing path: " + winName);
-			else win = Instantiate(winPrefab, transform).GetComponent<UIWindow>();
-			win?.gameObject.SetActive(false);
+			T openWin = Instantiate(winPrefab, transform).GetComponent<T>();
+			UIWindow win = openWin as UIWindow;
+			m_winDIc.Add(win.winName, win);
+			return openWin;
 		}
-		return win;
+	}
+
+	public bool OpenWindow(string winName)
+	{
+		if (m_winDIc.ContainsKey(winName)) { m_winDIc[winName].Open(); return true; }
+
+		UIWindow openWin = AddWindow<UIWindow>(winName);
+		openWin?.Open();
+		return openWin != null;
 	}
 
 	public void SwitchWindow(string winName)
 	{
-		var win = GetWindow(winName);
+		var win = GetWindow<UIWindow>(winName);
 		if (win != null && win.gameObject.activeSelf) win.Close();
 		else win?.Open();
 	}

@@ -52,8 +52,8 @@ public class UIRpgWindow : UIWindow
 
 	protected override void OnOpened()
 	{
-		GameManager.GameUI.GetWindow<UIInventoryWindow>("winInventory", true);
-		GameManager.GameUI.GetWindow<UITeamWindow>("winTeam", true);
+		GameManager.GameUI.OpenWindow("winInventory");
+		GameManager.GameUI.OpenWindow("winTeam");
 	}
 	protected override void OnClose()
 	{
@@ -196,7 +196,7 @@ public class UIRpgWindow : UIWindow
 				break;
 			case "talk":
 				Close();
-				GameManager.GameUI.GetWindow<UITalkWindow>("winTalk", true);
+				GameManager.GameUI.OpenWindow("winTalk");
 				break;
 			default:
 				break;

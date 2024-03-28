@@ -24,18 +24,20 @@ public class LevelSystem
 			if (m_data.teleportPos != Vector3.zero) m_data.Teleport(character);
 			if (m_data.openingRemark != "")
 			{
-				UIStoryWindow winStory = GameManager.GameUI.GetWindow<UIStoryWindow>("winStory", true, win => win.story.text = m_data.openingRemark);
+				UIStoryWindow winStory = GameManager.GameUI.GetWindow<UIStoryWindow>("winStory");
+				winStory.story.text = m_data.openingRemark;
+				winStory.Open();
 				GameManager.GameUI.winCloseAction += (win) =>
 				{
 					if (win == winStory)
 					{
-						if (m_data.initWindow != "") GameManager.GameUI.GetWindow<UIWindow>(m_data.initWindow, true);
+						if (m_data.initWindow != "") GameManager.GameUI.OpenWindow(m_data.initWindow);
 						StartStage(1);
 					}
 				};
 
 			}
-			else { if (m_data.initWindow != "") GameManager.GameUI.GetWindow<UIWindow>(m_data.initWindow, true); StartStage(1); }
+			else { if (m_data.initWindow != "") GameManager.GameUI.OpenWindow(m_data.initWindow); StartStage(1); }
 			GameManager.Instance.CameraCtrl.SetMode(m_data.cameraMode);
 		}
 		void StartStage(int step)

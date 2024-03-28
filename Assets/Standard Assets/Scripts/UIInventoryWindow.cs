@@ -141,7 +141,7 @@ public class UIInventoryWindow : UIWindow
 				}
 				break;
 			case "Add":
-				GameManager.GameUI.GetWindow<UIConfirmWindow>("winConfirm", true);
+				GameManager.GameUI.OpenWindow("winConfirm");
 				break;
 			case "Give":
 				if (GameManager.StoryListener.CurrentTeller.GiveItem(m_SelectedSlot.item))
