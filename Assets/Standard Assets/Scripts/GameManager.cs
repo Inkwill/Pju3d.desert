@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
-		m_lord = new LordSystem.Lord(new int[3] { 1, 2, 3 });
+		m_lord = new LordSystem.Lord(new int[3] { 10, 20, 30 });
 		m_lord.SetRpgTeam(m_lord.AddTeam(Instantiate(prefab_character, position_born.position, Quaternion.Euler(0, 180, 0)).GetComponent<Character>()));
 		GameGoal.Init();
 		SFXManager.ListenerTarget = CurHero.gameObject.transform;

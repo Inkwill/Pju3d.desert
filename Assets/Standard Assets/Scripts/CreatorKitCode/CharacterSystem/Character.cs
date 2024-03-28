@@ -97,7 +97,9 @@ public class Character : HighlightableObject, IInteractable
 				Weapon wp = item as Weapon;
 				BaseAI.EnemyDetector.Radius = System.Math.Max(wp.Stats.MaxRange, BaseAI.EnemyDetector.Radius);
 				if (m_weaponRoot && item.WorldObjectPrefab)
-					Instantiate(item.WorldObjectPrefab, m_weaponRoot.transform, false);
+				{
+					Instantiate(item.WorldObjectPrefab, m_weaponRoot.transform, false).layer = gameObject.layer;
+				}
 			}
 		};
 

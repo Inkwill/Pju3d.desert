@@ -51,6 +51,6 @@ public class UIGoalInfo : UIEventSender
 	{
 		if (!animInfo.gameObject.activeSelf) animInfo.gameObject.SetActive(true);
 		animInfo.SetBool("show", show);
-		if (show && !m_gameGoal.Completed) GameManager.StartWaitAction(2.0f, () => animInfo.SetBool("show", false));
+		if (show && !m_gameGoal.Completed) GameManager.StartWaitAction(3.0f, () => animInfo.SetBool("show", false));
 	}
 }

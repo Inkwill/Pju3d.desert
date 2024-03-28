@@ -35,7 +35,7 @@ public class TroopSystem
 			Troops.Add(TeamDeploy.Rear, new List<Character>());
 		}
 
-		public Character GetTrooper(TeamerType type)
+		public Character GetTeamer(TeamerType type)
 		{
 			switch (type)
 			{

@@ -33,6 +33,12 @@ public class UIManager : MonoBehaviour
 		return GetComponentInChildren<T>(true);
 	}
 
+	UIWindow GetWindow(string winName)
+	{
+		if (m_winDIc.ContainsKey(winName)) return m_winDIc[winName];
+		else return AddWindow<UIWindow>(winName);
+	}
+
 	T AddWindow<T>(string winName)
 	{
 		GameObject winPrefab = Resources.Load(winName) as GameObject;
@@ -58,7 +64,7 @@ public class UIManager : MonoBehaviour
 
 	public void SwitchWindow(string winName)
 	{
-		var win = GetWindow<UIWindow>(winName);
+		var win = GetWindow(winName);
 		if (win != null && win.gameObject.activeSelf) win.Close();
 		else win?.Open();
 	}
