@@ -4185,6 +4185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45ba4cd943b6c745bb32ca76b631cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_data: {fileID: 0}
   camp: 5
   CharacterName: Gate
   DefaultWeapon: {fileID: 0}
@@ -9096,6 +9097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8445336e0f9a394d8526affde042871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHud: 1
 --- !u!114 &681337886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32802,6 +32804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45ba4cd943b6c745bb32ca76b631cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_data: {fileID: 0}
   camp: 4
   CharacterName: Gate
   DefaultWeapon: {fileID: 0}
@@ -33545,8 +33548,6 @@ MonoBehaviour:
   startLevel: {fileID: 11400000, guid: 3e959eb554964f947a7b29fd134f4ef5, type: 2}
   ui_trans: {fileID: 5564097808944322120}
   position_born: {fileID: 1898064877}
-  baseBoundary_LB: {x: 75, y: -5}
-  baseBoundary_RT: {x: 90, y: 20}
   prefab_character: {fileID: 8112423057566066908, guid: 13412434e049bcc419706b33d84a668e,
     type: 3}
   prefab_gameui: {fileID: 3615227413832385651, guid: 14fb6a8134ee17941a103a80c429a6b3,
@@ -34054,6 +34055,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8445336e0f9a394d8526affde042871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHud: 1
 --- !u!114 &6016970620603439543
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -51,11 +51,17 @@ public class Helpers
 	{
 		if (KeyValueData.GetValue<bool>(GameManager.Config.LogConfig, key))
 		{
-			string content = $"<color=orange><{key}></color>-<color=white>{log}</color><color=grey>[{logger.ToString()}]</color>";
+			string content = $"<color=green><{key}></color>-<color=white>{log}</color><color=grey>[{logger.ToString()}]</color>";
 			Debug.Log(content);
-			UIRpgWindow win = GameManager.GameUI.GetWindow("winRpg") as UIRpgWindow;
+			UIRpgWindow win = GameManager.GameUI.GetWindow<UIRpgWindow>("winRpg");
 			win.chatInfo.text = content;
 		}
+	}
+
+	public static void LogError(object logger, string key = "", string log = "")
+	{
+		string content = $"<color=red><{key}></color>-<color=white>{log}</color><color=grey>[{logger.ToString()}]</color>";
+		Debug.LogError(content);
 	}
 
 	public static void ShowUIElement(GameObject element, bool value)

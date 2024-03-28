@@ -27,7 +27,7 @@ public class UIEquipSlot : MonoBehaviour
 		{
 			if (value)
 			{
-				UIInventoryWindow win = GameManager.GameUI.GetWindow("winInventory") as UIInventoryWindow;
+				UIInventoryWindow win = GameManager.GameUI.GetWindow<UIInventoryWindow>("winInventory", true);
 				win.OnEquipSelected(this);
 			}
 		});

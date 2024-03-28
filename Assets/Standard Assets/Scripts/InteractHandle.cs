@@ -37,7 +37,7 @@ public class InteractHandle : MonoBehaviour
 
 	void OnInterEnter(GameObject enter)
 	{
-		if (m_interactived.Count >= m_host.Data.maxActorCount) return;
+		if (m_interactived.Count >= m_host.interactData.maxActorCount) return;
 		IInteractable interactor = enter.GetComponent<IInteractable>();
 		if (interactor != null) { EnterEvent?.Invoke(); }
 	}
@@ -55,7 +55,7 @@ public class InteractHandle : MonoBehaviour
 
 	void OnInterStay(GameObject stayer, float duration)
 	{
-		if (duration < 0.5f || m_interactived.Count >= m_host.Data.maxActorCount) return;
+		if (duration < 0.5f || m_interactived.Count >= m_host.interactData.maxActorCount) return;
 		IInteractable interactor = stayer.GetComponent<IInteractable>();
 		if (m_host.CanInteract(interactor))
 		{

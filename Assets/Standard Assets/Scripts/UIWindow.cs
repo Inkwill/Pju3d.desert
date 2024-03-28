@@ -21,9 +21,9 @@ public class UIWindow : MonoBehaviour
 	public void Open()
 	{
 		gameObject.SetActive(true);
+		OnOpen();
 		if (OpenClip) SFXManager.PlaySound(SFXManager.Use.Sound2D, new SFXManager.PlayData() { Clip = OpenClip });
 		if (winMask) winMask.enabled = false;
-		OnOpen();
 		GameManager.GameUI.winOpenAction?.Invoke(this);
 		GameManager.StartWaitAction(openDuring, () => { OnOpened(); if (winMask) winMask.enabled = true; });
 	}
@@ -45,12 +45,6 @@ public class UIWindow : MonoBehaviour
 	protected virtual void OnOpened() { }
 	protected virtual void OnClose() { }
 	protected virtual void OnClosed() { }
-
-
-	public void Back()
-	{
-		GameManager.GameUI.BackWindow(this);
-	}
 
 	public static void SetButton(Button bt, bool active)
 	{

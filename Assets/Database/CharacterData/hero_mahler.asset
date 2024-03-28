@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b34871fcd8a57374b9e68de06515e6dc, type: 3}
+  m_Name: hero_mahler
+  m_EditorClassIdentifier: 
+  CharacterId: hero_mahler
+  CharacterName: Mahler
+  headIcon: {fileID: 21300000, guid: 1d22800a2c3105840bbac346df53ac48, type: 3}

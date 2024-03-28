@@ -2295,6 +2295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45ba4cd943b6c745bb32ca76b631cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 75866690d89de184ab5d71696b7ee2aa, type: 2}
   camp: 0
   CharacterName: Mahler
   DefaultWeapon: {fileID: 11400000, guid: 5b8fa00a0a1e1aa49ac2ff28065abfec, type: 2}
@@ -2319,9 +2320,6 @@ MonoBehaviour:
   AttackEvent:
     m_PersistentCalls:
       m_Calls: []
-  InteractEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &4272129805801271086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2334,6 +2332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1c58a18c6857d41bac517b20c0efc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Data: {fileID: 0}
   SceneDetector: {fileID: 2035109682229800503}
   InteractDetector: {fileID: 4597439104978932822}
   EnemyDetector: {fileID: 1134714616160843028}
@@ -2980,6 +2979,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624562813509706678, guid: aa96cce25b973164eb6aff0eb2866553,
+        type: 3}
+      propertyPath: isHud
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5712880437704622802, guid: aa96cce25b973164eb6aff0eb2866553,
         type: 3}

@@ -128,7 +128,7 @@ public class EffectData : ScriptableObject
 			case EffectType.OPENWINDOW:
 				if (param != null && param.Length > 0)
 				{
-					var win = GameManager.GameUI.OpenWindow(param[0]);
+					UIWindow win = GameManager.GameUI.GetWindow<UIWindow>(param[0], true);
 					success = win != null;
 				}
 				break;

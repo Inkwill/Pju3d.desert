@@ -13,6 +13,11 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class Character : HighlightableObject, IInteractable
 {
+	public CharacterData Data
+	{
+		get { return m_data; }
+	}
+	public CharacterData m_data;
 	public enum Camp
 	{
 		PLAYER,
@@ -50,7 +55,7 @@ public class Character : HighlightableObject, IInteractable
 	public AIBase BaseAI => GetComponent<AIBase>();
 	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }
 	protected IInteractable m_interactor;
-	public InteractData Data { get { return null; } }
+	public InteractData interactData { get { return null; } }
 	float m_AttackCoolDown;
 
 	void Awake()
@@ -236,7 +241,7 @@ public class Character : HighlightableObject, IInteractable
 		m_interactor = target;
 		if (m_interactor != null && BaseAI)
 		{
-			string anim = target.Data.interactAnim;
+			string anim = target.interactData.interactAnim;
 			if (anim != "") InteractAction?.Invoke(target);
 			else target.InteractWith(this);
 		}

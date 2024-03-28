@@ -1000,7 +1000,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &608222371848770500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1032,8 +1032,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   JoyStick: {fileID: 6654613658238103982}
   DragCanvas: {fileID: 6400451881483331260}
-  win_LastOpen: {fileID: 0}
-  win_LastClose: {fileID: 0}
 --- !u!1 &3909096228786278330
 GameObject:
   m_ObjectHideFlags: 0

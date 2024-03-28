@@ -9,7 +9,7 @@ using System.Linq;
 public class ItemDemander : MonoBehaviour, IInteractable
 {
 	public IInteractable CurrentInteractor { get { return m_submitter; } set { if (value == null && m_submitter != null) m_submitter = null; } }
-	public InteractData Data { get { return m_data; } }
+	public InteractData interactData { get { return m_data; } }
 	[SerializeField]
 	InteractData m_data;
 	[SerializeField]
@@ -83,9 +83,7 @@ public class ItemDemander : MonoBehaviour, IInteractable
 				m_submitter = character;
 				if (character == GameManager.CurHero && m_data.Type == InteractData.InteractType.DeviceFixer || m_data.Type == InteractData.InteractType.DeviceCreater)
 				{
-					UIInteractWindow win = GameManager.GameUI.GetWindow("winInteract") as UIInteractWindow;
-					win.Init(this, m_demands);
-					win.Open();
+					UIInteractWindow win = GameManager.GameUI.GetWindow<UIInteractWindow>("winInteract", true, w => w.Init(this, m_demands));
 					GetComponent<InteractHandle>()?.ExitEvent.AddListener(() => win.Close());
 					win.bt_Confirm.onClick.AddListener(() => OnClick_Interact(win));
 				}

@@ -91,7 +91,6 @@ public class UIInventoryWindow : UIWindow
 
 	public void OnEquipSelected(UIEquipSlot slot)
 	{
-		if (!gameObject.activeSelf) GameManager.GameUI.OpenWindow(winName);
 		m_SelectedEquipSlot = slot;
 		Tooltip.SetEquip(slot);
 	}
@@ -142,7 +141,7 @@ public class UIInventoryWindow : UIWindow
 				}
 				break;
 			case "Add":
-				GameManager.GameUI.OpenWindow("winConfirm");
+				GameManager.GameUI.GetWindow<UIConfirmWindow>("winConfirm", true);
 				break;
 			case "Give":
 				if (GameManager.StoryListener.CurrentTeller.GiveItem(m_SelectedSlot.item))

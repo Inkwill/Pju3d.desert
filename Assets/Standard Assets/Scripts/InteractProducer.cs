@@ -9,7 +9,7 @@ public class InteractProducer : MonoBehaviour, IInteractable
 	InteractData m_data;
 	[SerializeField]
 	bool autoActive;
-	public InteractData Data { get { return m_data; } }
+	public InteractData interactData { get { return m_data; } }
 	public UnityEvent<GameObject> ExhaustedEvent;
 	public UIItemGrid itemGrid;
 	public IInteractable CurrentInteractor { get { return m_interactor; } set { m_interactor = value; } }

@@ -52,13 +52,13 @@ public class UIRpgWindow : UIWindow
 
 	protected override void OnOpened()
 	{
-		GameManager.GameUI.OpenWindow("winInventory");
-		GameManager.GameUI.OpenWindow("winTeam");
+		GameManager.GameUI.GetWindow<UIInventoryWindow>("winInventory", true);
+		GameManager.GameUI.GetWindow<UITeamWindow>("winTeam", true);
 	}
 	protected override void OnClose()
 	{
-		GameManager.GameUI.CloseWindow("winInventory");
-		GameManager.GameUI.CloseWindow("winTeam");
+		GameManager.GameUI.GetWindow<UIInventoryWindow>().Close();
+		GameManager.GameUI.GetWindow<UITeamWindow>().Close();
 	}
 
 	void OnItemAction(Item item, string eventName, int num)
@@ -196,7 +196,7 @@ public class UIRpgWindow : UIWindow
 				break;
 			case "talk":
 				Close();
-				GameManager.GameUI.OpenWindow("winTalk");
+				GameManager.GameUI.GetWindow<UITalkWindow>("winTalk", true);
 				break;
 			default:
 				break;

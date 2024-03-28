@@ -13,7 +13,7 @@ public class UICraftWindow : UIWindow, IInteractable
 
 	[SerializeField]
 	InteractData m_data;
-	public InteractData Data { get { return m_data; } }
+	public InteractData interactData { get { return m_data; } }
 	[SerializeField]
 	TMP_Text product_Name;
 	[SerializeField]

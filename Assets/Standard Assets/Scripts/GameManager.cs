@@ -1,12 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using Cinemachine;
-using CreatorKitCode;
-using CreatorKitCodeInternal;
-using System.Diagnostics;
 using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
@@ -53,17 +49,13 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	Transform position_born;
 	[SerializeField]
-	Vector2 baseBoundary_LB;
-	[SerializeField]
-	Vector2 baseBoundary_RT;
-	[SerializeField]
 	GameObject prefab_character;
 	[SerializeField]
 	GameObject prefab_gameui;
 
 	[SerializeField]
 	KeyValueData DemoData;
-	InventorySystem.ItemDemand testDemand;
+
 	private void Awake()
 	{
 		Instance = this;
@@ -89,7 +81,7 @@ public class GameManager : MonoBehaviour
 	{
 		ResInventoryItem moneyInventory = KeyValueData.GetValue<Item>(GameManager.Config.Item, "ResInventory_Money") as ResInventoryItem;
 		if (moneyInventory) GameManager.CurHero.Inventory.ResInventories.Add(ResItem.ResType.Money, new InventorySystem.ResInventory(moneyInventory));
-		GameUI.OpenWindow("winLevelSelect");
+		GameUI.GetWindow<UILevelSelect>("winLevelSelect", true);
 	}
 
 	void OnApplicationQuit()

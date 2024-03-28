@@ -31,9 +31,9 @@ public class UIInteractWindow : UIWindow
 	}
 	protected override void OnOpen()
 	{
-		if (m_interactor.Data.Type == InteractData.InteractType.DeviceFixer || m_interactor.Data.Type == InteractData.InteractType.DeviceCreater)
+		if (m_interactor.interactData.Type == InteractData.InteractType.DeviceFixer || m_interactor.interactData.Type == InteractData.InteractType.DeviceCreater)
 		{
-			var devices = m_interactor.Data.devices.Value;
+			var devices = m_interactor.interactData.devices.Value;
 			var elements = Helpers.AdjustElements<UIElementBase>(m_uiGridRoot.transform, devices.Length, m_uiGridBox);
 			for (int i = 0; i < elements.Length; i++)
 			{
@@ -50,12 +50,12 @@ public class UIInteractWindow : UIWindow
 	public void UpdateInfo(int selected)
 	{
 		m_selectedIndex = selected;
-		var item = m_interactor.Data.devices.Value[selected];
+		var item = m_interactor.interactData.devices.Value[selected];
 		var demand = m_demands[selected];
 		Name.text = item.ItemName;
 		icon.sprite = item.ItemSprite;
 		Desc.text = item.Description;
-		promptText.text = demand.canCompleted(GameManager.CurHero.Inventory) ? m_interactor.Data.BehavePrompt : "Submit";
+		promptText.text = demand.canCompleted(GameManager.CurHero.Inventory) ? m_interactor.interactData.BehavePrompt : "Submit";
 		bt_Confirm.interactable = demand.Submittable(GameManager.CurHero.Inventory).Values.Sum() > 0;
 		uiDemand.Show(demand);
 	}

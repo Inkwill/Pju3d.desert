@@ -13,7 +13,7 @@ public class PlaceHandle : MonoBehaviour
 	public void SetDevice(DeviceItem device)
 	{
 		m_device = device;
-		winInventory = GameManager.GameUI.GetWindow("winInventory") as UIInventoryWindow;
+		winInventory = GameManager.GameUI.GetWindow<UIInventoryWindow>("winInventory");
 		m_character = GetComponent<Character>();
 		if (m_character.BaseAI.SceneDetector && device.prefab)
 		{

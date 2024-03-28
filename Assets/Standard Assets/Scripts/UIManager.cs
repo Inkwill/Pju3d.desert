@@ -5,87 +5,55 @@ using CreatorKitCodeInternal;
 using UnityEngine.UI;
 using System.Linq;
 using System;
+using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour
 {
 	public VariableJoystick JoyStick;
 	public Canvas DragCanvas;
-	public UIRpgWindow winRpg => m_winDic["winRpg"] as UIRpgWindow;
-	Dictionary<string, UIWindow> m_winDic = new Dictionary<string, UIWindow>();
-
+	public UIRpgWindow winRpg => GetWindow<UIRpgWindow>();
 	public Action<UIWindow> winOpenAction;
 	public Action<UIWindow> winCloseAction;
-
-	public UIWindow win_LastOpen;
-	public UIWindow win_LastClose;
 	float during_check;
+
+	public T GetWindow<T>(string winName = "", bool open = false, Action<T> action = null)
+	{
+		T w = GetComponentInChildren<T>(true);
+		if (w == null && winName != "")
+		{
+			UIWindow window = GetWindow(winName);
+			if (window != null) w = window.GetComponent<T>();
+		}
+		if (w != null)
+		{
+			if (action != null) action.Invoke(w);
+			if (open)
+			{
+				UIWindow window = w as UIWindow;
+				window?.Open();
+			}
+		}
+		return w;
+	}
 
 	public UIWindow GetWindow(string winName)
 	{
-		if (m_winDic.ContainsKey(winName))
+		var wins = GetComponentsInChildren<UIWindow>(true);
+		UIWindow win = wins.Where(w => w.winName == winName).FirstOrDefault();
+		if (win == null)
 		{
-			return m_winDic[winName];
+			GameObject winPrefab = Resources.Load(winName) as GameObject;
+			if (winPrefab == null) Helpers.LogError(this, "GetWindow", "missing path: " + winName);
+			else win = Instantiate(winPrefab, transform).GetComponent<UIWindow>();
+			win?.gameObject.SetActive(false);
 		}
-
-		UIWindow newWindow = Resources.Load<UIWindow>(winName);
-		if (newWindow)
-		{
-			newWindow = Instantiate(newWindow, transform);
-			m_winDic.Add(winName, newWindow);
-			newWindow.gameObject.SetActive(false);
-		}
-		return newWindow;
-	}
-	public UIWindow OpenWindow(string winName)
-	{
-		win_LastOpen = GetWindow(winName);
-		win_LastOpen.Open();
-		return win_LastOpen;
-	}
-	public UIWindow OpenWindow(UIWindow win)
-	{
-		win_LastOpen = win;
-		win_LastOpen.Open();
-		if (!m_winDic.ContainsKey(win.winName)) m_winDic.Add(win.winName, win);
-		return win_LastOpen;
-	}
-
-	public void CloseWindow(string winName)
-	{
-		if (m_winDic.ContainsKey(winName) && m_winDic[winName].gameObject.activeSelf)
-			m_winDic[winName].Close();
-	}
-
-	public void CloseAll()
-	{
-		foreach (var win in m_winDic.Values)
-		{
-			if (win.gameObject.activeSelf) win.Close();
-		}
+		return win;
 	}
 
 	public void SwitchWindow(string winName)
 	{
-		if (m_winDic.ContainsKey(winName))
-		{
-			if (m_winDic[winName].gameObject.activeSelf) m_winDic[winName].Close();
-			else m_winDic[winName].Open();
-		}
-		else OpenWindow(winName);
-
-	}
-
-	public void BackWindow(UIWindow curWindow)
-	{
-		if (win_LastClose)
-		{
-			OpenWindow(win_LastClose.gameObject.name);
-		}
-		curWindow.Close();
-		win_LastClose = curWindow;
-	}
-	public void BackWindow()
-	{
-		BackWindow(win_LastOpen);
+		var win = GetWindow(winName);
+		if (win != null && win.gameObject.activeSelf) win.Close();
+		else win?.Open();
 	}
 }
