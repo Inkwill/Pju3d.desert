@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
 	public static LordSystem.Lord Lord => Instance.m_lord;
-	public static Character CurHero => Instance.m_lord.rpgTroop.leader;
+	public static Character CurHero => Instance.m_lord.rpgTeam.leader;
 	public static StoryListener StoryListener => Instance.GetComponent<StoryListener>();
 	public static GameGoalSystem GameGoal => Instance.GetComponent<GameGoalSystem>();
 	public static LevelSystem GameLevel => Instance.m_levelSystem;
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
 	{
 		Instance = this;
 		m_lord = new LordSystem.Lord(new int[3] { 1, 2, 3 });
-		m_lord.SetRpgTroop(m_lord.AddTroop(Instantiate(prefab_character, position_born.position, Quaternion.Euler(0, 180, 0)).GetComponent<Character>()));
+		m_lord.SetRpgTeam(m_lord.AddTeam(Instantiate(prefab_character, position_born.position, Quaternion.Euler(0, 180, 0)).GetComponent<Character>()));
 		GameGoal.Init();
 		SFXManager.ListenerTarget = CurHero.gameObject.transform;
 		GameUI = Instantiate(prefab_gameui).GetComponent<UIManager>();

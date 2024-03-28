@@ -11,8 +11,8 @@ public class LordSystem
 		int m_level;
 		public int Exp => m_exp;
 		public float ExpPercent => 1.0f * m_exp / m_expTemlate[m_level - 1];
-		public List<TroopSystem.Troop> troops;
-		public TroopSystem.Troop rpgTroop;
+		public List<TroopSystem.Team> Teams;
+		public TroopSystem.Team rpgTeam;
 		public InventorySystem Inventory;
 		int m_exp;
 		int[] m_expTemlate;
@@ -21,16 +21,16 @@ public class LordSystem
 			m_level = 1;
 			m_exp = 0;
 			m_expTemlate = expTemplate;
-			troops = new List<TroopSystem.Troop>();
+			Teams = new List<TroopSystem.Team>();
 			Inventory = new InventorySystem();
 		}
 
-		public TroopSystem.Troop AddTroop(Character hero)
+		public TroopSystem.Team AddTeam(Character hero)
 		{
-			var troop = new TroopSystem.Troop();
-			troop.leader = hero;
-			troops.Add(troop);
-			return troop;
+			var Team = new TroopSystem.Team();
+			Team.leader = hero;
+			Teams.Add(Team);
+			return Team;
 		}
 
 		public void AddExp(int exp)
@@ -43,10 +43,10 @@ public class LordSystem
 			}
 		}
 
-		public void SetRpgTroop(TroopSystem.Troop troop)
+		public void SetRpgTeam(TroopSystem.Team Team)
 		{
-			rpgTroop = troop;
-			Inventory.BindToCharacter(rpgTroop.leader);
+			rpgTeam = Team;
+			Inventory.BindToCharacter(rpgTeam.leader);
 		}
 	}
 }

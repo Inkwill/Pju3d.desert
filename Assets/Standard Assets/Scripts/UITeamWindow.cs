@@ -8,7 +8,7 @@ public class UITeamWindow : UIWindow
 {
 	protected override void OnOpened()
 	{
-		UITrooperHead[] uielements = GetComponentsInChildren<UITrooperHead>();
-		uielements.ForEach(element => element.SetTroop(GameManager.Lord.rpgTroop));
+		UITeamerHead[] uielements = GetComponentsInChildren<UITeamerHead>();
+		uielements.ForEach(element => element.SetTroop(GameManager.Lord.rpgTeam));
 	}
 }
